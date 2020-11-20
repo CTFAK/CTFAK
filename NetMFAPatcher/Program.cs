@@ -12,7 +12,7 @@ namespace NetMFAPatcher
     {
         public static PackData pack_data;
         public static GameData game_data;
-        //public static string path = @"H:\fnaf-world.exe";
+        //public static string path = @"H:\fnaf-world.exe";//test
         //public static string path = @"D:\SteamLibrary\steamapps\common\Five Nights at Freddy's Sister Location\SisterLocation.exe";
         public static string path = "";//TODO: Make Selectable
 
