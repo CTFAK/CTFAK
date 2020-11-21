@@ -21,7 +21,7 @@ namespace NetMFAPatcher.chunkloaders
 
         public override void Print()
         {
-            Logger.Log($"{chunk.name} contains:  {value}\n",true,ConsoleColor.DarkCyan);
+            //Logger.Log($"{chunk.name} contains:  {value}\n",true,ConsoleColor.DarkCyan);
         }
 
 

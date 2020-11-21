@@ -12,6 +12,10 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
     class Frame : DataLoader
     {
         public string name = "ERROR";
+        public int sizeX;
+        public int sizeY;
+        public Color background;
+        public int maxObjects;
 
         public Frame(ByteIO reader) : base(reader)
         {
@@ -27,11 +31,11 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
         {
             var handle = reader.ReadInt32();
             name = reader.ReadAscii(reader.ReadInt32());
-            var sizeX = reader.ReadInt32();
-            var sizeY = reader.ReadInt32();
+            sizeX = reader.ReadInt32();
+            sizeY = reader.ReadInt32();
             var background = reader.ReadColor();
             var flags = reader.ReadInt32();
-            var maxObjects = reader.ReadInt32();
+            maxObjects = reader.ReadInt32();
             var password = reader.ReadAscii(reader.ReadInt32());
             reader.Skip(4);
             var lastViewedX = reader.ReadInt32();

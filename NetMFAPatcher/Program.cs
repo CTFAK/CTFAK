@@ -5,6 +5,8 @@ using System;
 using System.IO;
 using System.Collections;
 using NetMFAPatcher.mfa;
+using NetMFAPatcher.utils;
+using System.Runtime.InteropServices;
 
 namespace NetMFAPatcher
 {
@@ -33,13 +35,15 @@ namespace NetMFAPatcher
             bool DumpImages=true;
             bool DumpSounds=true;
             bool CreateFolders=true;
+
+
             if (args.Length == 0)
             {
                 if (true)
                 {
 
 
-                    ByteIO mfaReader = new ByteIO(@"E:\SUPERDECOMPILER\Tests\mmftest.mfa", FileMode.Open);
+                    ByteIO mfaReader = new ByteIO(@"E:\DotNetCTF\Tests\mmftest.mfa", FileMode.Open);
                     var mfa = new MFA(mfaReader);
                     mfa.Read();
                     

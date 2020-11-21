@@ -19,6 +19,26 @@ namespace NetMFAPatcher.mfa
 {
     class MFA : DataLoader
     {
+        public int mfaBuild;
+        public int product;
+        public int buildVersion;
+
+        public string name;
+        public string description;
+        public string path;
+        public string author;
+        public string copyright;
+        public string company;
+        public string version;
+
+        public byte[] stamp;
+
+        public int windowX;
+        public int windowY;
+
+        public ValueList globalValues;
+        public ValueList globalStrings;
+        
 
         public override void Print()
         {
@@ -31,56 +51,55 @@ namespace NetMFAPatcher.mfa
         public override void Read()
         {
             Logger.Log($"MFA HEADER:{reader.ReadAscii(4)}");
-            var mfaBuild = reader.ReadInt32();           
-            var product = reader.ReadInt32();            
-            var buildVersion = reader.ReadInt32();
+            mfaBuild = reader.ReadInt32();           
+            product = reader.ReadInt32();            
+            buildVersion = reader.ReadInt32();
             
-            var name = reader.ReadAscii(reader.ReadInt32());
-            var description = reader.ReadAscii(reader.ReadInt32());
-            var path = reader.ReadAscii(reader.ReadInt32());
-            var stamp = reader.ReadBytes(reader.ReadInt32());
+            name = reader.ReadAscii(reader.ReadInt32());
+            description = reader.ReadAscii(reader.ReadInt32());
+            path = reader.ReadAscii(reader.ReadInt32());
+            stamp = reader.ReadBytes(reader.ReadInt32());
             
 
 
-            Logger.Log(reader.ReadAscii(4));
+            if(reader.ReadAscii(4)!="ATNF")
+            {
+                throw new Exception("Invalid Font Bank");
+            }
             var fonts = new FontBank(reader);
             fonts.Read();
 
-            Logger.Log("FontsDone\n");
 
-            Logger.Log(reader.ReadAscii(4));
+            if (reader.ReadAscii(4) != "APMS")
+            {
+                throw new Exception("Invalid Sound Bank");
+            }
             var sounds = new SoundBank(reader);
             sounds.isCompressed = false;
             sounds.Read();
 
-            Logger.Log("SoundsDone\n");
 
-            Logger.Log(reader.ReadAscii(4));
+            if (reader.ReadAscii(4) != "ASUM")
+            {
+                throw new Exception("Invalid Music Bank");
+            }
             var music = new MusicBank(reader);
             music.Read();
+            //Images&Icons are not implemented
 
-            Logger.Log("MusicDone\n");
+            reader.Seek(1191182);//hardcoded offset
 
-            //Logger.Log(reader.ReadAscii(4));
-            //var icons = new AGMIBank(reader);
-            //icons.Read();
+            reader.ReadInt32();//checkDefault
+            author = reader.ReadAscii(reader.ReadInt32());
+            reader.ReadInt32();//checkDefault
 
-            //Logger.Log("IconDone\n");
+            copyright = reader.ReadAscii(reader.ReadInt32());
+            reader.ReadInt32();//checkDefault
 
-            //Logger.Log(reader.ReadAscii(4));
-
-
-
-            reader.Seek(1191186);
-
-            var author = reader.ReadAscii(reader.ReadInt32());
-            reader.ReadInt32();
-            var copyright = reader.ReadAscii(reader.ReadInt32());
-            reader.ReadInt32();
-            var company = reader.ReadAscii(reader.ReadInt32());
-            var version = reader.ReadAscii(reader.ReadInt32());
-            var windowX = reader.ReadInt32();
-            var windowY = reader.ReadInt32();
+            company = reader.ReadAscii(reader.ReadInt32());
+            version = reader.ReadAscii(reader.ReadInt32());
+            windowX = reader.ReadInt32();
+            windowY = reader.ReadInt32();
             var borderColor = reader.ReadBytes(4);
             var displayFlags = reader.ReadInt32();
             var graphicFlags = reader.ReadInt32();
@@ -122,9 +141,9 @@ namespace NetMFAPatcher.mfa
 
             
 
-            var globalValues = new ValueList(reader);
+            globalValues = new ValueList(reader);
             globalValues.Read();
-            var globalStrings = new ValueList(reader);
+            globalStrings = new ValueList(reader);
             globalStrings.Read();
             var globalEvents = reader.ReadBytes(reader.ReadInt32());
             var graphicMode = reader.ReadInt32();
@@ -144,7 +163,7 @@ namespace NetMFAPatcher.mfa
                 var handleQ = reader.ReadInt32();
             }
             var extCount = reader.ReadInt32();
-            for (int i = 0; i < extCount; i++)
+            for (int i = 0; i < extCount; i++)//extensions
             {
                 var handleE = reader.ReadInt32();
                 var filenameE = reader.ReadAscii(reader.ReadInt32());
@@ -166,7 +185,7 @@ namespace NetMFAPatcher.mfa
                 reader.Seek(item);
                 var testframe = new Frame(reader);
                 testframe.Read();
-                Console.WriteLine($"Done reading frame '{testframe.name}'");
+                
 
             }
 

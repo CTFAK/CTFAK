@@ -99,6 +99,7 @@ namespace NetMFAPatcher.Utils
             return str;
         }
 
+        
 
         public string ReadWideString(int length = -1)
         {

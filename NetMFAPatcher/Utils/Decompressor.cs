@@ -31,6 +31,11 @@ namespace NetMFAPatcher.Utils
         {
             return new ByteIO(decompress_block(image_data, v, decompressed_size));
         }
+
+        internal static byte[] decompress_block(ByteIO data, uint compressed_size, uint decompressedSize)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

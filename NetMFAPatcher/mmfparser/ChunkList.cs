@@ -1,4 +1,5 @@
 ﻿using NetMFAPatcher.chunkloaders;
+using NetMFAPatcher.utils;
 using NetMFAPatcher.Utils;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace NetMFAPatcher.mmfparser
 {
     public class ChunkList
     {
-        List<Chunk> chunks = new List<Chunk>();
+        public List<Chunk> chunks = new List<Chunk>();
         public bool verbose = true;
 
         public void Read(ByteIO exeReader)
@@ -30,6 +31,14 @@ namespace NetMFAPatcher.mmfparser
                 }
 
                 chunks.Add(chunk);
+                if (chunk.id == 8750)
+                {
+                    chunk.BuildKey();
+                }
+                if (chunk.id == 13108)
+                {
+                    
+                }
 
                 if (chunk.id == 32639) break; //LAST chunkID
             }
@@ -73,10 +82,12 @@ namespace NetMFAPatcher.mmfparser
                 switch (flag)
                 {
                     case ChunkFlags.Encrypted:
-                        chunk_data = exeReader.ReadBytes(size);
+                        
+                        chunk_data = Decryption.DecodeChunk(exeReader.ReadBytes(size),size,54);
                         break;
                     case ChunkFlags.CompressedAndEncrypyed:
-                        chunk_data = exeReader.ReadBytes(size);
+                        //exeReader.ReadBytes(size);
+                        chunk_data = Decryption.DecodeMode3(exeReader.ReadBytes(size), size,id, 54);
                         break;
                     case ChunkFlags.Compressed:
                         chunk_data = Decompressor.Decompress(exeReader);
@@ -94,9 +105,10 @@ namespace NetMFAPatcher.mmfparser
                 }
                 if(verbose)
                 {
-                    Print(false);
+                    //Print(false);
 
                 }
+                
             }
 
             public void Print(bool extented)
@@ -106,8 +118,7 @@ namespace NetMFAPatcher.mmfparser
                     Logger.Log($"Chunk: {name} ({uid})", true, ConsoleColor.DarkCyan);
                     Logger.Log($"    ID: {id} - 0x{id.ToString("X")}", true, ConsoleColor.DarkCyan);
                     Logger.Log($"    Flags: {flag}", true, ConsoleColor.DarkCyan);
-                    Logger.Log($"    Loader: {(loader != null ? loader.GetType().Name : "Empty Loader")}", true,
-                        ConsoleColor.DarkCyan);
+                    Logger.Log($"    Loader: {(loader != null ? loader.GetType().Name : "Empty Loader")}", true,ConsoleColor.DarkCyan);
                     Logger.Log($"    Size: {size} B", true, ConsoleColor.DarkCyan);
                     Logger.Log($"    Decompressed Size: {decompressed_size} B", true, ConsoleColor.DarkCyan);
                     Logger.Log("---------------------------------------------", true, ConsoleColor.DarkCyan);
@@ -122,6 +133,20 @@ namespace NetMFAPatcher.mmfparser
                     Logger.Log("---------------------------------------------", true, ConsoleColor.DarkCyan);
                 }
                 
+            }
+            public void BuildKey()
+            {
+                string title = "";
+                string copyright = "";
+                string project = "";
+                title = "Sister Location";//chunk_list.get_chunk<AppName>().value;
+                copyright = "Scott Cawthon";//chunk_list.get_chunk<Copyright>().value;
+                project = @"C:\Users\Scott\Desktop\FNAF 5\FNaF 5-157.mfa";//chunk_list.get_chunk<EditorFilename>().value;
+                Decryption.MakeKey(title,copyright,project,54);
+                Logger.Log("New Key!"); 
+
+
+
             }
         }
 
@@ -176,6 +201,9 @@ namespace NetMFAPatcher.mmfparser
                     break;
                 case 13107:
                     loader = new Frame(chunk);
+                    break;
+                case 13108:
+                    loader = new FrameHeader(chunk);
                     break;
                 case 26214:
                     loader = new ImageBank(chunk);
