@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetMFAPatcher.mmfparser;
+using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.chunkloaders
 {
@@ -19,7 +20,7 @@ namespace NetMFAPatcher.chunkloaders
             value = reader.ReadWideString();
         }
 
-        public override void Print()
+        public override void Print(bool ext)
         {
             //Logger.Log($"{chunk.name} contains:  {value}\n",true,ConsoleColor.DarkCyan);
         }
@@ -29,7 +30,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public StringChunk(ChunkList.Chunk chunk) : base(chunk)
+        public StringChunk(Chunk chunk) : base(chunk)
         {
         }
     }
@@ -40,7 +41,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public AppName(ChunkList.Chunk chunk) : base(chunk)
+        public AppName(Chunk chunk) : base(chunk)
         {
         }
     }
@@ -51,7 +52,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public AppAuthor(ChunkList.Chunk chunk) : base(chunk)
+        public AppAuthor(Chunk chunk) : base(chunk)
         {
         }
     }
@@ -62,7 +63,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public ExtPath(ChunkList.Chunk chunk) : base(chunk)
+        public ExtPath(Chunk chunk) : base(chunk)
         {
         }
     }
@@ -73,7 +74,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public EditorFilename(ChunkList.Chunk chunk) : base(chunk)
+        public EditorFilename(Chunk chunk) : base(chunk)
         {
         }
     }
@@ -84,7 +85,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public TargetFilename(ChunkList.Chunk chunk) : base(chunk)
+        public TargetFilename(Chunk chunk) : base(chunk)
         {
         }
     }
@@ -95,7 +96,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public AppDoc(ChunkList.Chunk chunk) : base(chunk)
+        public AppDoc(Chunk chunk) : base(chunk)
         {
         }
     }
@@ -106,7 +107,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public AboutText(ChunkList.Chunk chunk) : base(chunk)
+        public AboutText(Chunk chunk) : base(chunk)
         {
         }
     }
@@ -117,7 +118,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public Copyright(ChunkList.Chunk chunk) : base(chunk)
+        public Copyright(Chunk chunk) : base(chunk)
         {
         }
     }
@@ -128,7 +129,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public DemoFilePath(ChunkList.Chunk chunk) : base(chunk)
+        public DemoFilePath(Chunk chunk) : base(chunk)
         {
         }
     }

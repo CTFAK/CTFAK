@@ -1,4 +1,5 @@
 ﻿using NetMFAPatcher.chunkloaders;
+using NetMFAPatcher.mmfparser.chunkloaders;
 using NetMFAPatcher.utils;
 using NetMFAPatcher.Utils;
 using System;
@@ -6,12 +7,12 @@ using System.Collections.Generic;
 using System.IO;
 using static NetMFAPatcher.mmfparser.Constants;
 
-namespace NetMFAPatcher.mmfparser
+namespace NetMFAPatcher.MMFParser.Data
 {
     public class ChunkList
     {
         public List<Chunk> chunks = new List<Chunk>();
-        public bool verbose = true;
+        public bool verbose = false;
 
         public void Read(ByteIO exeReader)
         {
@@ -26,8 +27,17 @@ namespace NetMFAPatcher.mmfparser
                 {
                     if (chunk.loader.verbose)
                     {
-                        chunk.loader.Print();
+                        chunk.loader.Print(Program.LogAll);
                     }
+                }
+                if (chunk.verbose)
+                {
+                    chunk.Print(Program.LogAll);
+                    if(Program.LogAll) Console.ReadKey();
+
+
+
+
                 }
 
                 chunks.Add(chunk);
@@ -35,15 +45,12 @@ namespace NetMFAPatcher.mmfparser
                 {
                     chunk.BuildKey();
                 }
-                if (chunk.id == 13108)
-                {
-                    
-                }
+
 
                 if (chunk.id == 32639) break; //LAST chunkID
             }
 
-            Logger.Log(verbose ? $" Total Chunks Count: {chunks.Count}":"ChunkList Done", true, ConsoleColor.Blue);
+            //Logger.Log(verbose ? $" Total Chunks Count: {chunks.Count}":"ChunkList Done", true, ConsoleColor.Blue);
         }
 
         public class Chunk
@@ -56,9 +63,9 @@ namespace NetMFAPatcher.mmfparser
             public ChunkLoader loader;
             public byte[] chunk_data;
             public ChunkFlags flag;
-            int size = 0;
-            int decompressed_size = 0;
-            bool verbose = true;
+            public int size = 0;
+            public int decompressed_size = 0;
+            public bool verbose = false;
 
             public Chunk(int Actualuid, ChunkList actual_chunk_list)
             {
@@ -86,7 +93,6 @@ namespace NetMFAPatcher.mmfparser
                         chunk_data = Decryption.DecodeChunk(exeReader.ReadBytes(size),size,54);
                         break;
                     case ChunkFlags.CompressedAndEncrypyed:
-                        //exeReader.ReadBytes(size);
                         chunk_data = Decryption.DecodeMode3(exeReader.ReadBytes(size), size,id, 54);
                         break;
                     case ChunkFlags.Compressed:
@@ -103,12 +109,13 @@ namespace NetMFAPatcher.mmfparser
                     string path = $"{Program.DumpPath}\\CHUNKS\\{name}.chunk";
                     File.WriteAllBytes(path, chunk_data);
                 }
-                if(verbose)
+                int tempId=0;
+                int.TryParse(name,out tempId);
+                if(tempId==id)
                 {
-                    //Print(false);
-
+                    chunk_data.Log(true, "X2");
                 }
-                
+
             }
 
             public void Print(bool extented)
@@ -122,6 +129,7 @@ namespace NetMFAPatcher.mmfparser
                     Logger.Log($"    Size: {size} B", true, ConsoleColor.DarkCyan);
                     Logger.Log($"    Decompressed Size: {decompressed_size} B", true, ConsoleColor.DarkCyan);
                     Logger.Log("---------------------------------------------", true, ConsoleColor.DarkCyan);
+                    
 
                 }
                 else
@@ -136,13 +144,28 @@ namespace NetMFAPatcher.mmfparser
             }
             public void BuildKey()
             {
-                string title = "";
+                string title = "Five Nights at Candy's 3";
                 string copyright = "";
-                string project = "";
-                title = "Sister Location";//chunk_list.get_chunk<AppName>().value;
-                copyright = "Scott Cawthon";//chunk_list.get_chunk<Copyright>().value;
-                project = @"C:\Users\Scott\Desktop\FNAF 5\FNaF 5-157.mfa";//chunk_list.get_chunk<EditorFilename>().value;
-                Decryption.MakeKey(title,copyright,project,54);
+                string project = @"C:\Users\Emil\Desktop\Five Nights at Candy's 3\Five Nights At Candy's 3.mfa";
+                
+                var titleChunk = chunk_list.get_chunk<AppName>();
+                if (titleChunk != null) title = titleChunk.value;
+
+
+
+                var copyrightChunk = chunk_list.get_chunk<Copyright>();
+                if (copyrightChunk != null) copyright = copyrightChunk.value;
+                var projectChunk = chunk_list.get_chunk<EditorFilename>();
+                if (projectChunk != null) project = projectChunk.value;
+                if (Program.game_data.product_build > 284)
+                {
+                    Decryption.MakeKey(title, copyright, project, 54);
+                }
+                else
+                {
+                    Decryption.MakeKey(project, title, copyright, 54);
+                }
+
                 Logger.Log("New Key!"); 
 
 
@@ -184,6 +207,9 @@ namespace NetMFAPatcher.mmfparser
                 case 8752:
                     loader = new AppDoc(chunk);
                     break;
+                case 8745://
+                    loader = new FrameItems(chunk);
+                    break;
                 case 8757:
                     loader = new AppIcon(chunk);
                     break;
@@ -205,12 +231,25 @@ namespace NetMFAPatcher.mmfparser
                 case 13108:
                     loader = new FrameHeader(chunk);
                     break;
+                case 13112:
+                    loader = new ObjectInstances(chunk);
+                    break;
                 case 26214:
                     loader = new ImageBank(chunk);
                     break;
                 case 26216:
                     loader = new SoundBank(chunk);
                     break;
+                case 17477:
+                    loader = new ObjectName(chunk);
+                    break;
+                case 17476:
+                    loader = new ObjectHeader(chunk);
+                    break;
+                case 8788:
+                    loader = new ObjectNames(chunk);
+                    break;
+
             }
 
             if (loader != null)
@@ -235,6 +274,11 @@ namespace NetMFAPatcher.mmfparser
             }
 
             return null; //I hope this wont happen  
+        }
+        public T get_loader<T>(ChunkLoader loader) where T : ChunkLoader
+        {
+            
+            return (T)loader;  
         }
     }
 }

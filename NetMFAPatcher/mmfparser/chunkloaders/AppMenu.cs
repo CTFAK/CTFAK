@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.mmfparser.chunkloaders
 {
@@ -16,12 +17,12 @@ namespace NetMFAPatcher.mmfparser.chunkloaders
         {
         }
 
-        public AppMenu(ChunkList.Chunk chunk) : base(chunk)
+        public AppMenu(Chunk chunk) : base(chunk)
         {
         }
-        public override void Print()
+        public override void Print(bool ext)
         {
-            throw new NotImplementedException();
+            
         }
 
         public override void Read()
@@ -87,10 +88,10 @@ namespace NetMFAPatcher.mmfparser.chunkloaders
         {
         }
 
-        public AppMenuItem(ChunkList.Chunk chunk) : base(chunk)
+        public AppMenuItem(Chunk chunk) : base(chunk)
         {
         }
-        public override void Print()
+        public override void Print(bool ext)
         {
             throw new NotImplementedException();
         }

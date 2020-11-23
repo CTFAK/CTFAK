@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.chunkloaders
 {
@@ -20,12 +21,13 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public AppIcon(ChunkList.Chunk chunk) : base(chunk)
+        public AppIcon(Chunk chunk) : base(chunk)
         {
         }
 
         public override void Read()
         {
+            return;
             Logger.Log("dumpingIcon");
             reader.ReadBytes(reader.ReadInt32() - 4);
             List<byte> color_indexes = new List<byte>();
@@ -65,7 +67,7 @@ namespace NetMFAPatcher.chunkloaders
         }
 
 
-        public override void Print()
+        public override void Print(bool ext)
         {
             
         }

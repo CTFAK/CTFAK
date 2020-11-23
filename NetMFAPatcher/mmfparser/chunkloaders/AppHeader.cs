@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetMFAPatcher.mmfparser;
+using NetMFAPatcher.mmfparser.mfaloaders;
+using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.chunkloaders
 {
@@ -32,7 +34,7 @@ namespace NetMFAPatcher.chunkloaders
             initialLives = (int) (reader.ReadUInt32() ^ 0xffffffff);
             var controls = new Controls(reader);
             controls.Read();
-            controls.Print();
+            controls.Print(false);
 
             var borderColor = reader.ReadBytes(4);
             numberOfFrames = reader.ReadInt32();
@@ -40,7 +42,7 @@ namespace NetMFAPatcher.chunkloaders
             var windowsMenuIndex = reader.ReadSByte();
         }
 
-        public override void Print()
+        public override void Print(bool ext)
         {
             Logger.Log($"ScreenRes: {windowWidth}x{windowHeight}", true, ConsoleColor.DarkMagenta);
             Logger.Log($"Score: {initialScore}, Lives: {initialLives}", true, ConsoleColor.DarkMagenta);
@@ -53,7 +55,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public AppHeader(ChunkList.Chunk chunk) : base(chunk)
+        public AppHeader(Chunk chunk) : base(chunk)
         {
         }
     }
@@ -82,7 +84,7 @@ namespace NetMFAPatcher.chunkloaders
             }
         }
 
-        public override void Print()
+        public override void Print(bool ext)
         {
             Logger.Log("Controls: ",true,ConsoleColor.Yellow);
             foreach (var item in items)

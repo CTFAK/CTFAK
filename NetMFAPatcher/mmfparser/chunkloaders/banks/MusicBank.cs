@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetMFAPatcher.mmfparser;
+using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.chunkloaders
 {
@@ -15,7 +16,7 @@ namespace NetMFAPatcher.chunkloaders
         public int references = 0;
         public List<MusicFile> items;
 
-        public override void Print()
+        public override void Print(bool ext)
         {
         }
 
@@ -36,7 +37,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public MusicBank(ChunkList.Chunk chunk) : base(chunk)
+        public MusicBank(Chunk chunk) : base(chunk)
         {
         }
     }
@@ -47,7 +48,7 @@ namespace NetMFAPatcher.chunkloaders
         public string name = "ERROR";
         public byte[] data;
 
-        public override void Print()
+        public override void Print(bool ext)
         {
         }
 
@@ -59,7 +60,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public MusicFile(ChunkList.Chunk chunk) : base(chunk)
+        public MusicFile(Chunk chunk) : base(chunk)
         {
         }
     }

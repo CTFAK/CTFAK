@@ -6,13 +6,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.chunkloaders
 {
     class FontBank : ChunkLoader
     {
         int numberOfItems;
-        public override void Print()
+        public override void Print(bool ext)
         {
             Logger.Log($"FontCount:{numberOfItems.ToString()}");
         }
@@ -30,7 +31,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public FontBank(ChunkList.Chunk chunk) : base(chunk)
+        public FontBank(Chunk chunk) : base(chunk)
         {
         }
     }

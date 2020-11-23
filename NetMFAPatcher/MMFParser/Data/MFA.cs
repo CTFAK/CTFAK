@@ -59,6 +59,7 @@ namespace NetMFAPatcher.mfa
             description = reader.ReadAscii(reader.ReadInt32());
             path = reader.ReadAscii(reader.ReadInt32());
             stamp = reader.ReadBytes(reader.ReadInt32());
+            Console.WriteLine(path);
             
 
 
@@ -85,9 +86,15 @@ namespace NetMFAPatcher.mfa
             }
             var music = new MusicBank(reader);
             music.Read();
-            //Images&Icons are not implemented
 
-            reader.Seek(1191182);//hardcoded offset
+            //if (reader.ReadAscii(4) != "AGMI")
+            //{
+            //    throw new Exception("Invalid Icon Bank");
+            //}
+            //var icons = new AGMIBank(reader);
+            //icons.Read();
+
+            reader.Seek(17710);//hardcoded offset
 
             reader.ReadInt32();//checkDefault
             author = reader.ReadAscii(reader.ReadInt32());

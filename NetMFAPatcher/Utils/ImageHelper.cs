@@ -30,5 +30,14 @@ namespace NetMFAPatcher.utils
             return Color.FromArgb((int)b, (int)g, (int)r);
 
         }
+        public static int getPadding(int width, int pad = 2)
+        {
+            int num = pad - width * 3 % pad;
+            if (num == pad)
+            {
+                num = 0;
+            }
+            return (int)Math.Ceiling((double)((float)num / 3f));
+        }
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetMFAPatcher.mmfparser;
+using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.chunkloaders
 {
@@ -16,7 +17,7 @@ namespace NetMFAPatcher.chunkloaders
         public List<SoundItem> items;
         public bool isCompressed = true;
 
-        public override void Print()
+        public override void Print(bool ext)
         {
         }
 
@@ -39,7 +40,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public SoundBank(ChunkList.Chunk chunk) : base(chunk)
+        public SoundBank(Chunk chunk) : base(chunk)
         {
         }
     }
@@ -50,7 +51,7 @@ namespace NetMFAPatcher.chunkloaders
         public string name = "ERROR";
         public byte[] data;
 
-        public override void Print()
+        public override void Print(bool ext)
         {
         }
 
@@ -62,7 +63,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public SoundBase(ChunkList.Chunk chunk) : base(chunk)
+        public SoundBase(Chunk chunk) : base(chunk)
         {
         }
     }
@@ -118,7 +119,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public SoundItem(ChunkList.Chunk chunk) : base(chunk)
+        public SoundItem(Chunk chunk) : base(chunk)
         {
         }
     }

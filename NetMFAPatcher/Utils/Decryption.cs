@@ -11,40 +11,39 @@ namespace NetMFAPatcher.utils
     class Decryption
     {
         public static byte[] key;
+        public static string storedName;
+        public static string storedCopyright;
+        public static string storedPath;
         public static void MakeKey(string STitle, string SCopyright,string SProject, byte MagicChar)
         {
+            storedName = STitle;
+            storedCopyright = SCopyright;
+            storedPath = SProject;
             byte[] nameBytes = Encoding.ASCII.GetBytes(STitle);
-            var name = Marshal.AllocHGlobal(STitle.Length);
+            var name = Marshal.StringToHGlobalAnsi(STitle);//Marshal.AllocHGlobal(STitle.Length);
             Marshal.Copy(nameBytes, 0, name, STitle.Length);
 
             byte[] copyrightBytes = Encoding.ASCII.GetBytes(SCopyright);
-            var copyright = Marshal.AllocHGlobal(SCopyright.Length);
+            var copyright = Marshal.StringToHGlobalAnsi(SCopyright);
             Marshal.Copy(copyrightBytes, 0, copyright, SCopyright.Length);
 
-            byte[] filenameBytes = Encoding.ASCII.GetBytes(SProject);           
-            var pathfilename = Marshal.AllocHGlobal(SProject.Length);
+            byte[] filenameBytes = Encoding.ASCII.GetBytes(SProject);
+            var pathfilename = Marshal.StringToHGlobalAnsi(SProject);
             Marshal.Copy(filenameBytes, 0, pathfilename, SProject.Length);
 
             var ptr = Decryption.make_key(name, copyright, pathfilename, MagicChar);
 
             byte[] Key = new byte[257];
-            Marshal.Copy(ptr, Key, 0, 257);
+            Marshal.Copy(ptr, Key, 0, 256);
             Marshal.FreeHGlobal(name);
             Marshal.FreeHGlobal(copyright);
             Marshal.FreeHGlobal(pathfilename);
             key = Key;
-            //some hardcoded checks for SL
+            //key.Log(true, "X2");
 
            
 
-            if (Console.ReadKey().Key==ConsoleKey.N)
-            {
-                if(key[73] == 0xB2)
-                {
-                    return;
-                }
-                MakeKey("Sister Location", "Scott Cawthon", @"C:\Users\Scott\Desktop\FNAF 5\FNaF 5-157.mfa", 54);
-            }
+            
         }
         
 
@@ -54,7 +53,10 @@ namespace NetMFAPatcher.utils
             var DecompressedSize = reader.ReadUInt32();
             
             var chunkData = reader.ReadBytes((int)reader.Size());
-            chunkData[0] ^= (byte)(((byte)ChunkID & 0xFF) ^ ((byte)ChunkID >> 0x8));
+            if (ChunkID % 2 != 0)
+            {
+                chunkData[0] ^= (byte)(((byte)ChunkID & 0xFF) ^ ((byte)ChunkID >> 0x8));
+            }
             var data = new ByteIO(DecodeChunk(chunkData,ChunkSize,MagicChar));
             var compressed_size = data.ReadUInt32();
 
@@ -62,13 +64,11 @@ namespace NetMFAPatcher.utils
         }
         public static byte[] DecodeChunk(byte[] ChunkData, int ChunkSize,byte MagicChar)
         {
-            //Console.WriteLine("Decoding: "+ChunkData.Log(false,"X2"));
             IntPtr InputChunkPtr = Marshal.AllocHGlobal(ChunkSize);
             Marshal.Copy(ChunkData, 0, InputChunkPtr, ChunkSize-4);
             var OutputChunkPtr = decode_chunk(InputChunkPtr, ChunkSize, MagicChar);
             byte[] DecodedChunk = new byte[ChunkSize];
             Marshal.Copy(OutputChunkPtr, DecodedChunk,0,ChunkSize);
-            //Console.WriteLine("Result: " + DecodedChunk.Log(false, "X2"));
             return DecodedChunk;
 
 

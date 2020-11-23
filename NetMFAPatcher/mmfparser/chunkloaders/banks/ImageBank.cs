@@ -10,6 +10,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.chunkloaders
 {
@@ -20,10 +21,10 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public ImageBank(ChunkList.Chunk chunk) : base(chunk)
+        public ImageBank(Chunk chunk) : base(chunk)
         {
         }
-        public override void Print()
+        public override void Print(bool ext)
         {
 
         }
@@ -205,7 +206,7 @@ namespace NetMFAPatcher.chunkloaders
         {
             Bitmap bitmap = new Bitmap((int)width, (int)height);
             Color[,] array = new Color[(int)width, (int)height];
-            int num4 = Helper.getPadding((int)width, 2);
+            int num4 = ImageHelper.getPadding((int)width, 2);
             int num5 = 0;
             using (ByteIO binaryReader = image_data)
             {
@@ -264,7 +265,7 @@ namespace NetMFAPatcher.chunkloaders
    
         
 
-        public override void Print()
+        public override void Print(bool ext)
         {
 
         }
@@ -272,7 +273,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public ImageItem(ChunkList.Chunk chunk) : base(chunk)
+        public ImageItem(Chunk chunk) : base(chunk)
         {
         }
     }

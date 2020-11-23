@@ -94,16 +94,6 @@ namespace NetMFAPatcher.mmfparser
             Sounds=26216,
             Musics=26217,
             Last=32639
-
-
-
-
-
-
-
-
-         
-
         }
     }
 }

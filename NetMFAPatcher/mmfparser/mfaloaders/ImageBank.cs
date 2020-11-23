@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace mmfparser.mfaloaders
 {
@@ -36,8 +37,11 @@ namespace mmfparser.mfaloaders
             Logger.Log($"Number of image items: {count.ToString()}");
             for (int i = 0; i < count; i++)
             {
+                Console.WriteLine("READING IMAGE: " + reader.Tell());
                 var item = new ImageItem(reader);
                 item.Read();
+                
+
                 
         
 
@@ -48,7 +52,7 @@ namespace mmfparser.mfaloaders
         {
         }
 
-        public AGMIBank(ChunkList.Chunk chunk) : base(chunk)
+        public AGMIBank(Chunk chunk) : base(chunk)
         {
         }
     }

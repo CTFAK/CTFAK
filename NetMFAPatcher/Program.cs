@@ -7,6 +7,7 @@ using System.Collections;
 using NetMFAPatcher.mfa;
 using NetMFAPatcher.utils;
 using System.Runtime.InteropServices;
+using NetMFAPatcher.MMFParser.Data;
 
 namespace NetMFAPatcher
 {
@@ -26,6 +27,8 @@ namespace NetMFAPatcher
         public static bool DumpSounds = false;
         public static bool verbose;
 
+        public static bool LogAll=false;
+
 
         [STAThread]
         static void Main(string[] args)
@@ -43,7 +46,7 @@ namespace NetMFAPatcher
                 {
 
 
-                    ByteIO mfaReader = new ByteIO(@"E:\DotNetCTF\Tests\mmftest.mfa", FileMode.Open);
+                    ByteIO mfaReader = new ByteIO(@"E:\anaconda-mode3\Application.mfa", FileMode.Open);
                     var mfa = new MFA(mfaReader);
                     mfa.Read();
                     

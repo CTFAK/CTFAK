@@ -8,7 +8,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetMFAPatcher.mmfparser
+namespace NetMFAPatcher.MMFParser.Data
 {
     public class PackData
     {

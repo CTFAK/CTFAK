@@ -1,4 +1,5 @@
 ﻿using NetMFAPatcher.chunkloaders;
+using NetMFAPatcher.mmfparser;
 using NetMFAPatcher.Utils;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static NetMFAPatcher.mmfparser.Constants;
 
-namespace NetMFAPatcher.mmfparser
+namespace NetMFAPatcher.MMFParser.Data
 {
     public class GameData
     {
@@ -38,7 +39,7 @@ namespace NetMFAPatcher.mmfparser
 
             Print();
             Logger.Log("Press any key to continue",true,ConsoleColor.Magenta);
-            Console.ReadKey();
+            //Console.ReadKey();
 
             gameChunks = new ChunkList();
             gameChunks.Read(exeReader);

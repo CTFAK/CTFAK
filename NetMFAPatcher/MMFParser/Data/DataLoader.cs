@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static NetMFAPatcher.mmfparser.ChunkList;
+using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace mmfparser
 {

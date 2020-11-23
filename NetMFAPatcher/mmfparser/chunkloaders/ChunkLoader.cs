@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static NetMFAPatcher.mmfparser.ChunkList;
+using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.chunkloaders
 {
@@ -29,6 +29,6 @@ namespace NetMFAPatcher.chunkloaders
         public abstract void Read();
 
 
-        public abstract void Print();
+        public abstract void Print(bool ext);
     }
 }

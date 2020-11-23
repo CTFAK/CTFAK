@@ -1,4 +1,5 @@
 ﻿using NetMFAPatcher.mmfparser;
+using NetMFAPatcher.MMFParser.Data;
 using NetMFAPatcher.Utils;
 using System;
 using System.Collections.Generic;
@@ -40,17 +41,19 @@ namespace NetMFAPatcher.chunkloaders
         public int height;
         public byte[] background;
         public int flags;
+        public int CountOfObjs;
         int top;
         int bottom;
         int left;
         int right;
 
 
-        public override void Print()
+        public override void Print(bool ext)
         {
             Logger.Log($"Frame: {name}", true, ConsoleColor.Green);
             Logger.Log($"   Password: {(password!=null ? password : "None")}", true, ConsoleColor.Green);
             Logger.Log($"   Size: {width}x{height}", true, ConsoleColor.Green);
+            Logger.Log($"   Objects: {CountOfObjs}", true, ConsoleColor.Green);
             Logger.Log($"-------------------------", true, ConsoleColor.Green);
         }
 
@@ -77,6 +80,12 @@ namespace NetMFAPatcher.chunkloaders
             height = header.height;
             background = header.background;
             flags = header.flags;
+            var objects = chunks.get_chunk<ObjectInstances>();
+            if(objects!=null)
+            {
+                CountOfObjs = objects.CountOfObjects;
+                
+            }
 
 
 
@@ -85,9 +94,9 @@ namespace NetMFAPatcher.chunkloaders
 
             foreach (var item in chunks.chunks)
             {
-                Directory.CreateDirectory($"{Program.DumpPath}\\CHUNKS\\FRAMES\\{this.name}");
-                string path = $"{Program.DumpPath}\\CHUNKS\\FRAMES\\{this.name}\\{chunk.name}.chunk";
-                File.WriteAllBytes(path, item.chunk_data);
+                //Directory.CreateDirectory($"{Program.DumpPath}\\CHUNKS\\FRAMES\\{this.name}");
+                //string path = $"{Program.DumpPath}\\CHUNKS\\FRAMES\\{this.name}\\{chunk.name}.chunk";
+                //File.WriteAllBytes(path, item.chunk_data);
 
             }
             
@@ -119,7 +128,7 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public override void Print()
+        public override void Print(bool ext)
         {
             
         }
@@ -137,8 +146,9 @@ namespace NetMFAPatcher.chunkloaders
     }
     class ObjectInstances : ChunkLoader
     {
-        public int width;
-        public int height;
+        
+        public int CountOfObjects;
+        public List<ObjectInstances> items = new List<ObjectInstances>();
 
         public ObjectInstances(ByteIO reader) : base(reader)
         {
@@ -148,13 +158,22 @@ namespace NetMFAPatcher.chunkloaders
         {
         }
 
-        public override void Print()
+        public override void Print(bool ext)
         {
 
         }
 
         public override void Read()
-        { 
+        {
+            return;
+            CountOfObjects = (int)reader.ReadUInt32();
+            for (int i = 0; i < CountOfObjects; i++)
+            {
+                var item = new ObjectInstances(reader);
+                item.Read();
+                items.Add(item);
+            }
+
 
 
 
