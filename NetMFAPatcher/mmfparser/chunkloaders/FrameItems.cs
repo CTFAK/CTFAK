@@ -1,4 +1,5 @@
 ﻿using NetMFAPatcher.chunkloaders;
+using NetMFAPatcher.MMFParser.Data;
 using NetMFAPatcher.Utils;
 using System;
 using System.Collections.Generic;
@@ -9,9 +10,9 @@ using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.mmfparser.chunkloaders
 {
-    class FrameItems : ChunkLoader
+    public class FrameItems : ChunkLoader
     {
-        public Dictionary<int, ObjectInfo> itemDict = new Dictionary<int, ObjectInfo>();
+        public Dictionary<int, ObjectInfo> ItemDict = new Dictionary<int, ObjectInfo>();
         public List<string> names = new List<string>();
         public FrameItems(Chunk chunk) : base(chunk) { }
         public FrameItems(ByteIO reader) : base(reader) { }
@@ -30,10 +31,11 @@ namespace NetMFAPatcher.mmfparser.chunkloaders
                 var item = new ObjectInfo(reader);
                 item.verbose = false;
                 item.Read();
-                itemDict.Add(item.handle, item);
+                ItemDict.Add(item.handle, item);
                 names.Add(item.name);
-                Logger.Log($"Found FrameItem: '{item.name}' with handle ({item.handle})", true, ConsoleColor.Magenta);
+                //Logger.Log($"Found FrameItem: '{item.name}' with handle ({item.handle})", true, ConsoleColor.Magenta);
             }
+            GameData.testItems = this;
 
         }
     }

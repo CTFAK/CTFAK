@@ -7,7 +7,7 @@ using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.mmfparser.chunkloaders
 {
-    class ObjectInfo : ChunkLoader
+    public class ObjectInfo : ChunkLoader
     {
         public List<Chunk> chunks = new List<Chunk>();
         public int properties = 0;

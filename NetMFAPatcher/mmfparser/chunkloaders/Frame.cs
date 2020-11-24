@@ -66,12 +66,12 @@ namespace NetMFAPatcher.chunkloaders
             chunks.Read(FrameReader);
 
             var name = chunks.get_chunk<FrameName>();
-            if (name != null)
+            if (name != null) //Just to be sure
             {
                 this.name = name.value;
             }
             var password = chunks.get_chunk<FramePassword>();
-            if (password != null)
+            if (password != null) //Just to be sure
             {
                 this.password = password.value;
             }
@@ -83,8 +83,7 @@ namespace NetMFAPatcher.chunkloaders
             var objects = chunks.get_chunk<ObjectInstances>();
             if(objects!=null)
             {
-                CountOfObjs = objects.CountOfObjects;
-                
+                CountOfObjs = objects.CountOfObjects;              
             }
 
 
@@ -147,7 +146,7 @@ namespace NetMFAPatcher.chunkloaders
     class ObjectInstances : ChunkLoader
     {
         
-        public int CountOfObjects;
+        public int CountOfObjects=0;
         public List<ObjectInstances> items = new List<ObjectInstances>();
 
         public ObjectInstances(ByteIO reader) : base(reader)
@@ -165,8 +164,9 @@ namespace NetMFAPatcher.chunkloaders
 
         public override void Read()
         {
-            return;
+            
             CountOfObjects = (int)reader.ReadUInt32();
+            return;
             for (int i = 0; i < CountOfObjects; i++)
             {
                 var item = new ObjectInstances(reader);

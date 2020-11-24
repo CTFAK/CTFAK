@@ -90,6 +90,23 @@
   <ItemGroup>
     <Compile Include="MMFParser\ChunkLoaders\AppMenu.cs" />
     <Compile Include="MMFParser\ChunkLoaders\banks\DebugImageBank.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Events\Events.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Events\EventsParts.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Position.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Int.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\GlobalValue.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\ParameterCommon.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Float.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Every.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Sample.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Remark.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Colour.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Short.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\AlterableValue.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Create.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Time.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\ParamObject.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Globals.cs" />
     <Compile Include="MMFParser\ChunkLoaders\ObjectInfo.cs" />
     <Compile Include="MMFParser\ChunkLoaders\FrameItems.cs" />
     <Compile Include="MMFParser\ChunkLoaders\ObjectNames.cs" />
@@ -146,6 +163,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MMFParser\ChunkLoaders\Events\Expressions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

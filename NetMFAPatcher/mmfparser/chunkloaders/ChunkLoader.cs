@@ -13,7 +13,7 @@ namespace NetMFAPatcher.chunkloaders
     {
         public Chunk chunk;
         public ByteIO reader;
-        public bool verbose = true;
+        public bool verbose = false;
 
         protected ChunkLoader(ByteIO reader)
         {

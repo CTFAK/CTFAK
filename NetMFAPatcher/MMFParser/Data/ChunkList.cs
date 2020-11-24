@@ -1,5 +1,7 @@
 ﻿using NetMFAPatcher.chunkloaders;
 using NetMFAPatcher.mmfparser.chunkloaders;
+using NetMFAPatcher.MMFParser.ChunkLoaders;
+using NetMFAPatcher.MMFParser.ChunkLoaders.Events;
 using NetMFAPatcher.utils;
 using NetMFAPatcher.Utils;
 using System;
@@ -13,6 +15,7 @@ namespace NetMFAPatcher.MMFParser.Data
     {
         public List<Chunk> chunks = new List<Chunk>();
         public bool verbose = false;
+        public List<Frame> Frames = new List<Frame>();
 
         public void Read(ByteIO exeReader)
         {
@@ -27,7 +30,7 @@ namespace NetMFAPatcher.MMFParser.Data
                 {
                     if (chunk.loader.verbose)
                     {
-                        chunk.loader.Print(Program.LogAll);
+                        //chunk.loader.Print(Program.LogAll);
                     }
                 }
                 if (chunk.verbose)
@@ -44,6 +47,11 @@ namespace NetMFAPatcher.MMFParser.Data
                 if (chunk.id == 8750)
                 {
                     chunk.BuildKey();
+                }
+                if (chunk.id == 8755)
+                {
+                    Console.WriteLine("Fisting Found");
+                    Console.ReadKey();
                 }
 
 
@@ -227,6 +235,7 @@ namespace NetMFAPatcher.MMFParser.Data
                     break;
                 case 13107:
                     loader = new Frame(chunk);
+                    Frames.Add((Frame)loader);
                     break;
                 case 13108:
                     loader = new FrameHeader(chunk);
@@ -249,7 +258,15 @@ namespace NetMFAPatcher.MMFParser.Data
                 case 8788:
                     loader = new ObjectNames(chunk);
                     break;
-
+                case 8754:
+                    loader = new GlobalValues(chunk);
+                    break;
+                case 8755:
+                    loader = new GlobalStrings(chunk);
+                    break;
+                case 13117:
+                    loader = new Events(chunk);
+                    break;
             }
 
             if (loader != null)
@@ -272,7 +289,7 @@ namespace NetMFAPatcher.MMFParser.Data
                     }
                 }
             }
-
+            //Logger.Log($"ChunkLoader {typeof(T).Name} not found", true, ConsoleColor.Red);
             return null; //I hope this wont happen  
         }
         public T get_loader<T>(ChunkLoader loader) where T : ChunkLoader

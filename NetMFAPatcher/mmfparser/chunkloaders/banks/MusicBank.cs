@@ -10,7 +10,7 @@ using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.chunkloaders
 {
-    class MusicBank : ChunkLoader
+    public class MusicBank : ChunkLoader
     {
         public int num_of_items = 0;
         public int references = 0;

@@ -10,7 +10,7 @@ using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.mmfparser.chunkloaders
 {
-    class AppMenu : ChunkLoader
+    public class AppMenu : ChunkLoader
     {
         public List<AppMenuItem> items = new List<AppMenuItem>();
         public AppMenu(ByteIO reader) : base(reader)
@@ -78,7 +78,7 @@ namespace NetMFAPatcher.mmfparser.chunkloaders
 
         }
     }
-    class AppMenuItem : ChunkLoader
+    public class AppMenuItem : ChunkLoader
     {
         public string name = "";
         public int flags = 0;

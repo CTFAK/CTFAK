@@ -14,7 +14,7 @@ using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.chunkloaders
 {
-    class ImageBank : ChunkLoader
+    public class ImageBank : ChunkLoader
     {
         Dictionary<int, ImageItem> images = new Dictionary<int, ImageItem>();
         public ImageBank(ByteIO reader) : base(reader)
@@ -51,7 +51,7 @@ namespace NetMFAPatcher.chunkloaders
 
         }
     }
-    class ImageItem : ChunkLoader
+    public class ImageItem : ChunkLoader
     {
 
         public int handle;

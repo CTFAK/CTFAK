@@ -39,7 +39,7 @@ namespace NetMFAPatcher.utils
             Marshal.FreeHGlobal(copyright);
             Marshal.FreeHGlobal(pathfilename);
             key = Key;
-            //key.Log(true, "X2");
+            key.Log(true, "X2");
 
            
 

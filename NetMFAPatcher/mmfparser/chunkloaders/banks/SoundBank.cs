@@ -10,7 +10,7 @@ using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.chunkloaders
 {
-    class SoundBank : ChunkLoader
+    public class SoundBank : ChunkLoader
     {
         public int num_of_items = 0;
         public int references = 0;
@@ -26,6 +26,7 @@ namespace NetMFAPatcher.chunkloaders
             //Implementing for standalone-only because of my lazyness
             items = new List<SoundItem>();
             num_of_items = reader.ReadInt32();
+            return;
             for (int i = 0; i < num_of_items; i++)
             {
                 var item = new SoundItem(reader);

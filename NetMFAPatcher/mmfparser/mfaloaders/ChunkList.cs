@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NetMFAPatcher.mmfparser.mfaloaders
 {
-    class ChunkList : DataLoader
+    class ChunkList : DataLoader//This is used for MFA reading/writing
     {
         List<DataLoader> items = new List<DataLoader>();
         public override void Print()

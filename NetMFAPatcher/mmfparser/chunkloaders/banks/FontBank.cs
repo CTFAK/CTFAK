@@ -10,9 +10,9 @@ using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.chunkloaders
 {
-    class FontBank : ChunkLoader
+    public class FontBank : ChunkLoader
     {
-        int numberOfItems;
+        public int numberOfItems;
         public override void Print(bool ext)
         {
             Logger.Log($"FontCount:{numberOfItems.ToString()}");

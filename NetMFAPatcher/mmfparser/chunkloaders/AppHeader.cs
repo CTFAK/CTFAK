@@ -10,13 +10,13 @@ using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.chunkloaders
 {
-    class AppHeader : ChunkLoader
+    public class AppHeader : ChunkLoader
     {
-        int size;
-        int windowWidth;
-        int windowHeight;
-        int initialScore;
-        int initialLives;
+        public int size;
+        public int windowWidth;
+        public int windowHeight;
+        public int initialScore;
+        public int initialLives;
         public int numberOfFrames;
         
 
@@ -34,7 +34,7 @@ namespace NetMFAPatcher.chunkloaders
             initialLives = (int) (reader.ReadUInt32() ^ 0xffffffff);
             var controls = new Controls(reader);
             controls.Read();
-            controls.Print(false);
+            // controls.Print(false);
 
             var borderColor = reader.ReadBytes(4);
             numberOfFrames = reader.ReadInt32();

@@ -13,10 +13,43 @@ namespace NetMFAPatcher.mmfparser
         public static bool isUnicode;
         public enum Products
         {
-            MMF1,
-            MMF15,
-            MMF2,
-            CNC1
+            MMF1=1,
+            MMF15=2,
+            MMF2=3,
+            CNC1=0
+
+        }
+        public enum ValueType
+        {
+            Long=0,
+            Int=0,
+            String=1,
+            Float=2,
+            Double=2
+        }
+        public enum ObjectType
+        {
+            Player=-7,
+            Keyboard=-6,
+            Create=-5,
+            Timer=-4,
+            Game=-3,
+            Speaker=-2,
+            System=-1,
+            QuickBackdrop=0,
+            Backdrop=1,
+            Active=2,
+            Text=3,
+            Question=4,
+            Score=5,
+            Lives = 6,
+            Counter=7,
+            RTF=8,
+            SubApplication=9,
+            INI=33,
+            IniPp=32,
+            File=34,
+            TextEntry=35
 
         }
         public enum ChunkNames

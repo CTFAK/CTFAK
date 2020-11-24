@@ -1,4 +1,8 @@
-﻿using NetMFAPatcher.chunkloaders;
+﻿using mmfparser;
+using NetMFAPatcher.chunkloaders;
+using NetMFAPatcher.mmfparser.mfaloaders;
+using NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters;
+using NetMFAPatcher.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -49,6 +53,26 @@ namespace NetMFAPatcher
                 Console.WriteLine(Temp);
             }
             return Temp;
+
+
+        }
+        public static DataLoader LoadParameter(int code, ByteIO reader)
+        {
+            DataLoader item = null;
+            if(code==13)
+            {
+                item = new Every(reader);
+                
+            }
+            if (code == 2)
+            {
+                item = new Time(reader);
+
+            }
+            if(item!=null) item.Read();
+
+            return item;
+
 
 
         }
