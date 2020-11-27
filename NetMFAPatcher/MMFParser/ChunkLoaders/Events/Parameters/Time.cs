@@ -17,11 +17,11 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
         {
             Timer = reader.ReadInt32();
             Loops = reader.ReadInt32();
-            Logger.Log($"Time time: {Timer} loops: {Loops}");
             
         }
         public override string ToString()
         {
+
             return $"Time time: {Timer} loops: {Loops}";
         }
     }

@@ -52,12 +52,12 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
 
         public override void Read()
         {
-            name = reader.ReadAscii(reader.ReadInt32());
+            name = Helper.AutoReadUnicode(reader);
             var type = reader.ReadInt32();
             switch (type)
             {
                 case 2://string
-                    value = reader.ReadAscii(reader.ReadInt32());
+                    value = Helper.AutoReadUnicode(reader);
                     break;
                 case 0://int
                     value = reader.ReadInt32();

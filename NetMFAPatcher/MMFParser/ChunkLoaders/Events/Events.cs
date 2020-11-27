@@ -54,20 +54,21 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
 
                     }
                 }
-                else if(identifier==EventCount)
+                else if (identifier == EventCount)
                 {
                     var size = reader.ReadInt32();
                 }
-                else if(identifier==EventgroupData)
+                else if (identifier == EventgroupData)
                 {
                     var size = reader.ReadInt32();
                     var end_position = reader.Tell() + size;
-                    while(true)
+                    while (true)
                     {
                         var eg = new EventGroup(reader);
                         eg.Read();
                     }
                 }
+                else if (identifier == End) break;
 
             }
             
@@ -140,13 +141,25 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
                 Actions.Add(item);
             }
             reader.Seek(currentPosition + size);
-            if(Conditions[0].items[0].loader!=null)
+            Console.WriteLine("IF:");
+            if (Conditions!=null)
             {
-                Logger.Log(Conditions[0].items[0].loader.ToString());
-                Console.ReadKey();
-
+                foreach (var item in Conditions)
+                {
+                    Console.WriteLine("\t" + item.ToString());
+                }
             }
-            
+            Console.WriteLine("DO:");
+            if (Actions != null)
+            {
+                foreach (var item in Actions)
+                {
+                    Console.WriteLine("\t" + item.ToString());
+                }
+            }
+
+
+
 
         }
     }

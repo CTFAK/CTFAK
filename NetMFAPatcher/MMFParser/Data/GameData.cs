@@ -61,7 +61,7 @@ namespace NetMFAPatcher.MMFParser.Data
             //Checking for header
             if (magic == Constants.UNICODE_GAME_HEADER) Constants.isUnicode = true;//PAMU
             else if (magic == Constants.GAME_HEADER) Constants.isUnicode = false;//PAME
-            else Logger.Log("Header Fucked Up", true, ConsoleColor.Red);//Header not found
+            else Logger.Log("Couldn't found any known headers", true, ConsoleColor.Red);//Header not found
 
             runtime_version = exeReader.ReadUInt16(); //
             runtime_subversion = exeReader.ReadUInt16(); //0
@@ -69,18 +69,13 @@ namespace NetMFAPatcher.MMFParser.Data
             product_build = exeReader.ReadInt32(); //CTF Build
             build = (Products)runtime_version;
 
-            //Print();
-            //Logger.Log("Press any key to continue", true, ConsoleColor.Magenta);
-            //Console.ReadKey();
-            
-
             gameChunks = new ChunkList(); //Reading game chunks
             gameChunks.Read(exeReader);
 
             //Load chunks into gamedata for easier access
             if (gameChunks.get_chunk<AppName>() != null) Name = gameChunks.get_chunk<AppName>().value;
             if (gameChunks.get_chunk<Copyright>() != null) Copyright = gameChunks.get_chunk<Copyright>().value;
-            if(gameChunks.get_chunk<AppAuthor>()!=null) Author = gameChunks.get_chunk<AppAuthor>().value;
+            if (gameChunks.get_chunk<AppAuthor>()!=null) Author = gameChunks.get_chunk<AppAuthor>().value;
             if (gameChunks.get_chunk<EditorFilename>() != null) EditorFilename = gameChunks.get_chunk<EditorFilename>().value;
             if (gameChunks.get_chunk<TargetFilename>() != null) TargetFilename = gameChunks.get_chunk<TargetFilename>().value;
             if (gameChunks.get_chunk<AppMenu>() != null) Menu = gameChunks.get_chunk<AppMenu>();
@@ -93,7 +88,7 @@ namespace NetMFAPatcher.MMFParser.Data
             if (gameChunks.get_chunk<GlobalStrings>() != null) GStrings = gameChunks.get_chunk<GlobalStrings>();
             if (gameChunks.get_chunk<GlobalValues>() != null) GValues = gameChunks.get_chunk<GlobalValues>();
             if (gameChunks.get_chunk<FrameItems>() != null) Frameitems = gameChunks.get_chunk<FrameItems>();
-            Frames = gameChunks.Frames;
+            Frames = gameChunks.Frames; //Its a list, so i have to manually parse them in chunk list. 
 
             Print();
         }

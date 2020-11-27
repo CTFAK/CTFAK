@@ -30,13 +30,14 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
         public override void Read()
         {
             var handle = reader.ReadInt32();
-            name = reader.ReadAscii(reader.ReadInt32());
+            name = Helper.AutoReadUnicode(reader);
+            Console.WriteLine(name);
             sizeX = reader.ReadInt32();
             sizeY = reader.ReadInt32();
             var background = reader.ReadColor();
             var flags = reader.ReadInt32();
             maxObjects = reader.ReadInt32();
-            var password = reader.ReadAscii(reader.ReadInt32());
+            var password = Helper.AutoReadUnicode(reader);
             reader.Skip(4);
             var lastViewedX = reader.ReadInt32();
             var lastViewedY = reader.ReadInt32();

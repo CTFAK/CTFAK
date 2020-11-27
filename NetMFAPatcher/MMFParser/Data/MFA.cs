@@ -1,6 +1,4 @@
-﻿
-
-using NetMFAPatcher.Utils;
+﻿using NetMFAPatcher.Utils;
 using mmfparser.mfaloaders;
 using NetMFAPatcher.chunkloaders;
 using System;
@@ -50,20 +48,26 @@ namespace NetMFAPatcher.mfa
 
         public override void Read()
         {
-            Logger.Log($"MFA HEADER:{reader.ReadAscii(4)}");
-            mfaBuild = reader.ReadInt32();           
-            product = reader.ReadInt32();            
+            Logger.Log($"MFA HEADER:{reader.ReadAscii(4)}\n");
+            mfaBuild = reader.ReadInt32();
+            product = reader.ReadInt32();
             buildVersion = reader.ReadInt32();
+            Console.WriteLine($"mfaBuild: {mfaBuild}, product: {product}, buildVersion: {buildVersion}");
+            var reserved = reader.ReadInt32();
+
             
-            name = reader.ReadAscii(reader.ReadInt32());
-            description = reader.ReadAscii(reader.ReadInt32());
-            path = reader.ReadAscii(reader.ReadInt32());
+            name = Helper.AutoReadUnicode(reader);
+
+            
+            description = Helper.AutoReadUnicode(reader);
+
+            
+            path = Helper.AutoReadUnicode(reader);
+            Console.WriteLine($"\nMFAName: {name}\nDescription: {description}\nPath: {path}");
+
             stamp = reader.ReadBytes(reader.ReadInt32());
-            Console.WriteLine(path);
-            
 
-
-            if(reader.ReadAscii(4)!="ATNF")
+            if (reader.ReadAscii(4) != "ATNF")
             {
                 throw new Exception("Invalid Font Bank");
             }
@@ -87,39 +91,58 @@ namespace NetMFAPatcher.mfa
             var music = new MusicBank(reader);
             music.Read();
 
-            //if (reader.ReadAscii(4) != "AGMI")
-            //{
-            //    throw new Exception("Invalid Icon Bank");
-            //}
-            //var icons = new AGMIBank(reader);
-            //icons.Read();
+            if (reader.ReadAscii(4) != "AGMI")
+            {
+                throw new Exception("Invalid Icon Bank");
+            }
+            var icons = new AGMIBank(reader);
+            icons.Read();
+            if (reader.ReadAscii(4) != "AGMI")
+            {
+                throw new Exception("Invalid Image Bank");
+            }
+            var images = new AGMIBank(reader);
+            images.Read();
 
-            reader.Seek(17710);//hardcoded offset
+            
+            if (Helper.AutoReadUnicode(reader) != name) throw new Exception("Invalid name");
 
-            reader.ReadInt32();//checkDefault
-            author = reader.ReadAscii(reader.ReadInt32());
-            reader.ReadInt32();//checkDefault
+            
+            author = Helper.AutoReadUnicode(reader);
+            
 
-            copyright = reader.ReadAscii(reader.ReadInt32());
-            reader.ReadInt32();//checkDefault
+            
+            var newDesc = Helper.AutoReadUnicode(reader);
+            if ( newDesc!= description) throw new Exception("Invalid description: "+newDesc);
 
-            company = reader.ReadAscii(reader.ReadInt32());
-            version = reader.ReadAscii(reader.ReadInt32());
+
+
+            
+            copyright = Helper.AutoReadUnicode(reader);
+
+
+            company = Helper.AutoReadUnicode(reader);
+            Console.WriteLine("Company: "+company);
+            version = Helper.AutoReadUnicode(reader);
+            Console.WriteLine("Version: " + version);
             windowX = reader.ReadInt32();
             windowY = reader.ReadInt32();
-            var borderColor = reader.ReadBytes(4);
-            var displayFlags = reader.ReadInt32();
-            var graphicFlags = reader.ReadInt32();
-            var helpFile = reader.ReadBytes(reader.ReadInt32());
-            var vitalizePreview = reader.ReadBytes(reader.ReadInt32());
+            Console.WriteLine($"Window:{windowX}x{windowY}");
+            var borderColor = reader.ReadColor();
+            var displayFlags = reader.ReadUInt32();
+            var graphicFlags = reader.ReadUInt32();
+            var helpFile = Helper.AutoReadUnicode(reader);
+            Console.WriteLine(reader.Tell());
+            var vitalizePreview = reader.ReadInt32();
             var initialScore = reader.ReadInt32();
             var initialLifes = reader.ReadInt32();
             var frameRate = reader.ReadInt32();
             var buildType = reader.ReadInt32();
-            var buildPath = reader.ReadAscii(reader.ReadInt32());
+            var buildPath = Helper.AutoReadUnicode(reader);
             reader.ReadInt32();
-            var commandLine = reader.ReadAscii(reader.ReadInt32());
-            var aboutbox = reader.ReadAscii(reader.ReadInt32());
+            var commandLine = Helper.AutoReadUnicode(reader);
+            var aboutbox = Helper.AutoReadUnicode(reader);
+            Console.WriteLine(aboutbox);
             reader.ReadInt32();
             var binCount = reader.ReadInt32();//wtf i cant put it in loop fuck shit
 
@@ -153,7 +176,7 @@ namespace NetMFAPatcher.mfa
             globalStrings = new ValueList(reader);
             globalStrings.Read();
             var globalEvents = reader.ReadBytes(reader.ReadInt32());
-            var graphicMode = reader.ReadInt32();
+            var graphicMode = reader.ReadInt32();;
             
 
 
@@ -173,8 +196,8 @@ namespace NetMFAPatcher.mfa
             for (int i = 0; i < extCount; i++)//extensions
             {
                 var handleE = reader.ReadInt32();
-                var filenameE = reader.ReadAscii(reader.ReadInt32());
-                var nameE = reader.ReadAscii(reader.ReadInt32());
+                var filenameE = Helper.AutoReadUnicode(reader);
+                var nameE = Helper.AutoReadUnicode(reader);
                 var magicE = reader.ReadInt32();
                 var subType = reader.ReadBytes(reader.ReadInt32());
 
@@ -195,6 +218,7 @@ namespace NetMFAPatcher.mfa
                 
 
             }
+            reader.Seek(nextOffset);
 
 
 

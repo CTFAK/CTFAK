@@ -48,7 +48,6 @@ namespace NetMFAPatcher.mmfparser.chunkloaders
                 reader.ReadInt16();
                 reader.ReadInt16();
                 reader.Skip(2);
-                Console.WriteLine("AfterCycleOffset: " + reader.Tell());
             }
 
         }

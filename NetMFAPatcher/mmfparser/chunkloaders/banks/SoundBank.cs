@@ -26,7 +26,7 @@ namespace NetMFAPatcher.chunkloaders
             //Implementing for standalone-only because of my lazyness
             items = new List<SoundItem>();
             num_of_items = reader.ReadInt32();
-            return;
+
             for (int i = 0; i < num_of_items; i++)
             {
                 var item = new SoundItem(reader);

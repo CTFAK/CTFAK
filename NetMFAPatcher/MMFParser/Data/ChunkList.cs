@@ -48,11 +48,7 @@ namespace NetMFAPatcher.MMFParser.Data
                 {
                     chunk.BuildKey();
                 }
-                if (chunk.id == 8755)
-                {
-                    Console.WriteLine("Fisting Found");
-                    Console.ReadKey();
-                }
+                
 
 
                 if (chunk.id == 32639) break; //LAST chunkID
@@ -96,12 +92,11 @@ namespace NetMFAPatcher.MMFParser.Data
 
                 switch (flag)
                 {
-                    case ChunkFlags.Encrypted:
-                        
-                        chunk_data = Decryption.DecodeChunk(exeReader.ReadBytes(size),size,54);
+                    case ChunkFlags.Encrypted:                       
+                        chunk_data = Decryption.DecodeChunk(exeReader.ReadBytes(size),size);
                         break;
                     case ChunkFlags.CompressedAndEncrypyed:
-                        chunk_data = Decryption.DecodeMode3(exeReader.ReadBytes(size), size,id, 54);
+                        chunk_data = Decryption.DecodeMode3(exeReader.ReadBytes(size), size,id);
                         break;
                     case ChunkFlags.Compressed:
                         chunk_data = Decompressor.Decompress(exeReader);
@@ -121,7 +116,7 @@ namespace NetMFAPatcher.MMFParser.Data
                 int.TryParse(name,out tempId);
                 if(tempId==id)
                 {
-                    chunk_data.Log(true, "X2");
+                    //chunk_data.Log(true, "X2");
                 }
 
             }
@@ -152,26 +147,26 @@ namespace NetMFAPatcher.MMFParser.Data
             }
             public void BuildKey()
             {
-                string title = "Five Nights at Candy's 3";
+                string title = "";
                 string copyright = "";
-                string project = @"C:\Users\Emil\Desktop\Five Nights at Candy's 3\Five Nights At Candy's 3.mfa";
+                string project = "";
                 
                 var titleChunk = chunk_list.get_chunk<AppName>();
                 if (titleChunk != null) title = titleChunk.value;
 
-
-
                 var copyrightChunk = chunk_list.get_chunk<Copyright>();
                 if (copyrightChunk != null) copyright = copyrightChunk.value;
+
                 var projectChunk = chunk_list.get_chunk<EditorFilename>();
                 if (projectChunk != null) project = projectChunk.value;
-                if (Program.game_data.product_build > 284)
+
+                if (EXE.LatestInst.game_data.product_build >= 284)
                 {
-                    Decryption.MakeKey(title, copyright, project, 54);
+                    Decryption.MakeKey(title, copyright, project);
                 }
                 else
                 {
-                    Decryption.MakeKey(project, title, copyright, 54);
+                    Decryption.MakeKey(project, title, copyright);
                 }
 
                 Logger.Log("New Key!"); 
@@ -215,7 +210,7 @@ namespace NetMFAPatcher.MMFParser.Data
                 case 8752:
                     loader = new AppDoc(chunk);
                     break;
-                case 8745://
+                case 8745:
                     loader = new FrameItems(chunk);
                     break;
                 case 8757:
@@ -256,7 +251,7 @@ namespace NetMFAPatcher.MMFParser.Data
                     loader = new ObjectHeader(chunk);
                     break;
                 case 8788:
-                    loader = new ObjectNames(chunk);
+                    //loader = new ObjectNames(chunk);
                     break;
                 case 8754:
                     loader = new GlobalValues(chunk);
@@ -265,13 +260,15 @@ namespace NetMFAPatcher.MMFParser.Data
                     loader = new GlobalStrings(chunk);
                     break;
                 case 13117:
-                    loader = new Events(chunk);
+                    //loader = new Events(chunk);//NOT WORKING
                     break;
             }
 
             if (loader != null)
             {
+                //Logger.Log($"Reading {loader.GetType().Name}...",true,ConsoleColor.Yellow);
                 loader.Read();
+
             }
             return loader;
         }
@@ -290,7 +287,7 @@ namespace NetMFAPatcher.MMFParser.Data
                 }
             }
             //Logger.Log($"ChunkLoader {typeof(T).Name} not found", true, ConsoleColor.Red);
-            return null; //I hope this wont happen  
+            return null;  
         }
         public T get_loader<T>(ChunkLoader loader) where T : ChunkLoader
         {

@@ -23,7 +23,7 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
 
         public override void Read()
         {
-            name = reader.ReadAscii(reader.ReadInt32());
+            name = Helper.AutoReadUnicode(reader);
             flags = reader.ReadInt32();
             xCoefficient = reader.ReadSingle();
             yCoefficient = reader.ReadSingle();

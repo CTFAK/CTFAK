@@ -23,7 +23,6 @@ namespace NetMFAPatcher.mmfparser.chunkloaders
 
         public override void Read()
         {
-            Console.WriteLine("Reading FrameItems");
             var count = reader.ReadInt32();
             
             for (int i = 0; i < count; i++)

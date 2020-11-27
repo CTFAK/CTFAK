@@ -49,8 +49,14 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
                 items.Add(item);
             }
             reader.Seek(currentPosition + size);
+            
 
             
+        }
+        public override string ToString()
+        {
+            return $"Condition {ObjectType}-{num}-{(items.Count > 0 ? items[0].ToString() : "cock")}";
+
         }
     }
 
@@ -91,6 +97,12 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
 
 
         }
+        public override string ToString()
+        {
+            
+            return $"Action {ObjectType}-{num}-{(items.Count>0?items[0].ToString():"cock")}";
+
+        }
     }
 
     public class Parameter : DataLoader
@@ -110,11 +122,18 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
             var current_position = reader.Tell();
             var size = reader.ReadInt16();
             Code = reader.ReadInt16();
-            Logger.Log(Code.ToString());
+
+
             var ActualLoader = Helper.LoadParameter(Code,reader);
-            if(loader!=null)
+            this.loader = ActualLoader;
+            if (loader!=null)
             {
-                this.loader = ActualLoader;
+                
+                loader.Read();
+            }
+            else
+            {
+                //throw new Exception("Loader is null");
             }
             reader.Seek(current_position+size);
 
@@ -123,20 +142,27 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
         {
             get
             {
-                if(loader.GetType().GetField("value")!=null)
+                if (loader != null)
                 {
-                    return loader.GetType().GetField("value").GetValue(loader);
+
+
+                    if (loader.GetType().GetField("value") != null)
+                    {
+                        return loader.GetType().GetField("value").GetValue(loader);
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
-                else
-                {
-                    return null;
-                }
+                else return null;
             }
         }
         public override string ToString()
         {
-            if (value != null) return (string)value;
-            else return "UNKNOWN-PARAM";
+            if (loader != null) return loader.ToString();
+            else return "UNK-PARAMETER";
+
         }
     }
 

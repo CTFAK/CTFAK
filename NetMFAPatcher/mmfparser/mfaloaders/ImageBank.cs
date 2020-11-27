@@ -37,9 +37,12 @@ namespace mmfparser.mfaloaders
             Logger.Log($"Number of image items: {count.ToString()}");
             for (int i = 0; i < count; i++)
             {
-                Console.WriteLine("READING IMAGE: " + reader.Tell());
+
                 var item = new ImageItem(reader);
+                item.isCompressed = true;
+                var currentPos = reader.Tell();
                 item.Read();
+
                 
 
                 

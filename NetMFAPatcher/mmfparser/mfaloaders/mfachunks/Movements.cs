@@ -42,8 +42,8 @@ namespace NetMFAPatcher.mmfparser.mfaloaders.mfachunks
 
         public override void Read()
         {
-            name = reader.ReadAscii(reader.ReadInt32());
-            var extension = reader.ReadBytes(reader.ReadInt32());
+            name = Helper.AutoReadUnicode(reader);
+            var extension = Helper.AutoReadUnicode(reader);
             var identifier = reader.ReadInt32();
             var dataSize = reader.ReadInt32();
             if(extension.Length>0)

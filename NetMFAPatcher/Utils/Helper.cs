@@ -56,27 +56,77 @@ namespace NetMFAPatcher
 
 
         }
+        public static string AutoReadUnicode(ByteIO reader)
+        {
+            var len = reader.ReadInt16();
+            reader.Skip(2);
+            return reader.ReadWideString(len);
+        }
         public static DataLoader LoadParameter(int code, ByteIO reader)
         {
             DataLoader item = null;
-            if(code==13)
+            if (code == 1)
             {
-                item = new Every(reader);
-                
+                item = new ParamObject(reader);
             }
             if (code == 2)
             {
                 item = new Time(reader);
-
             }
-            if(item!=null) item.Read();
-
+            if (code==3|| code == 10|| code == 11 || code == 12 || code == 17 || code == 26 || code == 31 || code == 43 || code == 57 || code == 58 || code == 60 || code == 61)
+            {
+                item = new Short(reader);                
+            }
             return item;
 
+        }
+        public static string GetHex(this byte[] data, int count=-1,int position=0)
+        {
+            var actualCount = count;
+            if (actualCount == -1) actualCount = data.Length;
+            string temp = "";
+            for (int i = 0; i < actualCount; i++)
+            {
+                temp += data[i].ToString("X2");
+                temp += " ";
+            }
+            return temp;
+        }
+        public static void PrintHex(this byte[] data)
+        {
+            var blockSize = 16;
+            var blocks = data.Split<byte>(blockSize);
+            foreach (var block in blocks)
+            {
+                string charAcc = "";
+                foreach (var b in block)
+                {
+                    if (b < 128 && b > 32) charAcc += Convert.ToChar(b);
+                    else charAcc += '.';
+                }
+                var b_len = block.Count();
+                //var accLen=
 
+
+            }
+            
 
         }
-        
+        /// <summary>
+        /// Splits an array into several smaller arrays.
+        /// </summary>
+        /// <typeparam name="T">The type of the array.</typeparam>
+        /// <param name="array">The array to split.</param>
+        /// <param name="size">The size of the smaller arrays.</param>
+        /// <returns>An array containing smaller arrays.</returns>
+        public static IEnumerable<IEnumerable<T>> Split<T>(this T[] array, int size)
+        {
+            for (var i = 0; i < (float)array.Length / size; i++)
+            {
+                yield return array.Skip(i * size).Take(size);
+            }
+        }
+
 
     }
 }

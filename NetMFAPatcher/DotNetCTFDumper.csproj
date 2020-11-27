@@ -88,10 +88,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GUI\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MMFParser\ChunkLoaders\AppMenu.cs" />
     <Compile Include="MMFParser\ChunkLoaders\banks\DebugImageBank.cs" />
     <Compile Include="MMFParser\ChunkLoaders\Events\Events.cs" />
     <Compile Include="MMFParser\ChunkLoaders\Events\EventsParts.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Events\Expressions\Expression.cs" />
     <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Position.cs" />
     <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Int.cs" />
     <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\GlobalValue.cs" />
@@ -106,11 +113,13 @@
     <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Create.cs" />
     <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Time.cs" />
     <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\ParamObject.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\ExtData.cs" />
     <Compile Include="MMFParser\ChunkLoaders\Globals.cs" />
     <Compile Include="MMFParser\ChunkLoaders\ObjectInfo.cs" />
     <Compile Include="MMFParser\ChunkLoaders\FrameItems.cs" />
     <Compile Include="MMFParser\ChunkLoaders\ObjectNames.cs" />
     <Compile Include="MMFParser\Data\DataLoader.cs" />
+    <Compile Include="MMFParser\Data\EXE.cs" />
     <Compile Include="MMFParser\MFALoaders\ChunkList.cs" />
     <Compile Include="MMFParser\MFALoaders\Frame.cs" />
     <Compile Include="MMFParser\MFALoaders\FrameItem.cs" />
@@ -165,7 +174,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="MMFParser\ChunkLoaders\Events\Expressions\" />
+    <EmbeddedResource Include="GUI\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -33,6 +33,7 @@ namespace NetMFAPatcher.chunkloaders
         {
             reader = new ByteIO(chunk.chunk_data);
             var number_of_items = reader.ReadUInt32();
+            if (!Program.DumpImages) return;
             Console.WriteLine($"Found {number_of_items} images");
             for (int i = 0; i < number_of_items; i++)
             {
@@ -73,78 +74,33 @@ namespace NetMFAPatcher.chunkloaders
         byte[] alpha;
         ByteIO image_data;
 
+
         public bool isCompressed = true;
-
-
-        public (byte[] points, int n) ReadRGB(byte[] data, int width, int heigth, TestPoint pointClass)
-        {
-            var n = 0;
-            var i = 0;
-            List<byte> points = new List<byte>();
-            var pad = GetPadding(width, 3);
-            for (int y = 1; y < heigth; y++)
-            {
-                for (int x = 1; x < width; x++)
-                {
-                    var a = pointClass.Read(data, n);
-                    points.Add(a.r);
-                    points.Add(a.g);
-                    points.Add(a.b);
-
-                    n += 3;//pointClass.size;
-                    i += 1;
-
-                }
-                n += 3;//(int)pad + pointClass.size;
-
-
-            }
-
-            return (points.ToArray(), n);
-        }
-        public byte[] ReadAlpha(byte[] data, int width, int heigth, int position)
-        {
-
-            var n = 0;
-            var i = 0;
-            byte[] points = new byte[width * heigth * 16];
-            var pad = GetPadding(width, 1, 4);
-            for (int y = 1; y < heigth; y++)
-            {
-                for (int x = 1; x < heigth; x++)
-                {
-                    points[i] = data[n + position];
-                    n++;
-                    i++;
-
-                }
-                n += (int)pad;
-            }
-            return points;
-
-
-
-        }
-
-        public double GetPadding(int width, int classSize, int bytes = 2)
-        {
-            var pad = bytes - ((width * classSize) % bytes);
-            if (pad == bytes) pad = 0;
-            var padding = Math.Ceiling((float)(pad / classSize));
-            return padding;//Correct
-
-        }
-
-
-
-
 
         public override void Read()
         {
             handle = reader.ReadInt32();
             position = (int)reader.Tell();
-            if (!Program.DumpImages) return;
-            Load();
+            if (Program.DumpImages)
+            {
+                Load();
+                return;
+            }
+            else
+            {
+                if (isCompressed)
+                {
+                    reader.Skip(8);
+                    size = (int)reader.ReadUInt32();
+                    reader.Skip(size + 20);
+                }
+                else
+                {
+                    reader.Skip(4);
+                    size = (int)reader.ReadUInt32();
+                    reader.Seek(size + position);
+                }
+            }
             
         }
         public void Load()
@@ -156,7 +112,6 @@ namespace NetMFAPatcher.chunkloaders
             if (isCompressed)
             {
                 image_data = Decompressor.DecompressAsReader(reader);
-
             }
             else
             {
@@ -164,9 +119,19 @@ namespace NetMFAPatcher.chunkloaders
             }
 
             var start = image_data.Tell();
+            if (!isCompressed)
+            {
+
+            }
             checksum = image_data.ReadInt32();
+
+
             references = image_data.ReadInt32();
             size = (int)image_data.ReadUInt32();
+            if (!isCompressed)
+            {
+                image_data = new ByteIO(image_data.ReadBytes(size + 20));
+            }
             width = image_data.ReadInt16();
             height = image_data.ReadInt16();
             graphic_mode = image_data.ReadByte();//Graphic mode is always 4 for SL
@@ -177,23 +142,19 @@ namespace NetMFAPatcher.chunkloaders
             y_hotspot = image_data.ReadInt16();
             action_x = image_data.ReadInt16();
             action_y = image_data.ReadInt16();
-            
+
             Logger.Log($"Size: {width}x{height}");
             for (int i = 0; i < 4; i++)
             {
                 image_data.ReadByte();
             }
 
-
-
-
-
-            Save($"{Program.DumpPath}\\ImageBank\\" + handle.ToString() + ".png");
-
+            //Save($"{Program.DumpPath}\\ImageBank\\" + handle.ToString() + ".png");
+            Save("cum.png");
 
 
             return;
-            
+
 
 
 

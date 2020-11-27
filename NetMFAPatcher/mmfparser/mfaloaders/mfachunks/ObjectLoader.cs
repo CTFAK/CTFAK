@@ -26,12 +26,12 @@ namespace NetMFAPatcher.mmfparser.mfaloaders.mfachunks
             Logger.Log("    Values:");
             foreach (var item in values.items)
             {
-                Logger.Log($"       Value {item.name} contains {item.value}");
+                Logger.Log($"       Value {item.name} contains '{item.value}'");
             }
             Logger.Log("\n    Strings:");
             foreach (var item in strings.items)
             {
-                Logger.Log($"       String {item.name} contains {item.value}");
+                Logger.Log($"       String {item.name} contains '{item.value}'");
             }
             Logger.Log("\n    Movements:");
             foreach (var item in movements.items)
@@ -66,6 +66,7 @@ namespace NetMFAPatcher.mmfparser.mfaloaders.mfachunks
             movements.Read();
             behaviours = new Behaviours(reader);
             behaviours.Read();
+            reader.Skip(56);
             Print();
 
 

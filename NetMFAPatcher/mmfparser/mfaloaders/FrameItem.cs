@@ -18,7 +18,7 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
         public bool transparent;
         public int inkEffect;
         public int inkEffectParameter;
-        public bool antiAliasing;
+        public int antiAliasing;
         public int flags;
         public int iconType;
 
@@ -31,13 +31,13 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
         {
             objectType = reader.ReadInt32();
             handle = reader.ReadInt32();
-            name = reader.ReadAscii(reader.ReadInt32());
+            name = Helper.AutoReadUnicode(reader);
             var transparent1 = reader.ReadInt32();
             
             inkEffect = reader.ReadInt32();
             inkEffectParameter = reader.ReadInt32();
-            //antiAliasing = (bool)reader.ReadInt32();
-            reader.ReadInt32();
+            antiAliasing = reader.ReadInt32();
+
             flags = reader.ReadInt32();
             iconType = reader.ReadInt32();
             if(iconType==1)
@@ -57,11 +57,11 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
             }
             else
             {
-                Console.WriteLine("BeforeLoad:"+reader.Tell());
+              
                 var loader = new Active(reader);
                 loader.Read();
-                reader.Skip(56);
-                Console.WriteLine("AfterLoad:" + reader.Tell());
+
+
             }
             Print();
             

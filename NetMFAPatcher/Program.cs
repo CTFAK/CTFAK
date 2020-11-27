@@ -8,13 +8,14 @@ using NetMFAPatcher.mfa;
 using NetMFAPatcher.utils;
 using System.Runtime.InteropServices;
 using NetMFAPatcher.MMFParser.Data;
+using NetMFAPatcher.GUI;
+using System.Windows.Forms;
 
 namespace NetMFAPatcher
 {
     class Program
     {
-        public static PackData pack_data;
-        public static GameData game_data;
+        
         //public static string path = @"H:\fnaf-world.exe";//test
         //public static string path = @"D:\SteamLibrary\steamapps\common\Five Nights at Freddy's Sister Location\SisterLocation.exe";
         public static string path = "";//TODO: Make Selectable
@@ -28,7 +29,7 @@ namespace NetMFAPatcher
         public static bool verbose;
 
         public static bool LogAll=false;
-
+        public static bool UseGUI = false;
 
         [STAThread]
         static void Main(string[] args)
@@ -37,55 +38,17 @@ namespace NetMFAPatcher
             bool Verbose=false;
             bool DumpImages=true;
             bool DumpSounds=true;
-            bool CreateFolders=true;
-
-
-            if (args.Length == 0)
+            
+            if(args.Length==0)
             {
-                if (true)
-                {
-
-
-                    ByteIO mfaReader = new ByteIO(@"E:\anaconda-mode3\Application.mfa", FileMode.Open);
-                    var mfa = new MFA(mfaReader);
-                    mfa.Read();
-                    
-                    Console.ReadKey();
-                    Environment.Exit(0);
-                    
-                }
-                else
-                {
-                    var testWriter = new ByteWriter(@"C:\testcock.bin",FileMode.OpenOrCreate);
-                    testWriter.Write(0);
-                    testWriter.BaseStream.Close();
-                    var testReader = new ByteIO(@"C:\testcock.bin",FileMode.Open);
-
-
-
-
-                }
-                Console.ReadKey();
-                Environment.Exit(0);
-                Logger.Log("Finished!", true, ConsoleColor.Yellow);
-                Logger.Log("Args are not provided, launch dumper with -h or -help for help");
-                Logger.Log("Press any key to exit or press Z to launch with default args(debug only)");
-
-                var key = Console.ReadKey();
-                if(key.Key==ConsoleKey.Z)
-                {
-                    Console.WriteLine("");
-                    ReadFile("H:\\SteamLibrary\\steamapps\\common\\Freddy Fazbear's Pizzeria Simulator\\Pizzeria Simulator.exe", Verbose, DumpImages, DumpSounds);
-                    
-                }
-                if (key.Key == ConsoleKey.X)
-                {
-                    Console.WriteLine("");
-                    ReadFile("E:\\Games\\sl\\SisterLocation.exe", Verbose, DumpImages, DumpSounds);
-                }
-
-                Environment.Exit(0);
+                UseGUI = true;
+                var form = new MainForm();
+                Application.Run(form);
+                
             }
+
+            
+            
             if (args.Length > 0)
             {
                 Path = args[0];
@@ -116,8 +79,8 @@ namespace NetMFAPatcher
 
             }
 
+            if(args.Length>0) ReadFile(Path, Verbose, DumpImages, DumpSounds);
 
-            ReadFile(Path,Verbose,DumpImages,DumpSounds);
 
 
         }
@@ -137,16 +100,16 @@ namespace NetMFAPatcher
                 if (path.EndsWith(".exe"))
                 {
                     doMFA = false;
-
                     ByteIO exeReader = new ByteIO(path, FileMode.Open);
-                    
-
-                    ParseExe(exeReader);
+                    EXE currentEXE = new EXE();
+                    currentEXE.ParseExe(exeReader);
                     Logger.Log("Finished!", true, ConsoleColor.Yellow);
-                    Console.ReadKey();
+                    if(!UseGUI) Console.ReadKey();
+
                 }
                 else if (path.EndsWith(".mfa"))
                 {
+                    doMFA = true;
                     Logger.Log("MFA reading is currently unstable");
                     Logger.Log("Are you sure?");
                     Console.ReadKey();
@@ -181,76 +144,6 @@ namespace NetMFAPatcher
             Directory.CreateDirectory($"{DumpPath}\\extensions");
         }
 
-        public static void ParseExe(ByteIO exeReader)
-        {
-            Logger.Log($"Executable: {GameName}\n",true,ConsoleColor.DarkRed);
-            var es = exeReader.ReadAscii(2);
-            Logger.Log("EXE Header: " + es, true, ConsoleColor.Yellow);
-            if (es != "MZ")
-            {
-                Console.WriteLine("Invalid executable signature");
-                Environment.Exit(0);
-            }
-
-            exeReader.Seek(60,SeekOrigin.Begin);
-
-            UInt16 hdr_offset = exeReader.ReadUInt16();
-
-            exeReader.Seek(hdr_offset, SeekOrigin.Begin);
-            string peHdr = exeReader.ReadAscii(2);
-            Logger.Log("PE Header: " + peHdr, true, ConsoleColor.Yellow);
-            exeReader.Skip(4);
-
-            UInt16 num_of_sections = exeReader.ReadUInt16();
-
-            exeReader.Skip(16);
-            var optional_header = 28 + 68;
-            var data_dir = 16 * 8;
-            exeReader.Skip(optional_header + data_dir);
-
-            uint possition = 0;
-            for (int i = 0; i < num_of_sections; i++)
-            {
-                var entry = exeReader.Tell();
-
-                var section_name = exeReader.ReadAscii();
-
-                if (section_name == ".extra")
-                {
-                    exeReader.Seek(entry + 20);
-                    possition = exeReader.ReadUInt32();
-                    break;
-                }
-
-                if (i >= num_of_sections - 1)
-                {
-                    exeReader.Seek(entry + 16);
-                    uint size = exeReader.ReadUInt32();
-                    uint address = exeReader.ReadUInt32();
-                    possition = address + size;
-                    break;
-                }
-
-                exeReader.Seek(entry + 40);
-            }
-
-            exeReader.Seek((int) possition);
-            UInt16 first_short = exeReader.PeekUInt16();
-            Logger.Log("First Short: " + first_short.ToString("X2"), true, ConsoleColor.Yellow);
-
-            if (first_short == 0x7777)
-            {
-                Logger.Log("Found PackData header!\nReading PackData header.", true, ConsoleColor.Blue);
-                pack_data = new PackData();
-                pack_data.Read(exeReader);
-                game_data = new GameData();
-                game_data.Read(exeReader);
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-            }
-            else
-            {
-                Logger.Log("Failed to find PackData header!\n", true, ConsoleColor.Red);
-            }
-        }
+        
     }
 }
