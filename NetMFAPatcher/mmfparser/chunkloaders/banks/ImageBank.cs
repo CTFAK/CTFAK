@@ -1,22 +1,22 @@
-﻿using NetMFAPatcher.mmfparser;
-using NetMFAPatcher.utils;
-using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
+using System.Runtime.InteropServices;
+using NetMFAPatcher.MMFParser.Data;
+using NetMFAPatcher.utils;
+using NetMFAPatcher.Utils;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.chunkloaders
+namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
 {
     public class ImageBank : ChunkLoader
     {
-        Dictionary<int, ImageItem> images = new Dictionary<int, ImageItem>();
+        Dictionary<int, ImageItem> _images = new Dictionary<int, ImageItem>();
+
         public ImageBank(ByteIO reader) : base(reader)
         {
         }
@@ -24,212 +24,187 @@ namespace NetMFAPatcher.chunkloaders
         public ImageBank(Chunk chunk) : base(chunk)
         {
         }
+
         public override void Print(bool ext)
         {
-
         }
 
         public override void Read()
         {
-            reader = new ByteIO(chunk.chunk_data);
-            var number_of_items = reader.ReadUInt32();
-            if (!Program.DumpImages) return;
-            Console.WriteLine($"Found {number_of_items} images");
-            for (int i = 0; i < number_of_items; i++)
+            Reader = new ByteIO(Chunk.ChunkData);
+
+            var numberOfItems = Reader.ReadUInt32();
+            Console.WriteLine(@"Found {numberOfItems} images");
+            for (int i = 0; i < numberOfItems; i++)
             {
-                var item = new ImageItem(reader);
-                //item.isCompressed = false;
-                
-
+                var item = new ImageItem(Reader);
                 item.Read();
-                item.handle -= 1;
-                
+                if (Program.DumpImages)
+                    item.Save($"{Program.DumpPath}\\ImageBank\\" + item.Handle.ToString() + ".png");
+
+                if (Exe.LatestInst.GameData.ProductBuild >= 284)
+                    item.Handle -= 1;
+
                 //images[item.handle] = item;
-                
-
-
             }
-
         }
     }
+
     public class ImageItem : ChunkLoader
     {
+        public int Handle;
+        int Position;
+        int _checksum;
+        int _references;
+        int _width;
+        int _height;
+        int _graphicMode;
+        int _xHotspot;
+        int _yHotspot;
+        int _actionX;
+        int _actionY;
 
-        public int handle;
-        int position;
-        int checksum;
-        int references;
-        int width;
-        int height;
-        int graphic_mode;
-        int x_hotspot;
-        int y_hotspot;
-        int action_x;
-        int action_y;
-        public int flags;
-        public int size;
+        BitDict Flags = new BitDict(new string[]
+        {
+            "RLE",
+            "RLEW",
+            "RLET",
+            "LZX",
+            "Alpha",
+            "ACE",
+            "Mac"
+        });
+
+        public int Size;
+
         //tranparent,add later
-        int indexed;
-        byte[] image;
-        byte[] alpha;
-        ByteIO image_data;
+        byte[] _transparent;
+        byte[] _colorArray;
+        int _indexed;
 
 
-        public bool isCompressed = true;
+        public bool IsCompressed = true;
 
         public override void Read()
         {
-            handle = reader.ReadInt32();
-            position = (int)reader.Tell();
-            if (Program.DumpImages)
-            {
-                Load();
-                return;
-            }
-            else
-            {
-                if (isCompressed)
-                {
-                    reader.Skip(8);
-                    size = (int)reader.ReadUInt32();
-                    reader.Skip(size + 20);
-                }
-                else
-                {
-                    reader.Skip(4);
-                    size = (int)reader.ReadUInt32();
-                    reader.Seek(size + position);
-                }
-            }
-            
+            Handle = Reader.ReadInt32();
+            Position = (int) Reader.Tell();
+            Load();
         }
+
         public void Load()
         {
-
-
-            reader.Seek(position);
-
-            if (isCompressed)
+            Reader.Seek(Position);
+            ByteIO imageReader;
+            if (IsCompressed)
             {
-                image_data = Decompressor.DecompressAsReader(reader);
+                imageReader = Decompressor.DecompressAsReader(Reader);
             }
             else
             {
-                image_data = reader;
+                imageReader = Reader;
             }
 
-            var start = image_data.Tell();
-            if (!isCompressed)
+            long start = imageReader.Tell();
+
+            _checksum = imageReader.ReadInt32();
+            _references = imageReader.ReadInt32();
+            Size = (int) imageReader.ReadUInt32();
+            if (!IsCompressed)
             {
-
+                imageReader = new ByteIO(imageReader.ReadBytes(Size + 20));
             }
-            checksum = image_data.ReadInt32();
 
+            _width = imageReader.ReadInt16();
+            _height = imageReader.ReadInt16();
+            _graphicMode = imageReader.ReadByte(); //Graphic mode is always 4 for SL
+            Flags.flag = imageReader.ReadByte();
 
-            references = image_data.ReadInt32();
-            size = (int)image_data.ReadUInt32();
-            if (!isCompressed)
+            imageReader.Skip(2);
+            _xHotspot = imageReader.ReadInt16();
+            _yHotspot = imageReader.ReadInt16();
+            _actionX = imageReader.ReadInt16();
+            _actionY = imageReader.ReadInt16();
+            _transparent = imageReader.ReadBytes(4);
+            Logger.Log($"{Handle.ToString(),4} Size: {_width,4}x{_height,4}, flags: {Flags}");
+            byte[] imageData;
+            if (Flags["LZX"])
             {
-                image_data = new ByteIO(image_data.ReadBytes(size + 20));
+                throw new NotImplementedException();
+                imageData = new byte[1];
             }
-            width = image_data.ReadInt16();
-            height = image_data.ReadInt16();
-            graphic_mode = image_data.ReadByte();//Graphic mode is always 4 for SL
-            flags = image_data.ReadByte();
-
-            image_data.Skip(2);
-            x_hotspot = image_data.ReadInt16();
-            y_hotspot = image_data.ReadInt16();
-            action_x = image_data.ReadInt16();
-            action_y = image_data.ReadInt16();
-
-            Logger.Log($"Size: {width}x{height}");
-            for (int i = 0; i < 4; i++)
+            else
             {
-                image_data.ReadByte();
+                imageData = imageReader.ReadBytes((int) (imageReader.Size() - imageReader.Tell()));
             }
 
-            //Save($"{Program.DumpPath}\\ImageBank\\" + handle.ToString() + ".png");
-            Save("cum.png");
+            int bytesRead = 0;
+            if (Flags["RLE"] || Flags["RLEW"] || Flags["RLET"])
+            {
+            }
+            else
+            {
+                switch (_graphicMode)
+                {
+                    case 4:
+                    {
+                        (_colorArray, bytesRead) = ImageHelper.ReadPoint(imageData, _width, _height);
+                        break;
+                    }
+                    case 6:
+                    {
+                        (_colorArray, bytesRead) = ImageHelper.ReadFifteen(imageData, _width, _height);
+                        break;
+                    }
+                    case 7:
+                    {
+                        (_colorArray, bytesRead) = ImageHelper.ReadSixteen(imageData, _width, _height);
+                        break;
+                    }
+                }
+            }
 
+            int alphaSize = Size - bytesRead;
+            if (Flags["Alpha"])
+            {
+                byte[,] alpha = ImageHelper.ReadAlpha(imageData, _width, _height, Size - alphaSize);
+                int stride = _width * 4;
+                for (int y = 0; y < _height; y++)
+                {
+                    for (int x = 0; x < _width; x++)
+                    {
+                        _colorArray[(y * stride) + (x * 4) + 3] = alpha[x, y];
+                    }
+                }
+            }
 
             return;
-
-
-
-
-
-
-
-
         }
+
         public void Save(string filename)
         {
-            Bitmap bitmap = new Bitmap((int)width, (int)height);
-            Color[,] array = new Color[(int)width, (int)height];
-            int num4 = ImageHelper.getPadding((int)width, 2);
-            int num5 = 0;
-            using (ByteIO binaryReader = image_data)
+            using (var bmp = new Bitmap(_width, _height, PixelFormat.Format32bppArgb))
             {
-                int colorSize = 3;
-                for (int i = 0; i < (int)height; i++)
-                {
-                    for (int j = 0; j < (int)width; j++)
-                    {
-                        byte[] colorData = null;
-                        if (graphic_mode == 4)
-                        {
-                            colorSize = 3;
-                            colorData = binaryReader.ReadBytes(colorSize);
-                            array[j, i] = ImageHelper.ReadPoint(colorData, 0);
-                        }
-                        else
-                        {
-                            colorSize = 2;
-                            colorData = binaryReader.ReadBytes(colorSize);
-                            array[j, i] = ImageHelper.ReadSixteen(colorData, 0);
-                        }
-                        num5 += 3;
-                    }
-                    binaryReader.ReadBytes(num4 * 3);
-                    num5 += num4 * 3;
-                }
-                int num6 = size - num5;
-                if (flags == 16)
-                {
-                    num4 = (num6 - (int)(width * height)) / (int)height;
-                    for (int k = 0; k < (int)height; k++)
-                    {
-                        for (int l = 0; l < (int)width; l++)
-                        {
-                            byte Calpha = binaryReader.ReadByte();
-                            Color color = array[l, k];
-                            array[l, k] = Color.FromArgb(Calpha, color.R, color.G, color.B);
-                        }
-                        binaryReader.ReadBytes(num4);
-                    }
-                }
-                for (int m = 0; m < (int)height; m++)
-                {
-                    for (int n = 0; n < (int)width; n++)
-                    {
-                        bitmap.SetPixel(n, m, array[n, m]);
-                    }
-                }
-                
+                BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0,
+                        bmp.Width,
+                        bmp.Height),
+                    ImageLockMode.WriteOnly,
+                    bmp.PixelFormat);
 
+                IntPtr pNative = bmpData.Scan0;
+                Marshal.Copy(_colorArray, 0, pNative, _colorArray.Length);
+
+                bmp.UnlockBits(bmpData);
+
+                bmp.Save(filename);
             }
-            bitmap.Save(filename, ImageFormat.Png);
         }
-        
-            
-   
-        
+
 
         public override void Print(bool ext)
         {
-
         }
+
         public ImageItem(ByteIO reader) : base(reader)
         {
         }
@@ -241,7 +216,8 @@ namespace NetMFAPatcher.chunkloaders
 
     public class TestPoint
     {
-        public int size = 3;
+        public int Size = 3;
+
         public (byte r, byte g, byte b) Read(byte[] data, int position)
         {
             byte r = 0;
@@ -249,22 +225,16 @@ namespace NetMFAPatcher.chunkloaders
             byte b = 0;
             try
             {
-
-
                 b = data[position];
                 g = data[position + 1];
                 r = data[position + 2];
             }
             catch
             {
-
                 Console.WriteLine(position);
             }
+
             return (r, g, b);
         }
-
-
     }
-
-
 }

@@ -36,7 +36,7 @@ namespace NetMFAPatcher.Utils
         {
             BaseStream.Seek(count, SeekOrigin.Current);
         }
-        public byte[] ReadFourCC()
+        public byte[] ReadFourCc()
         {
             return Encoding.UTF8.GetBytes(ReadAscii(4));
         }
@@ -56,7 +56,7 @@ namespace NetMFAPatcher.Utils
             return Size() - Tell() >= size;
         }
 
-        public bool eof()
+        public bool Eof()
         {
             return BaseStream.Position < BaseStream.Length;
         }

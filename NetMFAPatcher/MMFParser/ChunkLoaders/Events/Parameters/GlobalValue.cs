@@ -18,8 +18,8 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
         }
         public override string ToString()
         {
-            if(value>26) return $"GlobalValue{value}";
-            return $"GlobalValue{Convert.ToChar(value).ToString().ToUpper()}";
+            if(Value>26) return $"GlobalValue{Value}";
+            return $"GlobalValue{Convert.ToChar(Value).ToString().ToUpper()}";
         }
     }
 }

@@ -9,20 +9,20 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
 {
     class Sample : ParameterCommon
     {
-        public int handle;
-        public string name;
-        public int flags;
+        public int Handle;
+        public string Name;
+        public int Flags;
 
         public Sample(ByteIO reader) : base(reader) { }
         public override void Read()
         {
-            handle = reader.ReadInt16();
-            flags = reader.ReadUInt16();
-            name = reader.ReadWideString();
+            Handle = Reader.ReadInt16();
+            Flags = Reader.ReadUInt16();
+            Name = Reader.ReadWideString();
         }
         public override string ToString()
         {
-            return $"Sample '{name}' handle: {handle}";
+            return $"Sample '{Name}' handle: {Handle}";
         }
     }
 }

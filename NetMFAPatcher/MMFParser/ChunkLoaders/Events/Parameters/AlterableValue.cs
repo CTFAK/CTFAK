@@ -17,7 +17,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
         }
         public override string ToString()
         {
-            return $"AlterableValue{Convert.ToChar(value).ToString().ToUpper()}";
+            return $"AlterableValue{Convert.ToChar(Value).ToString().ToUpper()}";
         }
     }
 }

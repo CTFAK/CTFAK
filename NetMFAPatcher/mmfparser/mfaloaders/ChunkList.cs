@@ -10,7 +10,7 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
 {
     class ChunkList : DataLoader//This is used for MFA reading/writing
     {
-        List<DataLoader> items = new List<DataLoader>();
+        List<DataLoader> _items = new List<DataLoader>();
         public override void Print()
         {
             throw new NotImplementedException();
@@ -18,10 +18,10 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
 
         public override void Read()
         {
-            var start = reader.Tell();
+            var start = Reader.Tell();
             while(true)
             {
-                var id = reader.ReadByte();
+                var id = Reader.ReadByte();
                 if(id==0) break;
                 Console.WriteLine("ChunkFound:"+id);
 

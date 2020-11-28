@@ -1,13 +1,13 @@
-﻿using NetMFAPatcher.chunkloaders;
-using NetMFAPatcher.Utils;
+﻿using NetMFAPatcher.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetMFAPatcher.MMFParser.ChunkLoaders;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.mmfparser.chunkloaders
+namespace NetMFAPatcher.MMFParser.ChunkLoaders
 {
     class ObjectNames : ChunkLoader//Fucking trash
     {
@@ -18,13 +18,13 @@ namespace NetMFAPatcher.mmfparser.chunkloaders
 
         public override void Read()
         {
-            var start = reader.Tell();
-            var endpos = start + chunk.size;
+            var start = Reader.Tell();
+            var endpos = start + Chunk.Size;
             while(true)
             {
-                if (reader.Tell() >= endpos+4) break;
+                if (Reader.Tell() >= endpos+4) break;
                 
-                Console.WriteLine(reader.ReadWideString());
+                Console.WriteLine(Reader.ReadWideString());
             }
             
         }

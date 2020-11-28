@@ -16,10 +16,10 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
         public Create(ByteIO reader) : base(reader) { }
         public override void Read()
         {
-            Position = new Position(reader);
+            Position = new Position(Reader);
             Position.Read();
-            ObjectInstances = reader.ReadUInt16();
-            ObjectInfo = reader.ReadUInt16();
+            ObjectInstances = Reader.ReadUInt16();
+            ObjectInfo = Reader.ReadUInt16();
             
             
         }

@@ -1,20 +1,14 @@
-﻿using NetMFAPatcher.Utils;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NetMFAPatcher.mmfparser;
+﻿using System.Collections.Generic;
+using NetMFAPatcher.Utils;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.chunkloaders
+namespace NetMFAPatcher.MMFParser.ChunkLoaders.banks
 {
     public class MusicBank : ChunkLoader
     {
-        public int num_of_items = 0;
-        public int references = 0;
-        public List<MusicFile> items;
+        public int NumOfItems = 0;
+        public int References = 0;
+        public List<MusicFile> Items;
 
         public override void Print(bool ext)
         {
@@ -23,13 +17,13 @@ namespace NetMFAPatcher.chunkloaders
         public override void Read()
         {
             //Someone is using this lol?
-            items = new List<MusicFile>();
-            num_of_items = reader.ReadInt32();
-            for (int i = 0; i < num_of_items; i++)
+            Items = new List<MusicFile>();
+            NumOfItems = Reader.ReadInt32();
+            for (int i = 0; i < NumOfItems; i++)
             {
-                var item = new MusicFile(reader);
+                var item = new MusicFile(Reader);
                 item.Read();
-                items.Add(item);
+                Items.Add(item);
             }
         }
 
@@ -44,9 +38,9 @@ namespace NetMFAPatcher.chunkloaders
 
     public class MusicFile : ChunkLoader
     {
-        public int handle;
-        public string name = "ERROR";
-        public byte[] data;
+        public int Handle;
+        public string Name = "ERROR";
+        public byte[] Data;
 
         public override void Print(bool ext)
         {

@@ -1,16 +1,12 @@
-﻿using mmfparser;
-using NetMFAPatcher.chunkloaders;
-using NetMFAPatcher.mmfparser.mfaloaders;
-using NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters;
-using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using mmfparser;
+using NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters;
+using NetMFAPatcher.Utils;
 
-namespace NetMFAPatcher
+namespace NetMFAPatcher.utils
 {
     static class Helper
     {
@@ -31,18 +27,18 @@ namespace NetMFAPatcher
         
         public static string Log(this byte[] bytes, bool log = true, string format = "")
         {
-            string Temp = String.Empty;
+            string temp = String.Empty;
             for (int i = 0; i < bytes.Length; i++)
             {
                 var item = bytes[i];
                 if (i > 0)
                 {
-                    Temp += " " + item.ToString(format);
+                    temp += " " + item.ToString(format);
 
                 }
                 else
                 {
-                    Temp += item.ToString(format);
+                    temp += item.ToString(format);
                 }
 
             }
@@ -50,9 +46,9 @@ namespace NetMFAPatcher
             {
 
 
-                Console.WriteLine(Temp);
+                Console.WriteLine(temp);
             }
-            return Temp;
+            return temp;
 
 
         }
@@ -110,7 +106,7 @@ namespace NetMFAPatcher
                     if (b < 128 && b > 32) charAcc += Convert.ToChar(b);
                     else charAcc += '.';
                 }
-                var b_len = block.Count();
+                var bLen = block.Count();
                 //var accLen=
 
 

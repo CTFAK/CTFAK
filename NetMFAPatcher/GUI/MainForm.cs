@@ -14,7 +14,7 @@ namespace NetMFAPatcher.GUI
 {
     public partial class MainForm : Form
     {
-        public Thread loaderThread;
+        public Thread LoaderThread;
         public MainForm()
         {
             InitializeComponent();
@@ -57,28 +57,28 @@ namespace NetMFAPatcher.GUI
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            var currentFrame = EXE.LatestInst.game_data.Frames[treeView1.SelectedNode.Index];
+            var currentFrame = Exe.LatestInst.GameData.Frames[treeView1.SelectedNode.Index];
             listBox1.Items.Clear();
-            listBox1.Items.Add($"Size: {currentFrame.width}x{currentFrame.height}");
+            listBox1.Items.Add($"Size: {currentFrame.Width}x{currentFrame.Height}");
             listBox1.Items.Add($"Number of objects: {currentFrame.CountOfObjs}");
             
         }
         public void AfterLoad()
         {
 
-            var gameData = EXE.LatestInst.game_data;
+            var gameData = Exe.LatestInst.GameData;
             foreach (var item in gameData.Frames)
             {
-                treeView1.Nodes.Add(item.name);    
+                treeView1.Nodes.Add(item.Name);    
             }
             string toLog = "";
-            toLog += $"Title:{EXE.LatestInst.game_data.Name}\n";
-            toLog += $"Copyright:{EXE.LatestInst.game_data.Copyright}\n";
-            toLog += $"Editor Filename: {EXE.LatestInst.game_data.EditorFilename}\n";
+            toLog += $"Title:{Exe.LatestInst.GameData.Name}\n";
+            toLog += $"Copyright:{Exe.LatestInst.GameData.Copyright}\n";
+            toLog += $"Editor Filename: {Exe.LatestInst.GameData.EditorFilename}\n";
             //toLog += $"Build Filename: {EXE.LatestInst.game_data.TargetFilename}\n";
-            toLog += $"Product Build: {EXE.LatestInst.game_data.product_build}\n";
-            toLog += $"Build: {EXE.LatestInst.game_data.build}\n";
-            toLog += $"Runtime Version: {EXE.LatestInst.game_data.runtime_version}\n";
+            toLog += $"Product Build: {Exe.LatestInst.GameData.ProductBuild}\n";
+            toLog += $"Build: {Exe.LatestInst.GameData.Build}\n";
+            toLog += $"Runtime Version: {Exe.LatestInst.GameData.RuntimeVersion}\n";
 
 
 

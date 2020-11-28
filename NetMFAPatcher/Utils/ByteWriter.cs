@@ -53,7 +53,7 @@ namespace NetMFAPatcher.Utils
             return Size() - Tell() >= size;
         }
 
-        public bool eof()
+        public bool Eof()
         {
             return BaseStream.Position < BaseStream.Length;
         }

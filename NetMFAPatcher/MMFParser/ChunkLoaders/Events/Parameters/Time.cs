@@ -15,8 +15,8 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
         public Time(ByteIO reader) : base(reader) { }
         public override void Read()
         {
-            Timer = reader.ReadInt32();
-            Loops = reader.ReadInt32();
+            Timer = Reader.ReadInt32();
+            Loops = Reader.ReadInt32();
             
         }
         public override string ToString()

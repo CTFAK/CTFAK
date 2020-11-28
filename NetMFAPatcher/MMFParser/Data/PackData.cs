@@ -12,7 +12,7 @@ namespace NetMFAPatcher.MMFParser.Data
 {
     public class PackData
     {
-        public PackFile[] items;
+        public PackFile[] Items;
         public PackData()
         {
 
@@ -23,14 +23,14 @@ namespace NetMFAPatcher.MMFParser.Data
             byte[] header = exeReader.ReadBytes(8);
 
             exeReader.Skip(8);
-            uint header_size = exeReader.ReadUInt32();
-            uint data_size = exeReader.ReadUInt32();
+            uint headerSize = exeReader.ReadUInt32();
+            uint dataSize = exeReader.ReadUInt32();
 
-            exeReader.Seek((int)(start + data_size - 32));
+            exeReader.Seek((int)(start + dataSize - 32));
             exeReader.Skip(4);
             exeReader.Seek(start + 16);
 
-            uint format_version = exeReader.ReadUInt32();
+            uint formatVersion = exeReader.ReadUInt32();
             exeReader.Skip(8);
 
             uint count = exeReader.ReadUInt32();
@@ -48,7 +48,7 @@ namespace NetMFAPatcher.MMFParser.Data
                 if (!exeReader.Check(value)) break;
             }
             exeReader.BaseStream.Position -= 5;//wtf lol
-            header = exeReader.ReadFourCC();
+            header = exeReader.ReadFourCc();
 
             exeReader.Seek(offset);
             for (int i = 0; i < count; i++) new PackFile().Read(exeReader);
@@ -60,24 +60,24 @@ namespace NetMFAPatcher.MMFParser.Data
     }
     public class PackFile
     {
-        string PackFilename = "ERROR";
-        int bingo = 0;
-        byte[] data;
+        string _packFilename = "ERROR";
+        int _bingo = 0;
+        byte[] _data;
 
         public void Read(ByteIO exeReader)
         {
             UInt16 len = exeReader.ReadUInt16();
-            PackFilename = exeReader.ReadWideString(len);
-            bingo = exeReader.ReadInt32();
-            data = exeReader.ReadBytes(exeReader.ReadInt32());
+            _packFilename = exeReader.ReadWideString(len);
+            _bingo = exeReader.ReadInt32();
+            _data = exeReader.ReadBytes(exeReader.ReadInt32());
             
             Dump();
         }
         public void Dump()
         {
-            Logger.Log($"Dumping {PackFilename}", true, ConsoleColor.DarkBlue);
-            string path = $"{Program.DumpPath}\\extensions\\" + PackFilename;
-            File.WriteAllBytes(path, data);
+            Logger.Log($"Dumping {_packFilename}", true, ConsoleColor.DarkBlue);
+            string path = $"{Program.DumpPath}\\extensions\\" + _packFilename;
+            File.WriteAllBytes(path, _data);
         }
 
     }

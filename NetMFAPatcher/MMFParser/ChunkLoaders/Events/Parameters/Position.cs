@@ -23,16 +23,16 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
         public Position(ByteIO reader) : base(reader) { }
         public override void Read()
         {
-            ObjectInfoParent = reader.ReadInt16();
-            Flags = reader.ReadUInt16();
-            X = reader.ReadInt16();
-            Y = reader.ReadInt16();
-            Slope = reader.ReadInt16();
-            Angle = reader.ReadInt16();
-            Direction = reader.ReadSingle();
-            TypeParent = reader.ReadInt16();
-            ObjectInfoList = reader.ReadInt16();
-            Layer = reader.ReadInt16();
+            ObjectInfoParent = Reader.ReadInt16();
+            Flags = Reader.ReadUInt16();
+            X = Reader.ReadInt16();
+            Y = Reader.ReadInt16();
+            Slope = Reader.ReadInt16();
+            Angle = Reader.ReadInt16();
+            Direction = Reader.ReadSingle();
+            TypeParent = Reader.ReadInt16();
+            ObjectInfoList = Reader.ReadInt16();
+            Layer = Reader.ReadInt16();
             
            
         }

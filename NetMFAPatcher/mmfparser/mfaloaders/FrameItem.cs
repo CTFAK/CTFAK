@@ -7,50 +7,51 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetMFAPatcher.utils;
 
 namespace NetMFAPatcher.mmfparser.mfaloaders
 {
     class FrameItem : DataLoader
     {
-        public int objectType;
-        public int handle;
-        public string name;
-        public bool transparent;
-        public int inkEffect;
-        public int inkEffectParameter;
-        public int antiAliasing;
-        public int flags;
-        public int iconType;
+        public int ObjectType;
+        public int Handle;
+        public string Name;
+        public bool Transparent;
+        public int InkEffect;
+        public int InkEffectParameter;
+        public int AntiAliasing;
+        public int Flags;
+        public int IconType;
 
         public override void Print()
         {
-            Console.WriteLine($"Name: {name}");
+            Console.WriteLine($"Name: {Name}");
         }
 
         public override void Read()
         {
-            objectType = reader.ReadInt32();
-            handle = reader.ReadInt32();
-            name = Helper.AutoReadUnicode(reader);
-            var transparent1 = reader.ReadInt32();
+            ObjectType = Reader.ReadInt32();
+            Handle = Reader.ReadInt32();
+            Name = Helper.AutoReadUnicode(Reader);
+            var transparent1 = Reader.ReadInt32();
             
-            inkEffect = reader.ReadInt32();
-            inkEffectParameter = reader.ReadInt32();
-            antiAliasing = reader.ReadInt32();
+            InkEffect = Reader.ReadInt32();
+            InkEffectParameter = Reader.ReadInt32();
+            AntiAliasing = Reader.ReadInt32();
 
-            flags = reader.ReadInt32();
-            iconType = reader.ReadInt32();
-            if(iconType==1)
+            Flags = Reader.ReadInt32();
+            IconType = Reader.ReadInt32();
+            if(IconType==1)
             {
-                var iconHandle = reader.ReadInt32();
+                var iconHandle = Reader.ReadInt32();
             }
             else
             {
                 throw new NotImplementedException("invalid icon");
             }
-            var chunks = new mmfparser.mfaloaders.ChunkList(reader);
+            var chunks = new mmfparser.mfaloaders.ChunkList(Reader);
             chunks.Read();
-            if(objectType>=32)//extension base
+            if(ObjectType>=32)//extension base
             {
                 //swallow some cum
 
@@ -58,7 +59,7 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
             else
             {
               
-                var loader = new Active(reader);
+                var loader = new Active(Reader);
                 loader.Read();
 
 

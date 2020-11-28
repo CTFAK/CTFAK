@@ -1,16 +1,12 @@
-﻿using NetMFAPatcher.chunkloaders;
-using NetMFAPatcher.mmfparser;
+﻿using System;
+using mmfparser;
+using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
 using NetMFAPatcher.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
-namespace mmfparser.mfaloaders
+namespace NetMFAPatcher.MMFParser.MFALoaders
 {
-    class AGMIBank : DataLoader
+    class AgmiBank : DataLoader
     {
         public override void Print()
         {
@@ -20,27 +16,27 @@ namespace mmfparser.mfaloaders
         public override void Read()
         {
             Logger.Log("TEX READ");
-            var graphicMode = reader.ReadInt32();
+            var graphicMode = Reader.ReadInt32();
             Logger.Log($"GraphicMode:{graphicMode}");
-            var paletteVersion = reader.ReadInt16();
+            var paletteVersion = Reader.ReadInt16();
             Logger.Log($"PaletteVersion:{paletteVersion}");
 
-            var paletteEntries = reader.ReadInt16();
+            var paletteEntries = Reader.ReadInt16();
             Logger.Log($"PaletteEntries:{paletteEntries}");
 
 
             for (int i = 0; i < 256; i++)
             {
-                reader.ReadColor();
+                Reader.ReadColor();
             }
-            var count = reader.ReadInt32();
+            var count = Reader.ReadInt32();
             Logger.Log($"Number of image items: {count.ToString()}");
             for (int i = 0; i < count; i++)
             {
 
-                var item = new ImageItem(reader);
-                item.isCompressed = true;
-                var currentPos = reader.Tell();
+                var item = new ImageItem(Reader);
+                item.IsCompressed = true;
+                var currentPos = Reader.Tell();
                 item.Read();
 
                 
@@ -51,11 +47,11 @@ namespace mmfparser.mfaloaders
             }
             
         }
-        public AGMIBank(ByteIO reader) : base(reader)
+        public AgmiBank(ByteIO reader) : base(reader)
         {
         }
 
-        public AGMIBank(Chunk chunk) : base(chunk)
+        public AgmiBank(Chunk chunk) : base(chunk)
         {
         }
     }

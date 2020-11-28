@@ -1,5 +1,4 @@
 ﻿using mmfparser;
-using NetMFAPatcher.chunkloaders;
 using NetMFAPatcher.MMFParser.Data;
 using NetMFAPatcher.Utils;
 using System;
@@ -7,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetMFAPatcher.utils;
 using static NetMFAPatcher.mmfparser.Constants;
 
 namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
@@ -18,11 +18,11 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
         public int DefType;
         public int NumberOfParameters;
         public ObjectType ObjectType;
-        public int num;
+        public int Num;
         public int ObjectInfo;
         public int Identifier;
         public int ObjectInfoList;
-        public List<Parameter> items = new List<Parameter>();
+        public List<Parameter> Items = new List<Parameter>();
         public Condition(ByteIO reader) : base(reader) { }
         public override void Print()
         {
@@ -31,31 +31,31 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
 
         public override void Read()
         {
-            var currentPosition = reader.Tell();
-            var size = reader.ReadUInt16();
-            ObjectType = (ObjectType)reader.ReadInt16();
-            num = reader.ReadInt16();
-            ObjectInfo = reader.ReadUInt16();
-            ObjectInfoList = reader.ReadInt16();
-            Flags = reader.ReadSByte();
-            OtherFlags = reader.ReadSByte();
-            NumberOfParameters = reader.ReadByte();
-            DefType = reader.ReadByte();
-            Identifier = reader.ReadInt16();
+            var currentPosition = Reader.Tell();
+            var size = Reader.ReadUInt16();
+            ObjectType = (ObjectType)Reader.ReadInt16();
+            Num = Reader.ReadInt16();
+            ObjectInfo = Reader.ReadUInt16();
+            ObjectInfoList = Reader.ReadInt16();
+            Flags = Reader.ReadSByte();
+            OtherFlags = Reader.ReadSByte();
+            NumberOfParameters = Reader.ReadByte();
+            DefType = Reader.ReadByte();
+            Identifier = Reader.ReadInt16();
             for (int i = 0; i < NumberOfParameters; i++)
             {
-                var item = new Parameter(reader);
+                var item = new Parameter(Reader);
                 item.Read();
-                items.Add(item);
+                Items.Add(item);
             }
-            reader.Seek(currentPosition + size);
+            Reader.Seek(currentPosition + size);
             
 
             
         }
         public override string ToString()
         {
-            return $"Condition {ObjectType}-{num}-{(items.Count > 0 ? items[0].ToString() : "cock")}";
+            return $"Condition {ObjectType}-{Num}-{(Items.Count > 0 ? Items[0].ToString() : "cock")}";
 
         }
     }
@@ -66,10 +66,10 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
         public int OtherFlags;
         public int DefType;
         public ObjectType ObjectType;
-        public int num;
+        public int Num;
         public int ObjectInfo;
         public int ObjectInfoList;
-        public List<Parameter> items = new List<Parameter>();
+        public List<Parameter> Items = new List<Parameter>();
         public Action(ByteIO reader) : base(reader) { }
         public override void Print( )
         {
@@ -78,21 +78,21 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
 
         public override void Read()
         {
-            var currentPosition = reader.Tell();
-            var size = reader.ReadUInt16();
-            ObjectType = (ObjectType)reader.ReadInt16();
-            num = reader.ReadInt16();
-            ObjectInfo = reader.ReadUInt16();
-            ObjectInfoList = reader.ReadInt16();
-            Flags = reader.ReadSByte();
-            OtherFlags = reader.ReadSByte();
-            var number_of_parameters=reader.ReadByte();
-            DefType = reader.ReadByte();
+            var currentPosition = Reader.Tell();
+            var size = Reader.ReadUInt16();
+            ObjectType = (ObjectType)Reader.ReadInt16();
+            Num = Reader.ReadInt16();
+            ObjectInfo = Reader.ReadUInt16();
+            ObjectInfoList = Reader.ReadInt16();
+            Flags = Reader.ReadSByte();
+            OtherFlags = Reader.ReadSByte();
+            var numberOfParameters=Reader.ReadByte();
+            DefType = Reader.ReadByte();
             for (int i = 0; i < DefType; i++)
             {
-                var item = new Parameter(reader);
+                var item = new Parameter(Reader);
                 item.Read();
-                items.Add(item);
+                Items.Add(item);
             }
 
 
@@ -100,7 +100,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
         public override string ToString()
         {
             
-            return $"Action {ObjectType}-{num}-{(items.Count>0?items[0].ToString():"cock")}";
+            return $"Action {ObjectType}-{Num}-{(Items.Count>0?Items[0].ToString():"cock")}";
 
         }
     }
@@ -108,7 +108,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
     public class Parameter : DataLoader
     {
         public int Code;
-        public DataLoader loader;
+        public DataLoader Loader;
 
         public Parameter(ByteIO reader) : base(reader) { }
 
@@ -119,36 +119,36 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
 
         public override void Read()
         {
-            var current_position = reader.Tell();
-            var size = reader.ReadInt16();
-            Code = reader.ReadInt16();
+            var currentPosition = Reader.Tell();
+            var size = Reader.ReadInt16();
+            Code = Reader.ReadInt16();
 
 
-            var ActualLoader = Helper.LoadParameter(Code,reader);
-            this.loader = ActualLoader;
-            if (loader!=null)
+            var actualLoader = Helper.LoadParameter(Code,Reader);
+            this.Loader = actualLoader;
+            if (Loader!=null)
             {
                 
-                loader.Read();
+                Loader.Read();
             }
             else
             {
                 //throw new Exception("Loader is null");
             }
-            reader.Seek(current_position+size);
+            Reader.Seek(currentPosition+size);
 
         }
-        public object value
+        public object Value
         {
             get
             {
-                if (loader != null)
+                if (Loader != null)
                 {
 
 
-                    if (loader.GetType().GetField("value") != null)
+                    if (Loader.GetType().GetField("value") != null)
                     {
-                        return loader.GetType().GetField("value").GetValue(loader);
+                        return Loader.GetType().GetField("value").GetValue(Loader);
                     }
                     else
                     {
@@ -160,7 +160,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
         }
         public override string ToString()
         {
-            if (loader != null) return loader.ToString();
+            if (Loader != null) return Loader.ToString();
             else return "UNK-PARAMETER";
 
         }

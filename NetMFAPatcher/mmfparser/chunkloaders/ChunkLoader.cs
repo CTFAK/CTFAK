@@ -1,28 +1,22 @@
-﻿using NetMFAPatcher.mfa;
-using NetMFAPatcher.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NetMFAPatcher.Utils;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.chunkloaders
+namespace NetMFAPatcher.MMFParser.ChunkLoaders
 {
     public abstract class ChunkLoader//:DataLoader
     {
-        public Chunk chunk;
-        public ByteIO reader;
-        public bool verbose = false;
+        public Chunk Chunk;
+        public ByteIO Reader;
+        public bool Verbose = false;
 
         protected ChunkLoader(ByteIO reader)
         {
-            this.reader = reader;
+            this.Reader = reader;
         }
         protected ChunkLoader(Chunk chunk)
         {
-            this.chunk = chunk;
-            this.reader = chunk.get_reader();
+            this.Chunk = chunk;
+            this.Reader = chunk.get_reader();
         }
 
 

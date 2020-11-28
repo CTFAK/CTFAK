@@ -13,69 +13,69 @@ namespace NetMFAPatcher.utils
     {
         public static byte[] DecryptionKey;
         public static byte MagicChar=54;
-        public static void MakeKey(string STitle, string SCopyright,string SProject)
+        public static void MakeKey(string sTitle, string sCopyright,string sProject)
         {
-            var RawKey = "";
-            RawKey += STitle;
-            RawKey += SCopyright;
-            RawKey += SProject;
-            Logger.Log("Combined data "+RawKey,true,ConsoleColor.Yellow);
-            var RawKeyPTR = Marshal.StringToHGlobalAnsi(RawKey);
+            var rawKey = "";
+            rawKey += sTitle;
+            rawKey += sCopyright;
+            rawKey += sProject;
+            Logger.Log("Combined data "+rawKey,true,ConsoleColor.Yellow);
+            var rawKeyPtr = Marshal.StringToHGlobalAnsi(rawKey);
 
-            var ptr = Decryption.make_key_combined(RawKeyPTR, MagicChar);
+            var ptr = Decryption.make_key_combined(rawKeyPtr, MagicChar);
 
-            byte[] Key = new byte[257];
-            Marshal.Copy(ptr, Key, 0, 256);
-            Marshal.FreeHGlobal(RawKeyPTR);
+            byte[] key = new byte[257];
+            Marshal.Copy(ptr, key, 0, 256);
+            Marshal.FreeHGlobal(rawKeyPtr);
 
-            DecryptionKey = Key;
+            DecryptionKey = key;
             Logger.Log($"First 16-Bytes of key: {DecryptionKey.GetHex(16)}",true,ConsoleColor.Yellow);
             File.WriteAllBytes($"{Program.DumpPath}\\key.bin", DecryptionKey);          
         }
         
 
-        public static byte[] DecodeMode3(byte[] ChunkData, int ChunkSize,int ChunkID)
+        public static byte[] DecodeMode3(byte[] chunkData, int chunkSize,int chunkId)
         {
-            var reader = new ByteIO(ChunkData);
-            var DecompressedSize = reader.ReadUInt32();
+            var reader = new ByteIO(chunkData);
+            var decompressedSize = reader.ReadUInt32();
             
-            var chunkData = reader.ReadBytes((int)reader.Size());
-            if (ChunkID % 2 != 0)
+            var rawData = reader.ReadBytes((int)reader.Size());
+            if (chunkId % 2 != 0)
             {
-                chunkData[0] ^= (byte)(((byte)ChunkID & 0xFF) ^ ((byte)ChunkID >> 0x8));
+                rawData[0] ^= (byte)(((byte)chunkId & 0xFF) ^ ((byte)chunkId >> 0x8));
             }
-            var rawData = DecodeChunk(chunkData, ChunkSize);
+            rawData = DecodeChunk(rawData, chunkSize);
             var data = new ByteIO(rawData);
-            var compressed_size = data.ReadUInt32();
+            var compressedSize = data.ReadUInt32();
 
-            return Decompressor.decompress_block(data, (int)compressed_size, (int)DecompressedSize);
+            return Decompressor.decompress_block(data, (int)compressedSize, (int)decompressedSize);
         }
-        public static byte[] DecodeChunk(byte[] ChunkData, int ChunkSize)
+        public static byte[] DecodeChunk(byte[] chunkData, int chunkSize)
         {
-            IntPtr InputChunkPtr = Marshal.AllocHGlobal(ChunkData.Length);
-            Marshal.Copy(ChunkData, 0, InputChunkPtr, ChunkData.Length);
+            IntPtr inputChunkPtr = Marshal.AllocHGlobal(chunkData.Length);
+            Marshal.Copy(chunkData, 0, inputChunkPtr, chunkData.Length);
 
-            IntPtr KeyPtr = Marshal.AllocHGlobal(DecryptionKey.Length);
-            Marshal.Copy(DecryptionKey, 0, KeyPtr, DecryptionKey.Length);
+            IntPtr keyPtr = Marshal.AllocHGlobal(DecryptionKey.Length);
+            Marshal.Copy(DecryptionKey, 0, keyPtr, DecryptionKey.Length);
 
-            var OutputChunkPtr = decode_chunk(InputChunkPtr, ChunkSize, MagicChar, KeyPtr);
+            var outputChunkPtr = decode_chunk(inputChunkPtr, chunkSize, MagicChar, keyPtr);
 
-            byte[] DecodedChunk = new byte[ChunkSize];
-            Marshal.Copy(OutputChunkPtr, DecodedChunk,0,ChunkSize);
+            byte[] decodedChunk = new byte[chunkSize];
+            Marshal.Copy(outputChunkPtr, decodedChunk,0,chunkSize);
 
-            Marshal.FreeHGlobal(InputChunkPtr);
-            Marshal.FreeHGlobal(KeyPtr);
+            Marshal.FreeHGlobal(inputChunkPtr);
+            Marshal.FreeHGlobal(keyPtr);
 
-            return DecodedChunk;
+            return decodedChunk;
         }
 
 
 
         [DllImport("Decrypter-x64.dll", EntryPoint = "decode_chunk", CharSet = CharSet.Auto)]
-        public static extern IntPtr decode_chunk(IntPtr chunk_data, int chunk_size, byte magic_char,IntPtr wrapper_key);
+        public static extern IntPtr decode_chunk(IntPtr chunkData, int chunkSize, byte magicChar,IntPtr wrapperKey);
         [DllImport("Decrypter-x64.dll", EntryPoint = "make_key", CharSet = CharSet.Auto)]
-        public static extern IntPtr make_key(IntPtr c_title, IntPtr c_copyright, IntPtr c_project, byte magic_char);
+        public static extern IntPtr make_key(IntPtr cTitle, IntPtr cCopyright, IntPtr cProject, byte magicChar);
         [DllImport("Decrypter-x64.dll", EntryPoint = "make_key_combined", CharSet = CharSet.Auto)]
-        public static extern IntPtr make_key_combined(IntPtr data, byte magic_char);      
+        public static extern IntPtr make_key_combined(IntPtr data, byte magicChar);      
     }
 }

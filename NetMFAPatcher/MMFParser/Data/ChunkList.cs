@@ -1,40 +1,40 @@
-﻿using NetMFAPatcher.chunkloaders;
-using NetMFAPatcher.mmfparser.chunkloaders;
-using NetMFAPatcher.MMFParser.ChunkLoaders;
+﻿using NetMFAPatcher.MMFParser.ChunkLoaders;
 using NetMFAPatcher.MMFParser.ChunkLoaders.Events;
 using NetMFAPatcher.utils;
 using NetMFAPatcher.Utils;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using NetMFAPatcher.MMFParser.ChunkLoaders.banks;
+using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
 using static NetMFAPatcher.mmfparser.Constants;
 
 namespace NetMFAPatcher.MMFParser.Data
 {
     public class ChunkList
     {
-        public List<Chunk> chunks = new List<Chunk>();
-        public bool verbose = false;
+        public List<Chunk> Chunks = new List<Chunk>();
+        public bool Verbose = false;
         public List<Frame> Frames = new List<Frame>();
 
         public void Read(ByteIO exeReader)
         {
-            chunks.Clear();
+            Chunks.Clear();
             while (true)
             {
-                Chunk chunk = new Chunk(chunks.Count, this);
-                chunk.verbose = verbose;
+                Chunk chunk = new Chunk(Chunks.Count, this);
+                chunk.Verbose = Verbose;
                 chunk.Read(exeReader);
-                chunk.loader = LoadChunk(chunk);
+                chunk.Loader = LoadChunk(chunk);
 
-                if (chunk.loader != null)
+                if (chunk.Loader != null)
                 {
-                    if (chunk.loader.verbose)
+                    if (chunk.Loader.Verbose)
                     {
                         //chunk.loader.Print(Program.LogAll);
                     }
                 }
-                if (chunk.verbose)
+                if (chunk.Verbose)
                 {
                     chunk.Print(Program.LogAll);
                     if(Program.LogAll) Console.ReadKey();
@@ -44,15 +44,15 @@ namespace NetMFAPatcher.MMFParser.Data
 
                 }
 
-                chunks.Add(chunk);
-                if (chunk.id == 8750)
+                Chunks.Add(chunk);
+                if (chunk.Id == 8750)
                 {
                     chunk.BuildKey();
                 }
                 
 
 
-                if (chunk.id == 32639) break; //LAST chunkID
+                if (chunk.Id == 32639) break; //LAST chunkID
             }
 
             //Logger.Log(verbose ? $" Total Chunks Count: {chunks.Count}":"ChunkList Done", true, ConsoleColor.Blue);
@@ -60,62 +60,62 @@ namespace NetMFAPatcher.MMFParser.Data
 
         public class Chunk
         {
-            ChunkList chunk_list;
-            public string name = "UNKNOWN";
-            int uid;
-            public int id = 0;
+            ChunkList _chunkList;
+            public string Name = "UNKNOWN";
+            int _uid;
+            public int Id = 0;
             
-            public ChunkLoader loader;
-            public byte[] chunk_data;
-            public ChunkFlags flag;
-            public int size = 0;
-            public int decompressed_size = 0;
-            public bool verbose = false;
+            public ChunkLoader Loader;
+            public byte[] ChunkData;
+            public ChunkFlags Flag;
+            public int Size = 0;
+            public int DecompressedSize = 0;
+            public bool Verbose = false;
 
-            public Chunk(int Actualuid, ChunkList actual_chunk_list)
+            public Chunk(int actualuid, ChunkList actualChunkList)
             {
-                uid = Actualuid;
-                chunk_list = actual_chunk_list;
+                _uid = actualuid;
+                _chunkList = actualChunkList;
             }
 
             public ByteIO get_reader()
             {
-                return new ByteIO(chunk_data);
+                return new ByteIO(ChunkData);
             }
 
             public void Read(ByteIO exeReader)
             {
-                id = exeReader.ReadInt16();
-                name = ((ChunkNames) id).ToString();
+                Id = exeReader.ReadInt16();
+                Name = ((ChunkNames) Id).ToString();
 
-                flag = (ChunkFlags) exeReader.ReadInt16();
-                size = exeReader.ReadInt32();
+                Flag = (ChunkFlags) exeReader.ReadInt16();
+                Size = exeReader.ReadInt32();
 
-                switch (flag)
+                switch (Flag)
                 {
                     case ChunkFlags.Encrypted:                       
-                        chunk_data = Decryption.DecodeChunk(exeReader.ReadBytes(size),size);
+                        ChunkData = Decryption.DecodeChunk(exeReader.ReadBytes(Size),Size);
                         break;
                     case ChunkFlags.CompressedAndEncrypyed:
-                        chunk_data = Decryption.DecodeMode3(exeReader.ReadBytes(size), size,id);
+                        ChunkData = Decryption.DecodeMode3(exeReader.ReadBytes(Size), Size,Id);
                         break;
                     case ChunkFlags.Compressed:
-                        chunk_data = Decompressor.Decompress(exeReader);
+                        ChunkData = Decompressor.Decompress(exeReader);
                         break;
                     case ChunkFlags.NotCompressed:
-                        chunk_data = exeReader.ReadBytes(size);
+                        ChunkData = exeReader.ReadBytes(Size);
                         break;
                 }
 
-                if (chunk_data != null)
+                if (ChunkData != null)
                 {
-                    decompressed_size = chunk_data.Length;
-                    string path = $"{Program.DumpPath}\\CHUNKS\\{name}.chunk";
-                    File.WriteAllBytes(path, chunk_data);
+                    DecompressedSize = ChunkData.Length;
+                    // string path = $"{Program.DumpPath}\\CHUNKS\\{Name}.chunk";
+                    // File.WriteAllBytes(path, ChunkData);
                 }
                 int tempId=0;
-                int.TryParse(name,out tempId);
-                if(tempId==id)
+                int.TryParse(Name,out tempId);
+                if(tempId==Id)
                 {
                     //chunk_data.Log(true, "X2");
                 }
@@ -126,22 +126,22 @@ namespace NetMFAPatcher.MMFParser.Data
             {
                 if(extented)
                 {
-                    Logger.Log($"Chunk: {name} ({uid})", true, ConsoleColor.DarkCyan);
-                    Logger.Log($"    ID: {id} - 0x{id.ToString("X")}", true, ConsoleColor.DarkCyan);
-                    Logger.Log($"    Flags: {flag}", true, ConsoleColor.DarkCyan);
-                    Logger.Log($"    Loader: {(loader != null ? loader.GetType().Name : "Empty Loader")}", true,ConsoleColor.DarkCyan);
-                    Logger.Log($"    Size: {size} B", true, ConsoleColor.DarkCyan);
-                    Logger.Log($"    Decompressed Size: {decompressed_size} B", true, ConsoleColor.DarkCyan);
+                    Logger.Log($"Chunk: {Name} ({_uid})", true, ConsoleColor.DarkCyan);
+                    Logger.Log($"    ID: {Id} - 0x{Id.ToString("X")}", true, ConsoleColor.DarkCyan);
+                    Logger.Log($"    Flags: {Flag}", true, ConsoleColor.DarkCyan);
+                    Logger.Log($"    Loader: {(Loader != null ? Loader.GetType().Name : "Empty Loader")}", true,ConsoleColor.DarkCyan);
+                    Logger.Log($"    Size: {Size} B", true, ConsoleColor.DarkCyan);
+                    Logger.Log($"    Decompressed Size: {DecompressedSize} B", true, ConsoleColor.DarkCyan);
                     Logger.Log("---------------------------------------------", true, ConsoleColor.DarkCyan);
                     
 
                 }
                 else
                 {
-                    Logger.Log($"Chunk: {name} ({uid})", true, ConsoleColor.DarkCyan);
-                    Logger.Log($"    ID: {id} - 0x{id.ToString("X")}", true, ConsoleColor.DarkCyan);
-                    Logger.Log($"    Decompressed Size: {decompressed_size} B", true, ConsoleColor.DarkCyan);
-                    Logger.Log($"    Flags: {flag}", true, ConsoleColor.DarkCyan);
+                    Logger.Log($"Chunk: {Name} ({_uid})", true, ConsoleColor.DarkCyan);
+                    Logger.Log($"    ID: {Id} - 0x{Id.ToString("X")}", true, ConsoleColor.DarkCyan);
+                    Logger.Log($"    Decompressed Size: {DecompressedSize} B", true, ConsoleColor.DarkCyan);
+                    Logger.Log($"    Flags: {Flag}", true, ConsoleColor.DarkCyan);
                     Logger.Log("---------------------------------------------", true, ConsoleColor.DarkCyan);
                 }
                 
@@ -152,16 +152,16 @@ namespace NetMFAPatcher.MMFParser.Data
                 string copyright = "";
                 string project = "";
                 
-                var titleChunk = chunk_list.get_chunk<AppName>();
-                if (titleChunk != null) title = titleChunk.value;
+                var titleChunk = _chunkList.get_chunk<AppName>();
+                if (titleChunk != null) title = titleChunk.Value;
 
-                var copyrightChunk = chunk_list.get_chunk<Copyright>();
-                if (copyrightChunk != null) copyright = copyrightChunk.value;
+                var copyrightChunk = _chunkList.get_chunk<Copyright>();
+                if (copyrightChunk != null) copyright = copyrightChunk.Value;
 
-                var projectChunk = chunk_list.get_chunk<EditorFilename>();
-                if (projectChunk != null) project = projectChunk.value;
+                var projectChunk = _chunkList.get_chunk<EditorFilename>();
+                if (projectChunk != null) project = projectChunk.Value;
 
-                if (EXE.LatestInst.game_data.product_build >= 284)
+                if (Exe.LatestInst.GameData.ProductBuild >= 284)
                 {
                     Decryption.MakeKey(title, copyright, project);
                 }
@@ -188,7 +188,7 @@ namespace NetMFAPatcher.MMFParser.Data
         public ChunkLoader LoadChunk(Chunk chunk)
         {
             ChunkLoader loader = null;
-            switch (chunk.id)
+            switch (chunk.Id)
             {
                 case 8739:
                     loader = new AppHeader(chunk);
@@ -277,13 +277,13 @@ namespace NetMFAPatcher.MMFParser.Data
 
         public T get_chunk<T>() where T : ChunkLoader
         {
-            foreach (Chunk chunk in chunks)
+            foreach (Chunk chunk in Chunks)
             {
-                if (chunk.loader != null)
+                if (chunk.Loader != null)
                 {
-                    if (chunk.loader.GetType().Name == typeof(T).Name)
+                    if (chunk.Loader.GetType().Name == typeof(T).Name)
                     {
-                        return (T) chunk.loader;
+                        return (T) chunk.Loader;
                     }
                 }
             }

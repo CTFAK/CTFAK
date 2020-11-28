@@ -12,7 +12,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Expressions
     class Expression : DataLoader
     {
         public ObjectType ObjectType;
-        public int num;
+        public int Num;
         public int ObjectInfo;
         public int ObjectInfoList;
         public Expression(ByteIO reader) : base(reader) { }

@@ -9,17 +9,17 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
 {
     class Float : ParameterCommon
     {
-        public float value;
+        public float Value;
 
         public Float(ByteIO reader) : base(reader) { }
         public override void Read()
         {
-            value = reader.ReadSingle();
+            Value = Reader.ReadSingle();
            
         }
         public override string ToString()
         {
-            return $"{this.GetType().Name} value: {value}";
+            return $"{this.GetType().Name} value: {Value}";
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using NetMFAPatcher.chunkloaders;
-using NetMFAPatcher.Utils;
+﻿using NetMFAPatcher.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,37 +33,37 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
         {
             while(true)
             {
-                var identifier = reader.ReadAscii(4);
+                var identifier = Reader.ReadAscii(4);
                 if (identifier == Header)
                 {
-                    MaxObjects = reader.ReadInt16();
-                    MaxObjectInfo = reader.ReadInt16();
-                    NumberOfPlayers = reader.ReadInt16();
+                    MaxObjects = Reader.ReadInt16();
+                    MaxObjectInfo = Reader.ReadInt16();
+                    NumberOfPlayers = Reader.ReadInt16();
                     for (int i = 0; i < 17; i++)
                     {
-                        NumberOfConditions.Add(reader.ReadInt16());
+                        NumberOfConditions.Add(Reader.ReadInt16());
                     }
-                    var QualifierCount = reader.ReadInt16();//should be 0, so i dont give a fuck
-                    Quailifers = new Quailifer[QualifierCount + 1];
-                    for (int i = 0; i < QualifierCount; i++)
+                    var qualifierCount = Reader.ReadInt16();//should be 0, so i dont give a fuck
+                    Quailifers = new Quailifer[qualifierCount + 1];
+                    for (int i = 0; i < qualifierCount; i++)
                     {
-                        var NewQualifier = new Quailifer(reader);
-                        QualifiersList.Add(NewQualifier);//fucking python types
+                        var newQualifier = new Quailifer(Reader);
+                        QualifiersList.Add(newQualifier);//fucking python types
                         //THIS IS NOT DONE
 
                     }
                 }
                 else if (identifier == EventCount)
                 {
-                    var size = reader.ReadInt32();
+                    var size = Reader.ReadInt32();
                 }
                 else if (identifier == EventgroupData)
                 {
-                    var size = reader.ReadInt32();
-                    var end_position = reader.Tell() + size;
+                    var size = Reader.ReadInt32();
+                    var endPosition = Reader.Tell() + size;
                     while (true)
                     {
-                        var eg = new EventGroup(reader);
+                        var eg = new EventGroup(Reader);
                         eg.Read();
                     }
                 }
@@ -77,10 +76,10 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
 
     public class Quailifer : ChunkLoader
     {
-        public int objectInfo;
-        public int type;
-        public Quailifer qualifier;
-        List<int> Objects = new List<int>();        
+        public int ObjectInfo;
+        public int Type;
+        public Quailifer Qualifier;
+        List<int> _objects = new List<int>();        
 
         public Quailifer(Chunk chunk) : base(chunk) { }
         public Quailifer(ByteIO reader) : base(reader) { }
@@ -92,9 +91,9 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
 
         public override void Read()
         {
-            objectInfo = reader.ReadUInt16();
-            type = reader.ReadInt16();
-            qualifier = this;
+            ObjectInfo = Reader.ReadUInt16();
+            Type = Reader.ReadInt16();
+            Qualifier = this;
 
         }
     }
@@ -104,9 +103,9 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
     {
         public int Flags;
         public int IsRestricted;
-        public int restrictCPT;
-        public int identifier;
-        public int undo;
+        public int RestrictCpt;
+        public int Identifier;
+        public int Undo;
         public List<Condition> Conditions = new List<Condition>();
         public List<Action> Actions = new List<Action>();
 
@@ -120,27 +119,27 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
 
         public override void Read()
         {
-            var currentPosition = reader.Tell();
-            var size = reader.ReadInt16() * -1;
-            var NumberOfConditions = reader.ReadByte();
-            var NumberOfActions = reader.ReadByte();
-            var flags = reader.ReadUInt16();
-            var nop = reader.ReadInt16();
-            IsRestricted = reader.ReadInt32();
-            restrictCPT = reader.ReadInt32();
-            for (int i = 0; i < NumberOfConditions; i++)
+            var currentPosition = Reader.Tell();
+            var size = Reader.ReadInt16() * -1;
+            var numberOfConditions = Reader.ReadByte();
+            var numberOfActions = Reader.ReadByte();
+            var flags = Reader.ReadUInt16();
+            var nop = Reader.ReadInt16();
+            IsRestricted = Reader.ReadInt32();
+            RestrictCpt = Reader.ReadInt32();
+            for (int i = 0; i < numberOfConditions; i++)
             {
-                var item = new Condition(reader);
+                var item = new Condition(Reader);
                 item.Read();
                 Conditions.Add(item);
             }
-            for (int i = 0; i < NumberOfActions; i++)
+            for (int i = 0; i < numberOfActions; i++)
             {
-                var item = new Action(reader);
+                var item = new Action(Reader);
                 item.Read();
                 Actions.Add(item);
             }
-            reader.Seek(currentPosition + size);
+            Reader.Seek(currentPosition + size);
             Console.WriteLine("IF:");
             if (Conditions!=null)
             {

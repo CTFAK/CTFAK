@@ -10,18 +10,18 @@ namespace mmfparser
 {
     public abstract class DataLoader
     {
-        private Chunk chunk;
-        public ByteIO reader;
-        public bool verbose = true;
+        private Chunk _chunk;
+        public ByteIO Reader;
+        public bool Verbose = true;
 
         protected DataLoader(ByteIO reader)
         {
-            this.reader = reader;
+            this.Reader = reader;
         }
         protected DataLoader(Chunk chunk)
         {
-            this.chunk = chunk;
-            this.reader = chunk.get_reader();
+            this._chunk = chunk;
+            this.Reader = chunk.get_reader();
         }
 
         public abstract void Read();

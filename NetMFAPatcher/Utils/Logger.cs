@@ -9,17 +9,17 @@ namespace NetMFAPatcher.Utils
 {
     public static class Logger
     {
-        static StreamWriter writer;
+        static StreamWriter _writer;
         public static void Log(string text, bool logToScreen = true,ConsoleColor color = ConsoleColor.White)
         {
-            if (writer == null)
+            if (_writer == null)
             {
                 File.Delete("Dump.log");
-                writer = new StreamWriter("Dump.log", true);
-                writer.AutoFlush = true;
+                _writer = new StreamWriter("Dump.log", true);
+                _writer.AutoFlush = true;
 
             }
-            writer.WriteLine(text);
+            _writer.WriteLine(text);
             
             if (logToScreen)
             {

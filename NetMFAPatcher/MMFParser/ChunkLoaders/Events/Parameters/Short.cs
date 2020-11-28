@@ -9,17 +9,17 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
 {
     class Short : ParameterCommon
     {
-        public short value;
+        public short Value;
 
         public Short(ByteIO reader) : base(reader) { }
         public override void Read()
         {
-            value = reader.ReadInt16();
+            Value = Reader.ReadInt16();
             
         }
         public override string ToString()
         {
-            return $"{this.GetType().Name} value: {value}";
+            return $"{this.GetType().Name} value: {Value}";
         }
     }
 }

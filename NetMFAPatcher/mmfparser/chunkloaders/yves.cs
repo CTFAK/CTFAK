@@ -8,13 +8,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetMFAPatcher.MMFParser.ChunkLoaders;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.chunkloaders
+namespace NetMFAPatcher.MMFParser.ChunkLoaders
 {
-    public class AppIcon:ChunkLoader
+    public class AppIcon : ChunkLoader
     {
-        List<byte> points;
+        List<byte> _points;
 
 
         public AppIcon(ByteIO reader) : base(reader)
@@ -29,47 +30,40 @@ namespace NetMFAPatcher.chunkloaders
         {
             return;
             Logger.Log("dumpingIcon");
-            reader.ReadBytes(reader.ReadInt32() - 4);
-            List<byte> color_indexes = new List<byte>();
-            for (int i = 0; i < 16*16; i++)
+            Reader.ReadBytes(Reader.ReadInt32() - 4);
+            List<byte> colorIndexes = new List<byte>();
+            for (int i = 0; i < 16 * 16; i++)
             {
-                
-                var b = reader.ReadByte();
-                var g = reader.ReadByte();
-                var r = reader.ReadByte();
-                reader.ReadByte();
-                color_indexes.Add(r);
-                color_indexes.Add(g);
-                color_indexes.Add(b);
+                var b = Reader.ReadByte();
+                var g = Reader.ReadByte();
+                var r = Reader.ReadByte();
+                Reader.ReadByte();
+                colorIndexes.Add(r);
+                colorIndexes.Add(g);
+                colorIndexes.Add(b);
             }
-            points = new List<byte>();
+
+            _points = new List<byte>();
             for (int y = 0; y < 16; y++)
             {
-                var x_list = new List<byte>();
+                var xList = new List<byte>();
                 for (int x = 0; x < 16; x++)
                 {
-                    x_list.Add(color_indexes[reader.ReadByte()]);
+                    xList.Add(colorIndexes[Reader.ReadByte()]);
                 }
+
                 //x_list.AddRange(points);
                 //points = x_list;
-                x_list.AddRange(points);
-                points = x_list;
-
-                
-               
+                xList.AddRange(_points);
+                _points = xList;
             }
-            File.WriteAllBytes("fatcock.raw", points.ToArray());
-            
 
-
-
-
+            File.WriteAllBytes("fatcock.raw", _points.ToArray());
         }
 
 
         public override void Print(bool ext)
         {
-            
         }
     }
 }

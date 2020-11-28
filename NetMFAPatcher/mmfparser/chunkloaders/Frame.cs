@@ -7,8 +7,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetMFAPatcher.MMFParser.ChunkLoaders;
 
-namespace NetMFAPatcher.chunkloaders
+namespace NetMFAPatcher.MMFParser.ChunkLoaders
 {
     class FrameName : StringChunk
     {
@@ -34,52 +35,51 @@ namespace NetMFAPatcher.chunkloaders
 
     public class Frame : ChunkLoader
     {
-        ByteIO reader;
-        public string name;
-        public string password;
-        public int width;
-        public int height;
-        public byte[] background;
-        public int flags;
+        public string Name;
+        public string Password;
+        public int Width;
+        public int Height;
+        public byte[] Background;
+        public int Flags;
         public int CountOfObjs;
-        int top;
-        int bottom;
-        int left;
-        int right;
+        int _top;
+        int _bottom;
+        int _left;
+        int _right;
 
 
         public override void Print(bool ext)
         {
-            Logger.Log($"Frame: {name}", true, ConsoleColor.Green);
-            Logger.Log($"   Password: {(password!=null ? password : "None")}", true, ConsoleColor.Green);
-            Logger.Log($"   Size: {width}x{height}", true, ConsoleColor.Green);
+            Logger.Log($"Frame: {Name}", true, ConsoleColor.Green);
+            Logger.Log($"   Password: {(Password!=null ? Password : "None")}", true, ConsoleColor.Green);
+            Logger.Log($"   Size: {Width}x{Height}", true, ConsoleColor.Green);
             Logger.Log($"   Objects: {CountOfObjs}", true, ConsoleColor.Green);
             Logger.Log($"-------------------------", true, ConsoleColor.Green);
         }
 
         public override void Read()
         {
-            var FrameReader = new ByteIO(chunk.chunk_data);
+            var frameReader = new ByteIO(Chunk.ChunkData);
             var chunks = new ChunkList();
 
-            chunks.verbose = false;
-            chunks.Read(FrameReader);
+            chunks.Verbose = false;
+            chunks.Read(frameReader);
 
             var name = chunks.get_chunk<FrameName>();
             if (name != null) //Just to be sure
             {
-                this.name = name.value;
+                this.Name = name.Value;
             }
             var password = chunks.get_chunk<FramePassword>();
             if (password != null) //Just to be sure
             {
-                this.password = password.value;
+                this.Password = password.Value;
             }
             var header = chunks.get_chunk<FrameHeader>();
-            width = header.width;
-            height = header.height;
-            background = header.background;
-            flags = header.flags;
+            Width = header.Width;
+            Height = header.Height;
+            Background = header.Background;
+            Flags = header.Flags;
             var objects = chunks.get_chunk<ObjectInstances>();
             if(objects!=null)
             {
@@ -91,7 +91,7 @@ namespace NetMFAPatcher.chunkloaders
 
 
 
-            foreach (var item in chunks.chunks)
+            foreach (var item in chunks.Chunks)
             {
                 //Directory.CreateDirectory($"{Program.DumpPath}\\CHUNKS\\FRAMES\\{this.name}");
                 //string path = $"{Program.DumpPath}\\CHUNKS\\FRAMES\\{this.name}\\{chunk.name}.chunk";
@@ -115,10 +115,10 @@ namespace NetMFAPatcher.chunkloaders
 
     class FrameHeader : ChunkLoader
     {
-        public int width;
-        public int height;
-        public int flags;
-        public byte[] background;
+        public int Width;
+        public int Height;
+        public int Flags;
+        public byte[] Background;
         public FrameHeader(ByteIO reader) : base(reader)
         {
         }
@@ -134,10 +134,10 @@ namespace NetMFAPatcher.chunkloaders
 
         public override void Read()
         {
-            width = reader.ReadInt32();
-            height = reader.ReadInt32();
-            background = reader.ReadBytes(4);
-            flags = (int)reader.ReadUInt32();
+            Width = Reader.ReadInt32();
+            Height = Reader.ReadInt32();
+            Background = Reader.ReadBytes(4);
+            Flags = (int)Reader.ReadUInt32();
             
             
 
@@ -147,7 +147,7 @@ namespace NetMFAPatcher.chunkloaders
     {
         
         public int CountOfObjects=0;
-        public List<ObjectInstances> items = new List<ObjectInstances>();
+        public List<ObjectInstances> Items = new List<ObjectInstances>();
 
         public ObjectInstances(ByteIO reader) : base(reader)
         {
@@ -165,13 +165,13 @@ namespace NetMFAPatcher.chunkloaders
         public override void Read()
         {
             
-            CountOfObjects = (int)reader.ReadUInt32();
+            CountOfObjects = (int)Reader.ReadUInt32();
             return;
             for (int i = 0; i < CountOfObjects; i++)
             {
-                var item = new ObjectInstances(reader);
+                var item = new ObjectInstances(Reader);
                 item.Read();
-                items.Add(item);
+                Items.Add(item);
             }
 
 

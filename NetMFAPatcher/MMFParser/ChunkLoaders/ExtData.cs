@@ -1,5 +1,4 @@
-﻿using NetMFAPatcher.chunkloaders;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +17,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
         public override void Read()
         {
-            var filename = reader.ReadAscii();
+            var filename = Reader.ReadAscii();
             //var data = reader.ReadBytes();
         }
     }

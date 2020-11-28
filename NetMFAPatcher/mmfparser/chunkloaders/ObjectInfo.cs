@@ -1,68 +1,69 @@
-﻿using NetMFAPatcher.chunkloaders;
+﻿using System;
 using NetMFAPatcher.MMFParser.Data;
 using NetMFAPatcher.utils;
 using NetMFAPatcher.Utils;
 using System.Collections.Generic;
+using NetMFAPatcher.MMFParser.ChunkLoaders;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.mmfparser.chunkloaders
+namespace NetMFAPatcher.MMFParser.ChunkLoaders
 {
     public class ObjectInfo : ChunkLoader
     {
-        public List<Chunk> chunks = new List<Chunk>();
-        public int properties = 0;
-        public string name = "ERROR";
-        public int handle;
-        public int objectType;
-        public int flags;
-        public bool transparent;
-        public bool antialias;
-        public int inkEffect;
-        public int inkEffectValue;
-        public int shaderId;
-        public int items;
-        public ObjectInfo(Chunk chunk) : base(chunk) { }
-        public ObjectInfo(ByteIO reader) : base(reader) { }
+        public List<Chunk> Chunks = new List<Chunk>();
+        public int Properties = 0;
+        public string Name = "ERROR";
+        public int Handle;
+        public int ObjectType;
+        public UInt32 Flags;
+        public bool Transparent;
+        public bool Antialias;
+        public int InkEffect;
+        public int InkEffectValue;
+        public int ShaderId;
+        public int Items;
+
+        public ObjectInfo(Chunk chunk) : base(chunk)
+        {
+        }
+
+        public ObjectInfo(ByteIO reader) : base(reader)
+        {
+        }
+
         public override void Print(bool ext)
         {
-            
         }
 
         public override void Read()
         {
             var infoChunks = new ChunkList();
-            infoChunks.verbose = false;
-            infoChunks.Read(reader);
-            
-            foreach (var chunk in infoChunks.chunks)
+            infoChunks.Verbose = false;
+            infoChunks.Read(Reader);
+
+            foreach (var infoChunk in infoChunks.Chunks)
             {
-                chunk.verbose = false;
-                var loader = chunk.loader;
-                if(loader is ObjectName)
+                infoChunk.Verbose = false;
+                var loader = infoChunk.Loader;
+                if (loader is ObjectName)
                 {
                     var actualLoader = infoChunks.get_loader<ObjectName>(loader);
-                    name = actualLoader.value;
-
+                    Name = actualLoader.Value;
                 }
-                else if(loader is ObjectHeader)
+                else if (loader is ObjectHeader)
                 {
                     var actualLoader = infoChunks.get_loader<ObjectHeader>(loader);
-                    handle = actualLoader.handle;
-                    objectType = actualLoader.objectType;
-                    flags = actualLoader.flags;
-                    var inkEffect = actualLoader.inkEffect;
-                    transparent = ByteFlag.getFlag(inkEffect, 28);
-                    antialias = ByteFlag.getFlag(inkEffect, 29);
-
-
-                }    
-
-
-
+                    Handle = actualLoader.Handle;
+                    ObjectType = actualLoader.ObjectType;
+                    Flags = actualLoader.Flags;
+                    UInt32 inkEffect = actualLoader.InkEffect;
+                    Transparent = ByteFlag.GetFlag(inkEffect, 28);
+                    Antialias = ByteFlag.GetFlag(inkEffect, 29);
+                }
             }
-            
         }
     }
+
     class ObjectName : StringChunk
     {
         public ObjectName(ByteIO reader) : base(reader)
@@ -73,13 +74,15 @@ namespace NetMFAPatcher.mmfparser.chunkloaders
         {
         }
     }
+
     class ObjectHeader : ChunkLoader
     {
-        public int handle;
-        public int objectType;
-        public int flags;
-        public int inkEffect;
-        public int inkEffectParameter;
+        public Int16 Handle;
+        public Int16 ObjectType;
+        public UInt32 Flags;
+        public UInt32 InkEffect;
+        public UInt32 InkEffectParameter;
+
         public ObjectHeader(ByteIO reader) : base(reader)
         {
         }
@@ -90,18 +93,16 @@ namespace NetMFAPatcher.mmfparser.chunkloaders
 
         public override void Print(bool ext)
         {
-            
         }
 
         public override void Read()
         {
-            handle = reader.ReadInt16();
-            objectType = reader.ReadInt16();
-            flags = reader.ReadUInt16();
-            var reserved = reader.ReadInt16();
-            inkEffect = (int)reader.ReadUInt32();
-            inkEffectParameter = (int)reader.ReadUInt32();
-            
+            Handle = Reader.ReadInt16();
+            ObjectType = Reader.ReadInt16();
+            Flags = Reader.ReadUInt16();
+            Int16 reserved = Reader.ReadInt16();
+            InkEffect = Reader.ReadUInt32();
+            InkEffectParameter = Reader.ReadUInt32();
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using NetMFAPatcher.chunkloaders;
-using NetMFAPatcher.Utils;
-using NetMFAPatcher.mmfparser;
+﻿using NetMFAPatcher.Utils;
 using System;
 using System.IO;
 using System.Collections;
@@ -15,111 +13,109 @@ namespace NetMFAPatcher
 {
     class Program
     {
-        
         //public static string path = @"H:\fnaf-world.exe";//test
         //public static string path = @"D:\SteamLibrary\steamapps\common\Five Nights at Freddy's Sister Location\SisterLocation.exe";
-        public static string path = "";//TODO: Make Selectable
+        public static string Path = ""; //TODO: Make Selectable
 
-        public static string GameName;// = Path.GetFileNameWithoutExtension(path);
-        public static string DumpPath;// = $"DUMP\\{GameName}";
+        public static string GameName; // = Path.GetFileNameWithoutExtension(path);
+        public static string DumpPath; // = $"DUMP\\{GameName}";
 
-        public static bool doMFA=false;
+        public static bool DoMfa = false;
         public static bool DumpImages = false;
         public static bool DumpSounds = false;
-        public static bool verbose;
+        public static bool Verbose;
 
-        public static bool LogAll=false;
-        public static bool UseGUI = false;
+        public static bool LogAll = false;
+        public static bool UseGui = false;
 
         [STAThread]
         static void Main(string[] args)
         {
-            string Path="";
-            bool Verbose=false;
-            bool DumpImages=true;
-            bool DumpSounds=true;
-            
-            if(args.Length==0)
+            string path = "";
+            bool verbose = false;
+            bool dumpImages = true;
+            bool dumpSounds = true;
+
+            if (args.Length == 0)
             {
-                UseGUI = true;
+                UseGui = true;
                 var form = new MainForm();
                 Application.Run(form);
-                
             }
 
-            
-            
+
             if (args.Length > 0)
             {
-                Path = args[0];
+                path = args[0];
             }
+
             if (args.Length > 1)
             {
-                Boolean.TryParse(args[1],out Verbose);
+                Boolean.TryParse(args[1], out verbose);
             }
+
             if (args.Length > 2)
             {
-                 Boolean.TryParse(args[2],out DumpImages);
+                Boolean.TryParse(args[2], out dumpImages);
             }
-            if(args.Length>3)
+
+            if (args.Length > 3)
             {
-                 Boolean.TryParse(args[3],out DumpSounds);
+                Boolean.TryParse(args[3], out dumpSounds);
             }
-            if(args[0]=="-h"||args[0]=="-help")
+
+            if (args.Length > 0 && (args[0] == "-h" || args[0] == "-help"))
             {
-                Logger.Log($"DotNetCTFDumper: 0.0.5",true,ConsoleColor.Green);
+                Logger.Log($"DotNetCTFDumper: 0.0.5", true, ConsoleColor.Green);
                 Logger.Log($"Lauch Args:", true, ConsoleColor.Green);
                 Logger.Log($"   Filename - path to your exe or mfa", true, ConsoleColor.Green);
                 Logger.Log($"   Info - Dump debug info to console(default:true)", true, ConsoleColor.Green);
-                Logger.Log($"   DumpImages - Dump images to 'DUMP\\[your game]\\ImageBank'(default:false)", true, ConsoleColor.Green);
-                Logger.Log($"   DumpSounds - Dump sounds to 'DUMP\\[your game]\\SoundBank'(default:true)\n", true, ConsoleColor.Green);
-                Logger.Log($"Exaple: DotNetCTFDumper.exe E:\\SisterLocation.exe true true false true", true, ConsoleColor.Green);
+                Logger.Log($"   DumpImages - Dump images to 'DUMP\\[your game]\\ImageBank'(default:false)", true,
+                    ConsoleColor.Green);
+                Logger.Log($"   DumpSounds - Dump sounds to 'DUMP\\[your game]\\SoundBank'(default:true)\n", true,
+                    ConsoleColor.Green);
+                Logger.Log($"Exaple: DotNetCTFDumper.exe E:\\SisterLocation.exe true true false true", true,
+                    ConsoleColor.Green);
                 Console.ReadKey();
                 Environment.Exit(0);
-
             }
 
-            if(args.Length>0) ReadFile(Path, Verbose, DumpImages, DumpSounds);
-
-
-
+            if (args.Length > 0) ReadFile(path, verbose, dumpImages, dumpSounds);
         }
-        public static void ReadFile(string path,bool verbose=false,bool dumpImages=false,bool dumpSounds=true)
+
+        public static void ReadFile(string path, bool verbose = false, bool dumpImages = false, bool dumpSounds = true)
         {
-            GameName = Path.GetFileNameWithoutExtension(path);
+            GameName = System.IO.Path.GetFileNameWithoutExtension(path);
             DumpPath = $"DUMP\\{GameName}";
             PrepareFolders();
-            
+
             DumpImages = dumpImages;
             DumpSounds = dumpSounds;
-            Program.verbose = verbose;
+            Program.Verbose = verbose;
             if (File.Exists(path))
             {
-
-
                 if (path.EndsWith(".exe"))
                 {
-                    doMFA = false;
+                    DoMfa = false;
                     ByteIO exeReader = new ByteIO(path, FileMode.Open);
-                    EXE currentEXE = new EXE();
-                    currentEXE.ParseExe(exeReader);
+                    Exe currentExe = new Exe();
+                    currentExe.ParseExe(exeReader);
                     Logger.Log("Finished!", true, ConsoleColor.Yellow);
-                    if(!UseGUI) Console.ReadKey();
-
+                    if (!UseGui) Console.ReadKey();
                 }
                 else if (path.EndsWith(".mfa"))
                 {
-                    doMFA = true;
+                    DoMfa = true;
                     Logger.Log("MFA reading is currently unstable");
                     Logger.Log("Are you sure?");
                     Console.ReadKey();
 
                     ByteIO mfaReader = new ByteIO(path, FileMode.Open);
-                    var mfa = new MFA(mfaReader);
+                    var mfa = new Mfa(mfaReader);
                     mfa.Read();
                     Console.WriteLine("Writing");
-                    var MFAWriter = new ByteWriter("out.mfa",FileMode.Create);
-                    mfa.Write(MFAWriter);
+                    var mfaWriter = new ByteWriter("out.mfa", FileMode.Create);
+                    mfa.Write(mfaWriter);
                     Console.ReadKey();
                 }
                 else
@@ -129,14 +125,10 @@ namespace NetMFAPatcher
             }
             else
             {
-                Logger.Log($"File '{path}' does not exist",true,ConsoleColor.Red);
+                Logger.Log($"File '{path}' does not exist", true, ConsoleColor.Red);
             }
-
-            
-
-
-
         }
+
         public static void PrepareFolders()
         {
             Directory.CreateDirectory($"{DumpPath}\\CHUNKS\\OBJECTINFO");
@@ -146,7 +138,5 @@ namespace NetMFAPatcher
             Directory.CreateDirectory($"{DumpPath}\\SoundBank");
             Directory.CreateDirectory($"{DumpPath}\\extensions");
         }
-
-        
     }
 }

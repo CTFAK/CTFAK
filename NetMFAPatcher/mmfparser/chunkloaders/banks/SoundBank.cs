@@ -1,21 +1,18 @@
-﻿using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NetMFAPatcher.mmfparser;
+using NetMFAPatcher.utils;
+using NetMFAPatcher.Utils;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.chunkloaders
+namespace NetMFAPatcher.MMFParser.ChunkLoaders.banks
 {
     public class SoundBank : ChunkLoader
     {
-        public int num_of_items = 0;
-        public int references = 0;
-        public List<SoundItem> items;
-        public bool isCompressed = true;
+        public int NumOfItems = 0;
+        public int References = 0;
+        public List<SoundItem> Items;
+        public bool IsCompressed = true;
 
         public override void Print(bool ext)
         {
@@ -24,22 +21,22 @@ namespace NetMFAPatcher.chunkloaders
         public override void Read()
         {
             //Implementing for standalone-only because of my lazyness
-            items = new List<SoundItem>();
-            num_of_items = reader.ReadInt32();
+            Items = new List<SoundItem>();
+            NumOfItems = Reader.ReadInt32();
 
-            for (int i = 0; i < num_of_items; i++)
+            for (int i = 0; i < NumOfItems; i++)
             {
-                var item = new SoundItem(reader);
-                item.isCompressed = isCompressed;
+                var item = new SoundItem(Reader);
+                item.IsCompressed = IsCompressed;
                 item.Read();
                 
-                items.Add(item);
+                Items.Add(item);
             }
         }
         public void Write(ByteWriter writer)
         {
-            writer.WriteInt32(num_of_items);
-            foreach (var item in items)
+            writer.WriteInt32(NumOfItems);
+            foreach (var item in Items)
             {
                 item.Write(writer);
             }
@@ -56,9 +53,9 @@ namespace NetMFAPatcher.chunkloaders
 
     public class SoundBase : ChunkLoader
     {
-        public int handle;
-        public string name = "ERROR";
-        public byte[] data;
+        public int Handle;
+        public string Name = "ERROR";
+        public byte[] Data;
 
         public override void Print(bool ext)
         {
@@ -79,63 +76,63 @@ namespace NetMFAPatcher.chunkloaders
 
     public class SoundItem : SoundBase
     {
-        public bool compressed;
-        public int checksum;
-        public int references;
-        public int flags;
-        public bool isCompressed = true;
+        public bool Compressed;
+        public int Checksum;
+        public int References;
+        public int Flags;
+        public bool IsCompressed = true;
 
         public override void Read()
         {
-            var start = reader.Tell();
+            var start = Reader.Tell();
             
-            handle = (int) reader.ReadUInt32();
-            checksum = reader.ReadInt32();
-            references = reader.ReadInt32();
-            var decompressed_size = reader.ReadInt32();
-            flags = (int)reader.ReadUInt32(); //flags
-            var reserved = reader.ReadInt32();
-            var name_lenght = reader.ReadInt32();
-            ByteIO SoundData;
-            if (isCompressed) //compressed
+            Handle = (int) Reader.ReadUInt32();
+            Checksum = Reader.ReadInt32();
+            References = Reader.ReadInt32();
+            var decompressedSize = Reader.ReadInt32();
+            Flags = (int)Reader.ReadUInt32(); //flags
+            var reserved = Reader.ReadInt32();
+            var nameLenght = Reader.ReadInt32();
+            ByteIO soundData;
+            if (IsCompressed) //compressed
             {
-                var size = reader.ReadInt32();
-                SoundData = new ByteIO(Decompressor.decompress_block(reader, size, decompressed_size));
+                var size = Reader.ReadInt32();
+                soundData = new ByteIO(Decompressor.decompress_block(Reader, size, decompressedSize));
             }
             else
             {
-                SoundData = new ByteIO(reader.ReadBytes(decompressed_size));
+                soundData = new ByteIO(Reader.ReadBytes(decompressedSize));
             }
-            if (isCompressed)
+            if (IsCompressed)
             {
-                name = SoundData.ReadWideString(name_lenght);
+                Name = soundData.ReadWideString(nameLenght);
             }
             else
             {
-                name = SoundData.ReadAscii(name_lenght);
+                Name = soundData.ReadAscii(nameLenght);
 
             }
 
 
-            this.data = SoundData.ReadBytes((int) SoundData.Size());
-            name = Helper.CleanInput(name);
-            Console.WriteLine($"Dumping {name}");
+            this.Data = soundData.ReadBytes((int) soundData.Size());
+            Name = Helper.CleanInput(Name);
+            Console.WriteLine($"Dumping {Name}");
 
-            string path = $"{Program.DumpPath}\\SoundBank\\{name}.wav";
-            File.WriteAllBytes(path, data);
+            string path = $"{Program.DumpPath}\\SoundBank\\{Name}.wav";
+            File.WriteAllBytes(path, Data);
         }
         public void Write(ByteWriter writer)
         {
-            writer.WriteUInt32((uint)handle);
-            writer.WriteInt32(checksum);
-            writer.WriteInt32(references);
-            writer.WriteInt32(data.Length+name.Length+1);
-            writer.WriteInt32(flags);
+            writer.WriteUInt32((uint)Handle);
+            writer.WriteInt32(Checksum);
+            writer.WriteInt32(References);
+            writer.WriteInt32(Data.Length+Name.Length+1);
+            writer.WriteInt32(Flags);
             writer.WriteInt32(0);
-            writer.WriteInt32(name.Length+1);
-            if (isCompressed) writer.WriteUnicode(name);
-            else writer.WriteAscii(name);
-            writer.WriteBytes(data);
+            writer.WriteInt32(Name.Length+1);
+            if (IsCompressed) writer.WriteUnicode(Name);
+            else writer.WriteAscii(Name);
+            writer.WriteBytes(Data);
 
 
 

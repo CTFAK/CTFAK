@@ -11,62 +11,62 @@ namespace NetMFAPatcher.mmfparser.mfaloaders.mfachunks
 {
     class ObjectLoader : DataLoader
     {
-        public int objectFlags;
-        public int newObjectFlags;
-        public Color backgroundColor;
-        List<short> qualifiers = new List<short>();
-        public ValueList values;
-        public ValueList strings;
-        public Movements movements;
-        public Behaviours behaviours;
+        public int ObjectFlags;
+        public int NewObjectFlags;
+        public Color BackgroundColor;
+        List<short> _qualifiers = new List<short>();
+        public ValueList Values;
+        public ValueList Strings;
+        public Movements Movements;
+        public Behaviours Behaviours;
         
         public override void Print()
         {
             Logger.Log("Object Loader: ");
             Logger.Log("    Values:");
-            foreach (var item in values.items)
+            foreach (var item in Values.Items)
             {
-                Logger.Log($"       Value {item.name} contains '{item.value}'");
+                Logger.Log($"       Value {item.Name} contains '{item.Value}'");
             }
             Logger.Log("\n    Strings:");
-            foreach (var item in strings.items)
+            foreach (var item in Strings.Items)
             {
-                Logger.Log($"       String {item.name} contains '{item.value}'");
+                Logger.Log($"       String {item.Name} contains '{item.Value}'");
             }
             Logger.Log("\n    Movements:");
-            foreach (var item in movements.items)
+            foreach (var item in Movements.Items)
             {
-                Logger.Log($"       Movement {item.name}");
+                Logger.Log($"       Movement {item.Name}");
             }
             Logger.Log("\n");
         }
 
         public override void Read()
         {
-            objectFlags = reader.ReadInt32();
-            newObjectFlags = reader.ReadInt32();
-            backgroundColor = reader.ReadColor();
-            var end = reader.Tell() + 2 * 9;
+            ObjectFlags = Reader.ReadInt32();
+            NewObjectFlags = Reader.ReadInt32();
+            BackgroundColor = Reader.ReadColor();
+            var end = Reader.Tell() + 2 * 9;
             for (int i = 0; i < 9; i++)
             {
-                var value = reader.ReadInt16();
+                var value = Reader.ReadInt16();
                 if(value==-1)
                 {
                     break;
                 }
-                qualifiers.Add(value);
+                _qualifiers.Add(value);
             }
-            reader.Seek(end);
+            Reader.Seek(end);
 
-            values = new ValueList(reader);
-            values.Read();
-            strings = new ValueList(reader);
-            strings.Read();
-            movements = new Movements(reader);
-            movements.Read();
-            behaviours = new Behaviours(reader);
-            behaviours.Read();
-            reader.Skip(56);
+            Values = new ValueList(Reader);
+            Values.Read();
+            Strings = new ValueList(Reader);
+            Strings.Read();
+            Movements = new Movements(Reader);
+            Movements.Read();
+            Behaviours = new Behaviours(Reader);
+            Behaviours.Read();
+            Reader.Skip(56);
             Print();
 
 

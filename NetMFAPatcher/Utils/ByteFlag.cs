@@ -8,12 +8,11 @@ namespace NetMFAPatcher.utils
 {
     public static class ByteFlag
     {
-        public static bool getFlag(int flagbyte,int pos)
+        public static bool GetFlag(UInt32 flagbyte, int pos)
         {
-            var mask = Math.Pow(2, pos);
-            var result = flagbyte & (int)mask;
+            UInt32 mask = (uint) (2 << pos);
+            UInt32 result = flagbyte & mask;
             return result == mask;
-
         }
     }
 }

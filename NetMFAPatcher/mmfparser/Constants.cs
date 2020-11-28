@@ -8,15 +8,15 @@ namespace NetMFAPatcher.mmfparser
 {
     public static class Constants
     {
-        public static readonly string GAME_HEADER = "PAME";
-        public static readonly string UNICODE_GAME_HEADER = "PAMU";//"50 41 4D 55";
-        public static bool isUnicode;
+        public static readonly string GameHeader = "PAME";
+        public static readonly string UnicodeGameHeader = "PAMU";//"50 41 4D 55";
+        public static bool IsUnicode;
         public enum Products
         {
-            MMF1=1,
-            MMF15=2,
-            MMF2=3,
-            CNC1=0
+            Mmf1=1,
+            Mmf15=2,
+            Mmf2=3,
+            Cnc1=0
 
         }
         public enum ValueType
@@ -44,9 +44,9 @@ namespace NetMFAPatcher.mmfparser
             Score=5,
             Lives = 6,
             Counter=7,
-            RTF=8,
+            Rtf=8,
             SubApplication=9,
-            INI=33,
+            Ini=33,
             IniPp=32,
             File=34,
             TextEntry=35
@@ -66,7 +66,7 @@ namespace NetMFAPatcher.mmfparser
             GlobalEvents=8746,
             FrameHandles=8747,
             ExtData=8748,
-            Additional_Extension=8749,
+            AdditionalExtension=8749,
             AppEditorFilename=8750,
             AppTargetFilename=8751,
             AppDoc=8752,
@@ -83,7 +83,7 @@ namespace NetMFAPatcher.mmfparser
             Copyright=8763,
             GlobalValuesNames=8764,
             GlobalStringNames=8765,
-            MVTexts=8766,
+            MvTexts=8766,
             FrameItems2=8767,
             ExeOnly=8768,
             Protection=8770,
@@ -109,7 +109,7 @@ namespace NetMFAPatcher.mmfparser
             RandomSeed=13124,
             FrameLayerEffects=13125,
             BlurayFrameOptions=13126,
-            MVTimerBase=13127,
+            MvTimerBase=13127,
             MosaicImageTable=13128,
             FrameEffects=13129,
             FrameIphoneOptions=13130,

@@ -6,16 +6,17 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetMFAPatcher.utils;
 
 namespace NetMFAPatcher.mmfparser.mfaloaders
 {
     class Frame : DataLoader
     {
-        public string name = "ERROR";
-        public int sizeX;
-        public int sizeY;
-        public Color background;
-        public int maxObjects;
+        public string Name = "ERROR";
+        public int SizeX;
+        public int SizeY;
+        public Color Background;
+        public int MaxObjects;
 
         public Frame(ByteIO reader) : base(reader)
         {
@@ -29,32 +30,32 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
 
         public override void Read()
         {
-            var handle = reader.ReadInt32();
-            name = Helper.AutoReadUnicode(reader);
-            Console.WriteLine(name);
-            sizeX = reader.ReadInt32();
-            sizeY = reader.ReadInt32();
-            var background = reader.ReadColor();
-            var flags = reader.ReadInt32();
-            maxObjects = reader.ReadInt32();
-            var password = Helper.AutoReadUnicode(reader);
-            reader.Skip(4);
-            var lastViewedX = reader.ReadInt32();
-            var lastViewedY = reader.ReadInt32();
+            var handle = Reader.ReadInt32();
+            Name = Helper.AutoReadUnicode(Reader);
+            Console.WriteLine(Name);
+            SizeX = Reader.ReadInt32();
+            SizeY = Reader.ReadInt32();
+            var background = Reader.ReadColor();
+            var flags = Reader.ReadInt32();
+            MaxObjects = Reader.ReadInt32();
+            var password = Helper.AutoReadUnicode(Reader);
+            Reader.Skip(4);
+            var lastViewedX = Reader.ReadInt32();
+            var lastViewedY = Reader.ReadInt32();
 
-            var paletteNum = reader.ReadInt32();
+            var paletteNum = Reader.ReadInt32();
             List<Color> palette = new List<Color>();
             for (int i = 0; i < paletteNum; i++)
             {
-                palette.Add(reader.ReadColor());
+                palette.Add(Reader.ReadColor());
             }
-            var stampHandle = reader.ReadInt32();
-            var activeLayer = reader.ReadInt32();
-            var layersCunt = reader.ReadInt32();
+            var stampHandle = Reader.ReadInt32();
+            var activeLayer = Reader.ReadInt32();
+            var layersCunt = Reader.ReadInt32();
             var layers = new List<Layer>();
             for (int i = 0; i < layersCunt; i++)
             {
-                var layer = new Layer(reader);
+                var layer = new Layer(Reader);
                 layer.Read();
                 layers.Add(layer);
 
@@ -62,13 +63,13 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
             //fadein
 
             //fadeout
-            reader.Skip(2);
+            Reader.Skip(2);
             var frameitems = new List<FrameItem>();
-            var frameitemsCount = reader.ReadInt32();
+            var frameitemsCount = Reader.ReadInt32();
            
             for (int i = 0; i < frameitemsCount; i++)
             {
-                var frameitem = new FrameItem(reader);
+                var frameitem = new FrameItem(Reader);
                 frameitem.Read();
                 frameitems.Add(frameitem);
                 //break;

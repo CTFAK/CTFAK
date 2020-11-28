@@ -10,7 +10,7 @@ namespace NetMFAPatcher.mmfparser.mfaloaders.mfachunks
 {
     class Behaviours : DataLoader
     {
-        List<Behaviour> items = new List<Behaviour>();
+        List<Behaviour> _items = new List<Behaviour>();
         public override void Print()
         {
             throw new NotImplementedException();
@@ -18,20 +18,20 @@ namespace NetMFAPatcher.mmfparser.mfaloaders.mfachunks
 
         public override void Read()
         {
-            var count = reader.ReadInt32();
+            var count = Reader.ReadInt32();
             for (int i = 0; i < count; i++)
             {
-                var item = new Behaviour(reader);
+                var item = new Behaviour(Reader);
                 item.Read();
-                items.Add(item);
+                _items.Add(item);
             }
         }
         public Behaviours(ByteIO reader) : base(reader) { }
     }
     class Behaviour : DataLoader
     {
-        public string name = "ERROR";
-        public ByteIO data;
+        public string Name = "ERROR";
+        public ByteIO Data;
         public override void Print()
         {
             throw new NotImplementedException();
@@ -39,8 +39,8 @@ namespace NetMFAPatcher.mmfparser.mfaloaders.mfachunks
 
         public override void Read()
         {
-            name = reader.ReadAscii(reader.ReadInt32());
-            data = new ByteIO(reader.ReadBytes(reader.ReadInt32()));
+            Name = Reader.ReadAscii(Reader.ReadInt32());
+            Data = new ByteIO(Reader.ReadBytes(Reader.ReadInt32()));
             
         }
         public Behaviour(ByteIO reader) : base(reader) { }

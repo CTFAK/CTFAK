@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetMFAPatcher.utils;
 
 namespace NetMFAPatcher.mmfparser.mfaloaders
 {
     class ValueList : DataLoader
     {
-        public List<ValueItem> items = new List<ValueItem>();
+        public List<ValueItem> Items = new List<ValueItem>();
         public ValueList(ByteIO reader) : base(reader)
         {
         }
@@ -23,12 +24,12 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
 
         public override void Read()
         {
-            var count = reader.ReadInt32();
+            var count = Reader.ReadInt32();
             for (int i = 0; i < count; i++)
             {
-                var item = new ValueItem(reader);
+                var item = new ValueItem(Reader);
                 item.Read();
-                items.Add(item);
+                Items.Add(item);
 
             }
 
@@ -37,8 +38,8 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
     }
     class ValueItem: DataLoader
     {
-        public object value;
-        public string name;
+        public object Value;
+        public string Name;
 
         public ValueItem(ByteIO reader) : base(reader)
         {
@@ -52,18 +53,18 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
 
         public override void Read()
         {
-            name = Helper.AutoReadUnicode(reader);
-            var type = reader.ReadInt32();
+            Name = Helper.AutoReadUnicode(Reader);
+            var type = Reader.ReadInt32();
             switch (type)
             {
                 case 2://string
-                    value = Helper.AutoReadUnicode(reader);
+                    Value = Helper.AutoReadUnicode(Reader);
                     break;
                 case 0://int
-                    value = reader.ReadInt32();
+                    Value = Reader.ReadInt32();
                     break;
                 case 1://double
-                    value = reader.ReadDouble();
+                    Value = Reader.ReadDouble();
                     break;
             }
 

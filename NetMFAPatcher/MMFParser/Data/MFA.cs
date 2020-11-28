@@ -1,53 +1,53 @@
 ﻿using NetMFAPatcher.Utils;
-using mmfparser.mfaloaders;
-using NetMFAPatcher.chunkloaders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NetMFAPatcher.mmfparser;
-using NetMFAPatcher.mmfparser.mfaloaders;
-using NetMFAPatcher.mmfparser.chunkloaders;
 using System.IO;
 using Frame = NetMFAPatcher.mmfparser.mfaloaders.Frame;
 using mmfparser;
+using NetMFAPatcher.MMFParser.ChunkLoaders;
+using NetMFAPatcher.MMFParser.ChunkLoaders.banks;
+using NetMFAPatcher.mmfparser.mfaloaders;
+using NetMFAPatcher.MMFParser.MFALoaders;
+using NetMFAPatcher.utils;
 
 namespace NetMFAPatcher.mfa
 {
-    class MFA : DataLoader
+    class Mfa : DataLoader
     {
-        public static readonly string FontBankID = "ATNF";
-        public static readonly string ImageBankID = "AGMI";
-        public static readonly string MusicBankID = "ASUM";
-        public static readonly string SoundBankID = "APMS";
+        public static readonly string FontBankId = "ATNF";
+        public static readonly string ImageBankId = "AGMI";
+        public static readonly string MusicBankId = "ASUM";
+        public static readonly string SoundBankId = "APMS";
 
-        public int mfaBuild;
-        public int product;
-        public int buildVersion;
-        public int langID;
+        public int MfaBuild;
+        public int Product;
+        public int BuildVersion;
+        public int LangId;
 
-        public string name;
-        public string description;
-        public string path;
+        public string Name;
+        public string Description;
+        public string Path;
 
-        public FontBank fonts;
-        public SoundBank sounds;
-        public MusicBank music;
+        public FontBank Fonts;
+        public SoundBank Sounds;
+        public MusicBank Music;
 
 
-        public string author;
-        public string copyright;
-        public string company;
-        public string version;
+        public string Author;
+        public string Copyright;
+        public string Company;
+        public string Version;
 
-        public byte[] stamp;
+        public byte[] Stamp;
 
-        public int windowX;
-        public int windowY;
+        public int WindowX;
+        public int WindowY;
 
-        public ValueList globalValues;
-        public ValueList globalStrings;
+        public ValueList GlobalValues;
+        public ValueList GlobalStrings;
         
 
         public override void Print()
@@ -61,21 +61,21 @@ namespace NetMFAPatcher.mfa
         {
             
             writer.WriteAscii("MFU2");
-            writer.WriteInt32(mfaBuild);
-            writer.WriteInt32(product);
-            writer.WriteInt32(buildVersion);
-            writer.WriteInt32(langID);
-            writer.AutoWriteUnicode(name);
-            writer.AutoWriteUnicode(description);
-            writer.AutoWriteUnicode(path);
+            writer.WriteInt32(MfaBuild);
+            writer.WriteInt32(Product);
+            writer.WriteInt32(BuildVersion);
+            writer.WriteInt32(LangId);
+            writer.AutoWriteUnicode(Name);
+            writer.AutoWriteUnicode(Description);
+            writer.AutoWriteUnicode(Path);
 
-            writer.WriteUInt32((uint)stamp.Length);
-            writer.WriteBytes(stamp);
-            writer.WriteAscii(FontBankID);
-            fonts.Write(writer);
-            writer.WriteAscii(SoundBankID);
-            sounds.Write(writer);
-            writer.WriteAscii(MusicBankID);
+            writer.WriteUInt32((uint)Stamp.Length);
+            writer.WriteBytes(Stamp);
+            writer.WriteAscii(FontBankId);
+            Fonts.Write(writer);
+            writer.WriteAscii(SoundBankId);
+            Sounds.Write(writer);
+            writer.WriteAscii(MusicBankId);
             //music.Write();//cum cum cum cum cum cum cum cum
             writer.WriteInt32(0);//someone is using musics lol?
 
@@ -89,181 +89,181 @@ namespace NetMFAPatcher.mfa
 
         public override void Read()
         {
-            Logger.Log($"MFA HEADER:{reader.ReadAscii(4)}\n");
-            mfaBuild = reader.ReadInt32();
-            product = reader.ReadInt32();
-            buildVersion = reader.ReadInt32();
-            Console.WriteLine($"mfaBuild: {mfaBuild}, product: {product}, buildVersion: {buildVersion}");
-            langID = reader.ReadInt32();
+            Logger.Log($"MFA HEADER:{Reader.ReadAscii(4)}\n");
+            MfaBuild = Reader.ReadInt32();
+            Product = Reader.ReadInt32();
+            BuildVersion = Reader.ReadInt32();
+            Console.WriteLine($"mfaBuild: {MfaBuild}, product: {Product}, buildVersion: {BuildVersion}");
+            LangId = Reader.ReadInt32();
 
             
-            name = Helper.AutoReadUnicode(reader);
+            Name = Helper.AutoReadUnicode(Reader);
             
 
             
-            description = Helper.AutoReadUnicode(reader);
+            Description = Helper.AutoReadUnicode(Reader);
 
             
-            path = Helper.AutoReadUnicode(reader);
-            Console.WriteLine($"\nMFAName: {name}\nDescription: {description}\nPath: {path}");
+            Path = Helper.AutoReadUnicode(Reader);
+            Console.WriteLine($"\nMFAName: {Name}\nDescription: {Description}\nPath: {Path}");
 
-            stamp = reader.ReadBytes(reader.ReadInt32());
+            Stamp = Reader.ReadBytes(Reader.ReadInt32());
             
-            if (reader.ReadAscii(4) != "ATNF")
+            if (Reader.ReadAscii(4) != "ATNF")
             {
                 throw new Exception("Invalid Font Bank");
             }
-            fonts = new FontBank(reader);
-            fonts.Read();
-            Console.WriteLine("FONTS: " + fonts.numberOfItems);
+            Fonts = new FontBank(Reader);
+            Fonts.Read();
+            Console.WriteLine("FONTS: " + Fonts.NumberOfItems);
 
 
-            if (reader.ReadAscii(4) != "APMS")
+            if (Reader.ReadAscii(4) != "APMS")
             {
                 throw new Exception("Invalid Sound Bank");
             }
-            sounds = new SoundBank(reader);
-            sounds.isCompressed = false;
-            sounds.Read();
+            Sounds = new SoundBank(Reader);
+            Sounds.IsCompressed = false;
+            Sounds.Read();
 
 
-            if (reader.ReadAscii(4) != "ASUM")
+            if (Reader.ReadAscii(4) != "ASUM")
             {
                 throw new Exception("Invalid Music Bank");
             }
-            music = new MusicBank(reader);
-            music.Read();
+            Music = new MusicBank(Reader);
+            Music.Read();
             
-            if (reader.ReadAscii(4) != "AGMI")
+            if (Reader.ReadAscii(4) != "AGMI")
             {
                 throw new Exception("Invalid Icon Bank");
             }
-            var icons = new AGMIBank(reader);
+            var icons = new AgmiBank(Reader);
             icons.Read();
-            if (reader.ReadAscii(4) != "AGMI")
+            if (Reader.ReadAscii(4) != "AGMI")
             {
                 throw new Exception("Invalid Image Bank");
             }
-            var images = new AGMIBank(reader);
+            var images = new AgmiBank(Reader);
             images.Read();
 
             
-            if (Helper.AutoReadUnicode(reader) != name) throw new Exception("Invalid name");
+            if (Helper.AutoReadUnicode(Reader) != Name) throw new Exception("Invalid name");
 
             
-            author = Helper.AutoReadUnicode(reader);
+            Author = Helper.AutoReadUnicode(Reader);
             
 
             
-            var newDesc = Helper.AutoReadUnicode(reader);
-            if ( newDesc!= description) throw new Exception("Invalid description: "+newDesc);
+            var newDesc = Helper.AutoReadUnicode(Reader);
+            if ( newDesc!= Description) throw new Exception("Invalid description: "+newDesc);
 
 
 
             
-            copyright = Helper.AutoReadUnicode(reader);
+            Copyright = Helper.AutoReadUnicode(Reader);
 
 
-            company = Helper.AutoReadUnicode(reader);
-            Console.WriteLine("Company: "+company);
-            version = Helper.AutoReadUnicode(reader);
-            Console.WriteLine("Version: " + version);
-            windowX = reader.ReadInt32();
-            windowY = reader.ReadInt32();
-            Console.WriteLine($"Window:{windowX}x{windowY}");
-            var borderColor = reader.ReadColor();
-            var displayFlags = reader.ReadUInt32();
-            var graphicFlags = reader.ReadUInt32();
-            var helpFile = Helper.AutoReadUnicode(reader);
-            Console.WriteLine(reader.Tell());
-            var vitalizePreview = reader.ReadInt32();
-            var initialScore = reader.ReadInt32();
-            var initialLifes = reader.ReadInt32();
-            var frameRate = reader.ReadInt32();
-            var buildType = reader.ReadInt32();
-            var buildPath = Helper.AutoReadUnicode(reader);
-            reader.ReadInt32();
-            var commandLine = Helper.AutoReadUnicode(reader);
-            var aboutbox = Helper.AutoReadUnicode(reader);
+            Company = Helper.AutoReadUnicode(Reader);
+            Console.WriteLine("Company: "+Company);
+            Version = Helper.AutoReadUnicode(Reader);
+            Console.WriteLine("Version: " + Version);
+            WindowX = Reader.ReadInt32();
+            WindowY = Reader.ReadInt32();
+            Console.WriteLine($"Window:{WindowX}x{WindowY}");
+            var borderColor = Reader.ReadColor();
+            var displayFlags = Reader.ReadUInt32();
+            var graphicFlags = Reader.ReadUInt32();
+            var helpFile = Helper.AutoReadUnicode(Reader);
+            Console.WriteLine(Reader.Tell());
+            var vitalizePreview = Reader.ReadInt32();
+            var initialScore = Reader.ReadInt32();
+            var initialLifes = Reader.ReadInt32();
+            var frameRate = Reader.ReadInt32();
+            var buildType = Reader.ReadInt32();
+            var buildPath = Helper.AutoReadUnicode(Reader);
+            Reader.ReadInt32();
+            var commandLine = Helper.AutoReadUnicode(Reader);
+            var aboutbox = Helper.AutoReadUnicode(Reader);
             
             Console.WriteLine(aboutbox);
-            reader.ReadInt32();
-            var binCount = reader.ReadInt32();//wtf i cant put it in loop fuck shit
+            Reader.ReadInt32();
+            var binCount = Reader.ReadInt32();//wtf i cant put it in loop fuck shit
 
             for (int i = 0; i < binCount; i++)
             {
-                reader.ReadBytes(reader.ReadInt32());//binaryfiles
+                Reader.ReadBytes(Reader.ReadInt32());//binaryfiles
             }
-            var controls = new mmfparser.mfaloaders.Controls(reader);
+            var controls = new mmfparser.mfaloaders.Controls(Reader);
             controls.Read();
 
-            var menuSize = reader.ReadUInt32();
-            var currentPosition = reader.Tell();
-            var menu = new AppMenu(reader);
+            var menuSize = Reader.ReadUInt32();
+            var currentPosition = Reader.Tell();
+            var menu = new AppMenu(Reader);
             menu.Read();
-            reader.Seek(menuSize + currentPosition);
+            Reader.Seek(menuSize + currentPosition);
 
-            var windowMenuIndex = reader.ReadInt32();
+            var windowMenuIndex = Reader.ReadInt32();
             int[] menuImages = new int[65535];//govnokod suka
-            var MICount = reader.ReadInt32();
-            for (int i = 0; i < MICount; i++)
+            var miCount = Reader.ReadInt32();
+            for (int i = 0; i < miCount; i++)
             {
-                var id = reader.ReadInt32();
-                menuImages[id] = reader.ReadInt32();
+                var id = Reader.ReadInt32();
+                menuImages[id] = Reader.ReadInt32();
             }
 
 
             
 
-            globalValues = new ValueList(reader);
-            globalValues.Read();
-            globalStrings = new ValueList(reader);
-            globalStrings.Read();
-            var globalEvents = reader.ReadBytes(reader.ReadInt32());
-            var graphicMode = reader.ReadInt32();;
+            GlobalValues = new ValueList(Reader);
+            GlobalValues.Read();
+            GlobalStrings = new ValueList(Reader);
+            GlobalStrings.Read();
+            var globalEvents = Reader.ReadBytes(Reader.ReadInt32());
+            var graphicMode = Reader.ReadInt32();;
             
 
 
-            var icoCount = reader.ReadInt32();
+            var icoCount = Reader.ReadInt32();
             for (int i = 0; i < icoCount; i++)
             {
-                reader.ReadInt32();
+                Reader.ReadInt32();
             }
 
-            var qualCount = reader.ReadInt32();
+            var qualCount = Reader.ReadInt32();
             for (int i = 0; i < qualCount; i++)//qualifiers
             {
-                var nameQ = reader.ReadAscii(reader.ReadInt32());
-                var handleQ = reader.ReadInt32();
+                var nameQ = Reader.ReadAscii(Reader.ReadInt32());
+                var handleQ = Reader.ReadInt32();
             }
-            var extCount = reader.ReadInt32();
+            var extCount = Reader.ReadInt32();
             for (int i = 0; i < extCount; i++)//extensions
             {
-                var handleE = reader.ReadInt32();
-                var filenameE = Helper.AutoReadUnicode(reader);
-                var nameE = Helper.AutoReadUnicode(reader);
-                var magicE = reader.ReadInt32();
-                var subType = reader.ReadBytes(reader.ReadInt32());
+                var handleE = Reader.ReadInt32();
+                var filenameE = Helper.AutoReadUnicode(Reader);
+                var nameE = Helper.AutoReadUnicode(Reader);
+                var magicE = Reader.ReadInt32();
+                var subType = Reader.ReadBytes(Reader.ReadInt32());
 
 
             }
             List<int> frameOffsets = new List<int>();
-            var offCount = reader.ReadInt32();
+            var offCount = Reader.ReadInt32();
             for (int i = 0; i < offCount; i++)
             {
-                frameOffsets.Add(reader.ReadInt32());
+                frameOffsets.Add(Reader.ReadInt32());
             }
-            var nextOffset = reader.ReadInt32();
+            var nextOffset = Reader.ReadInt32();
             foreach (var item in frameOffsets)
             {
-                reader.Seek(item);
-                var testframe = new Frame(reader);
+                Reader.Seek(item);
+                var testframe = new Frame(Reader);
                 testframe.Read();
                 
 
             }
-            reader.Seek(nextOffset);
-            var chunks = new ChunkList(reader);
+            Reader.Seek(nextOffset);
+            var chunks = new ChunkList(Reader);
             chunks.Read();
             return;
 
@@ -275,7 +275,7 @@ namespace NetMFAPatcher.mfa
 
 
         }
-        public MFA(ByteIO reader) : base(reader)
+        public Mfa(ByteIO reader) : base(reader)
         {
         }
 

@@ -5,24 +5,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NetMFAPatcher.mmfparser;
+using NetMFAPatcher.MMFParser.ChunkLoaders;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.chunkloaders
+namespace NetMFAPatcher.MMFParser.ChunkLoaders
 {
     class StringChunk : ChunkLoader
     {
-        public string value;
+        public string Value;
 
 
         public override void Read()
         {
-            reader = new ByteIO(chunk.chunk_data);
-            value = reader.ReadWideString();
+            Reader = new ByteIO(Chunk.ChunkData);
+            Value = Reader.ReadWideString();
         }
 
         public override void Print(bool ext)
         {
-            Logger.Log($"{chunk.name} contains:  {value}\n",true,ConsoleColor.DarkCyan);
+            Logger.Log($"{Chunk.Name} contains:  {Value}\n",true,ConsoleColor.DarkCyan);
         }
 
 

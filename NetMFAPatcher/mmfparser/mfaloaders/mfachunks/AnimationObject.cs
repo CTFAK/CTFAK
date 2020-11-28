@@ -10,18 +10,18 @@ namespace NetMFAPatcher.mmfparser.mfaloaders.mfachunks
 {
     class AnimationObject:ObjectLoader
     {
-        List<Animation> items = new List<Animation>();
+        List<Animation> _items = new List<Animation>();
         public override void Read()
         {
             base.Read();
-            if(reader.ReadByte()!=0)
+            if(Reader.ReadByte()!=0)
             {
-                var animationCount = reader.ReadInt32();
+                var animationCount = Reader.ReadInt32();
                 for (int i = 0; i < animationCount; i++)
                 {
-                    var item = new Animation(reader);
+                    var item = new Animation(Reader);
                     item.Read();
-                    items.Add(item);
+                    _items.Add(item);
                 }
             }
 
@@ -31,20 +31,20 @@ namespace NetMFAPatcher.mmfparser.mfaloaders.mfachunks
     }
     class Animation : DataLoader
     {
-        public string name = "Animation-UNKNOWN";
+        public string Name = "Animation-UNKNOWN";
         public override void Print()
         {
-            Logger.Log($"   Found animation: {name} ");
+            Logger.Log($"   Found animation: {Name} ");
         }
 
         public override void Read()
         {
-            name = reader.ReadAscii(reader.ReadInt32());
-            var directionCount = reader.ReadInt32();
+            Name = Reader.ReadAscii(Reader.ReadInt32());
+            var directionCount = Reader.ReadInt32();
             var directions = new List<AnimationDirection>();
             for (int i = 0; i < directionCount; i++)
             {
-                var direction = new AnimationDirection(reader);
+                var direction = new AnimationDirection(Reader);
                 direction.Read();
                 directions.Add(direction);
             }
@@ -56,7 +56,7 @@ namespace NetMFAPatcher.mmfparser.mfaloaders.mfachunks
     }
     class AnimationDirection : DataLoader
     {
-        public string name = "Animation-UNKNOWN";
+        public string Name = "Animation-UNKNOWN";
         public override void Print()
         {
             throw new NotImplementedException();
@@ -64,11 +64,11 @@ namespace NetMFAPatcher.mmfparser.mfaloaders.mfachunks
 
         public override void Read()
         {
-            var index = reader.ReadInt32();
-            var minSpeed = reader.ReadInt32();
-            var maxSpeed= reader.ReadInt32();
-            var repeat= reader.ReadInt32();
-            var backTo= reader.ReadInt32();
+            var index = Reader.ReadInt32();
+            var minSpeed = Reader.ReadInt32();
+            var maxSpeed= Reader.ReadInt32();
+            var repeat= Reader.ReadInt32();
+            var backTo= Reader.ReadInt32();
             var frames = new List<int>();
 
         }

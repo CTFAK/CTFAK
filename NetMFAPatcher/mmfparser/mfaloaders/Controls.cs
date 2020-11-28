@@ -10,7 +10,7 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
 {
     class Controls : DataLoader
     {
-        public List<PlayerControl> items;
+        public List<PlayerControl> Items;
 
         public Controls(ByteIO reader) : base(reader)
         {
@@ -24,12 +24,12 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
 
         public override void Read()
         {
-            items = new List<PlayerControl>();
-            var count = reader.ReadInt32();
+            Items = new List<PlayerControl>();
+            var count = Reader.ReadInt32();
             for (int i = 0; i < count; i++)
             {
-                var item = new mmfparser.mfaloaders.PlayerControl(reader);
-                items.Add(item);
+                var item = new mmfparser.mfaloaders.PlayerControl(Reader);
+                Items.Add(item);
                 item.Read();
             }
         }
@@ -37,7 +37,7 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
 
     class PlayerControl : DataLoader
     {
-        int controlType;
+        int _controlType;
 
         
 
@@ -54,19 +54,19 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
 
         public override void Read()
         {
-            controlType = reader.ReadInt32();
-            var count = reader.ReadInt32();
-            var up = reader.ReadInt32();
-            var down = reader.ReadInt32();
-            var left = reader.ReadInt32();
-            var right = reader.ReadInt32();
-            var button1 = reader.ReadInt32();
-            var button2 = reader.ReadInt32();
-            var button3 = reader.ReadInt32();
-            var button4 = reader.ReadInt32();
+            _controlType = Reader.ReadInt32();
+            var count = Reader.ReadInt32();
+            var up = Reader.ReadInt32();
+            var down = Reader.ReadInt32();
+            var left = Reader.ReadInt32();
+            var right = Reader.ReadInt32();
+            var button1 = Reader.ReadInt32();
+            var button2 = Reader.ReadInt32();
+            var button3 = Reader.ReadInt32();
+            var button4 = Reader.ReadInt32();
             for (int i = 0; i < 8; i++)
             {
-                reader.ReadInt32();
+                Reader.ReadInt32();
             }
 
 

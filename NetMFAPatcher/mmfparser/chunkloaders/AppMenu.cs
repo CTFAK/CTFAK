@@ -1,18 +1,18 @@
-﻿using NetMFAPatcher.chunkloaders;
-using NetMFAPatcher.utils;
+﻿using NetMFAPatcher.utils;
 using NetMFAPatcher.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetMFAPatcher.MMFParser.ChunkLoaders;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.mmfparser.chunkloaders
+namespace NetMFAPatcher.MMFParser.ChunkLoaders
 {
     public class AppMenu : ChunkLoader
     {
-        public List<AppMenuItem> items = new List<AppMenuItem>();
+        public List<AppMenuItem> Items = new List<AppMenuItem>();
         public AppMenu(ByteIO reader) : base(reader)
         {
         }
@@ -27,27 +27,27 @@ namespace NetMFAPatcher.mmfparser.chunkloaders
 
         public override void Read()
         {
-            var current_position = reader.Tell();
-            var header_size = reader.ReadUInt32();
-            var menu_offset = reader.ReadInt32();
-            var menu_size = reader.ReadInt32();
-            if (menu_size == 0) return;
-            var accel_offset = reader.ReadInt32();
-            var accel_size = reader.ReadInt32();
-            reader.Seek(current_position + menu_offset);
-            reader.Skip(4);
+            var currentPosition = Reader.Tell();
+            var headerSize = Reader.ReadUInt32();
+            var menuOffset = Reader.ReadInt32();
+            var menuSize = Reader.ReadInt32();
+            if (menuSize == 0) return;
+            var accelOffset = Reader.ReadInt32();
+            var accelSize = Reader.ReadInt32();
+            Reader.Seek(currentPosition + menuOffset);
+            Reader.Skip(4);
             
             Load();
             
-            reader.Seek(current_position + accel_offset);
+            Reader.Seek(currentPosition + accelOffset);
             
-            for (int i = 0; i < accel_size/8; i++)
+            for (int i = 0; i < accelSize/8; i++)
             {
-                reader.ReadByte();
-                reader.Skip(1);
-                reader.ReadInt16();
-                reader.ReadInt16();
-                reader.Skip(2);
+                Reader.ReadByte();
+                Reader.Skip(1);
+                Reader.ReadInt16();
+                Reader.ReadInt16();
+                Reader.Skip(2);
             }
 
         }
@@ -55,11 +55,11 @@ namespace NetMFAPatcher.mmfparser.chunkloaders
         {
             while(true)
             {
-                var new_item = new AppMenuItem(reader);
-                new_item.Read();
-                items.Add(new_item);
+                var newItem = new AppMenuItem(Reader);
+                newItem.Read();
+                Items.Add(newItem);
 
-                if (new_item.name.Contains("About")) break;
+                if (newItem.Name.Contains("About")) break;
                 if (true)//ByteFlag.getFlag(new_item.flags,4))
                 {
                     Load();
@@ -79,10 +79,10 @@ namespace NetMFAPatcher.mmfparser.chunkloaders
     }
     public class AppMenuItem : ChunkLoader
     {
-        public string name = "";
-        public int flags = 0;
-        public int id = 0;
-        public string mnemonic = "";
+        public string Name = "";
+        public int Flags = 0;
+        public int Id = 0;
+        public string Mnemonic = "";
         public AppMenuItem(ByteIO reader) : base(reader)
         {
         }
@@ -97,24 +97,24 @@ namespace NetMFAPatcher.mmfparser.chunkloaders
 
         public override void Read()
         {
-            var flags = reader.ReadInt16();
-            if (!ByteFlag.getFlag(flags,4))
+            uint flags = (uint) Reader.ReadInt16();
+            if (!ByteFlag.GetFlag(flags,4))
             {
-                id = reader.ReadInt16();
+                Id = Reader.ReadInt16();
                 
             }
-            name = reader.ReadWideString();
+            Name = Reader.ReadWideString();
             
-            for (int i = 0; i < name.Length; i++)
+            for (int i = 0; i < Name.Length; i++)
             {
-                if(name[i]=='&')
+                if(Name[i]=='&')
                 {
-                    mnemonic = name[i + 1].ToString().ToUpper();
+                    Mnemonic = Name[i + 1].ToString().ToUpper();
                 }
-                name = name.Replace("&", "");
+                Name = Name.Replace("&", "");
                 
             }
-            Console.WriteLine(name);
+            Console.WriteLine(Name);
         }
         public void Load()
         {
