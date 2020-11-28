@@ -17,13 +17,25 @@ namespace NetMFAPatcher.mfa
 {
     class MFA : DataLoader
     {
+        public static readonly string FontBankID = "ATNF";
+        public static readonly string ImageBankID = "AGMI";
+        public static readonly string MusicBankID = "ASUM";
+        public static readonly string SoundBankID = "APMS";
+
         public int mfaBuild;
         public int product;
         public int buildVersion;
+        public int langID;
 
         public string name;
         public string description;
         public string path;
+
+        public FontBank fonts;
+        public SoundBank sounds;
+        public MusicBank music;
+
+
         public string author;
         public string copyright;
         public string company;
@@ -45,6 +57,35 @@ namespace NetMFAPatcher.mfa
             //Logger.Log($"MFA Product:{buildVersion}");
 
         }
+        public void Write(ByteWriter writer)
+        {
+            
+            writer.WriteAscii("MFU2");
+            writer.WriteInt32(mfaBuild);
+            writer.WriteInt32(product);
+            writer.WriteInt32(buildVersion);
+            writer.WriteInt32(langID);
+            writer.AutoWriteUnicode(name);
+            writer.AutoWriteUnicode(description);
+            writer.AutoWriteUnicode(path);
+
+            writer.WriteUInt32((uint)stamp.Length);
+            writer.WriteBytes(stamp);
+            writer.WriteAscii(FontBankID);
+            fonts.Write(writer);
+            writer.WriteAscii(SoundBankID);
+            sounds.Write(writer);
+            writer.WriteAscii(MusicBankID);
+            //music.Write();//cum cum cum cum cum cum cum cum
+            writer.WriteInt32(0);//someone is using musics lol?
+
+
+
+
+            
+
+
+        }
 
         public override void Read()
         {
@@ -53,10 +94,11 @@ namespace NetMFAPatcher.mfa
             product = reader.ReadInt32();
             buildVersion = reader.ReadInt32();
             Console.WriteLine($"mfaBuild: {mfaBuild}, product: {product}, buildVersion: {buildVersion}");
-            var reserved = reader.ReadInt32();
+            langID = reader.ReadInt32();
 
             
             name = Helper.AutoReadUnicode(reader);
+            
 
             
             description = Helper.AutoReadUnicode(reader);
@@ -66,20 +108,21 @@ namespace NetMFAPatcher.mfa
             Console.WriteLine($"\nMFAName: {name}\nDescription: {description}\nPath: {path}");
 
             stamp = reader.ReadBytes(reader.ReadInt32());
-
+            
             if (reader.ReadAscii(4) != "ATNF")
             {
                 throw new Exception("Invalid Font Bank");
             }
-            var fonts = new FontBank(reader);
+            fonts = new FontBank(reader);
             fonts.Read();
+            Console.WriteLine("FONTS: " + fonts.numberOfItems);
 
 
             if (reader.ReadAscii(4) != "APMS")
             {
                 throw new Exception("Invalid Sound Bank");
             }
-            var sounds = new SoundBank(reader);
+            sounds = new SoundBank(reader);
             sounds.isCompressed = false;
             sounds.Read();
 
@@ -88,9 +131,9 @@ namespace NetMFAPatcher.mfa
             {
                 throw new Exception("Invalid Music Bank");
             }
-            var music = new MusicBank(reader);
+            music = new MusicBank(reader);
             music.Read();
-
+            
             if (reader.ReadAscii(4) != "AGMI")
             {
                 throw new Exception("Invalid Icon Bank");
@@ -142,6 +185,7 @@ namespace NetMFAPatcher.mfa
             reader.ReadInt32();
             var commandLine = Helper.AutoReadUnicode(reader);
             var aboutbox = Helper.AutoReadUnicode(reader);
+            
             Console.WriteLine(aboutbox);
             reader.ReadInt32();
             var binCount = reader.ReadInt32();//wtf i cant put it in loop fuck shit
@@ -219,7 +263,9 @@ namespace NetMFAPatcher.mfa
 
             }
             reader.Seek(nextOffset);
-
+            var chunks = new ChunkList(reader);
+            chunks.Read();
+            return;
 
 
 

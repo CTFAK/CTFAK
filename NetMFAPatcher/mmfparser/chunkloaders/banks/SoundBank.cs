@@ -36,6 +36,14 @@ namespace NetMFAPatcher.chunkloaders
                 items.Add(item);
             }
         }
+        public void Write(ByteWriter writer)
+        {
+            writer.WriteInt32(num_of_items);
+            foreach (var item in items)
+            {
+                item.Write(writer);
+            }
+        }
 
         public SoundBank(ByteIO reader) : base(reader)
         {
@@ -74,6 +82,7 @@ namespace NetMFAPatcher.chunkloaders
         public bool compressed;
         public int checksum;
         public int references;
+        public int flags;
         public bool isCompressed = true;
 
         public override void Read()
@@ -84,7 +93,7 @@ namespace NetMFAPatcher.chunkloaders
             checksum = reader.ReadInt32();
             references = reader.ReadInt32();
             var decompressed_size = reader.ReadInt32();
-            reader.ReadUInt32(); //flags
+            flags = (int)reader.ReadUInt32(); //flags
             var reserved = reader.ReadInt32();
             var name_lenght = reader.ReadInt32();
             ByteIO SoundData;
@@ -114,6 +123,25 @@ namespace NetMFAPatcher.chunkloaders
 
             string path = $"{Program.DumpPath}\\SoundBank\\{name}.wav";
             File.WriteAllBytes(path, data);
+        }
+        public void Write(ByteWriter writer)
+        {
+            writer.WriteUInt32((uint)handle);
+            writer.WriteInt32(checksum);
+            writer.WriteInt32(references);
+            writer.WriteInt32(data.Length+name.Length+1);
+            writer.WriteInt32(flags);
+            writer.WriteInt32(0);
+            writer.WriteInt32(name.Length+1);
+            if (isCompressed) writer.WriteUnicode(name);
+            else writer.WriteAscii(name);
+            writer.WriteBytes(data);
+
+
+
+
+
+
         }
 
         public SoundItem(ByteIO reader) : base(reader)

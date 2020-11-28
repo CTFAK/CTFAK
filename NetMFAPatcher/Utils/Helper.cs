@@ -62,6 +62,12 @@ namespace NetMFAPatcher
             reader.Skip(2);
             return reader.ReadWideString(len);
         }
+        public static void AutoWriteUnicode(this ByteWriter writer,string value)
+        {
+            writer.WriteInt16((short)value.Length);
+            writer.Skip(2);
+            writer.WriteUnicode(value);
+        }
         public static DataLoader LoadParameter(int code, ByteIO reader)
         {
             DataLoader item = null;

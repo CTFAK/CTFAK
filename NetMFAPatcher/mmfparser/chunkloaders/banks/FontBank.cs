@@ -21,10 +21,11 @@ namespace NetMFAPatcher.chunkloaders
         public override void Read()
         {
             numberOfItems = reader.ReadInt32();
-            
-
-
-
+        }
+        public void Write(ByteWriter writer)
+        {
+            writer.WriteInt32(numberOfItems);
+            //i am testing with no fonts suck pinus haha
 
         }
         public FontBank(ByteIO reader) : base(reader)

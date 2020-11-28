@@ -23,6 +23,7 @@ namespace NetMFAPatcher.MMFParser.Data
             while (true)
             {
                 Chunk chunk = new Chunk(chunks.Count, this);
+                chunk.verbose = verbose;
                 chunk.Read(exeReader);
                 chunk.loader = LoadChunk(chunk);
 

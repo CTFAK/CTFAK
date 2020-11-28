@@ -117,6 +117,9 @@ namespace NetMFAPatcher
                     ByteIO mfaReader = new ByteIO(path, FileMode.Open);
                     var mfa = new MFA(mfaReader);
                     mfa.Read();
+                    Console.WriteLine("Writing");
+                    var MFAWriter = new ByteWriter("out.mfa",FileMode.Create);
+                    mfa.Write(MFAWriter);
                     Console.ReadKey();
                 }
                 else

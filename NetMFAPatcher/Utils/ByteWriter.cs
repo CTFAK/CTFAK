@@ -57,15 +57,48 @@ namespace NetMFAPatcher.Utils
         {
             return BaseStream.Position < BaseStream.Length;
         }
+        public void WriteInt8(byte value) => Write(value);
+        public void WriteInt16(short value)=>Write(value);
+        public void WriteInt32(int value) => Write(value);
+        public void WriteInt64(long value) => Write(value);
+
+        public void WriteUInt16(ushort value) => Write(value);
+        public void WriteUInt32(uint value) => Write(value);
+        public void WriteUInt64(ulong value) => Write(value);
+
+       
+        public void WriteBytes(byte[] value) => Write(value);
 
         
 
+        public void WriteAscii(string value)
+        {
+            var bytes = Encoding.ASCII.GetBytes(value);
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                WriteInt8(bytes[i]);
+            }
+        }
+        public void WriteUnicode(string value)
+        {
+            var bytes = Encoding.Unicode.GetBytes(value);
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                WriteInt8(bytes[i]);
 
-        
+            }
+        }
 
 
-        
-        
+
+
+
+
+
+
+
+
+
 
     }
 }
