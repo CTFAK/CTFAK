@@ -1,15 +1,11 @@
-﻿using mmfparser;
-using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NetMFAPatcher.utils;
+using NetMFAPatcher.MMFParser.Data;
+using NetMFAPatcher.Utils;
 
-namespace NetMFAPatcher.mmfparser.mfaloaders
+namespace NetMFAPatcher.MMFParser.MFALoaders
 {
-    class ValueList : DataLoader
+    public class ValueList : DataLoader
     {
         public List<ValueItem> Items = new List<ValueItem>();
         public ValueList(ByteIO reader) : base(reader)
@@ -30,13 +26,20 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
                 var item = new ValueItem(Reader);
                 item.Read();
                 Items.Add(item);
-
             }
+        }
 
-
+        public void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt32(Items.Count);
+            foreach (var item in Items)
+            {
+                item.Write(Writer);
+            }
+            
         }
     }
-    class ValueItem: DataLoader
+    public class ValueItem: DataLoader
     {
         public object Value;
         public string Name;
@@ -67,8 +70,26 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
                     Value = Reader.ReadDouble();
                     break;
             }
+        }
 
-
+        public void Write(ByteWriter Writer)
+        {
+            Writer.AutoWriteUnicode(Name);
+            if (Value is string)
+            {
+                Writer.WriteInt32(2);
+                Writer.AutoWriteUnicode((string)Value);
+            }
+            else if (Value is int)
+            {
+                Writer.WriteInt32(0);
+                Writer.WriteInt32((int)Value);
+            }
+            else if (Value is double || Value is float)
+            {
+                Writer.WriteInt32(1);
+                Writer.Write((float)Value);
+            }
         }
     }
 

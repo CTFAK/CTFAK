@@ -1,13 +1,11 @@
-﻿using mmfparser;
-using NetMFAPatcher.MMFParser.Data;
-using NetMFAPatcher.Utils;
+﻿using NetMFAPatcher.MMFParser.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NetMFAPatcher.utils;
-using static NetMFAPatcher.mmfparser.Constants;
+using NetMFAPatcher.Utils;
+
 
 namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
 {
@@ -17,7 +15,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
         public int OtherFlags;
         public int DefType;
         public int NumberOfParameters;
-        public ObjectType ObjectType;
+        public Constants.ObjectType ObjectType;
         public int Num;
         public int ObjectInfo;
         public int Identifier;
@@ -33,7 +31,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
         {
             var currentPosition = Reader.Tell();
             var size = Reader.ReadUInt16();
-            ObjectType = (ObjectType)Reader.ReadInt16();
+            ObjectType = (Constants.ObjectType)Reader.ReadInt16();
             Num = Reader.ReadInt16();
             ObjectInfo = Reader.ReadUInt16();
             ObjectInfoList = Reader.ReadInt16();
@@ -65,7 +63,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
         public int Flags;
         public int OtherFlags;
         public int DefType;
-        public ObjectType ObjectType;
+        public Constants.ObjectType ObjectType;
         public int Num;
         public int ObjectInfo;
         public int ObjectInfoList;
@@ -80,7 +78,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
         {
             var currentPosition = Reader.Tell();
             var size = Reader.ReadUInt16();
-            ObjectType = (ObjectType)Reader.ReadInt16();
+            ObjectType = (Constants.ObjectType)Reader.ReadInt16();
             Num = Reader.ReadInt16();
             ObjectInfo = Reader.ReadUInt16();
             ObjectInfoList = Reader.ReadInt16();

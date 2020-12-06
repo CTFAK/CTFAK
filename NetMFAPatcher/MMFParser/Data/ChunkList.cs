@@ -1,13 +1,11 @@
-﻿using NetMFAPatcher.MMFParser.ChunkLoaders;
-using NetMFAPatcher.MMFParser.ChunkLoaders.Events;
-using NetMFAPatcher.utils;
-using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using NetMFAPatcher.MMFParser.ChunkLoaders.banks;
+using System.Windows.Forms;
+using NetMFAPatcher.MMFParser.ChunkLoaders;
 using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
-using static NetMFAPatcher.mmfparser.Constants;
+using NetMFAPatcher.Utils;
+using static NetMFAPatcher.MMFParser.Constants;
 
 namespace NetMFAPatcher.MMFParser.Data
 {
@@ -36,8 +34,8 @@ namespace NetMFAPatcher.MMFParser.Data
                 }
                 if (chunk.Verbose)
                 {
-                    chunk.Print(Program.LogAll);
-                    if(Program.LogAll) Console.ReadKey();
+                    chunk.Print(false);
+
 
 
 
@@ -67,9 +65,10 @@ namespace NetMFAPatcher.MMFParser.Data
             
             public ChunkLoader Loader;
             public byte[] ChunkData;
+            public byte[] RawData;
             public ChunkFlags Flag;
             public int Size = 0;
-            public int DecompressedSize = 0;
+            public int DecompressedSize = -1;
             public bool Verbose = false;
 
             public Chunk(int actualuid, ChunkList actualChunkList)
@@ -86,10 +85,15 @@ namespace NetMFAPatcher.MMFParser.Data
             public void Read(ByteIO exeReader)
             {
                 Id = exeReader.ReadInt16();
-                Name = ((ChunkNames) Id).ToString();
+                Name = this.ActualName();
 
                 Flag = (ChunkFlags) exeReader.ReadInt16();
                 Size = exeReader.ReadInt32();
+                if((Id!=26214&&Id!=26216)) //To prevent RAM from commiting suicide
+                {                
+                    RawData = exeReader.ReadBytes(Size);
+                    exeReader.BaseStream.Position -= Size;
+                }
 
                 switch (Flag)
                 {
@@ -97,27 +101,32 @@ namespace NetMFAPatcher.MMFParser.Data
                         ChunkData = Decryption.DecodeChunk(exeReader.ReadBytes(Size),Size);
                         break;
                     case ChunkFlags.CompressedAndEncrypyed:
-                        ChunkData = Decryption.DecodeMode3(exeReader.ReadBytes(Size), Size,Id);
+                        ChunkData = Decryption.DecodeMode3(exeReader.ReadBytes(Size), Size,Id,out DecompressedSize);
                         break;
                     case ChunkFlags.Compressed:
-                        ChunkData = Decompressor.Decompress(exeReader);
+                        ChunkData = Decompressor.Decompress(exeReader,out DecompressedSize);
                         break;
                     case ChunkFlags.NotCompressed:
                         ChunkData = exeReader.ReadBytes(Size);
                         break;
                 }
 
-                if (ChunkData != null)
-                {
-                    DecompressedSize = ChunkData.Length;
-                    // string path = $"{Program.DumpPath}\\CHUNKS\\{Name}.chunk";
-                    // File.WriteAllBytes(path, ChunkData);
-                }
+                
                 int tempId=0;
                 int.TryParse(Name,out tempId);
                 if(tempId==Id)
                 {
                     //chunk_data.Log(true, "X2");
+                }
+
+            }
+
+            public void Save()
+            {
+                if (ChunkData != null)
+                {
+                    string path = $"{Settings.ChunkPath}\\{Name}.chunk";
+                    File.WriteAllBytes(path, ChunkData);
                 }
 
             }
@@ -160,8 +169,12 @@ namespace NetMFAPatcher.MMFParser.Data
 
                 var projectChunk = _chunkList.get_chunk<EditorFilename>();
                 if (projectChunk != null) project = projectChunk.Value;
+                Settings.AppName=title;
+                Settings.Copyright = copyright;
+                Settings.ProjectPath = project;
+               
 
-                if (Exe.LatestInst.GameData.ProductBuild >= 284)
+                if (Exe.LatestInst.GameData.ProductBuild > 284)
                 {
                     Decryption.MakeKey(title, copyright, project);
                 }
@@ -251,6 +264,10 @@ namespace NetMFAPatcher.MMFParser.Data
                 case 17476:
                     loader = new ObjectHeader(chunk);
                     break;
+                case 17478:
+                    loader = new ObjectProperties(chunk);
+                    return loader;
+                    break;
                 case 8788:
                     //loader = new ObjectNames(chunk);
                     break;
@@ -263,6 +280,7 @@ namespace NetMFAPatcher.MMFParser.Data
                 case 13117:
                     //loader = new Events(chunk);//NOT WORKING
                     break;
+                
             }
 
             if (loader != null)

@@ -1,12 +1,12 @@
-﻿using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NetMFAPatcher.mmfparser;
-using NetMFAPatcher.MMFParser.ChunkLoaders;
-using NetMFAPatcher.mmfparser.mfaloaders;
+
+using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
+using NetMFAPatcher.Utils;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.MMFParser.ChunkLoaders
@@ -19,13 +19,55 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         public int InitialScore;
         public int InitialLives;
         public int NumberOfFrames;
-        
+        public BitDict Flags = new BitDict(new string[]
+        {
+            "BorderMax",
+            "NoHeading",
+            "Panic",
+            "SpeedIndependent",
+            "Stretch",
+            "MusicOn",
+            "SoundOn",
+            "MenuHidden",
+            "MenuBar",
+            "Maximize",
+            "MultiSamples",
+            "FullscreenAtStart",
+            "FullscreenSwitch",
+            "Protected",
+            "Copyright",
+            "OneFile"
+        });
+        public BitDict NewFlags = new BitDict(new string[]
+        {
+            "SamplesOverFrames",
+            "RelocFiles",
+            "RunFrame",
+            "SamplesWhenNotFocused",
+            "NoMinimizeBox",
+            "NoMaximizeBox",
+            "NoThiccFrame",
+            "DoNotCenterFrame",
+            "ScreensaverAutostop",
+            "DisableClose",
+            "HiddenAtStart",
+            "XPVisualThemes",
+            "VSync",
+            "RunWhenMinimized",
+            "MDI",
+            "RunWhileResizing"
+        });
+
+        public Color BorderColor;
+        public int FrameRate;
+
 
         public override void Read()
         {
             Reader = new ByteIO(Chunk.ChunkData);
             Size = Reader.ReadInt32();
-            var flags = Reader.ReadInt16(); //raw,need convert
+            Flags.flag=(uint) Reader.ReadInt16();//I finally got my balls back
+
             var newFlags = Reader.ReadInt16(); //read flags or no balls
             var graphicsMode = Reader.ReadInt16(); //i am serious
             var otherflags = Reader.ReadInt16(); //last chance to get balls back
@@ -37,9 +79,9 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
             controls.Read();
             // controls.Print(false);
 
-            var borderColor = Reader.ReadBytes(4);
+            BorderColor = Reader.ReadColor();
             NumberOfFrames = Reader.ReadInt32();
-            var frameRate = Reader.ReadInt32();
+            FrameRate = Reader.ReadInt32();
             var windowsMenuIndex = Reader.ReadSByte();
         }
 
@@ -49,6 +91,17 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
             Logger.Log($"Score: {InitialScore}, Lives: {InitialLives}", true, ConsoleColor.DarkMagenta);
             Logger.Log($"Frame count: {NumberOfFrames}", true, ConsoleColor.DarkMagenta);
             Logger.Log("");
+        }
+
+        public override string[] GetReadableData()
+        {
+            return new string[]
+                        {
+                            $"Screen Resolution: {WindowWidth}x{WindowHeight}",
+                            $"Initial Score: {InitialScore}",
+                            $"Initial Lives: {InitialLives}",
+                            $"Flags:;{Flags.ToString()}"
+                        };
         }
 
 
@@ -91,6 +144,11 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
             {
                 item.Print();
             }
+        }
+
+        public override string[] GetReadableData()
+        {
+            throw new NotImplementedException();
         }
     }
 

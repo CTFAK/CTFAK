@@ -1,5 +1,4 @@
-﻿using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,12 +6,13 @@ using System.Reflection.Emit;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using NetMFAPatcher.Utils;
 
 namespace NetMFAPatcher.MMFParser.Data
 {
     public class PackData
     {
-        public PackFile[] Items;
+        public List<PackFile> Items = new List<PackFile>();
         public PackData()
         {
 
@@ -51,7 +51,13 @@ namespace NetMFAPatcher.MMFParser.Data
             header = exeReader.ReadFourCc();
 
             exeReader.Seek(offset);
-            for (int i = 0; i < count; i++) new PackFile().Read(exeReader);
+            for (int i = 0; i < count; i++)
+            {
+                var item = new PackFile();
+                item.Read(exeReader);
+                Items.Add(item);
+                    
+            }
 
             Logger.Log("\nPackdata Done\n", true, ConsoleColor.Blue);
 
@@ -60,24 +66,24 @@ namespace NetMFAPatcher.MMFParser.Data
     }
     public class PackFile
     {
-        string _packFilename = "ERROR";
+        public string PackFilename = "ERROR";
         int _bingo = 0;
-        byte[] _data;
+        public byte[] Data;
 
         public void Read(ByteIO exeReader)
         {
             UInt16 len = exeReader.ReadUInt16();
-            _packFilename = exeReader.ReadWideString(len);
+            PackFilename = exeReader.ReadWideString(len);
             _bingo = exeReader.ReadInt32();
-            _data = exeReader.ReadBytes(exeReader.ReadInt32());
+            Data = exeReader.ReadBytes(exeReader.ReadInt32());
             
-            Dump();
+            //Dump();
         }
-        public void Dump()
+        public void Dump(string path = "[DEFAULT-PATH]")
         {
-            Logger.Log($"Dumping {_packFilename}", true, ConsoleColor.DarkBlue);
-            string path = $"{Program.DumpPath}\\extensions\\" + _packFilename;
-            File.WriteAllBytes(path, _data);
+            Logger.Log($"Dumping {PackFilename}", true, ConsoleColor.DarkBlue);
+            var actualPath = path=="[DEFAULT-PATH]" ? ($"{Settings.ExtensionPath}\\{PackFilename}"):path;
+            File.WriteAllBytes(actualPath, Data);
         }
 
     }

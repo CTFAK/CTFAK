@@ -1,14 +1,12 @@
-﻿using mmfparser;
-using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
+using NetMFAPatcher.MMFParser.Data;
+using NetMFAPatcher.Utils;
 
-namespace NetMFAPatcher.mmfparser.mfaloaders
+namespace NetMFAPatcher.MMFParser.MFALoaders
 {
-    class Controls : DataLoader
+    public class Controls : DataLoader
     {
         public List<PlayerControl> Items;
 
@@ -28,18 +26,36 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
             var count = Reader.ReadInt32();
             for (int i = 0; i < count; i++)
             {
-                var item = new mmfparser.mfaloaders.PlayerControl(Reader);
+                var item = new PlayerControl(Reader);
                 Items.Add(item);
                 item.Read();
             }
         }
+
+        public void Write(ByteWriter writer)
+        {
+            writer.WriteInt32(Items.Count);
+            foreach (var item in Items)
+            {
+                item.Write(writer);
+            }
+            
+        }
+        
     }
 
-    class PlayerControl : DataLoader
+    public class PlayerControl : DataLoader
     {
-        int _controlType;
+        public int ControlType;
+        public int Up;
+        public int Down;
+        public int Left;
+        public int Right;
+        public int Button1;
+        public int Button2;
+        public int Button3;
+        public int Button4;
 
-        
 
         public PlayerControl(ByteIO reader) : base(reader)
         {
@@ -54,21 +70,34 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
 
         public override void Read()
         {
-            _controlType = Reader.ReadInt32();
+            ControlType = Reader.ReadInt32();
             var count = Reader.ReadInt32();
-            var up = Reader.ReadInt32();
-            var down = Reader.ReadInt32();
-            var left = Reader.ReadInt32();
-            var right = Reader.ReadInt32();
-            var button1 = Reader.ReadInt32();
-            var button2 = Reader.ReadInt32();
-            var button3 = Reader.ReadInt32();
-            var button4 = Reader.ReadInt32();
+            Up = Reader.ReadInt32();
+            Down = Reader.ReadInt32();
+            Left = Reader.ReadInt32();
+            Right = Reader.ReadInt32();
+            Button1 = Reader.ReadInt32();
+            Button2 = Reader.ReadInt32();
+            Button3 = Reader.ReadInt32();
+            Button4 = Reader.ReadInt32();
             for (int i = 0; i < 8; i++)
             {
                 Reader.ReadInt32();
             }
+        }
 
+        public void Write(ByteWriter writer)
+        {
+            writer.WriteInt32(ControlType);
+            writer.WriteUInt32(16);
+            writer.WriteInt32(Up);
+            writer.WriteInt32(Down);
+            writer.WriteInt32(Left);
+            writer.WriteInt32(Right);
+            writer.WriteInt32(Button1);
+            writer.WriteInt32(Button2);
+            writer.WriteInt32(Button3);
+            writer.WriteInt32(Button4);
 
 
         }

@@ -1,11 +1,10 @@
-﻿using NetMFAPatcher.utils;
-using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NetMFAPatcher.MMFParser.ChunkLoaders;
+using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
+using NetMFAPatcher.Utils;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.MMFParser.ChunkLoaders
@@ -13,6 +12,10 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
     public class AppMenu : ChunkLoader
     {
         public List<AppMenuItem> Items = new List<AppMenuItem>();
+        public List<byte> AccelShift;
+        public List<short> AccelKey;
+        public List<short> AccelId;
+
         public AppMenu(ByteIO reader) : base(reader)
         {
         }
@@ -23,6 +26,11 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         public override void Print(bool ext)
         {
             
+        }
+
+        public override string[] GetReadableData()
+        {
+            throw new NotImplementedException();
         }
 
         public override void Read()
@@ -37,35 +45,38 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
             Reader.Seek(currentPosition + menuOffset);
             Reader.Skip(4);
             
-            Load();
+            Load(Reader);
             
             Reader.Seek(currentPosition + accelOffset);
             
             for (int i = 0; i < accelSize/8; i++)
             {
-                Reader.ReadByte();
+                AccelShift = new List<byte>();
+                AccelKey = new List<short>();
+                AccelId = new List<short>();
+                AccelShift.Add(Reader.ReadByte());;
                 Reader.Skip(1);
-                Reader.ReadInt16();
-                Reader.ReadInt16();
+                AccelKey.Add(Reader.ReadInt16());
+                AccelId.Add(Reader.ReadInt16());
                 Reader.Skip(2);
             }
 
         }
-        public void Load()
+        public void Load(ByteIO reader)
         {
             while(true)
             {
-                var newItem = new AppMenuItem(Reader);
+                var newItem = new AppMenuItem(reader);
                 newItem.Read();
                 Items.Add(newItem);
 
                 if (newItem.Name.Contains("About")) break;
-                if (true)//ByteFlag.getFlag(new_item.flags,4))
+                if (ByteFlag.GetFlag((uint) newItem.Flags,4))
                 {
-                    Load();
+                    Load(reader);
                     
                 }
-                if (true)//ByteFlag.getFlag(new_item.flags, 7))
+                if (ByteFlag.GetFlag((uint) newItem.Flags, 7))
                 {
 
                     break;
@@ -91,6 +102,11 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         {
         }
         public override void Print(bool ext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string[] GetReadableData()
         {
             throw new NotImplementedException();
         }

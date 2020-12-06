@@ -1,14 +1,14 @@
-﻿using NetMFAPatcher.mmfparser;
-using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using NetMFAPatcher.MMFParser.ChunkLoaders;
+using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
+using NetMFAPatcher.Utils;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.MMFParser.ChunkLoaders
@@ -34,13 +34,13 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
             List<byte> colorIndexes = new List<byte>();
             for (int i = 0; i < 16 * 16; i++)
             {
-                var b = Reader.ReadByte();
-                var g = Reader.ReadByte();
-                var r = Reader.ReadByte();
+                var r = Reader.ReadSByte();
+                var g = Reader.ReadSByte();
+                var b = Reader.ReadSByte();
                 Reader.ReadByte();
-                colorIndexes.Add(r);
-                colorIndexes.Add(g);
-                colorIndexes.Add(b);
+                colorIndexes.Add((byte) r);
+                colorIndexes.Add((byte) g);
+                colorIndexes.Add((byte) b);
             }
 
             _points = new List<byte>();
@@ -52,10 +52,28 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
                     xList.Add(colorIndexes[Reader.ReadByte()]);
                 }
 
-                //x_list.AddRange(points);
-                //points = x_list;
                 xList.AddRange(_points);
-                _points = xList;
+                _points = xList;                
+            }
+
+            for (int i = 0; i < 16*16/8; i++)
+            {
+                
+            }
+            using (var bmp = new Bitmap(16, 16, PixelFormat.Format32bppArgb))
+            {
+                BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0,
+                        bmp.Width,
+                        bmp.Height),
+                    ImageLockMode.WriteOnly,
+                    bmp.PixelFormat);
+
+                IntPtr pNative = bmpData.Scan0;
+                Marshal.Copy(_points.ToArray(), 0, pNative, _points.Count);
+
+                bmp.UnlockBits(bmpData);
+
+                bmp.Save("icon.png");
             }
 
             File.WriteAllBytes("fatcock.raw", _points.ToArray());
@@ -64,6 +82,11 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
         public override void Print(bool ext)
         {
+        }
+
+        public override string[] GetReadableData()
+        {
+            return Array.Empty<string>();
         }
     }
 }

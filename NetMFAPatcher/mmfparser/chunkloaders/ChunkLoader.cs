@@ -24,5 +24,6 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
 
         public abstract void Print(bool ext);
+        public abstract string[] GetReadableData();
     }
 }

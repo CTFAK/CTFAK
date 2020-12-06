@@ -15,6 +15,11 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
             throw new NotImplementedException();
         }
 
+        public override string[] GetReadableData()
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Read()
         {
             var filename = Reader.ReadAscii();

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Text;
-using System.IO;
 using System.Drawing;
+using System.IO;
+using System.Text;
 
 namespace NetMFAPatcher.Utils
 {
@@ -130,9 +130,8 @@ namespace NetMFAPatcher.Utils
             var g = ReadByte();
             var b = ReadByte();
             Skip(1);
-            Color color = Color.FromArgb(b, g, r);
 
-            return color;
+            return Color.FromArgb(r, g, b);
 
         }
 

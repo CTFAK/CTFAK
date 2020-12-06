@@ -1,9 +1,9 @@
 ﻿using System;
 using NetMFAPatcher.MMFParser.Data;
-using NetMFAPatcher.utils;
-using NetMFAPatcher.Utils;
 using System.Collections.Generic;
-using NetMFAPatcher.MMFParser.ChunkLoaders;
+using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
+using NetMFAPatcher.MMFParser.ChunkLoaders.Objects;
+using NetMFAPatcher.Utils;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.MMFParser.ChunkLoaders
@@ -11,7 +11,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
     public class ObjectInfo : ChunkLoader
     {
         public List<Chunk> Chunks = new List<Chunk>();
-        public int Properties = 0;
+        //public int Properties = 0;
         public string Name = "ERROR";
         public int Handle;
         public int ObjectType;
@@ -22,6 +22,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         public int InkEffectValue;
         public int ShaderId;
         public int Items;
+        public ObjectProperties Properties;
 
         public ObjectInfo(Chunk chunk) : base(chunk)
         {
@@ -35,6 +36,11 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         {
         }
 
+        public override string[] GetReadableData()
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Read()
         {
             var infoChunks = new ChunkList();
@@ -43,15 +49,23 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
             foreach (var infoChunk in infoChunks.Chunks)
             {
+                
                 infoChunk.Verbose = false;
                 var loader = infoChunk.Loader;
+                if (loader != null)
+                {
+                    Console.WriteLine($"Reading {loader.GetType().Name}");
+                }
+                
                 if (loader is ObjectName)
                 {
+                    
                     var actualLoader = infoChunks.get_loader<ObjectName>(loader);
                     Name = actualLoader.Value;
                 }
                 else if (loader is ObjectHeader)
                 {
+                    
                     var actualLoader = infoChunks.get_loader<ObjectHeader>(loader);
                     Handle = actualLoader.Handle;
                     ObjectType = actualLoader.ObjectType;
@@ -60,11 +74,22 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
                     Transparent = ByteFlag.GetFlag(inkEffect, 28);
                     Antialias = ByteFlag.GetFlag(inkEffect, 29);
                 }
+                else if (loader is ObjectProperties)
+                {
+                    
+                    Properties = (ObjectProperties)loader;
+                }
+                
+            }
+
+            if (Properties != null)
+            {
+                //Properties.ReadNew(ObjectType);
             }
         }
     }
 
-    class ObjectName : StringChunk
+    public class ObjectName : StringChunk
     {
         public ObjectName(ByteIO reader) : base(reader)
         {
@@ -75,7 +100,50 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         }
     }
 
-    class ObjectHeader : ChunkLoader
+    public class ObjectProperties : ChunkLoader
+    {
+        public bool IsCommon;
+        public ObjectCommon Loader;
+
+        public ObjectProperties(ByteIO reader) : base(reader)
+        {
+        }
+
+        public ObjectProperties(Chunk chunk) : base(chunk)
+        {
+        }
+
+        public void ReadNew(int ObjectType)
+        {
+            Reader.Seek(0);
+            //var objType = 2;//THIS IS SHITCODE
+            IsCommon = true;//ITS NOT DONE
+            if (ObjectType == 2)
+            {
+                Loader = new ObjectCommon(Reader);
+                Loader.Read();
+            }
+            
+        }
+
+        public override void Read()
+        {
+
+        }
+
+
+        public override void Print(bool ext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string[] GetReadableData()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class ObjectHeader : ChunkLoader
     {
         public Int16 Handle;
         public Int16 ObjectType;
@@ -93,6 +161,12 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
         public override void Print(bool ext)
         {
+        }
+
+        public override string[] GetReadableData()
+        {
+            return null;
+
         }
 
         public override void Read()

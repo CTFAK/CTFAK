@@ -1,7 +1,7 @@
 ﻿using NetMFAPatcher.Utils;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.MMFParser.ChunkLoaders.banks
+namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
 {
     public class FontBank : ChunkLoader
     {
@@ -9,6 +9,11 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.banks
         public override void Print(bool ext)
         {
             Logger.Log($"FontCount:{NumberOfItems.ToString()}");
+        }
+
+        public override string[] GetReadableData()
+        {
+            throw new System.NotImplementedException();
         }
 
         public override void Read()

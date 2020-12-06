@@ -1,16 +1,12 @@
-﻿using mmfparser;
-using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NetMFAPatcher.utils;
+using NetMFAPatcher.MMFParser.Data;
+using NetMFAPatcher.Utils;
 
-namespace NetMFAPatcher.mmfparser.mfaloaders
+namespace NetMFAPatcher.MMFParser.MFALoaders
 {
-    class Frame : DataLoader
+    public class Frame : DataLoader
     {
         public string Name = "ERROR";
         public int SizeX;
@@ -72,9 +68,11 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
                 var frameitem = new FrameItem(Reader);
                 frameitem.Read();
                 frameitems.Add(frameitem);
+                Console.WriteLine("Frameitem:"+frameitem.Name);
                 //break;
 
             }
+            
 
 
 
@@ -90,6 +88,11 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
             
 
 
+        }
+
+        public void Write(ByteWriter Writer)
+        {
+            
         }
     }
     

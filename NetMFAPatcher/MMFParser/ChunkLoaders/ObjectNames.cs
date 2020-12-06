@@ -1,10 +1,10 @@
-﻿using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NetMFAPatcher.MMFParser.ChunkLoaders;
+using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
+using NetMFAPatcher.Utils;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.MMFParser.ChunkLoaders
@@ -14,6 +14,11 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         public override void Print(bool ext)
         {
             
+        }
+
+        public override string[] GetReadableData()
+        {
+            throw new NotImplementedException();
         }
 
         public override void Read()

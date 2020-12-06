@@ -1,16 +1,16 @@
-﻿using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NetMFAPatcher.mmfparser;
-using NetMFAPatcher.MMFParser.ChunkLoaders;
+
+using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
+using NetMFAPatcher.Utils;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.MMFParser.ChunkLoaders
 {
-    class StringChunk : ChunkLoader
+    public class StringChunk : ChunkLoader
     {
         public string Value;
 
@@ -24,6 +24,15 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         public override void Print(bool ext)
         {
             Logger.Log($"{Chunk.Name} contains:  {Value}\n",true,ConsoleColor.DarkCyan);
+        }
+
+        public override string[] GetReadableData()
+        {
+            return new string[]
+            {
+                $"Value: {Value}"
+            };
+
         }
 
 

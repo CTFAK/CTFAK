@@ -1,17 +1,11 @@
-﻿
-using mmfparser;
-using NetMFAPatcher.mmfparser.mfaloaders.mfachunks;
+﻿using System;
+using NetMFAPatcher.MMFParser.Data;
+using NetMFAPatcher.MMFParser.MFALoaders.mfachunks;
 using NetMFAPatcher.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NetMFAPatcher.utils;
 
-namespace NetMFAPatcher.mmfparser.mfaloaders
+namespace NetMFAPatcher.MMFParser.MFALoaders
 {
-    class FrameItem : DataLoader
+    public class FrameItem : DataLoader
     {
         public int ObjectType;
         public int Handle;
@@ -49,7 +43,7 @@ namespace NetMFAPatcher.mmfparser.mfaloaders
             {
                 throw new NotImplementedException("invalid icon");
             }
-            var chunks = new mmfparser.mfaloaders.ChunkList(Reader);
+            var chunks = new ChunkList(Reader);
             chunks.Read();
             if(ObjectType>=32)//extension base
             {

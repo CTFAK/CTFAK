@@ -1,12 +1,9 @@
-﻿using mmfparser;
-using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using NetMFAPatcher.MMFParser.Data;
+using NetMFAPatcher.Utils;
 
-namespace NetMFAPatcher.mmfparser.mfaloaders.mfachunks
+namespace NetMFAPatcher.MMFParser.MFALoaders.mfachunks
 {
     class AnimationObject:ObjectLoader
     {

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using NetMFAPatcher.utils;
+using NetMFAPatcher.GUI;
 using NetMFAPatcher.Utils;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.MMFParser.ChunkLoaders.banks
+namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
 {
     public class SoundBank : ChunkLoader
     {
@@ -18,19 +18,39 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.banks
         {
         }
 
+        public override string[] GetReadableData()
+        {
+            return new string[]
+            {
+            $"Number of sounds: {NumOfItems}"
+            };
+        }
+
         public override void Read()
         {
             //Implementing for standalone-only because of my lazyness
+            
+            if(!Settings.DoMFA) Reader.Seek(0);//Reset the reader to avoid bugs when dumping more than once
             Items = new List<SoundItem>();
             NumOfItems = Reader.ReadInt32();
+            Logger.Log("Found " + NumOfItems + " sounds");
+            if (!Settings.DumpSounds&&!Settings.DoMFA) return;
 
             for (int i = 0; i < NumOfItems; i++)
             {
+                if (MainForm.BreakSounds)
+                {
+                    MainForm.BreakSounds = false;
+                    break;
+                }
+
                 var item = new SoundItem(Reader);
                 item.IsCompressed = IsCompressed;
                 item.Read();
-                
+                Helper.OnSoundSaved(i, NumOfItems);
                 Items.Add(item);
+
+
             }
         }
         public void Write(ByteWriter writer)
@@ -59,6 +79,11 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.banks
 
         public override void Print(bool ext)
         {
+        }
+
+        public override string[] GetReadableData()
+        {
+            throw new NotImplementedException();
         }
 
         public override void Read()
@@ -115,12 +140,17 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.banks
 
 
             this.Data = soundData.ReadBytes((int) soundData.Size());
-            Name = Helper.CleanInput(Name);
-            Console.WriteLine($"Dumping {Name}");
-
-            string path = $"{Program.DumpPath}\\SoundBank\\{Name}.wav";
-            File.WriteAllBytes(path, Data);
+            if (Settings.DumpSounds)
+            {
+                Name = Helper.CleanInput(Name);
+                Console.WriteLine($"Dumping {Name}");
+                File.WriteAllBytes($"{Settings.SoundPath}\\{Name}.wav", Data);
+            }
+            //Save($"{Settings.DumpPath}\\SoundBank\\{Name}.wav");
+            
         }
+
+        
         public void Write(ByteWriter writer)
         {
             writer.WriteUInt32((uint)Handle);

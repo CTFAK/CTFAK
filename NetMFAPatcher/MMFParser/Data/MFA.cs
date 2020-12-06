@@ -1,21 +1,19 @@
-﻿using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using Frame = NetMFAPatcher.mmfparser.mfaloaders.Frame;
-using mmfparser;
+using System.Net.NetworkInformation;
+using System.Windows.Forms;
 using NetMFAPatcher.MMFParser.ChunkLoaders;
-using NetMFAPatcher.MMFParser.ChunkLoaders.banks;
-using NetMFAPatcher.mmfparser.mfaloaders;
+using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
 using NetMFAPatcher.MMFParser.MFALoaders;
-using NetMFAPatcher.utils;
+using NetMFAPatcher.Utils;
+using Controls = NetMFAPatcher.MMFParser.MFALoaders.Controls;
+using Frame = NetMFAPatcher.MMFParser.MFALoaders.Frame;
 
-namespace NetMFAPatcher.mfa
+namespace NetMFAPatcher.MMFParser.Data
 {
-    class Mfa : DataLoader
+    public class MFA : DataLoader
     {
         public static readonly string FontBankId = "ATNF";
         public static readonly string ImageBankId = "AGMI";
@@ -34,6 +32,8 @@ namespace NetMFAPatcher.mfa
         public FontBank Fonts;
         public SoundBank Sounds;
         public MusicBank Music;
+        public AgmiBank Icons;
+        public AgmiBank Images;
 
 
         public string Author;
@@ -48,7 +48,66 @@ namespace NetMFAPatcher.mfa
 
         public ValueList GlobalValues;
         public ValueList GlobalStrings;
-        
+        public Color BorderColor;
+        public BitDict DisplayFlags = new BitDict(new string[]
+        {
+            "MaximizedOnBoot",
+            "ResizeDisplay",
+            "FullscreenAtStart",
+            "AllowFullscreen",
+            "Heading",
+            "HeadingWhenMaximized",
+            "MenuBar",
+            "MenuOnBoot",
+            "NoMinimize",
+            "NoMaximize",
+            "NoThickFrame",
+            "NoCenter",
+            "DisableClose",
+            "HiddenAtStart",
+            "MDI" 
+            
+        });
+        public BitDict GraphicFlags = new BitDict(new string[]
+        {
+            "MultiSamples",
+            "SpeedIndependent",
+            "SoundsOverFrames",
+            "PlaySamplesWhenUnfocused",
+            "IgnoreInputOnScreensaver",
+            "DirectX",
+            "VRAM",
+            "EnableVisualThemes",
+            "VSync",
+            "RunWhenMinimized",
+            "RunWhenResizing",
+            "EnableDebuggerShortcuts",
+            "NoDebugger",
+            "NoSubappSharing"
+        });
+        public string HelpFile;
+        public int VitalizePreview;
+        public int InitialScore;
+        public int InitialLifes;
+        public int FrameRate;
+        public int BuildType;
+        public string BuildPath;
+        public string CommandLine;
+        public string Aboutbox;
+        public uint MenuSize;
+        public AppMenu Menu;
+        private int windowMenuIndex;
+        private int[] menuImages;
+        private byte[] GlobalEvents;
+        private int GraphicMode;
+        private int IcoCount;
+        private int QualCount;
+        public Controls Controls;
+        public List<int> IconImages;
+        public List<Tuple<int, string, string, int, byte[]>> Extensions;
+        public List<Tuple<string, int>> CustomQuals;
+        public List<Frame> Frames;
+
 
         public override void Print()
         {
@@ -78,11 +137,96 @@ namespace NetMFAPatcher.mfa
             writer.WriteAscii(MusicBankId);
             //music.Write();//cum cum cum cum cum cum cum cum
             writer.WriteInt32(0);//someone is using musics lol?
+            writer.WriteAscii(ImageBankId);
+            Icons.Write(writer);
+            writer.WriteAscii(ImageBankId);
+            Images.Write(writer);
+            writer.AutoWriteUnicode(Name);
+            writer.AutoWriteUnicode(Author);
+            writer.AutoWriteUnicode(Description);
+            writer.AutoWriteUnicode(Copyright);
+            writer.AutoWriteUnicode(Company);
+            writer.AutoWriteUnicode(Version);
+            writer.WriteInt32(WindowX);
+            writer.WriteInt32(WindowY);
+            writer.WriteColor(Color.White);
+            writer.WriteInt32((int) DisplayFlags.flag);
+            writer.WriteInt32((int) GraphicFlags.flag);
+            writer.WriteUInt32((uint) InitialScore);
+            writer.WriteUInt32((uint) InitialLifes);
+            writer.WriteInt32(FrameRate);
+            writer.WriteInt32(BuildType);
+            writer.AutoWriteUnicode(BuildPath);
+            writer.WriteInt32(0);
+            writer.AutoWriteUnicode(CommandLine);
+            writer.AutoWriteUnicode(Aboutbox);
+            writer.WriteInt32(0);//anaconda
+            writer.WriteInt32(0);//binary files are not supported because i am lazy asshole
+            Controls.Write(writer);
+            Menu = null; //cunt
+            if (Menu != null)
+            {
+                byte[] menuData = new byte[15]; //Menu.Generate;
+                writer.WriteInt32(menuData.Length);
+                writer.WriteBytes(menuData);
+            }
+            else
+            {
+                writer.WriteInt32(0);
+            }
+            writer.WriteInt32(windowMenuIndex);
+            writer.WriteInt32(menuImages.Length);
+            foreach (var item in menuImages)
+            {
+                writer.WriteInt32(item);
+            }
 
-
-
-
+            GlobalValues.Write(writer);
+            GlobalStrings.Write(writer);
+            writer.WriteInt32(GlobalEvents.Length);
+            writer.WriteBytes(GlobalEvents);
+            writer.WriteInt32(GraphicMode);
+            writer.WriteInt32(IconImages.Count);
+            foreach (var item in IconImages)
+            {
+                writer.WriteInt32(item);
+            }
             
+            //Qualifiers
+            writer.WriteInt32(CustomQuals.Count);
+            foreach (var item in CustomQuals)
+            {
+                writer.AutoWriteUnicode(item.Item1);
+                writer.WriteInt32(item.Item2);
+            }
+            //Extensions
+            
+            foreach (var item in Extensions)
+            {
+                writer.WriteInt32(item.Item1);
+                writer.AutoWriteUnicode(item.Item2);
+                writer.AutoWriteUnicode(item.Item3);
+                writer.WriteInt32(item.Item4);
+                writer.WriteBytes(item.Item5);
+                writer.WriteInt32(Frames.Count);
+            }
+            writer.WriteInt32(Extensions.Count);
+            var startPosition = writer.Tell() + 4 * Frames.Count + 4;
+            //help
+            //how to implement write writer
+            
+            
+            
+
+
+
+
+
+
+
+
+
+
 
 
         }
@@ -93,118 +237,75 @@ namespace NetMFAPatcher.mfa
             MfaBuild = Reader.ReadInt32();
             Product = Reader.ReadInt32();
             BuildVersion = Reader.ReadInt32();
-            Console.WriteLine($"mfaBuild: {MfaBuild}, product: {Product}, buildVersion: {BuildVersion}");
             LangId = Reader.ReadInt32();
-
-            
             Name = Helper.AutoReadUnicode(Reader);
-            
-
-            
             Description = Helper.AutoReadUnicode(Reader);
-
-            
             Path = Helper.AutoReadUnicode(Reader);
-            Console.WriteLine($"\nMFAName: {Name}\nDescription: {Description}\nPath: {Path}");
-
             Stamp = Reader.ReadBytes(Reader.ReadInt32());
-            
-            if (Reader.ReadAscii(4) != "ATNF")
-            {
-                throw new Exception("Invalid Font Bank");
-            }
+
+            if (Reader.ReadAscii(4) != FontBankId) throw new Exception("Invalid Font Bank");
             Fonts = new FontBank(Reader);
             Fonts.Read();
-            Console.WriteLine("FONTS: " + Fonts.NumberOfItems);
 
-
-            if (Reader.ReadAscii(4) != "APMS")
-            {
-                throw new Exception("Invalid Sound Bank");
-            }
+            if (Reader.ReadAscii(4) != SoundBankId) throw new Exception("Invalid Sound Bank");
             Sounds = new SoundBank(Reader);
             Sounds.IsCompressed = false;
             Sounds.Read();
-
-
-            if (Reader.ReadAscii(4) != "ASUM")
-            {
-                throw new Exception("Invalid Music Bank");
-            }
+            
+            if (Reader.ReadAscii(4) != MusicBankId) throw new Exception("Invalid Music Bank");
             Music = new MusicBank(Reader);
             Music.Read();
-            
-            if (Reader.ReadAscii(4) != "AGMI")
-            {
-                throw new Exception("Invalid Icon Bank");
-            }
-            var icons = new AgmiBank(Reader);
-            icons.Read();
-            if (Reader.ReadAscii(4) != "AGMI")
-            {
-                throw new Exception("Invalid Image Bank");
-            }
-            var images = new AgmiBank(Reader);
-            images.Read();
 
-            
-            if (Helper.AutoReadUnicode(Reader) != Name) throw new Exception("Invalid name");
+            if (Reader.ReadAscii(4) != "AGMI") throw new Exception("Invalid Icon Bank");
+            Icons = new AgmiBank(Reader);
+            Icons.Read();
 
-            
+            if (Reader.ReadAscii(4) != "AGMI") throw new Exception("Invalid Image Bank");
+            Images = new AgmiBank(Reader);
+            Images.Read();
+
+            Helper.CheckPattern(Helper.AutoReadUnicode(Reader),Name);
             Author = Helper.AutoReadUnicode(Reader);
-            
-
-            
-            var newDesc = Helper.AutoReadUnicode(Reader);
-            if ( newDesc!= Description) throw new Exception("Invalid description: "+newDesc);
-
-
-
-            
+            Helper.CheckPattern(Helper.AutoReadUnicode(Reader),Description);
             Copyright = Helper.AutoReadUnicode(Reader);
-
-
             Company = Helper.AutoReadUnicode(Reader);
-            Console.WriteLine("Company: "+Company);
             Version = Helper.AutoReadUnicode(Reader);
-            Console.WriteLine("Version: " + Version);
             WindowX = Reader.ReadInt32();
             WindowY = Reader.ReadInt32();
-            Console.WriteLine($"Window:{WindowX}x{WindowY}");
-            var borderColor = Reader.ReadColor();
-            var displayFlags = Reader.ReadUInt32();
-            var graphicFlags = Reader.ReadUInt32();
-            var helpFile = Helper.AutoReadUnicode(Reader);
-            Console.WriteLine(Reader.Tell());
-            var vitalizePreview = Reader.ReadInt32();
-            var initialScore = Reader.ReadInt32();
-            var initialLifes = Reader.ReadInt32();
-            var frameRate = Reader.ReadInt32();
-            var buildType = Reader.ReadInt32();
-            var buildPath = Helper.AutoReadUnicode(Reader);
+            BorderColor = Reader.ReadColor();
+            DisplayFlags.flag = Reader.ReadUInt32();
+            GraphicFlags.flag = Reader.ReadUInt32();
+            HelpFile = Helper.AutoReadUnicode(Reader);
+            VitalizePreview = Reader.ReadInt32();
+            InitialScore = Reader.ReadInt32();
+            InitialLifes = Reader.ReadInt32();
+            FrameRate = Reader.ReadInt32();
+            BuildType = Reader.ReadInt32(); 
+            BuildPath = Helper.AutoReadUnicode(Reader);
+            //Console.WriteLine(BuildPath);
+            //Helper.CheckPattern(Reader.ReadInt32(),0);
             Reader.ReadInt32();
-            var commandLine = Helper.AutoReadUnicode(Reader);
-            var aboutbox = Helper.AutoReadUnicode(Reader);
+            CommandLine = Helper.AutoReadUnicode(Reader);
+            Aboutbox = Helper.AutoReadUnicode(Reader);
+            Reader.ReadInt32();
             
-            Console.WriteLine(aboutbox);
-            Reader.ReadInt32();
             var binCount = Reader.ReadInt32();//wtf i cant put it in loop fuck shit
 
             for (int i = 0; i < binCount; i++)
             {
                 Reader.ReadBytes(Reader.ReadInt32());//binaryfiles
             }
-            var controls = new mmfparser.mfaloaders.Controls(Reader);
-            controls.Read();
+            Controls = new Controls(Reader);
+            Controls.Read();
 
-            var menuSize = Reader.ReadUInt32();
+            MenuSize = Reader.ReadUInt32();
             var currentPosition = Reader.Tell();
-            var menu = new AppMenu(Reader);
-            menu.Read();
-            Reader.Seek(menuSize + currentPosition);
+            Menu = new AppMenu(Reader);
+            Menu.Read();
+            Reader.Seek(MenuSize + currentPosition);
 
-            var windowMenuIndex = Reader.ReadInt32();
-            int[] menuImages = new int[65535];//govnokod suka
+            windowMenuIndex = Reader.ReadInt32();
+            menuImages = new int[65535];//govnokod suka
             var miCount = Reader.ReadInt32();
             for (int i = 0; i < miCount; i++)
             {
@@ -219,33 +320,39 @@ namespace NetMFAPatcher.mfa
             GlobalValues.Read();
             GlobalStrings = new ValueList(Reader);
             GlobalStrings.Read();
-            var globalEvents = Reader.ReadBytes(Reader.ReadInt32());
-            var graphicMode = Reader.ReadInt32();;
+            GlobalEvents = Reader.ReadBytes(Reader.ReadInt32());
+            GraphicMode = Reader.ReadInt32();;
             
 
 
-            var icoCount = Reader.ReadInt32();
-            for (int i = 0; i < icoCount; i++)
+            IcoCount = Reader.ReadInt32();
+            IconImages = new List<int>();
+            for (int i = 0; i < IcoCount; i++)
             {
-                Reader.ReadInt32();
+                IconImages.Add(Reader.ReadInt32());
             }
-
-            var qualCount = Reader.ReadInt32();
-            for (int i = 0; i < qualCount; i++)//qualifiers
+            
+            //I STUCK HERE
+            QualCount = Reader.ReadInt32();
+            CustomQuals = new List<Tuple<string, int>>();
+            for (int i = 0; i < QualCount; i++)//qualifiers
             {
-                var nameQ = Reader.ReadAscii(Reader.ReadInt32());
-                var handleQ = Reader.ReadInt32();
+                var name = Reader.ReadAscii(Reader.ReadInt32());
+                var handle = Reader.ReadInt32();
+                CustomQuals.Add(new Tuple<string,int>(name,handle));
+
             }
             var extCount = Reader.ReadInt32();
+            Extensions = new List<Tuple<int, string, string, int, byte[]>>();
             for (int i = 0; i < extCount; i++)//extensions
             {
-                var handleE = Reader.ReadInt32();
-                var filenameE = Helper.AutoReadUnicode(Reader);
-                var nameE = Helper.AutoReadUnicode(Reader);
-                var magicE = Reader.ReadInt32();
-                var subType = Reader.ReadBytes(Reader.ReadInt32());
-
-
+                var handle = Reader.ReadInt32();
+                var filename = Helper.AutoReadUnicode(Reader);
+                var name = Helper.AutoReadUnicode(Reader);
+                var magic = Reader.ReadInt32();
+                var data = Reader.ReadBytes(Reader.ReadInt32());
+                var tuple = new Tuple<int,string,string,int,byte[]>(handle,filename,name,magic,data);
+                Extensions.Add(tuple);
             }
             List<int> frameOffsets = new List<int>();
             var offCount = Reader.ReadInt32();
@@ -254,16 +361,17 @@ namespace NetMFAPatcher.mfa
                 frameOffsets.Add(Reader.ReadInt32());
             }
             var nextOffset = Reader.ReadInt32();
+            Frames = new List<Frame>();
             foreach (var item in frameOffsets)
             {
                 Reader.Seek(item);
                 var testframe = new Frame(Reader);
                 testframe.Read();
-                
+                Frames.Add(testframe);
 
             }
             Reader.Seek(nextOffset);
-            var chunks = new ChunkList(Reader);
+            var chunks = new MFALoaders.ChunkList(Reader);
             chunks.Read();
             return;
 
@@ -275,7 +383,7 @@ namespace NetMFAPatcher.mfa
 
 
         }
-        public Mfa(ByteIO reader) : base(reader)
+        public MFA(ByteIO reader) : base(reader)
         {
         }
 

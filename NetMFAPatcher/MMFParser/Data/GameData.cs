@@ -1,14 +1,13 @@
-﻿using NetMFAPatcher.MMFParser.ChunkLoaders;
-using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NetMFAPatcher.mmfparser;
-using NetMFAPatcher.MMFParser.ChunkLoaders.banks;
+
+using NetMFAPatcher.MMFParser.ChunkLoaders;
 using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
-using static NetMFAPatcher.mmfparser.Constants;
+using NetMFAPatcher.Utils;
+
 
 namespace NetMFAPatcher.MMFParser.Data
 {
@@ -17,8 +16,8 @@ namespace NetMFAPatcher.MMFParser.Data
         public int RuntimeVersion;
         public int RuntimeSubversion;
         public int ProductBuild;
-        public int ProductVersion;
-        public Products Build;
+        public Constants.Products ProductVersion;
+        public int Build;
         public ChunkList GameChunks;
 
         public string Name;
@@ -65,9 +64,11 @@ namespace NetMFAPatcher.MMFParser.Data
 
             RuntimeVersion = exeReader.ReadUInt16(); //
             RuntimeSubversion = exeReader.ReadUInt16(); //0
-            ProductVersion = exeReader.ReadInt32();  //CTF/MMF2/MMF1.5/CNC
+            ProductVersion = (Constants.Products)exeReader.ReadInt32();  //CTF/MMF2/MMF1.5/CNC
             ProductBuild = exeReader.ReadInt32(); //CTF Build
-            Build = (Products)RuntimeVersion;
+            Settings.Build=ProductBuild;
+            
+            Build = ProductBuild;
 
             GameChunks = new ChunkList(); //Reading game chunks
             GameChunks.Read(exeReader);
@@ -97,9 +98,9 @@ namespace NetMFAPatcher.MMFParser.Data
             Logger.Log($"GameData Info:", true, ConsoleColor.DarkGreen);
             Logger.Log($"    Runtime Version: {RuntimeVersion}", true, ConsoleColor.DarkGreen);
             Logger.Log($"    Runtime Subversion: { RuntimeSubversion}", true, ConsoleColor.DarkGreen);
-            Logger.Log($"    Product Version: { ((Products)ProductVersion).ToString()}", true, ConsoleColor.DarkGreen);
+            Logger.Log($"    Product Version: { ((Constants.Products)ProductVersion).ToString()}", true, ConsoleColor.DarkGreen);
             Logger.Log($"    Product Build: {ProductBuild}", true, ConsoleColor.DarkGreen);
-            Logger.Log($"    {(IsUnicode ? "Unicode" : "NonUnicode")} Game", true, ConsoleColor.DarkGreen);
+            Logger.Log($"    {(Constants.IsUnicode ? "Unicode" : "NonUnicode")} Game", true, ConsoleColor.DarkGreen);
             Logger.Log($"Game Info:", true, ConsoleColor.Cyan);
             Logger.Log($"    Name:{Name}", true, ConsoleColor.Cyan);
             Logger.Log($"    Author:{Author}", true, ConsoleColor.Cyan);
@@ -134,7 +135,16 @@ namespace NetMFAPatcher.MMFParser.Data
                 Logger.Log("Frames: ", true, ConsoleColor.Cyan);
                 foreach (var item in Frames)
                 {
-                    Logger.Log($"       Frame: {item.Name}, Size: {item.Width}x{item.Height}, Number of objects: {item.CountOfObjs}", true, ConsoleColor.Cyan);
+                    Logger.Log($"       Frame: {item.Name,25}, Size: {item.Width,4}x{item.Height,4}, Number of objects: {item.CountOfObjs,5}", true, ConsoleColor.Cyan);
+                    var objects = item.Chunks.get_chunk<ObjectInstances>();
+                    if (objects != null)
+                    {
+                        foreach (var obj in objects.Items)
+                        {
+                            Logger.Log($"           Object: {obj.Name}", true, ConsoleColor.Green);
+                        }
+                    }
+
                 }
                 
 

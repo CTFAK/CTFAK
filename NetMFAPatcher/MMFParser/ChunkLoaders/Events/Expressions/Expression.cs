@@ -1,17 +1,12 @@
-﻿using mmfparser;
+﻿using System;
+using NetMFAPatcher.MMFParser.Data;
 using NetMFAPatcher.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static NetMFAPatcher.mmfparser.Constants;
 
 namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Expressions
 {
     class Expression : DataLoader
     {
-        public ObjectType ObjectType;
+        public Constants.ObjectType ObjectType;
         public int Num;
         public int ObjectInfo;
         public int ObjectInfoList;

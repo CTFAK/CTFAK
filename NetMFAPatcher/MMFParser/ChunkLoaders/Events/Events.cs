@@ -1,9 +1,9 @@
-﻿using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetMFAPatcher.Utils;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
@@ -25,6 +25,11 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
 
         public Events(Chunk chunk) : base(chunk) { }
         public override void Print(bool ext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string[] GetReadableData()
         {
             throw new NotImplementedException();
         }
@@ -89,6 +94,11 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
             throw new NotImplementedException();
         }
 
+        public override string[] GetReadableData()
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Read()
         {
             ObjectInfo = Reader.ReadUInt16();
@@ -113,6 +123,11 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
         public EventGroup(ByteIO reader) : base(reader) { }
 
         public override void Print(bool ext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string[] GetReadableData()
         {
             throw new NotImplementedException();
         }

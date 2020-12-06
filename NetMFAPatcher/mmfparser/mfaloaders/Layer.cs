@@ -1,13 +1,8 @@
-﻿using mmfparser;
+﻿using System;
+using NetMFAPatcher.MMFParser.Data;
 using NetMFAPatcher.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NetMFAPatcher.utils;
 
-namespace NetMFAPatcher.mmfparser.mfaloaders
+namespace NetMFAPatcher.MMFParser.MFALoaders
 {
     class Layer : DataLoader
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Text;
-using System.IO;
 using System.Drawing;
+using System.IO;
+using System.Text;
 
 namespace NetMFAPatcher.Utils
 {
@@ -87,6 +87,16 @@ namespace NetMFAPatcher.Utils
                 WriteInt8(bytes[i]);
 
             }
+        }
+        public void WriteColor(Color color)
+        {
+            
+            WriteInt8(color.R);
+            WriteInt8(color.G);
+            WriteInt8(color.B);
+            Skip(1);
+            
+
         }
 
 

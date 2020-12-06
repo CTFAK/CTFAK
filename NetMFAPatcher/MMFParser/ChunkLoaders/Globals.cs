@@ -1,10 +1,9 @@
-﻿using NetMFAPatcher.mmfparser;
-using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetMFAPatcher.Utils;
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.MMFParser.ChunkLoaders
@@ -16,6 +15,11 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         public override void Print(bool ext)
         {
             
+        }
+
+        public override string[] GetReadableData()
+        {
+            throw new NotImplementedException();
         }
 
         public override void Read()
@@ -55,6 +59,11 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         public override void Print(bool ext)
         {
 
+        }
+
+        public override string[] GetReadableData()
+        {
+            throw new NotImplementedException();
         }
 
         public override void Read()

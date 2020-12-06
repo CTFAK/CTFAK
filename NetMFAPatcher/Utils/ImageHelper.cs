@@ -1,13 +1,6 @@
-﻿using NetMFAPatcher.Utils;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
+﻿using System;
 
-namespace NetMFAPatcher.utils
+namespace NetMFAPatcher.Utils
 {
     public static class ImageHelper
     {
@@ -38,20 +31,23 @@ namespace NetMFAPatcher.utils
         {
             byte[] colorArray = new byte[width * height * 4];
             int stride = width * 4;
-            int pad = GetPadding(width, 3);
+            int pad = GetPadding(width, 2);
             int position = 0;
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
                     UInt16 newShort = (ushort) (data[position] | data[position + 1] << 8);
-                    byte r = (byte) ((newShort & 31744) >> 10);
-                    byte g = (byte) ((newShort & 992) >> 5);
+                    byte r = (byte) ((newShort & 63488) >> 11);
+                    byte g = (byte) ((newShort & 2016) >> 5);
                     byte b = (byte) ((newShort & 31));
 
-                    colorArray[(y * stride) + (x * 4) + 0] = (byte) (r << 3);
-                    colorArray[(y * stride) + (x * 4) + 1] = (byte) (g << 2);
-                    colorArray[(y * stride) + (x * 4) + 2] = (byte) (b << 3);
+                    r=(byte) (r << 3);
+                    g=(byte) (g << 2);
+                    b=(byte) (b << 3);
+                    colorArray[(y * stride) + (x * 4) + 2] = r;
+                    colorArray[(y * stride) + (x * 4) + 1] = g;
+                    colorArray[(y * stride) + (x * 4) + 0] = b;
                     colorArray[(y * stride) + (x * 4) + 3] = 255;
                     position += 2;
                 }
@@ -66,7 +62,7 @@ namespace NetMFAPatcher.utils
         {
             byte[] colorArray = new byte[width * height * 4];
             int stride = width * 4;
-            int pad = GetPadding(width, 3);
+            int pad = GetPadding(width, 2);
             int position = 0;
             for (int y = 0; y < height; y++)
             {

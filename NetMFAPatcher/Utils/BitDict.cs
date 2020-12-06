@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 
-namespace NetMFAPatcher.utils
+namespace NetMFAPatcher.Utils
 {
     public class BitDict
     {
@@ -34,7 +32,7 @@ namespace NetMFAPatcher.utils
 
         public static string ToDebugString<TKey, TValue>(IDictionary<TKey, TValue> dictionary)
         {
-            return "{" + string.Join(",", dictionary.Select(kv => kv.Key + "=" + kv.Value).ToArray()) + "}";
+            return  string.Join(";", dictionary.Select(kv => kv.Key + "=" + kv.Value).ToArray());
         }
 
         public override string ToString()

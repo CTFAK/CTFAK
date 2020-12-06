@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NetMFAPatcher.mmfparser
+namespace NetMFAPatcher.MMFParser
 {
     public static class Constants
     {
@@ -13,10 +13,10 @@ namespace NetMFAPatcher.mmfparser
         public static bool IsUnicode;
         public enum Products
         {
-            Mmf1=1,
-            Mmf15=2,
-            Mmf2=3,
-            Cnc1=0
+            MMF1=1,
+            MMF15=2,
+            MMF2=3,
+            CNC1=0
 
         }
         public enum ValueType
@@ -47,7 +47,7 @@ namespace NetMFAPatcher.mmfparser
             Rtf=8,
             SubApplication=9,
             Ini=33,
-            IniPp=32,
+            Extension=32,
             File=34,
             TextEntry=35
 

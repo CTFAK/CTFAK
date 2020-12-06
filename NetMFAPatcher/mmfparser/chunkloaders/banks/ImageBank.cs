@@ -1,21 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Net;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using NetMFAPatcher.GUI;
 using NetMFAPatcher.MMFParser.Data;
-using NetMFAPatcher.utils;
 using NetMFAPatcher.Utils;
+
 using static NetMFAPatcher.MMFParser.Data.ChunkList;
 
 namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
 {
     public class ImageBank : ChunkLoader
     {
-        Dictionary<int, ImageItem> _images = new Dictionary<int, ImageItem>();
+        public Dictionary<int, ImageItem> Images = new Dictionary<int, ImageItem>();
+        public uint NumberOfItems;
 
         public ImageBank(ByteIO reader) : base(reader)
         {
@@ -29,18 +31,41 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
         {
         }
 
+        public override string[] GetReadableData()
+        {
+            return new string[]
+            {
+                $"Number of images: {NumberOfItems}"               
+            };
+        }
+
         public override void Read()
         {
-            Reader = new ByteIO(Chunk.ChunkData);
-
-            var numberOfItems = Reader.ReadUInt32();
-            Console.WriteLine(@"Found {numberOfItems} images");
-            for (int i = 0; i < numberOfItems; i++)
+            
+            Reader.Seek(0);//Reset the reader to avoid bugs when dumping more than once
+            
+            NumberOfItems = Reader.ReadUInt32();
+            
+            Console.WriteLine($"Found {NumberOfItems} images");
+            
+            if (!Settings.DumpImages) return;
+            for (int i = 0; i < NumberOfItems; i++)
             {
+                if (MainForm.BreakImages)
+                {
+                    MainForm.BreakImages = false;
+                    break;
+                }
                 var item = new ImageItem(Reader);
                 item.Read();
-                if (Program.DumpImages)
-                    item.Save($"{Program.DumpPath}\\ImageBank\\" + item.Handle.ToString() + ".png");
+                Images.Add(item.Handle,item);
+                if (Settings.DumpImages)
+                {
+
+                    item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
+                    Console.ReadKey();
+                    Helper.OnImageSaved(i,(int) NumberOfItems);
+                }
 
                 if (Exe.LatestInst.GameData.ProductBuild >= 284)
                     item.Handle -= 1;
@@ -82,8 +107,11 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
         byte[] _colorArray;
         int _indexed;
 
+        public byte[] rawImg;
 
-        public bool IsCompressed = true;
+
+        public bool Debug = false;
+        public int Debug2 = 1;
 
         public override void Read()
         {
@@ -92,25 +120,30 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
             Load();
         }
 
+        public override void Print(bool ext)
+        {
+            
+        }
+
+        public override string[] GetReadableData()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Load()
         {
             Reader.Seek(Position);
             ByteIO imageReader;
-            if (IsCompressed)
-            {
-                imageReader = Decompressor.DecompressAsReader(Reader);
-            }
-            else
-            {
-                imageReader = Reader;
-            }
+
+            imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
 
             long start = imageReader.Tell();
 
             _checksum = imageReader.ReadInt32();
             _references = imageReader.ReadInt32();
             Size = (int) imageReader.ReadUInt32();
-            if (!IsCompressed)
+
+            if (Debug)
             {
                 imageReader = new ByteIO(imageReader.ReadBytes(Size + 20));
             }
@@ -126,24 +159,45 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
             _actionX = imageReader.ReadInt16();
             _actionY = imageReader.ReadInt16();
             _transparent = imageReader.ReadBytes(4);
-            Logger.Log($"{Handle.ToString(),4} Size: {_width,4}x{_height,4}, flags: {Flags}");
-            byte[] imageData;
+            Logger.Log($"Loading image {Handle.ToString(),4} Size: {_width,4}x{_height,4}");
+            byte[] imageData = new byte[1];
+            if (Debug2 == 1)
+            {
+                var imgLen = imageReader.Size() - imageReader.Tell();
+                var data = imageReader.ReadBytes((int) imgLen);
+                imageReader.BaseStream.Position -= imgLen;
+                File.WriteAllBytes("CumImage.bin", Ionic.Zlib.DeflateStream.CompressBuffer(data));
+            }
+
+            if (Debug2 == 2)
+            {
+                imageData = File.ReadAllBytes("CumImage.bin");
+            }
             if (Flags["LZX"])
             {
-                throw new NotImplementedException();
-                imageData = new byte[1];
+                var DecompressedSize = imageReader.ReadUInt32();
+                imageData = Decompressor.decompress_block(imageReader, (int) (imageReader.Size() - imageReader.Tell()),
+                    (int) DecompressedSize);
+
             }
             else
             {
                 imageData = imageReader.ReadBytes((int) (imageReader.Size() - imageReader.Tell()));
             }
 
-            int bytesRead = 0;
+            
+
+
+        int bytesRead = 0;
+            rawImg = imageData;
             if (Flags["RLE"] || Flags["RLEW"] || Flags["RLET"])
             {
             }
+
+            
             else
             {
+
                 switch (_graphicMode)
                 {
                     case 4:
@@ -200,10 +254,44 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
             }
         }
 
-
-        public override void Print(bool ext)
+        public void Write(ByteWriter writer)
         {
+            writer.WriteInt32(_checksum);
+            writer.WriteInt32(_references);
+            writer.WriteInt32(_colorArray.Length);
+            writer.WriteInt16((short) _width);
+            writer.WriteInt16((short) _height);
+            writer.WriteInt8(4);
+            if (Flags["Alpha"])
+            {
+                writer.WriteInt8(16);
+            }
+            else
+            {
+                writer.WriteInt8(0);
+            }
+            writer.Skip(2);
+            writer.WriteInt16((short) _xHotspot);
+            writer.WriteInt16((short) _yHotspot);
+            writer.WriteInt16((short) _actionX);
+            writer.WriteInt16((short) _actionY);
+            writer.WriteBytes(_transparent);
+            writer.Skip(1);
+            
+                writer.WriteBytes(rawImg);
+                
+           
+            
+
+            
+
+
+
         }
+
+
+        
+        
 
         public ImageItem(ByteIO reader) : base(reader)
         {

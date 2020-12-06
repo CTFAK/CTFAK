@@ -1,30 +1,28 @@
-﻿using NetMFAPatcher.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetMFAPatcher.Utils;
 
 namespace NetMFAPatcher.MMFParser.Data
 {
-    class Exe
+    public class Exe
     {
         public PackData PackData;
         public GameData GameData;
         public static Exe LatestInst;
         public void ParseExe(ByteIO exeReader)
         {
-            LatestInst = this;
-            Logger.Log($"Executable: {Program.GameName}\n", true, ConsoleColor.DarkRed);
+            Exe.LatestInst = this;
+            Logger.Log($"Executable: {Settings.GameName}\n", true, ConsoleColor.DarkRed);
 
-            string header1 = exeReader.ReadAscii(2);
-            Logger.Log("EXE Header: " + header1, true, ConsoleColor.Yellow);
-            if (header1 != "MZ")
+            string sig = exeReader.ReadAscii(2);
+            Logger.Log("EXE Header: " + sig, true, ConsoleColor.Yellow);
+            if (sig != "MZ")
             {
                 Console.WriteLine("Invalid executable signature");
-                Console.ReadKey();
-                Environment.Exit(0);
             }
 
             exeReader.Seek(60, SeekOrigin.Begin);
