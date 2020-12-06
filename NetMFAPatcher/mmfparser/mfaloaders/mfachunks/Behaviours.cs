@@ -23,12 +23,12 @@ namespace NetMFAPatcher.MMFParser.MFALoaders.mfachunks
                 _items.Add(item);
             }
         }
-        public Behaviours(ByteIO reader) : base(reader) { }
+        public Behaviours(ByteReader reader) : base(reader) { }
     }
     class Behaviour : DataLoader
     {
         public string Name = "ERROR";
-        public ByteIO Data;
+        public ByteReader Data;
         public override void Print()
         {
             throw new NotImplementedException();
@@ -37,9 +37,9 @@ namespace NetMFAPatcher.MMFParser.MFALoaders.mfachunks
         public override void Read()
         {
             Name = Reader.ReadAscii(Reader.ReadInt32());
-            Data = new ByteIO(Reader.ReadBytes(Reader.ReadInt32()));
+            Data = new ByteReader(Reader.ReadBytes(Reader.ReadInt32()));
             
         }
-        public Behaviour(ByteIO reader) : base(reader) { }
+        public Behaviour(ByteReader reader) : base(reader) { }
     }
 }

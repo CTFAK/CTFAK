@@ -8,7 +8,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
     {
         
 
-        public ParameterCommon(ByteIO reader) : base(reader) { }
+        public ParameterCommon(ByteReader reader) : base(reader) { }
         public override void Print()
         {
             throw new NotImplementedException();

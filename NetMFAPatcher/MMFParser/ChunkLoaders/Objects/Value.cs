@@ -8,7 +8,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Objects
 {
     public class AlterableValues:ChunkLoader
     {
-        public AlterableValues(ByteIO reader) : base(reader)
+        public AlterableValues(ByteReader reader) : base(reader)
         {
         }
 
@@ -44,7 +44,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Objects
     }
     public class AlterableStrings:ChunkLoader
     {
-        public AlterableStrings(ByteIO reader) : base(reader)
+        public AlterableStrings(ByteReader reader) : base(reader)
         {
         }
 

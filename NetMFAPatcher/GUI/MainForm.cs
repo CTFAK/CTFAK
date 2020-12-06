@@ -20,39 +20,39 @@ namespace NetMFAPatcher.GUI
         public static bool BreakImages;
         public static bool BreakSounds;
         public Thread LoaderThread;
-        public Color colorTheme = Color.FromArgb(223,114,38);
+        public Color ColorTheme = Color.FromArgb(223,114,38);
         public PackDataForm PackForm;
 
         public MainForm()
         {
             //Buttons
             InitializeComponent();
-            cryptKeyBtn.ForeColor = colorTheme;
-            dumpSortedBtn.ForeColor = colorTheme;
-            showHexBtn.ForeColor = colorTheme;
-            FolderBTN.ForeColor = colorTheme; 
-            MFABtn.ForeColor = colorTheme;
-            ImagesButton.ForeColor = colorTheme;
-            SoundsButton.ForeColor = colorTheme;
-            packDataBtn.ForeColor = colorTheme;
+            cryptKeyBtn.ForeColor = ColorTheme;
+            dumpSortedBtn.ForeColor = ColorTheme;
+            showHexBtn.ForeColor = ColorTheme;
+            FolderBTN.ForeColor = ColorTheme; 
+            MFABtn.ForeColor = ColorTheme;
+            ImagesButton.ForeColor = ColorTheme;
+            SoundsButton.ForeColor = ColorTheme;
+            packDataBtn.ForeColor = ColorTheme;
             //Menu
-            saveChunkBtn.ForeColor = colorTheme;
+            saveChunkBtn.ForeColor = ColorTheme;
             saveChunkBtn.BackColor=Color.Black;                       
-            viewHexBtn.ForeColor = colorTheme; 
+            viewHexBtn.ForeColor = ColorTheme; 
             viewHexBtn.BackColor=Color.Black;
             //Labels
-            label1.ForeColor = colorTheme;
+            label1.ForeColor = ColorTheme;
             label1.Text = Settings.DumperVersion;
-            button1.ForeColor = colorTheme;
-            GameInfo.ForeColor = colorTheme;
-            loadingLabel.ForeColor = colorTheme;
-            ImagesLabel.ForeColor = colorTheme;
-            SoundsLabel.ForeColor=colorTheme;
+            button1.ForeColor = ColorTheme;
+            GameInfo.ForeColor = ColorTheme;
+            loadingLabel.ForeColor = ColorTheme;
+            ImagesLabel.ForeColor = ColorTheme;
+            SoundsLabel.ForeColor=ColorTheme;
             //Other
-            treeView1.ForeColor = colorTheme;
-            listBox1.ForeColor = colorTheme;
-            ImagesBar.ForeColor = colorTheme;
-            SoundBar.ForeColor = colorTheme;
+            treeView1.ForeColor = ColorTheme;
+            listBox1.ForeColor = ColorTheme;
+            ImagesBar.ForeColor = ColorTheme;
+            SoundBar.ForeColor = ColorTheme;
             
 
         }
@@ -386,7 +386,7 @@ namespace NetMFAPatcher.GUI
                 rawData += Settings.Copyright;
             }
 
-            var KeyForm = new CryptoKeyForm(rawData,colorTheme);
+            var KeyForm = new CryptoKeyForm(rawData,ColorTheme);
             KeyForm.Show();
         }
 
@@ -403,7 +403,7 @@ namespace NetMFAPatcher.GUI
                         var node = ((ChunkNode) treeView1.SelectedNode);
                         HexViewForm hexform = null;
                         
-                            hexform = new HexViewForm(node.chunk.ChunkData,node.chunk.RawData,colorTheme,$"Hew View: {node.chunk.Name}"); 
+                            hexform = new HexViewForm(node.chunk.ChunkData,node.chunk.RawData,ColorTheme,$"Hew View: {node.chunk.Name}"); 
                         
                         hexform.Show();
                     }
@@ -439,7 +439,7 @@ namespace NetMFAPatcher.GUI
 
         private void packDataBtn_Click(object sender, EventArgs e)
         {
-            if(PackForm==null)PackForm = new PackDataForm(Exe.LatestInst.PackData,colorTheme);
+            if(PackForm==null)PackForm = new PackDataForm(Exe.LatestInst.PackData,ColorTheme);
             PackForm.Show();
         }
     }

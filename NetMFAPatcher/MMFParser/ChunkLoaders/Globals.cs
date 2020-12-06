@@ -25,10 +25,10 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         public override void Read()
         {
             var numberOfItems = Reader.ReadUInt16();
-            var templist = new List<ByteIO>();
+            var templist = new List<ByteReader>();
             for (int i = 0; i < numberOfItems; i++)
             {
-                templist.Add(new ByteIO(Reader.ReadBytes(4)));
+                templist.Add(new ByteReader(Reader.ReadBytes(4)));
             }
             foreach (var item in templist)
             {

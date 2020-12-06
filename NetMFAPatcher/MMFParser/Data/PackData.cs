@@ -17,7 +17,7 @@ namespace NetMFAPatcher.MMFParser.Data
         {
 
         }
-        public void Read(ByteIO exeReader)
+        public void Read(ByteReader exeReader)
         {
             long start = exeReader.Tell();
             byte[] header = exeReader.ReadBytes(8);
@@ -70,7 +70,7 @@ namespace NetMFAPatcher.MMFParser.Data
         int _bingo = 0;
         public byte[] Data;
 
-        public void Read(ByteIO exeReader)
+        public void Read(ByteReader exeReader)
         {
             UInt16 len = exeReader.ReadUInt16();
             PackFilename = exeReader.ReadWideString(len);

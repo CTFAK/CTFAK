@@ -14,7 +14,7 @@ namespace NetMFAPatcher.MMFParser.MFALoaders
         public Color Background;
         public int MaxObjects;
 
-        public Frame(ByteIO reader) : base(reader)
+        public Frame(ByteReader reader) : base(reader)
         {
         }
 

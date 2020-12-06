@@ -8,7 +8,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
         public string Name;
         public int Flags;
 
-        public Sample(ByteIO reader) : base(reader) { }
+        public Sample(ByteReader reader) : base(reader) { }
         public override void Read()
         {
             Handle = Reader.ReadInt16();

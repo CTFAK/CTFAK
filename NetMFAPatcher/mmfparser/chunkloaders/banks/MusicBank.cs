@@ -34,7 +34,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
             }
         }
 
-        public MusicBank(ByteIO reader) : base(reader)
+        public MusicBank(ByteReader reader) : base(reader)
         {
         }
 
@@ -62,7 +62,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
         {
         }
 
-        public MusicFile(ByteIO reader) : base(reader)
+        public MusicFile(ByteReader reader) : base(reader)
         {
         }
 

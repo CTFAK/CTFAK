@@ -87,7 +87,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
         List<int> _objects = new List<int>();        
 
         public Quailifer(Chunk chunk) : base(chunk) { }
-        public Quailifer(ByteIO reader) : base(reader) { }
+        public Quailifer(ByteReader reader) : base(reader) { }
 
         public override void Print(bool ext)
         {
@@ -120,7 +120,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
         public List<Action> Actions = new List<Action>();
 
         public EventGroup(Chunk chunk) : base(chunk) { }
-        public EventGroup(ByteIO reader) : base(reader) { }
+        public EventGroup(ByteReader reader) : base(reader) { }
 
         public override void Print(bool ext)
         {

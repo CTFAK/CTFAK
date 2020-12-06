@@ -16,7 +16,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         public List<short> AccelKey;
         public List<short> AccelId;
 
-        public AppMenu(ByteIO reader) : base(reader)
+        public AppMenu(ByteReader reader) : base(reader)
         {
         }
 
@@ -62,7 +62,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
             }
 
         }
-        public void Load(ByteIO reader)
+        public void Load(ByteReader reader)
         {
             while(true)
             {
@@ -94,7 +94,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         public int Flags = 0;
         public int Id = 0;
         public string Mnemonic = "";
-        public AppMenuItem(ByteIO reader) : base(reader)
+        public AppMenuItem(ByteReader reader) : base(reader)
         {
         }
 

@@ -7,7 +7,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
         public int Timer;
         public int Loops;
 
-        public Time(ByteIO reader) : base(reader) { }
+        public Time(ByteReader reader) : base(reader) { }
         public override void Read()
         {
             Timer = Reader.ReadInt32();

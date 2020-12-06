@@ -71,7 +71,7 @@ namespace NetMFAPatcher.MMFParser.MFALoaders
                 Items[key].Write(writer);
             }
         }
-        public AgmiBank(ByteIO reader) : base(reader)
+        public AgmiBank(ByteReader reader) : base(reader)
         {
         }
 

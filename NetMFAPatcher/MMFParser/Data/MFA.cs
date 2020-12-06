@@ -383,7 +383,7 @@ namespace NetMFAPatcher.MMFParser.Data
 
 
         }
-        public MFA(ByteIO reader) : base(reader)
+        public MFA(ByteReader reader) : base(reader)
         {
         }
 

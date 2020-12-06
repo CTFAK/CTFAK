@@ -53,7 +53,7 @@ namespace NetMFAPatcher.MMFParser.Data
         public List<Frame> Frames = new List<Frame>();
 
 
-        public void Read(ByteIO exeReader)
+        public void Read(ByteReader exeReader)
         {
             string magic = exeReader.ReadAscii(4); //Reading header
 

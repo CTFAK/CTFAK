@@ -33,7 +33,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
             }
             
         }
-        public ObjectNames(ByteIO reader) : base(reader) { }
+        public ObjectNames(ByteReader reader) : base(reader) { }
         public ObjectNames(Chunk chunk) : base(chunk) { }
     }
 }

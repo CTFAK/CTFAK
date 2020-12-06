@@ -6,7 +6,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
     {
 
 
-        public Remark(ByteIO reader) : base(reader) { }
+        public Remark(ByteReader reader) : base(reader) { }
         public override void Read()
         {
             //TODO

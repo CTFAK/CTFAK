@@ -7,7 +7,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
     {
 
 
-        public GlobalValue(ByteIO reader) : base(reader) { }
+        public GlobalValue(ByteReader reader) : base(reader) { }
         public override void Read()
         {
             base.Read();           

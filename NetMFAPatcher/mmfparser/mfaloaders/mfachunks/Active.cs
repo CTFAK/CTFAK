@@ -14,6 +14,6 @@ namespace NetMFAPatcher.MMFParser.MFALoaders.mfachunks
         {
             base.Read();
         }
-        public Active(ByteIO reader) : base(reader) { }
+        public Active(ByteReader reader) : base(reader) { }
     }
 }

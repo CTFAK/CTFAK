@@ -7,7 +7,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
         public int ObjectInfoList;
         public int ObjectInfo;
         public int ObjectType;
-        public ParamObject(ByteIO reader) : base(reader) { }
+        public ParamObject(ByteReader reader) : base(reader) { }
         public override void Read()
         {
             ObjectInfoList = Reader.ReadInt16();

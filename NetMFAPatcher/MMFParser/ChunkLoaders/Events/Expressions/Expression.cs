@@ -10,7 +10,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Expressions
         public int Num;
         public int ObjectInfo;
         public int ObjectInfoList;
-        public Expression(ByteIO reader) : base(reader) { }
+        public Expression(ByteReader reader) : base(reader) { }
         public override void Print()
         {
             throw new NotImplementedException();

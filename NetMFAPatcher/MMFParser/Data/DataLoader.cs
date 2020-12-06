@@ -6,10 +6,10 @@ namespace NetMFAPatcher.MMFParser.Data
     public abstract class DataLoader
     {
         private Chunk _chunk;
-        public ByteIO Reader;
+        public ByteReader Reader;
         public bool Verbose = true;
 
-        protected DataLoader(ByteIO reader)
+        protected DataLoader(ByteReader reader)
         {
             this.Reader = reader;
         }

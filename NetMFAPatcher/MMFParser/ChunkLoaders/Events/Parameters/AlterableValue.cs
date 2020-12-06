@@ -10,7 +10,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
     class AlterableValue : Short
     {
 
-        public AlterableValue(ByteIO reader) : base(reader) { }
+        public AlterableValue(ByteReader reader) : base(reader) { }
         public override void Read()
         {
             base.Read();           

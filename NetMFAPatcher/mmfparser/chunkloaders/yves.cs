@@ -18,7 +18,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         List<byte> _points;
 
 
-        public AppIcon(ByteIO reader) : base(reader)
+        public AppIcon(ByteReader reader) : base(reader)
         {
         }
 

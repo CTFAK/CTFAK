@@ -17,7 +17,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         public List<string> Names = new List<string>();
         public int NumberOfItems;
         public FrameItems(Chunk chunk) : base(chunk) { }
-        public FrameItems(ByteIO reader) : base(reader) { }
+        public FrameItems(ByteReader reader) : base(reader) { }
         public override void Print(bool ext)
         {
                        

@@ -17,6 +17,7 @@ namespace NetMFAPatcher.Utils
         public bool this[String key]
         {
             get => GetFlag(key);
+            // set => SetFlag(key,value);
         }
 
         public bool GetFlag(String key)

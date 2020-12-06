@@ -6,7 +6,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
     {
 
 
-        public Int(ByteIO reader) : base(reader) { }
+        public Int(ByteReader reader) : base(reader) { }
         public override void Read()
         {
             Value = (short)Reader.ReadInt32();          

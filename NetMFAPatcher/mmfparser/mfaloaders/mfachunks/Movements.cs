@@ -26,7 +26,7 @@ namespace NetMFAPatcher.MMFParser.MFALoaders.mfachunks
 
 
         }
-        public Movements(ByteIO reader) : base(reader) { }
+        public Movements(ByteReader reader) : base(reader) { }
     }
     class Movement : DataLoader
     {
@@ -45,7 +45,7 @@ namespace NetMFAPatcher.MMFParser.MFALoaders.mfachunks
             var dataSize = Reader.ReadInt32();
             if(extension.Length>0)
             {
-                var newReader = new ByteIO(Reader.ReadBytes(dataSize));
+                var newReader = new ByteReader(Reader.ReadBytes(dataSize));
 
 
             }
@@ -60,6 +60,6 @@ namespace NetMFAPatcher.MMFParser.MFALoaders.mfachunks
             }
 
         }
-        public Movement(ByteIO reader) : base(reader) { }
+        public Movement(ByteReader reader) : base(reader) { }
     }
 }

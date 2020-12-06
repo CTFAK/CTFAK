@@ -27,7 +27,7 @@ namespace NetMFAPatcher.MMFParser.MFALoaders
 
 
         }
-        public Layer(ByteIO reader):base(reader)
+        public Layer(ByteReader reader):base(reader)
         {
         }
     }

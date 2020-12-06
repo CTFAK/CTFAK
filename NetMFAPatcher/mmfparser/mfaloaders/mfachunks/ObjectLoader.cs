@@ -68,6 +68,6 @@ namespace NetMFAPatcher.MMFParser.MFALoaders.mfachunks
 
             
         }
-        public ObjectLoader(ByteIO reader) : base(reader) { }
+        public ObjectLoader(ByteReader reader) : base(reader) { }
     }
 }

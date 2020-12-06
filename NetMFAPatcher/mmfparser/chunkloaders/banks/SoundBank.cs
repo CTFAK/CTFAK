@@ -62,7 +62,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
             }
         }
 
-        public SoundBank(ByteIO reader) : base(reader)
+        public SoundBank(ByteReader reader) : base(reader)
         {
         }
 
@@ -90,7 +90,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
         {
         }
 
-        public SoundBase(ByteIO reader) : base(reader)
+        public SoundBase(ByteReader reader) : base(reader)
         {
         }
 
@@ -118,15 +118,15 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
             Flags = (int)Reader.ReadUInt32(); //flags
             var reserved = Reader.ReadInt32();
             var nameLenght = Reader.ReadInt32();
-            ByteIO soundData;
+            ByteReader soundData;
             if (IsCompressed) //compressed
             {
                 var size = Reader.ReadInt32();
-                soundData = new ByteIO(Decompressor.decompress_block(Reader, size, decompressedSize));
+                soundData = new ByteReader(Decompressor.decompress_block(Reader, size, decompressedSize));
             }
             else
             {
-                soundData = new ByteIO(Reader.ReadBytes(decompressedSize));
+                soundData = new ByteReader(Reader.ReadBytes(decompressedSize));
             }
             if (IsCompressed)
             {
@@ -171,7 +171,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
 
         }
 
-        public SoundItem(ByteIO reader) : base(reader)
+        public SoundItem(ByteReader reader) : base(reader)
         {
         }
 

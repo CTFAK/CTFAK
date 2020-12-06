@@ -6,7 +6,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
     {
         public float Value;
 
-        public Float(ByteIO reader) : base(reader) { }
+        public Float(ByteReader reader) : base(reader) { }
         public override void Read()
         {
             Value = Reader.ReadSingle();

@@ -24,7 +24,7 @@ namespace NetMFAPatcher.MMFParser.MFALoaders.mfachunks
 
         }
 
-        public AnimationObject(ByteIO reader) : base(reader) { }
+        public AnimationObject(ByteReader reader) : base(reader) { }
     }
     class Animation : DataLoader
     {
@@ -49,7 +49,7 @@ namespace NetMFAPatcher.MMFParser.MFALoaders.mfachunks
 
 
         }
-        public Animation(ByteIO reader) : base(reader) { }
+        public Animation(ByteReader reader) : base(reader) { }
     }
     class AnimationDirection : DataLoader
     {
@@ -69,7 +69,7 @@ namespace NetMFAPatcher.MMFParser.MFALoaders.mfachunks
             var frames = new List<int>();
 
         }
-        public AnimationDirection(ByteIO reader) : base(reader) { }
+        public AnimationDirection(ByteReader reader) : base(reader) { }
     }
 
 }

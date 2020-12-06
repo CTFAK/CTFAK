@@ -6,7 +6,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
     {
         public short Value;
 
-        public Short(ByteIO reader) : base(reader) { }
+        public Short(ByteReader reader) : base(reader) { }
         public override void Read()
         {
             Value = Reader.ReadInt16();

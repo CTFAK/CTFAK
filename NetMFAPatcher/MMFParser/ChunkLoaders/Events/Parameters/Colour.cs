@@ -7,7 +7,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
     {
         public Color Value;
 
-        public Colour(ByteIO reader) : base(reader) { }
+        public Colour(ByteReader reader) : base(reader) { }
         public override void Read()
         {
             var bytes = Reader.ReadBytes(4);

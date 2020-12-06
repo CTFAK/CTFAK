@@ -434,45 +434,31 @@ namespace NetMFAPatcher.GUI
             this.PerformLayout();
         }
 
-        private System.Windows.Forms.Button packDataBtn;
-
-        private System.Windows.Forms.ToolStripMenuItem saveChunkBtn;
-        private System.Windows.Forms.ToolStripMenuItem viewHexBtn;
-
-        private System.Windows.Forms.ContextMenuStrip ChunkCombo;
-
-        private System.Windows.Forms.Button dumpSortedBtn;
-
-        private System.Windows.Forms.Button showHexBtn;
-
-        private System.Windows.Forms.Button cryptKeyBtn;
-
-        private System.Windows.Forms.Label loadingLabel;
-
-        private System.Windows.Forms.Button ImagesButton;
-
-        private System.Windows.Forms.Button SoundsButton;
-
-        private System.Windows.Forms.Button FolderBTN;
-        private System.Windows.Forms.Button MFABtn;
-
-        private System.Windows.Forms.ProgressBar SoundBar;
-        private System.Windows.Forms.Label SoundsLabel;
-
-        private System.Windows.Forms.Label ImagesLabel;
-
-        private System.Windows.Forms.ProgressBar ImagesBar;
-
-        private System.Windows.Forms.CheckBox ChunkBox;
-        private System.Windows.Forms.CheckBox ImageBox;
-        private System.Windows.Forms.CheckBox SoundBox;
-
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.CheckBox ChunkBox;
+        private System.Windows.Forms.ContextMenuStrip ChunkCombo;
+        private System.Windows.Forms.Button cryptKeyBtn;
+        private System.Windows.Forms.Button dumpSortedBtn;
+        private System.Windows.Forms.Button FolderBTN;
         private System.Windows.Forms.Label GameInfo;
+        private System.Windows.Forms.CheckBox ImageBox;
+        private System.Windows.Forms.ProgressBar ImagesBar;
+        private System.Windows.Forms.Button ImagesButton;
+        private System.Windows.Forms.Label ImagesLabel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Label loadingLabel;
+        private System.Windows.Forms.Button MFABtn;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Button packDataBtn;
+        private System.Windows.Forms.ToolStripMenuItem saveChunkBtn;
+        private System.Windows.Forms.Button showHexBtn;
+        private System.Windows.Forms.ProgressBar SoundBar;
+        private System.Windows.Forms.CheckBox SoundBox;
+        private System.Windows.Forms.Button SoundsButton;
+        private System.Windows.Forms.Label SoundsLabel;
         private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.ToolStripMenuItem viewHexBtn;
 
         #endregion
     }

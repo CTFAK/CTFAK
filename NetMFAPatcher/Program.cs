@@ -79,7 +79,7 @@ namespace NetMFAPatcher
                 {
                     Settings.DoMFA = false;
                    
-                    var exeReader = new ByteIO(path, FileMode.OpenOrCreate);
+                    var exeReader = new ByteReader(path, FileMode.OpenOrCreate);
                     var currentExe = new Exe();
                     currentExe.ParseExe(exeReader);
                     Logger.Log("Finished!", true, ConsoleColor.Yellow);

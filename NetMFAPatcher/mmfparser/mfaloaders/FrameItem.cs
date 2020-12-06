@@ -63,7 +63,7 @@ namespace NetMFAPatcher.MMFParser.MFALoaders
 
 
         }
-        public FrameItem(ByteIO reader):base(reader)
+        public FrameItem(ByteReader reader):base(reader)
         { }
     }
 }

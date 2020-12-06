@@ -16,7 +16,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 {
     class FrameName : StringChunk
     {
-        public FrameName(ByteIO reader) : base(reader)
+        public FrameName(ByteReader reader) : base(reader)
         {
         }
 
@@ -27,7 +27,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
     class FramePassword : StringChunk
     {
-        public FramePassword(ByteIO reader) : base(reader)
+        public FramePassword(ByteReader reader) : base(reader)
         {
         }
 
@@ -76,7 +76,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
         public override void Read()
         {
-            var frameReader = new ByteIO(Chunk.ChunkData);
+            var frameReader = new ByteReader(Chunk.ChunkData);
             Chunks = new ChunkList();
 
             Chunks.Verbose = false;
@@ -122,7 +122,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
         }
 
-        public Frame(ByteIO reader) : base(reader)
+        public Frame(ByteReader reader) : base(reader)
         {
         }
 
@@ -150,7 +150,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
                 
         });
         public byte[] Background;
-        public FrameHeader(ByteIO reader) : base(reader)
+        public FrameHeader(ByteReader reader) : base(reader)
         {
         }
 
@@ -191,7 +191,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         public int CountOfObjects=0;
         public List<ObjectInstance> Items = new List<ObjectInstance>();
 
-        public ObjectInstances(ByteIO reader) : base(reader)
+        public ObjectInstances(ByteReader reader) : base(reader)
         {
         }
 
@@ -237,7 +237,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         public string Name;
         public short ParentHandle;
 
-        public ObjectInstance(ByteIO reader) : base(reader)
+        public ObjectInstance(ByteReader reader) : base(reader)
         {
         }
 
@@ -292,7 +292,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
     class Layer : ChunkLoader
     {
-        public Layer(ByteIO reader) : base(reader)
+        public Layer(ByteReader reader) : base(reader)
         {
         }
 

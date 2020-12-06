@@ -28,7 +28,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         {
         }
 
-        public ObjectInfo(ByteIO reader) : base(reader)
+        public ObjectInfo(ByteReader reader) : base(reader)
         {
         }
 
@@ -91,7 +91,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
     public class ObjectName : StringChunk
     {
-        public ObjectName(ByteIO reader) : base(reader)
+        public ObjectName(ByteReader reader) : base(reader)
         {
         }
 
@@ -105,7 +105,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         public bool IsCommon;
         public ObjectCommon Loader;
 
-        public ObjectProperties(ByteIO reader) : base(reader)
+        public ObjectProperties(ByteReader reader) : base(reader)
         {
         }
 
@@ -151,7 +151,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         public UInt32 InkEffect;
         public UInt32 InkEffectParameter;
 
-        public ObjectHeader(ByteIO reader) : base(reader)
+        public ObjectHeader(ByteReader reader) : base(reader)
         {
         }
 

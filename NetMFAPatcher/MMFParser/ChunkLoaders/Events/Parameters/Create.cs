@@ -8,7 +8,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
         public int ObjectInfo;
         public Position Position;
 
-        public Create(ByteIO reader) : base(reader) { }
+        public Create(ByteReader reader) : base(reader) { }
         public override void Read()
         {
             Position = new Position(Reader);

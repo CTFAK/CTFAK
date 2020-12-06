@@ -64,7 +64,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
         public override void Read()
         {
-            Reader = new ByteIO(Chunk.ChunkData);
+            Reader = new ByteReader(Chunk.ChunkData);
             Size = Reader.ReadInt32();
             Flags.flag=(uint) Reader.ReadInt16();//I finally got my balls back
 
@@ -105,7 +105,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         }
 
 
-        public AppHeader(ByteIO reader) : base(reader)
+        public AppHeader(ByteReader reader) : base(reader)
         {
         }
 
@@ -119,7 +119,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
     {
         public List<PlayerControl> Items;
 
-        public Controls(ByteIO reader) : base(reader)
+        public Controls(ByteReader reader) : base(reader)
         {
             this.Reader = reader;
         }
@@ -155,10 +155,10 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
     public class PlayerControl
     {
         int _controlType = 0;
-        ByteIO _reader;
+        ByteReader _reader;
         Keys _keys;
 
-        public PlayerControl(ByteIO reader)
+        public PlayerControl(ByteReader reader)
         {
             this._reader = reader;
         }
@@ -188,9 +188,9 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         int _button2;
         int _button3;
         int _button4;
-        ByteIO _reader;
+        ByteReader _reader;
 
-        public Keys(ByteIO reader)
+        public Keys(ByteReader reader)
         {
             this._reader = reader;
         }

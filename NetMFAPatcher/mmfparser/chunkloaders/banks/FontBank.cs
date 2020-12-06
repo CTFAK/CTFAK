@@ -26,7 +26,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
             //i am testing with no fonts suck pinus haha
 
         }
-        public FontBank(ByteIO reader) : base(reader)
+        public FontBank(ByteReader reader) : base(reader)
         {
         }
 

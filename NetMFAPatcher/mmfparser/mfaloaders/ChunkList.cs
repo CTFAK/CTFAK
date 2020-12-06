@@ -30,6 +30,6 @@ namespace NetMFAPatcher.MMFParser.MFALoaders
 
            
         }
-        public ChunkList(ByteIO reader) : base(reader) { }
+        public ChunkList(ByteReader reader) : base(reader) { }
     }
 }

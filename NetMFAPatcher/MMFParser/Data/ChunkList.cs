@@ -15,7 +15,7 @@ namespace NetMFAPatcher.MMFParser.Data
         public bool Verbose = false;
         public List<Frame> Frames = new List<Frame>();
 
-        public void Read(ByteIO exeReader)
+        public void Read(ByteReader exeReader)
         {
             Chunks.Clear();
             while (true)
@@ -77,12 +77,12 @@ namespace NetMFAPatcher.MMFParser.Data
                 _chunkList = actualChunkList;
             }
 
-            public ByteIO get_reader()
+            public ByteReader get_reader()
             {
-                return new ByteIO(ChunkData);
+                return new ByteReader(ChunkData);
             }
 
-            public void Read(ByteIO exeReader)
+            public void Read(ByteReader exeReader)
             {
                 Id = exeReader.ReadInt16();
                 Name = this.ActualName();

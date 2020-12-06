@@ -9,7 +9,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Objects
     {
         public Dictionary<int, Animation> AnimationDict;
 
-        public Animations(ByteIO reader) : base(reader)
+        public Animations(ByteReader reader) : base(reader)
         {
         }
 
@@ -63,7 +63,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Objects
     {
         public Dictionary<int, AnimationDirection> DirectionDict;
 
-        public Animation(ByteIO reader) : base(reader)
+        public Animation(ByteReader reader) : base(reader)
         {
         }
 
@@ -113,7 +113,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Objects
         public int Repeat;
         public int BackTo;
         public List<int> Frames = new List<int>();
-        public AnimationDirection(ByteIO reader) : base(reader)
+        public AnimationDirection(ByteReader reader) : base(reader)
         {
         }
 

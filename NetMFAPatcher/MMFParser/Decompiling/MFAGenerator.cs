@@ -11,7 +11,7 @@ namespace NetMFAPatcher.MMFParser.Decompiling
         public static void BuildMFA()
         {
             Settings.DoMFA = true;
-            var mfaReader = new ByteIO(TemplatePath, FileMode.Open);
+            var mfaReader = new ByteReader(TemplatePath, FileMode.Open);
             var template = new MFA(mfaReader);
 
             template.Read(); //Loading template
@@ -27,7 +27,7 @@ namespace NetMFAPatcher.MMFParser.Decompiling
 
         public static void ReadTestMFA()
         {
-            var mfaReader = new ByteIO(TemplatePath, FileMode.Open);
+            var mfaReader = new ByteReader(TemplatePath, FileMode.Open);
             var template = new MFA(mfaReader);
             template.Read();
             var mfaWriter = new ByteWriter("outTest.mfa", FileMode.Create);

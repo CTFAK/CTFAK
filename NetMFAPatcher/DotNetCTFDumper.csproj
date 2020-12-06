@@ -186,7 +186,7 @@
     <Compile Include="MMFParser\Data\PackData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\ByteIO.cs" />
+    <Compile Include="Utils\ByteReader.cs" />
     <Compile Include="Utils\Decompressor.cs" />
     <Compile Include="Utils\Decryption.cs" />
     <Compile Include="Utils\ImageDumper.cs" />

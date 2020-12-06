@@ -21,7 +21,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
         public int Identifier;
         public int ObjectInfoList;
         public List<Parameter> Items = new List<Parameter>();
-        public Condition(ByteIO reader) : base(reader) { }
+        public Condition(ByteReader reader) : base(reader) { }
         public override void Print()
         {
             throw new NotImplementedException();
@@ -68,7 +68,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
         public int ObjectInfo;
         public int ObjectInfoList;
         public List<Parameter> Items = new List<Parameter>();
-        public Action(ByteIO reader) : base(reader) { }
+        public Action(ByteReader reader) : base(reader) { }
         public override void Print( )
         {
             throw new NotImplementedException();
@@ -108,7 +108,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
         public int Code;
         public DataLoader Loader;
 
-        public Parameter(ByteIO reader) : base(reader) { }
+        public Parameter(ByteReader reader) : base(reader) { }
 
         public override void Print()
         {

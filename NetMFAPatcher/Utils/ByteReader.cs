@@ -5,25 +5,25 @@ using System.Text;
 
 namespace NetMFAPatcher.Utils
 {
-    public class ByteIO : BinaryReader
+    public class ByteReader : BinaryReader
     {
-        public ByteIO(Stream input) : base(input)
+        public ByteReader(Stream input) : base(input)
         {
         }
 
-        public ByteIO(Stream input, Encoding encoding) : base(input, encoding)
+        public ByteReader(Stream input, Encoding encoding) : base(input, encoding)
         {
         }
 
-        public ByteIO(Stream input, Encoding encoding, bool leaveOpen) : base(input, encoding, leaveOpen)
+        public ByteReader(Stream input, Encoding encoding, bool leaveOpen) : base(input, encoding, leaveOpen)
         {
         }
 
-        public ByteIO(byte[] data) : base(new MemoryStream(data))
+        public ByteReader(byte[] data) : base(new MemoryStream(data))
         {
         }
 
-        public ByteIO(string path, FileMode fileMode) : base(new FileStream(path, fileMode))
+        public ByteReader(string path, FileMode fileMode) : base(new FileStream(path, fileMode))
         {
         }
 

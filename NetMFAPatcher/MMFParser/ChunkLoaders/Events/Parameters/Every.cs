@@ -8,7 +8,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
         public int Compteur;
 
 
-        public Every(ByteIO reader) : base(reader) { }
+        public Every(ByteReader reader) : base(reader) { }
         public override void Read()
         {
             Delay = Reader.ReadInt32();

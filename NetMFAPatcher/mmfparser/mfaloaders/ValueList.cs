@@ -8,7 +8,7 @@ namespace NetMFAPatcher.MMFParser.MFALoaders
     public class ValueList : DataLoader
     {
         public List<ValueItem> Items = new List<ValueItem>();
-        public ValueList(ByteIO reader) : base(reader)
+        public ValueList(ByteReader reader) : base(reader)
         {
         }
 
@@ -44,7 +44,7 @@ namespace NetMFAPatcher.MMFParser.MFALoaders
         public object Value;
         public string Name;
 
-        public ValueItem(ByteIO reader) : base(reader)
+        public ValueItem(ByteReader reader) : base(reader)
         {
         }
 

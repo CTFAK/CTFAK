@@ -13,7 +13,7 @@ namespace NetMFAPatcher.MMFParser.Data
         public PackData PackData;
         public GameData GameData;
         public static Exe LatestInst;
-        public void ParseExe(ByteIO exeReader)
+        public void ParseExe(ByteReader exeReader)
         {
             Exe.LatestInst = this;
             Logger.Log($"Executable: {Settings.GameName}\n", true, ConsoleColor.DarkRed);

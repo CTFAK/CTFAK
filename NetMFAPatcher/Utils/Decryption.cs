@@ -51,7 +51,7 @@ namespace NetMFAPatcher.Utils
 
         public static byte[] DecodeMode3(byte[] chunkData, int chunkSize, int chunkId, out int decompressed)
         {
-            var reader = new ByteIO(chunkData);
+            var reader = new ByteReader(chunkData);
             var decompressedSize = reader.ReadUInt32();
 
             var rawData = reader.ReadBytes((int) reader.Size());
@@ -61,7 +61,7 @@ namespace NetMFAPatcher.Utils
             }
 
             rawData = DecodeChunk(rawData, chunkSize);
-            using (var data = new ByteIO(rawData))
+            using (var data = new ByteReader(rawData))
             {
                 var compressedSize = data.ReadUInt32();
                 decompressed = (int) decompressedSize;

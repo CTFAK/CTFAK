@@ -10,7 +10,7 @@ namespace NetMFAPatcher.MMFParser.MFALoaders
     {
         public List<PlayerControl> Items;
 
-        public Controls(ByteIO reader) : base(reader)
+        public Controls(ByteReader reader) : base(reader)
         {
         }
 
@@ -57,7 +57,7 @@ namespace NetMFAPatcher.MMFParser.MFALoaders
         public int Button4;
 
 
-        public PlayerControl(ByteIO reader) : base(reader)
+        public PlayerControl(ByteReader reader) : base(reader)
         {
             
         }

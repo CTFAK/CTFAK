@@ -17,7 +17,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
         public override void Read()
         {
-            Reader = new ByteIO(Chunk.ChunkData);
+            Reader = new ByteReader(Chunk.ChunkData);
             Value = Reader.ReadWideString();
         }
 
@@ -36,7 +36,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         }
 
 
-        public StringChunk(ByteIO reader) : base(reader)
+        public StringChunk(ByteReader reader) : base(reader)
         {
         }
 
@@ -47,7 +47,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
     class AppName : StringChunk
     {
-        public AppName(ByteIO reader) : base(reader)
+        public AppName(ByteReader reader) : base(reader)
         {
         }
 
@@ -58,7 +58,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
     class AppAuthor : StringChunk
     {
-        public AppAuthor(ByteIO reader) : base(reader)
+        public AppAuthor(ByteReader reader) : base(reader)
         {
         }
 
@@ -69,7 +69,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
     class ExtPath : StringChunk
     {
-        public ExtPath(ByteIO reader) : base(reader)
+        public ExtPath(ByteReader reader) : base(reader)
         {
         }
 
@@ -80,7 +80,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
     class EditorFilename : StringChunk
     {
-        public EditorFilename(ByteIO reader) : base(reader)
+        public EditorFilename(ByteReader reader) : base(reader)
         {
         }
 
@@ -91,7 +91,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
     class TargetFilename : StringChunk
     {
-        public TargetFilename(ByteIO reader) : base(reader)
+        public TargetFilename(ByteReader reader) : base(reader)
         {
         }
 
@@ -102,7 +102,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
     class AppDoc : StringChunk
     {
-        public AppDoc(ByteIO reader) : base(reader)
+        public AppDoc(ByteReader reader) : base(reader)
         {
         }
 
@@ -113,7 +113,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
     class AboutText : StringChunk
     {
-        public AboutText(ByteIO reader) : base(reader)
+        public AboutText(ByteReader reader) : base(reader)
         {
         }
 
@@ -124,7 +124,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
     class Copyright : StringChunk
     {
-        public Copyright(ByteIO reader) : base(reader)
+        public Copyright(ByteReader reader) : base(reader)
         {
         }
 
@@ -135,7 +135,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
     class DemoFilePath : StringChunk
     {
-        public DemoFilePath(ByteIO reader) : base(reader)
+        public DemoFilePath(ByteReader reader) : base(reader)
         {
         }
 
