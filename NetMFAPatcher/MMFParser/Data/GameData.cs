@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DotNetCTFDumper.MMFParser.ChunkLoaders;
+using DotNetCTFDumper.MMFParser.ChunkLoaders.Banks;
+using DotNetCTFDumper.Utils;
 
-using NetMFAPatcher.MMFParser.ChunkLoaders;
-using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
-using NetMFAPatcher.Utils;
-
-
-namespace NetMFAPatcher.MMFParser.Data
+namespace DotNetCTFDumper.MMFParser.Data
 {
     public class GameData
     {
@@ -62,10 +57,10 @@ namespace NetMFAPatcher.MMFParser.Data
             else if (magic == Constants.GameHeader) Constants.IsUnicode = false;//PAME
             else Logger.Log("Couldn't found any known headers", true, ConsoleColor.Red);//Header not found
 
-            RuntimeVersion = exeReader.ReadUInt16(); //
-            RuntimeSubversion = exeReader.ReadUInt16(); //0
-            ProductVersion = (Constants.Products)exeReader.ReadInt32();  //CTF/MMF2/MMF1.5/CNC
-            ProductBuild = exeReader.ReadInt32(); //CTF Build
+            RuntimeVersion = exeReader.ReadUInt16(); 
+            RuntimeSubversion = exeReader.ReadUInt16(); 
+            ProductVersion = (Constants.Products)exeReader.ReadInt32();
+            ProductBuild = exeReader.ReadInt32();//Easy Access
             Settings.Build=ProductBuild;
             
             Build = ProductBuild;
@@ -74,24 +69,26 @@ namespace NetMFAPatcher.MMFParser.Data
             GameChunks.Read(exeReader);
 
             //Load chunks into gamedata for easier access
-            if (GameChunks.get_chunk<AppName>() != null) Name = GameChunks.get_chunk<AppName>().Value;
-            if (GameChunks.get_chunk<Copyright>() != null) Copyright = GameChunks.get_chunk<Copyright>().Value;
-            if (GameChunks.get_chunk<AppAuthor>()!=null) Author = GameChunks.get_chunk<AppAuthor>().Value;
-            if (GameChunks.get_chunk<EditorFilename>() != null) EditorFilename = GameChunks.get_chunk<EditorFilename>().Value;
-            if (GameChunks.get_chunk<TargetFilename>() != null) TargetFilename = GameChunks.get_chunk<TargetFilename>().Value;
-            if (GameChunks.get_chunk<AppMenu>() != null) Menu = GameChunks.get_chunk<AppMenu>();
-            if (GameChunks.get_chunk<AppHeader>() != null) Header = GameChunks.get_chunk<AppHeader>();
-            if (GameChunks.get_chunk<SoundBank>() != null) Sounds = GameChunks.get_chunk<SoundBank>();
-            if (GameChunks.get_chunk<MusicBank>() != null) Music = GameChunks.get_chunk<MusicBank>();
-            if (GameChunks.get_chunk<FontBank>() != null) Fonts = GameChunks.get_chunk<FontBank>();
-            if (GameChunks.get_chunk<ImageBank>() != null) Images = GameChunks.get_chunk<ImageBank>();
-            if (GameChunks.get_chunk<AppIcon>() != null) Icon = GameChunks.get_chunk<AppIcon>();
-            if (GameChunks.get_chunk<GlobalStrings>() != null) GStrings = GameChunks.get_chunk<GlobalStrings>();
-            if (GameChunks.get_chunk<GlobalValues>() != null) GValues = GameChunks.get_chunk<GlobalValues>();
-            if (GameChunks.get_chunk<FrameItems>() != null) Frameitems = GameChunks.get_chunk<FrameItems>();
+            //Can only be accessed from here AFTER loading all the chunks
+            //If you need it AT LOADING - use ChunkList.get_chunk<ChunkType>();
+            if (GameChunks.GetChunk<AppName>() != null) Name = GameChunks.GetChunk<AppName>().Value;
+            if (GameChunks.GetChunk<Copyright>() != null) Copyright = GameChunks.GetChunk<Copyright>().Value;
+            if (GameChunks.GetChunk<AppAuthor>()!=null) Author = GameChunks.GetChunk<AppAuthor>().Value;
+            if (GameChunks.GetChunk<EditorFilename>() != null) EditorFilename = GameChunks.GetChunk<EditorFilename>().Value;
+            if (GameChunks.GetChunk<TargetFilename>() != null) TargetFilename = GameChunks.GetChunk<TargetFilename>().Value;
+            if (GameChunks.GetChunk<AppMenu>() != null) Menu = GameChunks.GetChunk<AppMenu>();
+            if (GameChunks.GetChunk<AppHeader>() != null) Header = GameChunks.GetChunk<AppHeader>();
+            if (GameChunks.GetChunk<SoundBank>() != null) Sounds = GameChunks.GetChunk<SoundBank>();
+            if (GameChunks.GetChunk<MusicBank>() != null) Music = GameChunks.GetChunk<MusicBank>();
+            if (GameChunks.GetChunk<FontBank>() != null) Fonts = GameChunks.GetChunk<FontBank>();
+            if (GameChunks.GetChunk<ImageBank>() != null) Images = GameChunks.GetChunk<ImageBank>();
+            if (GameChunks.GetChunk<AppIcon>() != null) Icon = GameChunks.GetChunk<AppIcon>();
+            if (GameChunks.GetChunk<GlobalStrings>() != null) GStrings = GameChunks.GetChunk<GlobalStrings>();
+            if (GameChunks.GetChunk<GlobalValues>() != null) GValues = GameChunks.GetChunk<GlobalValues>();
+            if (GameChunks.GetChunk<FrameItems>() != null) Frameitems = GameChunks.GetChunk<FrameItems>();
             Frames = GameChunks.Frames; //Its a list, so i have to manually parse them in chunk list. 
 
-            Print();
+            //Print();
         }
         public void Print()
         {
@@ -136,12 +133,12 @@ namespace NetMFAPatcher.MMFParser.Data
                 foreach (var item in Frames)
                 {
                     Logger.Log($"       Frame: {item.Name,25}, Size: {item.Width,4}x{item.Height,4}, Number of objects: {item.CountOfObjs,5}", true, ConsoleColor.Cyan);
-                    var objects = item.Chunks.get_chunk<ObjectInstances>();
+                    var objects = item.Chunks.GetChunk<ObjectInstances>();
                     if (objects != null)
                     {
                         foreach (var obj in objects.Items)
                         {
-                            Logger.Log($"           Object: {obj.Name}", true, ConsoleColor.Green);
+                            Logger.Log($"           Object: {obj.Name} - {obj.Handle} - {obj.FrameItem.ObjectType}", true, ConsoleColor.Green);
                         }
                     }
 

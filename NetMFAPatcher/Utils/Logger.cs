@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace NetMFAPatcher.Utils
+namespace DotNetCTFDumper.Utils
 {
     public static class Logger
     {

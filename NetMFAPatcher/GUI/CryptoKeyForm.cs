@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using Be.Windows.Forms;
-using NetMFAPatcher.Utils;
+using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher.GUI
+namespace DotNetCTFDumper.GUI
 {
     public partial class CryptoKeyForm : Form
     {

@@ -1,11 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
-using System.Management.Instrumentation;
 using System.Runtime.InteropServices;
-using System.Text;
 
-namespace NetMFAPatcher.Utils
+namespace DotNetCTFDumper.Utils
 {
     class Decryption
     {

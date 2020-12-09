@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using NetMFAPatcher.MMFParser.Data;
-using NetMFAPatcher.Utils;
+using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher.MMFParser.MFALoaders
+namespace DotNetCTFDumper.MMFParser.MFALoaders
 {
     class ChunkList : DataLoader//This is used for MFA reading/writing
     {

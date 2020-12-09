@@ -5,13 +5,13 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using NetMFAPatcher.GUI;
-using NetMFAPatcher.MMFParser;
-using NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters;
-using NetMFAPatcher.MMFParser.ChunkLoaders.Objects;
-using NetMFAPatcher.MMFParser.Data;
+using DotNetCTFDumper.GUI;
+using DotNetCTFDumper.MMFParser;
+using DotNetCTFDumper.MMFParser.ChunkLoaders.Events.Parameters;
+using DotNetCTFDumper.MMFParser.ChunkLoaders.Objects;
+using DotNetCTFDumper.MMFParser.Data;
 
-namespace NetMFAPatcher.Utils
+namespace DotNetCTFDumper.Utils
 {
     static class Helper
     {
@@ -181,10 +181,14 @@ namespace NetMFAPatcher.Utils
 
         public static void OnImageSaved(int index, int all)
         {
-            Program.MyForm.UpdateImageBar(index, all);
+           Program.MyForm.UpdateImageBar(index, all);
         }
 
         public static void OnSoundSaved(int index, int all)
+        {
+            Program.MyForm.UpdateSoundBar(index, all);
+        }
+        public static void OnMusicSaved(int index, int all)
         {
             Program.MyForm.UpdateSoundBar(index, all);
         }
@@ -283,6 +287,17 @@ namespace NetMFAPatcher.Utils
 
             // Step 3: return the new array.
             return result;
+        }
+
+        public static void WriteWriter(this ByteWriter writer, ByteWriter toWrite)
+        {
+            var endPos = toWrite.Tell();
+            toWrite.Seek(0);
+            for (int i = 0; i < endPos; i++)
+            {
+                writer.WriteInt8(((MemoryStream)(toWrite.BaseStream)).GetBuffer()[i]);
+            }
+
         }
     }
 }

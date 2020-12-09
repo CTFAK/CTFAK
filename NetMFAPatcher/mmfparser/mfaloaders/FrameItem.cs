@@ -1,9 +1,9 @@
 ﻿using System;
-using NetMFAPatcher.MMFParser.Data;
-using NetMFAPatcher.MMFParser.MFALoaders.mfachunks;
-using NetMFAPatcher.Utils;
+using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.MMFParser.MFALoaders.mfachunks;
+using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher.MMFParser.MFALoaders
+namespace DotNetCTFDumper.MMFParser.MFALoaders
 {
     public class FrameItem : DataLoader
     {

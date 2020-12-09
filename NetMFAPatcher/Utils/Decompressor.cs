@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Windows.Forms;
 
-namespace NetMFAPatcher.Utils
+namespace DotNetCTFDumper.Utils
 {
     public static class Decompressor
     {

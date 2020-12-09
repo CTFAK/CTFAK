@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
-using NetMFAPatcher.Utils;
-using static NetMFAPatcher.MMFParser.Data.ChunkList;
+using DotNetCTFDumper.Utils;
+using static DotNetCTFDumper.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.MMFParser.ChunkLoaders
+namespace DotNetCTFDumper.MMFParser.ChunkLoaders
 {
     public class AppIcon : ChunkLoader
     {
@@ -28,7 +24,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
         public override void Read()
         {
-            return;
+            
             Logger.Log("dumpingIcon");
             Reader.ReadBytes(Reader.ReadInt32() - 4);
             List<byte> colorIndexes = new List<byte>();
@@ -76,7 +72,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
                 bmp.Save("icon.png");
             }
 
-            File.WriteAllBytes("fatcock.raw", _points.ToArray());
+            
         }
 
 

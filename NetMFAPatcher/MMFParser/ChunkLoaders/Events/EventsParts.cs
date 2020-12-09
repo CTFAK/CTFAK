@@ -1,13 +1,9 @@
-﻿using NetMFAPatcher.MMFParser.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NetMFAPatcher.Utils;
+using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.Utils;
 
-
-namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events
+namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Events
 {
     public class Condition : DataLoader
     {

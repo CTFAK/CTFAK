@@ -1,28 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NetMFAPatcher.Utils;
+using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher.MMFParser.Data
+namespace DotNetCTFDumper.MMFParser.Data
 {
     public class Exe
     {
         public PackData PackData;
         public GameData GameData;
-        public static Exe LatestInst;
+        public static Exe Instance;
         public void ParseExe(ByteReader exeReader)
         {
-            Exe.LatestInst = this;
+            
             Logger.Log($"Executable: {Settings.GameName}\n", true, ConsoleColor.DarkRed);
 
             string sig = exeReader.ReadAscii(2);
             Logger.Log("EXE Header: " + sig, true, ConsoleColor.Yellow);
             if (sig != "MZ")
             {
-                Console.WriteLine("Invalid executable signature");
+                Logger.Log("Invalid executable signature",true,ConsoleColor.Red);
             }
 
             exeReader.Seek(60, SeekOrigin.Begin);

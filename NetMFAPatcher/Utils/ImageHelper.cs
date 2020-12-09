@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NetMFAPatcher.Utils
+namespace DotNetCTFDumper.Utils
 {
     public static class ImageHelper
     {
@@ -73,9 +73,12 @@ namespace NetMFAPatcher.Utils
                     byte g = (byte) ((newShort & 992) >> 5);
                     byte b = (byte) ((newShort & 31));
 
-                    colorArray[(y * stride) + (x * 4) + 0] = (byte) (r << 3);
-                    colorArray[(y * stride) + (x * 4) + 1] = (byte) (g << 3);
-                    colorArray[(y * stride) + (x * 4) + 2] = (byte) (b << 3);
+                    r=(byte) (r << 3);
+                    g=(byte) (g << 3);
+                    b=(byte) (b << 3);
+                    colorArray[(y * stride) + (x * 4) + 2] = r;
+                    colorArray[(y * stride) + (x * 4) + 1] = g;
+                    colorArray[(y * stride) + (x * 4) + 0] = b;
                     colorArray[(y * stride) + (x * 4) + 3] = 255;
                     position += 2;
                 }

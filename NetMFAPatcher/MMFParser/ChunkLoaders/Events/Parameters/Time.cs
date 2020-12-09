@@ -1,6 +1,6 @@
-﻿using NetMFAPatcher.Utils;
+﻿using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters
+namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Events.Parameters
 {
     class Time : ParameterCommon
     {

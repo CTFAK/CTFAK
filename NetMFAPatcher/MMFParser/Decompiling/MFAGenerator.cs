@@ -1,8 +1,8 @@
 ﻿using System.IO;
-using NetMFAPatcher.MMFParser.Data;
-using NetMFAPatcher.Utils;
+using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher.MMFParser.Decompiling
+namespace DotNetCTFDumper.MMFParser.Decompiling
 {
     public static class MFAGenerator
     {
@@ -16,11 +16,11 @@ namespace NetMFAPatcher.MMFParser.Decompiling
 
             template.Read(); //Loading template
 
-            var gameMFA = Pame2Mfa.Translate(template, Exe.LatestInst.GameData); //Translation
+            var gameMFA = template;//Pame2Mfa.Translate(template, Exe.LatestInst.GameData); //Translation
 
             var mfaWriter =
                 new ByteWriter(
-                    Settings.GameName.Length > 0 ? $"{Settings.DumpPath}\\{Exe.LatestInst.GameData.Name}.mfa" : "out.mfa",
+                    Settings.GameName.Length > 0 ? $"{Settings.DumpPath}\\{Exe.Instance.GameData.Name}.mfa" : "out.mfa",
                     FileMode.Create); //New writer for new MFA
             gameMFA.Write(mfaWriter); //Writing new MFA
         }

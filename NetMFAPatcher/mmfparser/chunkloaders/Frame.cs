@@ -1,18 +1,10 @@
-﻿
-using NetMFAPatcher.MMFParser.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
-using NetMFAPatcher.MMFParser.ChunkLoaders.Events.Parameters;
-using NetMFAPatcher.MMFParser.MFALoaders;
-using NetMFAPatcher.Utils;
-using ChunkList = NetMFAPatcher.MMFParser.Data.ChunkList;
+using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.Utils;
+using ChunkList = DotNetCTFDumper.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.MMFParser.ChunkLoaders
+namespace DotNetCTFDumper.MMFParser.ChunkLoaders
 {
     class FrameName : StringChunk
     {
@@ -76,28 +68,33 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
         public override void Read()
         {
+            
             var frameReader = new ByteReader(Chunk.ChunkData);
             Chunks = new ChunkList();
+            
 
             Chunks.Verbose = false;
             Chunks.Read(frameReader);
-
-            var name = Chunks.get_chunk<FrameName>();
+            //return;
+            var name = Chunks.GetChunk<FrameName>();
             if (name != null) //Just to be sure
             {
                 this.Name = name.Value;
+                Console.WriteLine("Reading Frame: "+Name);
             }
-            var password = Chunks.get_chunk<FramePassword>();
+            var password = Chunks.GetChunk<FramePassword>();
             if (password != null) //Just to be sure
             {
                 this.Password = password.Value;
             }
-            Header = Chunks.get_chunk<FrameHeader>();
+            
+            
+            Header = Chunks.GetChunk<FrameHeader>();
             Width = Header.Width;
             Height = Header.Height;
             Background = Header.Background;
             //Flags = header.Flags;
-            Objects = Chunks.get_chunk<ObjectInstances>();
+            Objects = Chunks.GetChunk<ObjectInstances>();
             if(Objects!=null)
             {
                 CountOfObjs = Objects.CountOfObjects;              
@@ -247,20 +244,19 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
         public override void Read()
         {
-           
-            Handle = Reader.ReadUInt16();
-            //if (Handle > 0) Handle -= 1;
-            ObjectInfo = Reader.ReadUInt16();
+            ObjectInfo = (ushort) Reader.ReadInt16();
+            Handle = (ushort) Reader.ReadInt16();
+            
             X = Reader.ReadInt32();
             Y = Reader.ReadInt32();
             ParentType = Reader.ReadInt16();
             ParentHandle = Reader.ReadInt16();
             Layer = Reader.ReadInt16();
-            Reader.Skip(2);
+            var reserved = Reader.ReadInt16();
+            
             //-------------------------
             if (FrameItem != null) Name = FrameItem.Name;
             else Name = $"UNKNOWN-{Handle}";
-           Console.WriteLine("ObjectInfoHandle: "+Handle);
 
         }
 
@@ -268,7 +264,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         {
             get
             {
-                return Exe.LatestInst.GameData.GameChunks.get_chunk<FrameItems>().GetItemByHandle(Handle);
+                return Exe.Instance.GameData.GameChunks.GetChunk<FrameItems>().FromHandle(Handle);
             }
         }
 
@@ -284,7 +280,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
                 $"Name: {Name}",
                 $"Type:{(Constants.ObjectType)FrameItem.ObjectType} - {FrameItem.ObjectType}",
                 $"Position: {X,5}x{Y,5}",
-                $"Size: CUMxCUM"
+                $"Size: NotImplementedYet"
 
             };
         }

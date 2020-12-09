@@ -1,12 +1,11 @@
 ﻿using System;
-using NetMFAPatcher.MMFParser.Data;
 using System.Collections.Generic;
-using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
-using NetMFAPatcher.MMFParser.ChunkLoaders.Objects;
-using NetMFAPatcher.Utils;
-using static NetMFAPatcher.MMFParser.Data.ChunkList;
+using DotNetCTFDumper.MMFParser.ChunkLoaders.Objects;
+using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.Utils;
+using static DotNetCTFDumper.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.MMFParser.ChunkLoaders
+namespace DotNetCTFDumper.MMFParser.ChunkLoaders
 {
     public class ObjectInfo : ChunkLoader
     {
@@ -60,13 +59,13 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
                 if (loader is ObjectName)
                 {
                     
-                    var actualLoader = infoChunks.get_loader<ObjectName>(loader);
+                    var actualLoader = (ObjectName)(loader);
                     Name = actualLoader.Value;
                 }
                 else if (loader is ObjectHeader)
                 {
                     
-                    var actualLoader = infoChunks.get_loader<ObjectHeader>(loader);
+                    var actualLoader = (ObjectHeader)(loader);
                     Handle = actualLoader.Handle;
                     ObjectType = actualLoader.ObjectType;
                     Flags = actualLoader.Flags;
@@ -84,7 +83,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
             if (Properties != null)
             {
-                //Properties.ReadNew(ObjectType);
+                //Properties.ReadNew(ObjectType,this);
             }
         }
     }
@@ -103,7 +102,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
     public class ObjectProperties : ChunkLoader
     {
         public bool IsCommon;
-        public ObjectCommon Loader;
+        public ChunkLoader Loader;
 
         public ObjectProperties(ByteReader reader) : base(reader)
         {
@@ -113,17 +112,25 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         {
         }
 
-        public void ReadNew(int ObjectType)
+        public void ReadNew(int ObjectType,ObjectInfo parent)
         {
-            Reader.Seek(0);
-            //var objType = 2;//THIS IS SHITCODE
-            IsCommon = true;//ITS NOT DONE
-            if (ObjectType == 2)
+            
+            //TODO: Fix shit
+            Console.WriteLine("Reading properties of "+parent.Name);
+            if (ObjectType == 1)//Backdrop
             {
-                Loader = new ObjectCommon(Reader);
+                Loader = new Backdrop(Reader);
+            }
+            else if(ObjectType==2|| ObjectType==7)
+            {
+                IsCommon = true;
+                Loader = new ObjectCommon(Reader,parent);
+            }
+
+            if (Loader != null)
+            {
                 Loader.Read();
             }
-            
         }
 
         public override void Read()

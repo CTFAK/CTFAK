@@ -1,13 +1,13 @@
 ﻿using System.IO;
-using System.Runtime.Remoting.Messaging;
-using NetMFAPatcher.Utils;
+using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher
+namespace DotNetCTFDumper
 {
     public static class Settings
     {
         public static bool DumpImages;
         public static bool DumpSounds;
+        public static bool DumpMusic;
         public static bool SaveChunks;
         public static bool Verbose;
         
@@ -16,6 +16,8 @@ namespace NetMFAPatcher
         public static string DumpPath => $"DUMP\\{GameName}";
         public static string ImagePath=>$"{DumpPath}\\ImageBank";
         public static string SoundPath=>$"{DumpPath}\\SoundBank";
+        public static string MusicPath=>$"{DumpPath}\\MusicBank";
+
         public static string ChunkPath=>$"{DumpPath}\\Chunks";
         public static string ExtensionPath=>$"{DumpPath}\\Extensions";
         
@@ -29,7 +31,7 @@ namespace NetMFAPatcher
         public static bool DoMFA;
         public static bool UseGUI;
 
-        public static string DumperVersion = "CTFAN 0.1.1 Debug";
+        public static string DumperVersion = "CTFAN 0.1.1-c Debug";
 
         public static byte[] EncryptionKey=>Decryption.DecryptionKey;
         

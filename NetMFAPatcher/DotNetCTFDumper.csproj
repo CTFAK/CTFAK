@@ -9,7 +9,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{86D99F9E-98FB-4E50-AB68-F5C115850C33}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>NetMFAPatcher</RootNamespace>
+    <RootNamespace>DotNetCTFDumper</RootNamespace>
     <AssemblyName>DotNetCTFDumper</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -67,12 +67,13 @@
     <OutputPath>bin\x64\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
+    <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Be.Windows.Forms.HexBox, Version=1.6.1.0, Culture=neutral, PublicKeyToken=null">
@@ -147,6 +148,8 @@
     <Compile Include="MMFParser\ChunkLoaders\FrameItems.cs" />
     <Compile Include="MMFParser\ChunkLoaders\ObjectNames.cs" />
     <Compile Include="MMFParser\ChunkLoaders\Objects\Animations.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Objects\Backdrop.cs" />
+    <Compile Include="MMFParser\ChunkLoaders\Objects\Counters.cs" />
     <Compile Include="MMFParser\ChunkLoaders\Objects\ObjectCommon.cs" />
     <Compile Include="MMFParser\ChunkLoaders\Objects\Value.cs" />
     <Compile Include="MMFParser\Data\DataLoader.cs" />

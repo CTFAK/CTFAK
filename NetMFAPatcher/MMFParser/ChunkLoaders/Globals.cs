@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NetMFAPatcher.Utils;
-using static NetMFAPatcher.MMFParser.Data.ChunkList;
+using DotNetCTFDumper.Utils;
+using static DotNetCTFDumper.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.MMFParser.ChunkLoaders
+namespace DotNetCTFDumper.MMFParser.ChunkLoaders
 {
     public class GlobalValues : ChunkLoader
     {

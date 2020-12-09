@@ -1,8 +1,8 @@
 ﻿using System.Windows.Forms;
-using NetMFAPatcher.MMFParser.ChunkLoaders;
-using NetMFAPatcher.MMFParser.Data;
+using DotNetCTFDumper.MMFParser.ChunkLoaders;
+using DotNetCTFDumper.MMFParser.Data;
 
-namespace NetMFAPatcher.GUI
+namespace DotNetCTFDumper.GUI
 {
     public class ChunkNode:TreeNode
     {

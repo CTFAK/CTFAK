@@ -1,15 +1,10 @@
-﻿using NetMFAPatcher.MMFParser.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
-using NetMFAPatcher.MMFParser.MFALoaders;
-using NetMFAPatcher.Utils;
-using static NetMFAPatcher.MMFParser.Data.ChunkList;
+using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.Utils;
+using static DotNetCTFDumper.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.MMFParser.ChunkLoaders
+namespace DotNetCTFDumper.MMFParser.ChunkLoaders
 {
     public class FrameItems : ChunkLoader
     {
@@ -38,7 +33,6 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
             for (int i = 0; i < NumberOfItems; i++)
             {
                 var item = new ObjectInfo(Reader);
-                item.Verbose = false;
                 item.Read();
                 ItemDict.Add(item.Handle, item);
                 Names.Add(item.Name);
@@ -48,10 +42,22 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
         }
 
-        public ObjectInfo GetItemByHandle(int handle)
+        public ObjectInfo FromHandle(int handle)
         {
             ItemDict.TryGetValue(handle, out var ret);
             return ret;
+        }
+
+        public List<ObjectInfo> FromName(string name)
+        {
+            var tempList = new List<ObjectInfo>();
+            foreach (var key in ItemDict.Keys)
+            {
+                var item = ItemDict[key];
+                if(item.Name==name)tempList.Add(item);
+            }
+
+            return tempList;
         }
     }
 }

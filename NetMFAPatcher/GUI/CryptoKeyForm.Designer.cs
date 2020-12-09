@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace NetMFAPatcher.GUI
+namespace DotNetCTFDumper.GUI
 {
     partial class CryptoKeyForm
     {
@@ -43,6 +43,7 @@ namespace NetMFAPatcher.GUI
             this.charBox.BackColor = System.Drawing.Color.Black;
             this.charBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.charBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.charBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.charBox.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
             this.charBox.Location = new System.Drawing.Point(0, 0);
             this.charBox.Name = "charBox";
@@ -57,7 +58,7 @@ namespace NetMFAPatcher.GUI
             this.hexBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.hexBox1.ColumnInfoVisible = true;
             this.hexBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hexBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.hexBox1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.hexBox1.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
             this.hexBox1.LineInfoVisible = true;
             this.hexBox1.Location = new System.Drawing.Point(0, 20);
@@ -75,6 +76,7 @@ namespace NetMFAPatcher.GUI
             this.plusButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.plusButton.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
             this.plusButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.plusButton.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.plusButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
             this.plusButton.Location = new System.Drawing.Point(616, 0);
             this.plusButton.Name = "plusButton";
@@ -89,6 +91,7 @@ namespace NetMFAPatcher.GUI
             this.minusButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.minusButton.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
             this.minusButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.minusButton.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.minusButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
             this.minusButton.Location = new System.Drawing.Point(589, 0);
             this.minusButton.Name = "minusButton";

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NetMFAPatcher.MMFParser
+﻿namespace DotNetCTFDumper.MMFParser
 {
     public static class Constants
     {
@@ -108,7 +102,7 @@ namespace NetMFAPatcher.MMFParser
             DemoFilePath=13123,
             RandomSeed=13124,
             FrameLayerEffects=13125,
-            BlurayFrameOptions=13126,
+            BluRayFrameOptions=13126,
             MvTimerBase=13127,
             MosaicImageTable=13128,
             FrameEffects=13129,

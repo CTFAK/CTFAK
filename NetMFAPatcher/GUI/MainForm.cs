@@ -4,24 +4,26 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
-using Be.Windows.Forms;
-using NetMFAPatcher.MMFParser.ChunkLoaders;
-using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
-using NetMFAPatcher.MMFParser.Data;
-using NetMFAPatcher.MMFParser.Decompiling;
-using NetMFAPatcher.Utils;
+using DotNetCTFDumper.MMFParser.ChunkLoaders;
+using DotNetCTFDumper.MMFParser.ChunkLoaders.Banks;
+using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.MMFParser.Decompiling;
+using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher.GUI
+namespace DotNetCTFDumper.GUI
 {
     public partial class MainForm : Form
     {
         public static bool IsDumpingImages;
         public static bool IsDumpingSounds;
+        public static bool IsDumpingMusics;
         public static bool BreakImages;
         public static bool BreakSounds;
+        public static bool BreakMusics;
         public Thread LoaderThread;
         public Color ColorTheme = Color.FromArgb(223,114,38);
         public PackDataForm PackForm;
+        
 
         public MainForm()
         {
@@ -32,8 +34,8 @@ namespace NetMFAPatcher.GUI
             showHexBtn.ForeColor = ColorTheme;
             FolderBTN.ForeColor = ColorTheme; 
             MFABtn.ForeColor = ColorTheme;
-            ImagesButton.ForeColor = ColorTheme;
-            SoundsButton.ForeColor = ColorTheme;
+            imagesButton.ForeColor = ColorTheme;
+            soundsButton.ForeColor = ColorTheme;
             packDataBtn.ForeColor = ColorTheme;
             //Menu
             saveChunkBtn.ForeColor = ColorTheme;
@@ -46,13 +48,15 @@ namespace NetMFAPatcher.GUI
             button1.ForeColor = ColorTheme;
             GameInfo.ForeColor = ColorTheme;
             loadingLabel.ForeColor = ColorTheme;
-            ImagesLabel.ForeColor = ColorTheme;
-            SoundsLabel.ForeColor=ColorTheme;
+            imageLabel.ForeColor = ColorTheme;
+            soundLabel.ForeColor=ColorTheme;
             //Other
             treeView1.ForeColor = ColorTheme;
             listBox1.ForeColor = ColorTheme;
-            ImagesBar.ForeColor = ColorTheme;
-            SoundBar.ForeColor = ColorTheme;
+            imageBar.ForeColor = ColorTheme;
+            soundBar.ForeColor = ColorTheme;
+            
+            
             
 
         }
@@ -60,11 +64,20 @@ namespace NetMFAPatcher.GUI
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
             var worker = new BackgroundWorker();
-            worker.DoWork += (senderA, eA) => { StartReading(); };
-            worker.RunWorkerCompleted += (senderA, eA) => { AfterLoad(); };
+            worker.DoWork += worker_DoWork;
+            worker.RunWorkerCompleted +=   worker_RunWorkerCompleted;
             worker.RunWorkerAsync();
         }
 
+        void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            StartReading();
+        }
+
+        void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            AfterLoad();
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             openFileDialog1.ShowDialog();
@@ -72,34 +85,34 @@ namespace NetMFAPatcher.GUI
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            listBox1.Items.Clear();
-
             loadingLabel.Visible = false;
+            listBox1.Items.Clear();
         }
-
+        
+        
         private void StartReading()
         {
             var path = openFileDialog1.FileName;
-            ImagesBar.Value = 0;
-            SoundBar.Value = 0;
+            Program.ReadFile(path, Settings.Verbose, Settings.DumpImages, Settings.DumpSounds);
+            imageBar.Value = 0;
+            soundBar.Value = 0;
             GameInfo.Text = "";
             loadingLabel.Visible = true;
-            ImagesLabel.Text = "0/0";
-            SoundsLabel.Text = "0/0";
-            ImageBox.Enabled = false;
-            SoundBox.Enabled = false;
-            ChunkBox.Enabled = false;
+            imageLabel.Text = "Using nonGUI mode";
+            soundLabel.Text = "Using nonGUI mode";
+
             MFABtn.Visible = false;
             FolderBTN.Visible = false;
-            ImagesButton.Visible = false;
-            SoundsButton.Visible = false;
+            imagesButton.Visible = false;
+            soundsButton.Visible = false;
+            musicsButton.Visible = false;
             cryptKeyBtn.Visible = false;
             showHexBtn.Visible = false;
             dumpSortedBtn.Visible = false;
             packDataBtn.Visible = false;
+            
 
-
-            Program.ReadFile(path, Settings.Verbose, Settings.DumpImages, Settings.DumpSounds);
+            
         }
 
         private void treeView1_AfterDblClick(object sender, EventArgs e)
@@ -129,34 +142,23 @@ namespace NetMFAPatcher.GUI
                 case "viewHexBtn":
                     ShowHex();
                     break;
-                
             }
-            
         }
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             var nodeChunk = ((ChunkNode) treeView1.SelectedNode).chunk;
             var nodeLoader = ((ChunkNode) treeView1.SelectedNode).loader;
-            Console.WriteLine("NodeChunk:"+nodeChunk!=null);
-            Console.WriteLine("NodeLoader:"+nodeLoader!=null);
             
-            ChunkList.Chunk chunk = null;
             listBox1.Items.Clear();
-            if (nodeChunk != null) chunk = nodeChunk;
-            //if (nodeLoader.Chunk != null) chunk = nodeLoader.Chunk;
-            if (chunk != null)
+            if (nodeChunk != null)
             {
-                chunk = nodeChunk;
-                listBox1.Items.Add($"Name: {chunk.Name}");
-                listBox1.Items.Add($"Id: {chunk.Id}");
-                listBox1.Items.Add($"Flag: {chunk.Flag}");
-                listBox1.Items.Add($"Size: {chunk.Size.ToPrettySize()}");
-                if (chunk.DecompressedSize>-1)listBox1.Items.Add($"Decompressed Size: {chunk.DecompressedSize.ToPrettySize()}");
                 
-                    
-                
-                
+                listBox1.Items.Add($"Name: {nodeChunk.Name}");
+                listBox1.Items.Add($"Id: {nodeChunk.Id}");
+                listBox1.Items.Add($"Flag: {nodeChunk.Flag}");
+                listBox1.Items.Add($"Size: {nodeChunk.Size.ToPrettySize()}");
+                if (nodeChunk.DecompressedSize>-1)listBox1.Items.Add($"Decompressed Size: {nodeChunk.DecompressedSize.ToPrettySize()}");
             }
             
             if (nodeLoader != null)
@@ -178,9 +180,9 @@ namespace NetMFAPatcher.GUI
 
         public void AfterLoad()
         {
-            GameData gameData = null;
-
-            gameData = Exe.LatestInst.GameData;
+            //GameData gameData = null;
+            var exe = Exe.Instance;
+            var gameData = exe.GameData;
 
 
             treeView1.Nodes.Clear();
@@ -199,11 +201,11 @@ namespace NetMFAPatcher.GUI
                 if (item.Loader is Frame frame)
                     foreach (var frmChunk in frame.Chunks.Chunks)
                     {
-                        var frameNode = Helper.GetChunkNode(frmChunk);//new ChunkNode(frmChunk.Name, frmChunk);
+                        var frameNode = Helper.GetChunkNode(frmChunk);
                         newNode.Nodes.Add(frameNode);
                         if (frameNode.loader is ObjectInstances)
                         {
-                            var objs = frame.Chunks.get_chunk<ObjectInstances>();
+                            var objs = frame.Chunks.GetChunk<ObjectInstances>();
                             if (objs != null)
                             {
                                 foreach (var frmitem in objs.Items)
@@ -216,13 +218,12 @@ namespace NetMFAPatcher.GUI
                     }
             }
 
-            ImageBox.Enabled = true;
-            SoundBox.Enabled = true;
-            ChunkBox.Enabled = true;
+            
             MFABtn.Visible = true;
             FolderBTN.Visible = true;
-            ImagesButton.Visible = true;
-            SoundsButton.Visible = true;
+            imagesButton.Visible = true;
+            soundsButton.Visible = true;
+            musicsButton.Visible = true;
             cryptKeyBtn.Visible = true;
             //showHexBtn.Visible = true;
             dumpSortedBtn.Visible = true;
@@ -230,17 +231,17 @@ namespace NetMFAPatcher.GUI
             GameInfo.Visible = true;
             loadingLabel.Visible = false;
             var toLog = "";
-            toLog += $"Title:{Exe.LatestInst.GameData.Name}\n";
-            toLog += $"Copyright:{Exe.LatestInst.GameData.Copyright}\n";
-            toLog += $"Editor Filename: {Exe.LatestInst.GameData.EditorFilename}\n";
-            toLog += $"Product Version: {Exe.LatestInst.GameData.ProductVersion}\n";
-            toLog += $"Build: {Exe.LatestInst.GameData.Build}\n";
-            toLog += $"Runtime Version: {Exe.LatestInst.GameData.RuntimeVersion}\n";
-            toLog += $"Number Of Images: {Exe.LatestInst.GameData.Images.NumberOfItems}\n";
-            toLog += $"Number Of Sounds: {Exe.LatestInst.GameData.Sounds.NumOfItems}\n";
-            toLog += $"Unique FrameItems: {Exe.LatestInst.GameData.Frameitems.NumberOfItems}\n";
-            toLog += $"Frame Count: {Exe.LatestInst.GameData.Frames.Count}\n";
-            toLog += $"Chunks Count: {Exe.LatestInst.GameData.GameChunks.Chunks.Count}\n";
+            toLog += $"Title:{Exe.Instance.GameData.Name}\n";
+            toLog += $"Copyright:{Exe.Instance.GameData.Copyright}\n";
+            toLog += $"Editor Filename: {Exe.Instance.GameData.EditorFilename}\n";
+            toLog += $"Product Version: {Exe.Instance.GameData.ProductVersion}\n";
+            toLog += $"Build: {Exe.Instance.GameData.Build}\n";
+            toLog += $"Runtime Version: {Exe.Instance.GameData.RuntimeVersion}\n";
+            toLog += $"Number Of Images: {Exe.Instance.GameData.Images.NumberOfItems}\n";
+            toLog += $"Number Of Sounds: {(Exe.Instance.GameData.Sounds!= null ?  Exe.Instance.GameData.Sounds.NumOfItems: 0)}\n";
+            toLog += $"Unique FrameItems: {Exe.Instance.GameData.Frameitems.NumberOfItems}\n";
+            toLog += $"Frame Count: {Exe.Instance.GameData.Frames.Count}\n";
+            toLog += $"Chunks Count: {Exe.Instance.GameData.GameChunks.Chunks.Count}\n";
             
 
 
@@ -251,38 +252,28 @@ namespace NetMFAPatcher.GUI
         }
 
 
-        private void ImageBox_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.DumpImages = ImageBox.Checked;
-            ImagesBar.Visible = ImageBox.Checked;
-            ImagesLabel.Visible = ImageBox.Checked;
-        }
-
-        private void SoundBox_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.DumpSounds = SoundBox.Checked;
-            SoundBar.Visible = SoundBox.Checked;
-            SoundsLabel.Visible = SoundBox.Checked;
-        }
-
-        private void ChunkBox_CheckedChanged(object sender, EventArgs e)
-        {
-            Settings.SaveChunks = ChunkBox.Checked;
-        }
+        
 
         public void UpdateImageBar(int index, int all)
         {
             all -= 1;
-            ImagesBar.Value = (int) (index / (float) all * 100);
-            ImagesLabel.Text = $"{index}/{all}";
+            imageBar.Value = (int) (index / (float) all * 100);
+            imageLabel.Text = $"{index}/{all}";
         }
 
         public void UpdateSoundBar(int index, int all)
         {
             all -= 1;
-            SoundBar.Value = (int) (index / (float) all * 100);
-            SoundsLabel.Text = $"{index}/{all}";
+            soundBar.Value = (int) (index / (float) all * 100);
+            soundLabel.Text = $"{index}/{all}";
         }
+        public void UpdateMusicBar(int index, int all)
+        {
+            all -= 1;
+            musicBar.Value = (int) (index / (float) all * 100);
+            musicLabel.Text = $"{index}/{all}";
+        }
+
 
         private void FolderBTN_Click(object sender, EventArgs e)
         {
@@ -294,79 +285,75 @@ namespace NetMFAPatcher.GUI
             MFAGenerator.BuildMFA();
         }
 
-        private void SoundsButton_Click(object sender, EventArgs e)
+        private void soundsButton_Click(object sender, EventArgs e)
         {
             if (!IsDumpingSounds)
             {
-                SoundBar.Visible = true;
-                SoundsLabel.Visible = true;
-                SoundsButton.Text = "Cancel";
+                soundBar.Visible = true;
+                soundLabel.Visible = true;
+                soundsButton.Text = "Cancel";
+                soundBar.Value = 0;
                 IsDumpingSounds = true;
+                BreakSounds = false;
                 var worker = new BackgroundWorker();
                 worker.DoWork += (senderA, eA) =>
                 {
-                    var cachedImgState = Settings.DumpSounds;
-                    Settings.DumpSounds = true;
-                    Exe.LatestInst.GameData.GameChunks.get_chunk<SoundBank>().Read();
-                    Settings.DumpSounds = cachedImgState;
+                    Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>().Read(true);
                 };
                 worker.RunWorkerCompleted += (senderA, eA) =>
                 {
-                    SoundBar.Visible = false;
-                    SoundsLabel.Visible = false;
+                    soundBar.Visible = false;
+                    soundLabel.Visible = false;
                     Logger.Log("Sounds done");
-                    SoundsButton.Text = "Dump Sounds";
+                    soundsButton.Text = "Dump Sounds";
                 };
                 worker.RunWorkerAsync();
             }
             else
             {
                 BreakSounds = true;
-                SoundBar.Visible = false;
-                SoundsLabel.Visible = false;
-                SoundsButton.Text = "Dump Sounds";
+                soundBar.Visible = false;
+                soundLabel.Visible = false;
+                soundsButton.Text = "Dump Sounds";
                 IsDumpingSounds = false;
             }
         }
 
-        private void ImagesButton_Click(object sender, EventArgs e)
+        private void imagesButton_Click(object sender, EventArgs e)
         {
             if (!IsDumpingImages)
             {
-                ImagesBar.Visible = true;
-                ImagesLabel.Visible = true;
-                ImagesButton.Text = "Cancel";
+                imageBar.Visible = true;
+                imageLabel.Visible = true;
+                imagesButton.Text = "Cancel";
+                imageBar.Value = 0;
                 IsDumpingImages = true;
-                //ImagesLabel.BackColor=Color.Transparent;
-                //ImagesLabel.ForeColor=Color.Red;
-
-                ;
+                BreakImages = false;
                 var worker = new BackgroundWorker();
                 worker.DoWork += (senderA, eA) =>
                 {
-                    var cachedImgState = Settings.DumpImages;
-                    Settings.DumpImages = true;
-                    Exe.LatestInst.GameData.GameChunks.get_chunk<ImageBank>().Read();
-                    Settings.DumpImages = cachedImgState;
+                    Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().Read(true,true);
                 };
                 worker.RunWorkerCompleted += (senderA, eA) =>
                 {
-                    ImagesBar.Visible = false;
-                    ImagesLabel.Visible = false;
-                    ImagesButton.Text = "Dump\nImages";
-                    Logger.Log("Images done");
+                    imageBar.Visible = false;
+                    imageLabel.Visible = false;
+                    Logger.Log("Images done",true,ConsoleColor.Yellow);
+                    imagesButton.Text = "Dump Images";
                 };
                 worker.RunWorkerAsync();
             }
             else
             {
                 BreakImages = true;
-                ImagesBar.Visible = false;
-                ImagesLabel.Visible = false;
-                ImagesButton.Text = "Dump\nImages";
+                imageBar.Visible = false;
+                imageLabel.Visible = false;
+                imagesButton.Text = "Dump Images";
                 IsDumpingImages = false;
             }
         }
+
+        
 
 
         private void cryptKeyBtn_Click(object sender, EventArgs e)
@@ -417,7 +404,27 @@ namespace NetMFAPatcher.GUI
 
         private void dumpSortedBtn_Click(object sender, EventArgs e)
         {
-            ImageDumper.DumpImages();
+            imageBar.Visible = true;
+            imageLabel.Visible = true;
+            var worker = new BackgroundWorker();
+            worker.DoWork += (senderA, eA) =>
+            {
+                
+                Settings.DumpImages = true;
+                var bank = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
+                bank.SaveImages=false;
+                bank.Read();
+                    
+            };
+            worker.RunWorkerCompleted += (senderA, eA) =>
+            {
+                imageBar.Visible = false;
+                imageLabel.Visible = false;
+                
+
+                ImageDumper.DumpImages();
+            };
+            worker.RunWorkerAsync();
         }
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -439,8 +446,45 @@ namespace NetMFAPatcher.GUI
 
         private void packDataBtn_Click(object sender, EventArgs e)
         {
-            if(PackForm==null)PackForm = new PackDataForm(Exe.LatestInst.PackData,ColorTheme);
+            if(PackForm==null)PackForm = new PackDataForm(Exe.Instance.PackData,ColorTheme);
             PackForm.Show();
+        }
+
+        private void musicsButton_Click(object sender, EventArgs e)
+        {
+            var bank = Exe.Instance.GameData.GameChunks.GetChunk<MusicBank>();
+            if (bank == null) return;
+            if (!IsDumpingMusics)
+            {
+                musicBar.Visible = true;
+                musicLabel.Visible = true;
+                musicsButton.Text = "Cancel";
+                musicBar.Value = 0;
+                IsDumpingMusics = true;
+                BreakMusics = false;
+                var worker = new BackgroundWorker();
+                worker.DoWork += (senderA, eA) =>
+                {
+                    Exe.Instance.GameData.GameChunks.GetChunk<MusicBank>().Read(true);
+                };
+                worker.RunWorkerCompleted += (senderA, eA) =>
+                {
+                    musicBar.Visible = false;
+                    musicLabel.Visible = false;
+                    Logger.Log("Musics done",true,ConsoleColor.Yellow);
+                    musicsButton.Text = "Dump Musics";
+                };
+                worker.RunWorkerAsync();
+            }
+            else
+            {
+                BreakMusics = true;
+                musicBar.Visible = false;
+                musicLabel.Visible = false;
+                musicsButton.Text = "Dump Musics";
+                IsDumpingMusics = false;
+            }
+            
         }
     }
 }

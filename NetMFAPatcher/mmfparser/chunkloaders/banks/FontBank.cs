@@ -1,7 +1,7 @@
-﻿using NetMFAPatcher.Utils;
-using static NetMFAPatcher.MMFParser.Data.ChunkList;
+﻿using DotNetCTFDumper.Utils;
+using static DotNetCTFDumper.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
+namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
 {
     public class FontBank : ChunkLoader
     {

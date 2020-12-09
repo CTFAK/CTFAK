@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using NetMFAPatcher.GUI;
-using NetMFAPatcher.Utils;
-using static NetMFAPatcher.MMFParser.Data.ChunkList;
+using DotNetCTFDumper.GUI;
+using DotNetCTFDumper.Utils;
+using static DotNetCTFDumper.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
+namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
 {
     public class SoundBank : ChunkLoader
     {
@@ -25,16 +25,24 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
             $"Number of sounds: {NumOfItems}"
             };
         }
+        public void Read(bool dump)
+        {
+            var cache = Settings.DumpSounds;
+            Settings.DumpSounds = dump;
+            Read();
+            Settings.DumpSounds = cache;
+
+        }
 
         public override void Read()
         {
             //Implementing for standalone-only because of my lazyness
             
-            if(!Settings.DoMFA) Reader.Seek(0);//Reset the reader to avoid bugs when dumping more than once
+            Reader.Seek(0);//Reset the reader to avoid bugs when dumping more than once
             Items = new List<SoundItem>();
             NumOfItems = Reader.ReadInt32();
             Logger.Log("Found " + NumOfItems + " sounds");
-            if (!Settings.DumpSounds&&!Settings.DoMFA) return;
+            if (!Settings.DumpSounds) return;
 
             for (int i = 0; i < NumOfItems; i++)
             {
@@ -107,6 +115,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
         public int Flags;
         public bool IsCompressed = true;
 
+        
         public override void Read()
         {
             var start = Reader.Tell();

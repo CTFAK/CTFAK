@@ -1,6 +1,6 @@
-﻿using NetMFAPatcher.Utils;
+﻿using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher.MMFParser.MFALoaders.mfachunks
+namespace DotNetCTFDumper.MMFParser.MFALoaders.mfachunks
 {
     class Active : AnimationObject
     {

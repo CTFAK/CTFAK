@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using NetMFAPatcher.MMFParser.Data;
-using NetMFAPatcher.Utils;
+using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher.MMFParser.ChunkLoaders.Objects
+namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Objects
 {
     public class AlterableValues:ChunkLoader
     {

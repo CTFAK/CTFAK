@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace NetMFAPatcher.GUI
+namespace DotNetCTFDumper.GUI
 {
     partial class HexViewForm
     {
@@ -40,6 +40,7 @@ namespace NetMFAPatcher.GUI
             // rawBox
             // 
             this.rawBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rawBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.rawBox.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
             this.rawBox.Location = new System.Drawing.Point(0, 0);
             this.rawBox.Name = "rawBox";
@@ -55,7 +56,7 @@ namespace NetMFAPatcher.GUI
             this.hexBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.hexBox1.ColumnInfoVisible = true;
             this.hexBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hexBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.hexBox1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.hexBox1.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
             this.hexBox1.LineInfoVisible = true;
             this.hexBox1.Location = new System.Drawing.Point(0, 28);
@@ -72,6 +73,7 @@ namespace NetMFAPatcher.GUI
             // sizeLabel
             // 
             this.sizeLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.sizeLabel.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.sizeLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
             this.sizeLabel.Location = new System.Drawing.Point(0, 369);
             this.sizeLabel.Name = "sizeLabel";

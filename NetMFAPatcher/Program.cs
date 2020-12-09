@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using NetMFAPatcher.GUI;
-using NetMFAPatcher.MMFParser.Data;
-using NetMFAPatcher.MMFParser.Decompiling;
-using NetMFAPatcher.Utils;
+using DotNetCTFDumper.GUI;
+using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.MMFParser.Decompiling;
+using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher
+namespace DotNetCTFDumper
 {
     internal class Program
     {
@@ -73,16 +73,19 @@ namespace NetMFAPatcher
             Settings.DumpImages = dumpImages;
             Settings.DumpSounds = dumpSounds;
             Settings.Verbose = verbose;
+            var exeReader = new ByteReader(path, FileMode.OpenOrCreate);
+            var currentExe = new Exe();
+            Exe.Instance = currentExe;
+            currentExe.ParseExe(exeReader);
+            Logger.Log("Finished!", true, ConsoleColor.Yellow);
+            return;
             if (File.Exists(path))
             {
                 if (path.EndsWith(".exe"))
                 {
                     Settings.DoMFA = false;
                    
-                    var exeReader = new ByteReader(path, FileMode.OpenOrCreate);
-                    var currentExe = new Exe();
-                    currentExe.ParseExe(exeReader);
-                    Logger.Log("Finished!", true, ConsoleColor.Yellow);
+                   
                 }
                 else if (path.EndsWith(".mfa"))
                 {
@@ -106,7 +109,9 @@ namespace NetMFAPatcher
         {
             Directory.CreateDirectory($"{Settings.ImagePath}");
             Directory.CreateDirectory($"{Settings.SoundPath}");
+            Directory.CreateDirectory($"{Settings.MusicPath}");
             Directory.CreateDirectory($"{Settings.ChunkPath}");
+
             Directory.CreateDirectory($"{Settings.ExtensionPath}");
 
 

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using NetMFAPatcher.MMFParser.Data;
-using NetMFAPatcher.Utils;
+using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher.MMFParser.MFALoaders.mfachunks
+namespace DotNetCTFDumper.MMFParser.MFALoaders.mfachunks
 {
     class Movements : DataLoader
     {

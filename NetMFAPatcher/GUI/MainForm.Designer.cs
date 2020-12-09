@@ -1,7 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
-
-namespace NetMFAPatcher.GUI
+﻿namespace DotNetCTFDumper.GUI
 {
     partial class MainForm
     {
@@ -39,17 +36,14 @@ namespace NetMFAPatcher.GUI
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.GameInfo = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.ImageBox = new System.Windows.Forms.CheckBox();
-            this.SoundBox = new System.Windows.Forms.CheckBox();
-            this.ChunkBox = new System.Windows.Forms.CheckBox();
-            this.ImagesBar = new System.Windows.Forms.ProgressBar();
-            this.ImagesLabel = new System.Windows.Forms.Label();
-            this.SoundsLabel = new System.Windows.Forms.Label();
-            this.SoundBar = new System.Windows.Forms.ProgressBar();
+            this.imageBar = new System.Windows.Forms.ProgressBar();
+            this.imageLabel = new System.Windows.Forms.Label();
+            this.soundLabel = new System.Windows.Forms.Label();
+            this.soundBar = new System.Windows.Forms.ProgressBar();
             this.FolderBTN = new System.Windows.Forms.Button();
             this.MFABtn = new System.Windows.Forms.Button();
-            this.SoundsButton = new System.Windows.Forms.Button();
-            this.ImagesButton = new System.Windows.Forms.Button();
+            this.soundsButton = new System.Windows.Forms.Button();
+            this.imagesButton = new System.Windows.Forms.Button();
             this.loadingLabel = new System.Windows.Forms.Label();
             this.cryptKeyBtn = new System.Windows.Forms.Button();
             this.showHexBtn = new System.Windows.Forms.Button();
@@ -58,6 +52,9 @@ namespace NetMFAPatcher.GUI
             this.saveChunkBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.viewHexBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.packDataBtn = new System.Windows.Forms.Button();
+            this.musicsButton = new System.Windows.Forms.Button();
+            this.musicBar = new System.Windows.Forms.ProgressBar();
+            this.musicLabel = new System.Windows.Forms.Label();
             this.ChunkCombo.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -143,100 +140,61 @@ namespace NetMFAPatcher.GUI
             this.label1.TabIndex = 4;
             this.label1.Text = "CTFDumper 0.1.1 Debug";
             // 
-            // ImageBox
+            // imageBar
             // 
-            this.ImageBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ImageBox.ForeColor = System.Drawing.Color.Lime;
-            this.ImageBox.Location = new System.Drawing.Point(9, 239);
-            this.ImageBox.Name = "ImageBox";
-            this.ImageBox.Size = new System.Drawing.Size(104, 24);
-            this.ImageBox.TabIndex = 5;
-            this.ImageBox.Text = "Dump Images";
-            this.ImageBox.UseVisualStyleBackColor = true;
-            this.ImageBox.Visible = false;
-            this.ImageBox.CheckedChanged += new System.EventHandler(this.ImageBox_CheckedChanged);
+            this.imageBar.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.imageBar.BackColor = System.Drawing.Color.Black;
+            this.imageBar.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.imageBar.Location = new System.Drawing.Point(190, 367);
+            this.imageBar.Name = "imageBar";
+            this.imageBar.Size = new System.Drawing.Size(126, 23);
+            this.imageBar.Step = 2;
+            this.imageBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.imageBar.TabIndex = 8;
+            this.imageBar.Visible = false;
             // 
-            // SoundBox
+            // imageLabel
             // 
-            this.SoundBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SoundBox.ForeColor = System.Drawing.Color.Lime;
-            this.SoundBox.Location = new System.Drawing.Point(9, 269);
-            this.SoundBox.Name = "SoundBox";
-            this.SoundBox.Size = new System.Drawing.Size(104, 24);
-            this.SoundBox.TabIndex = 6;
-            this.SoundBox.Text = "Dump Sounds";
-            this.SoundBox.UseVisualStyleBackColor = true;
-            this.SoundBox.Visible = false;
-            this.SoundBox.CheckedChanged += new System.EventHandler(this.SoundBox_CheckedChanged);
+            this.imageLabel.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.imageLabel.BackColor = System.Drawing.Color.Transparent;
+            this.imageLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.imageLabel.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.imageLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.imageLabel.Location = new System.Drawing.Point(322, 367);
+            this.imageLabel.Name = "imageLabel";
+            this.imageLabel.Size = new System.Drawing.Size(126, 24);
+            this.imageLabel.TabIndex = 9;
+            this.imageLabel.Text = "0/0";
+            this.imageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.imageLabel.Visible = false;
             // 
-            // ChunkBox
+            // soundLabel
             // 
-            this.ChunkBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ChunkBox.ForeColor = System.Drawing.Color.Lime;
-            this.ChunkBox.Location = new System.Drawing.Point(9, 299);
-            this.ChunkBox.Name = "ChunkBox";
-            this.ChunkBox.Size = new System.Drawing.Size(104, 24);
-            this.ChunkBox.TabIndex = 7;
-            this.ChunkBox.Text = "Export Chunks\r\n";
-            this.ChunkBox.UseVisualStyleBackColor = true;
-            this.ChunkBox.Visible = false;
-            this.ChunkBox.CheckedChanged += new System.EventHandler(this.ChunkBox_CheckedChanged);
+            this.soundLabel.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.soundLabel.BackColor = System.Drawing.Color.Black;
+            this.soundLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.soundLabel.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.soundLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.soundLabel.Location = new System.Drawing.Point(322, 415);
+            this.soundLabel.Name = "soundLabel";
+            this.soundLabel.Size = new System.Drawing.Size(126, 24);
+            this.soundLabel.TabIndex = 11;
+            this.soundLabel.Text = "0/0";
+            this.soundLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.soundLabel.Visible = false;
             // 
-            // ImagesBar
+            // soundBar
             // 
-            this.ImagesBar.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.ImagesBar.BackColor = System.Drawing.Color.Black;
-            this.ImagesBar.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.ImagesBar.Location = new System.Drawing.Point(190, 367);
-            this.ImagesBar.Name = "ImagesBar";
-            this.ImagesBar.Size = new System.Drawing.Size(126, 23);
-            this.ImagesBar.Step = 2;
-            this.ImagesBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.ImagesBar.TabIndex = 8;
-            this.ImagesBar.Visible = false;
-            // 
-            // ImagesLabel
-            // 
-            this.ImagesLabel.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.ImagesLabel.BackColor = System.Drawing.Color.Transparent;
-            this.ImagesLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ImagesLabel.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.ImagesLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.ImagesLabel.Location = new System.Drawing.Point(322, 367);
-            this.ImagesLabel.Name = "ImagesLabel";
-            this.ImagesLabel.Size = new System.Drawing.Size(126, 24);
-            this.ImagesLabel.TabIndex = 9;
-            this.ImagesLabel.Text = "0/0";
-            this.ImagesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.ImagesLabel.Visible = false;
-            // 
-            // SoundsLabel
-            // 
-            this.SoundsLabel.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.SoundsLabel.BackColor = System.Drawing.Color.Black;
-            this.SoundsLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SoundsLabel.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.SoundsLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.SoundsLabel.Location = new System.Drawing.Point(322, 415);
-            this.SoundsLabel.Name = "SoundsLabel";
-            this.SoundsLabel.Size = new System.Drawing.Size(126, 24);
-            this.SoundsLabel.TabIndex = 11;
-            this.SoundsLabel.Text = "0/0";
-            this.SoundsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.SoundsLabel.Visible = false;
-            // 
-            // SoundBar
-            // 
-            this.SoundBar.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.SoundBar.BackColor = System.Drawing.Color.Black;
-            this.SoundBar.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.SoundBar.Location = new System.Drawing.Point(190, 415);
-            this.SoundBar.Name = "SoundBar";
-            this.SoundBar.Size = new System.Drawing.Size(126, 23);
-            this.SoundBar.Step = 2;
-            this.SoundBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.SoundBar.TabIndex = 10;
-            this.SoundBar.Visible = false;
+            this.soundBar.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.soundBar.BackColor = System.Drawing.Color.Black;
+            this.soundBar.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.soundBar.Location = new System.Drawing.Point(190, 415);
+            this.soundBar.Name = "soundBar";
+            this.soundBar.Size = new System.Drawing.Size(126, 23);
+            this.soundBar.Step = 2;
+            this.soundBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.soundBar.TabIndex = 10;
+            this.soundBar.Visible = false;
             // 
             // FolderBTN
             // 
@@ -245,7 +203,7 @@ namespace NetMFAPatcher.GUI
             this.FolderBTN.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FolderBTN.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.FolderBTN.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.FolderBTN.Location = new System.Drawing.Point(190, 453);
+            this.FolderBTN.Location = new System.Drawing.Point(101, 309);
             this.FolderBTN.Name = "FolderBTN";
             this.FolderBTN.Size = new System.Drawing.Size(83, 42);
             this.FolderBTN.TabIndex = 12;
@@ -258,10 +216,11 @@ namespace NetMFAPatcher.GUI
             // 
             this.MFABtn.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.MFABtn.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
+            this.MFABtn.Enabled = false;
             this.MFABtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.MFABtn.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.MFABtn.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.MFABtn.Location = new System.Drawing.Point(101, 453);
+            this.MFABtn.Location = new System.Drawing.Point(12, 453);
             this.MFABtn.Name = "MFABtn";
             this.MFABtn.Size = new System.Drawing.Size(83, 42);
             this.MFABtn.TabIndex = 13;
@@ -270,37 +229,37 @@ namespace NetMFAPatcher.GUI
             this.MFABtn.Visible = false;
             this.MFABtn.Click += new System.EventHandler(this.MFABtn_Click);
             // 
-            // SoundsButton
+            // soundsButton
             // 
-            this.SoundsButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.SoundsButton.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
-            this.SoundsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.SoundsButton.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.SoundsButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.SoundsButton.Location = new System.Drawing.Point(101, 405);
-            this.SoundsButton.Name = "SoundsButton";
-            this.SoundsButton.Size = new System.Drawing.Size(83, 42);
-            this.SoundsButton.TabIndex = 14;
-            this.SoundsButton.Text = "Dump Sounds";
-            this.SoundsButton.UseVisualStyleBackColor = false;
-            this.SoundsButton.Visible = false;
-            this.SoundsButton.Click += new System.EventHandler(this.SoundsButton_Click);
+            this.soundsButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.soundsButton.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
+            this.soundsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.soundsButton.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.soundsButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.soundsButton.Location = new System.Drawing.Point(101, 405);
+            this.soundsButton.Name = "soundsButton";
+            this.soundsButton.Size = new System.Drawing.Size(83, 42);
+            this.soundsButton.TabIndex = 14;
+            this.soundsButton.Text = "Dump Sounds";
+            this.soundsButton.UseVisualStyleBackColor = false;
+            this.soundsButton.Visible = false;
+            this.soundsButton.Click += new System.EventHandler(this.soundsButton_Click);
             // 
-            // ImagesButton
+            // imagesButton
             // 
-            this.ImagesButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.ImagesButton.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
-            this.ImagesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ImagesButton.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.ImagesButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.ImagesButton.Location = new System.Drawing.Point(101, 357);
-            this.ImagesButton.Name = "ImagesButton";
-            this.ImagesButton.Size = new System.Drawing.Size(83, 42);
-            this.ImagesButton.TabIndex = 15;
-            this.ImagesButton.Text = "Dump\r\nImages";
-            this.ImagesButton.UseVisualStyleBackColor = false;
-            this.ImagesButton.Visible = false;
-            this.ImagesButton.Click += new System.EventHandler(this.ImagesButton_Click);
+            this.imagesButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.imagesButton.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
+            this.imagesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.imagesButton.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.imagesButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.imagesButton.Location = new System.Drawing.Point(101, 357);
+            this.imagesButton.Name = "imagesButton";
+            this.imagesButton.Size = new System.Drawing.Size(83, 42);
+            this.imagesButton.TabIndex = 15;
+            this.imagesButton.Text = "Dump\r\nImages";
+            this.imagesButton.UseVisualStyleBackColor = false;
+            this.imagesButton.Visible = false;
+            this.imagesButton.Click += new System.EventHandler(this.imagesButton_Click);
             // 
             // loadingLabel
             // 
@@ -321,7 +280,7 @@ namespace NetMFAPatcher.GUI
             this.cryptKeyBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cryptKeyBtn.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.cryptKeyBtn.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.cryptKeyBtn.Location = new System.Drawing.Point(12, 405);
+            this.cryptKeyBtn.Location = new System.Drawing.Point(12, 357);
             this.cryptKeyBtn.Name = "cryptKeyBtn";
             this.cryptKeyBtn.Size = new System.Drawing.Size(83, 42);
             this.cryptKeyBtn.TabIndex = 17;
@@ -352,7 +311,7 @@ namespace NetMFAPatcher.GUI
             this.dumpSortedBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.dumpSortedBtn.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.dumpSortedBtn.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.dumpSortedBtn.Location = new System.Drawing.Point(12, 453);
+            this.dumpSortedBtn.Location = new System.Drawing.Point(12, 405);
             this.dumpSortedBtn.Name = "dumpSortedBtn";
             this.dumpSortedBtn.Size = new System.Drawing.Size(83, 42);
             this.dumpSortedBtn.TabIndex = 19;
@@ -388,7 +347,7 @@ namespace NetMFAPatcher.GUI
             this.packDataBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.packDataBtn.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.packDataBtn.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.packDataBtn.Location = new System.Drawing.Point(12, 357);
+            this.packDataBtn.Location = new System.Drawing.Point(12, 309);
             this.packDataBtn.Name = "packDataBtn";
             this.packDataBtn.Size = new System.Drawing.Size(83, 42);
             this.packDataBtn.TabIndex = 20;
@@ -397,28 +356,72 @@ namespace NetMFAPatcher.GUI
             this.packDataBtn.Visible = false;
             this.packDataBtn.Click += new System.EventHandler(this.packDataBtn_Click);
             // 
+            // musicsButton
+            // 
+            this.musicsButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.musicsButton.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
+            this.musicsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.musicsButton.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.musicsButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.musicsButton.Location = new System.Drawing.Point(101, 453);
+            this.musicsButton.Name = "musicsButton";
+            this.musicsButton.Size = new System.Drawing.Size(83, 42);
+            this.musicsButton.TabIndex = 21;
+            this.musicsButton.Text = "Dump Musics";
+            this.musicsButton.UseVisualStyleBackColor = false;
+            this.musicsButton.Visible = false;
+            this.musicsButton.Click += new System.EventHandler(this.musicsButton_Click);
+            // 
+            // musicBar
+            // 
+            this.musicBar.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.musicBar.BackColor = System.Drawing.Color.Black;
+            this.musicBar.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.musicBar.Location = new System.Drawing.Point(190, 463);
+            this.musicBar.Name = "musicBar";
+            this.musicBar.Size = new System.Drawing.Size(126, 23);
+            this.musicBar.Step = 2;
+            this.musicBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
+            this.musicBar.TabIndex = 22;
+            this.musicBar.Visible = false;
+            // 
+            // musicLabel
+            // 
+            this.musicLabel.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.musicLabel.BackColor = System.Drawing.Color.Black;
+            this.musicLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.musicLabel.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.musicLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.musicLabel.Location = new System.Drawing.Point(322, 463);
+            this.musicLabel.Name = "musicLabel";
+            this.musicLabel.Size = new System.Drawing.Size(126, 24);
+            this.musicLabel.TabIndex = 23;
+            this.musicLabel.Text = "0/0";
+            this.musicLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.musicLabel.Visible = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(943, 507);
+            this.Controls.Add(this.musicLabel);
+            this.Controls.Add(this.musicBar);
+            this.Controls.Add(this.musicsButton);
             this.Controls.Add(this.packDataBtn);
             this.Controls.Add(this.dumpSortedBtn);
             this.Controls.Add(this.showHexBtn);
             this.Controls.Add(this.cryptKeyBtn);
             this.Controls.Add(this.loadingLabel);
-            this.Controls.Add(this.ImagesButton);
-            this.Controls.Add(this.SoundsButton);
+            this.Controls.Add(this.imagesButton);
+            this.Controls.Add(this.soundsButton);
             this.Controls.Add(this.MFABtn);
             this.Controls.Add(this.FolderBTN);
-            this.Controls.Add(this.SoundsLabel);
-            this.Controls.Add(this.SoundBar);
-            this.Controls.Add(this.ImagesLabel);
-            this.Controls.Add(this.ImagesBar);
-            this.Controls.Add(this.ChunkBox);
-            this.Controls.Add(this.SoundBox);
-            this.Controls.Add(this.ImageBox);
+            this.Controls.Add(this.soundLabel);
+            this.Controls.Add(this.soundBar);
+            this.Controls.Add(this.imageLabel);
+            this.Controls.Add(this.imageBar);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.GameInfo);
             this.Controls.Add(this.listBox1);
@@ -434,17 +437,23 @@ namespace NetMFAPatcher.GUI
             this.PerformLayout();
         }
 
+        private System.Windows.Forms.Button musicsButton;
+
+        private System.Windows.Forms.ProgressBar imageBar;
+        private System.Windows.Forms.Label imageLabel;
+        private System.Windows.Forms.Button imagesButton;
+        private System.Windows.Forms.ProgressBar musicBar;
+        private System.Windows.Forms.Label musicLabel;
+        private System.Windows.Forms.ProgressBar soundBar;
+        private System.Windows.Forms.Label soundLabel;
+        private System.Windows.Forms.Button soundsButton;
+
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.CheckBox ChunkBox;
         private System.Windows.Forms.ContextMenuStrip ChunkCombo;
         private System.Windows.Forms.Button cryptKeyBtn;
         private System.Windows.Forms.Button dumpSortedBtn;
         private System.Windows.Forms.Button FolderBTN;
         private System.Windows.Forms.Label GameInfo;
-        private System.Windows.Forms.CheckBox ImageBox;
-        private System.Windows.Forms.ProgressBar ImagesBar;
-        private System.Windows.Forms.Button ImagesButton;
-        private System.Windows.Forms.Label ImagesLabel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Label loadingLabel;
@@ -453,10 +462,6 @@ namespace NetMFAPatcher.GUI
         private System.Windows.Forms.Button packDataBtn;
         private System.Windows.Forms.ToolStripMenuItem saveChunkBtn;
         private System.Windows.Forms.Button showHexBtn;
-        private System.Windows.Forms.ProgressBar SoundBar;
-        private System.Windows.Forms.CheckBox SoundBox;
-        private System.Windows.Forms.Button SoundsButton;
-        private System.Windows.Forms.Label SoundsLabel;
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.ToolStripMenuItem viewHexBtn;
 

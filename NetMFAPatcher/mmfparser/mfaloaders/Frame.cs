@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using NetMFAPatcher.MMFParser.Data;
-using NetMFAPatcher.Utils;
+using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher.MMFParser.MFALoaders
+namespace DotNetCTFDumper.MMFParser.MFALoaders
 {
     public class Frame : DataLoader
     {

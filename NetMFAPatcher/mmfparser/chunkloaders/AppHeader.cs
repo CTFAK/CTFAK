@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using DotNetCTFDumper.Utils;
+using static DotNetCTFDumper.MMFParser.Data.ChunkList;
 
-using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
-using NetMFAPatcher.Utils;
-using static NetMFAPatcher.MMFParser.Data.ChunkList;
-
-namespace NetMFAPatcher.MMFParser.ChunkLoaders
+namespace DotNetCTFDumper.MMFParser.ChunkLoaders
 {
     public class AppHeader : ChunkLoader
     {
@@ -66,18 +61,22 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
         {
             Reader = new ByteReader(Chunk.ChunkData);
             Size = Reader.ReadInt32();
-            Flags.flag=(uint) Reader.ReadInt16();//I finally got my balls back
+            Flags.flag=(uint) Reader.ReadInt16();
 
-            var newFlags = Reader.ReadInt16(); //read flags or no balls
-            var graphicsMode = Reader.ReadInt16(); //i am serious
-            var otherflags = Reader.ReadInt16(); //last chance to get balls back
+            NewFlags.flag = (uint) Reader.ReadInt16();
+            var graphicsMode = Reader.ReadInt16();
+            var otherflags = Reader.ReadInt16();// I am an asshole
+            //TODO: Add OtherFlags
+            
             WindowWidth = Reader.ReadInt16();
             WindowHeight = Reader.ReadInt16();
+            
             InitialScore = (int) (Reader.ReadUInt32() ^ 0xffffffff);
             InitialLives = (int) (Reader.ReadUInt32() ^ 0xffffffff);
+            
             var controls = new Controls(Reader);
             controls.Read();
-            // controls.Print(false);
+            
 
             BorderColor = Reader.ReadColor();
             NumberOfFrames = Reader.ReadInt32();

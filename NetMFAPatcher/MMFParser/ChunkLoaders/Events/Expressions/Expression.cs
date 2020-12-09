@@ -1,8 +1,8 @@
 ﻿using System;
-using NetMFAPatcher.MMFParser.Data;
-using NetMFAPatcher.Utils;
+using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher.MMFParser.ChunkLoaders.Events.Expressions
+namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Events.Expressions
 {
     class Expression : DataLoader
     {

@@ -1,15 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
-using System.ComponentModel.Design;
 using System.Drawing;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
-using Be.Windows.Forms;
-using NetMFAPatcher.MMFParser.Data;
-using NetMFAPatcher.Utils;
+using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher.GUI
+namespace DotNetCTFDumper.GUI
 {
     public partial class PackDataForm : Form
     {

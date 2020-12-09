@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using NetMFAPatcher.MMFParser.Data;
-using NetMFAPatcher.Utils;
+using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher.MMFParser.ChunkLoaders.Objects
+namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Objects
 {
     public class Animations:ChunkLoader
     {
@@ -28,13 +28,11 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Objects
                 offsets.Add(Reader.ReadInt16());
             }
             AnimationDict = new Dictionary<int,Animation>();
-            if (offsets.Count <= 0) return;
-            for (int i = 0; i < 1; i++)//I am stupid faggot, i don't know, whats wrong with this list
+            for (int i = 0; i < offsets.Count; i++)
             {
                 var offset = offsets[i];
                 if (offset != 0)
                 {
-                    Console.WriteLine("Offset: "+offset);
                     Reader.Seek(currentPosition+offset);
                     var anim = new Animation(Reader);
                     anim.Read();

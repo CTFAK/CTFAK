@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Windows.Forms;
-using NetMFAPatcher.MMFParser.ChunkLoaders;
-using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
-using NetMFAPatcher.MMFParser.MFALoaders;
-using NetMFAPatcher.Utils;
-using Controls = NetMFAPatcher.MMFParser.MFALoaders.Controls;
-using Frame = NetMFAPatcher.MMFParser.MFALoaders.Frame;
+using DotNetCTFDumper.MMFParser.ChunkLoaders;
+using DotNetCTFDumper.MMFParser.ChunkLoaders.Banks;
+using DotNetCTFDumper.MMFParser.MFALoaders;
+using DotNetCTFDumper.Utils;
+using Controls = DotNetCTFDumper.MMFParser.MFALoaders.Controls;
+using Frame = DotNetCTFDumper.MMFParser.MFALoaders.Frame;
 
-namespace NetMFAPatcher.MMFParser.Data
+namespace DotNetCTFDumper.MMFParser.Data
 {
     public class MFA : DataLoader
     {
@@ -134,13 +131,18 @@ namespace NetMFAPatcher.MMFParser.Data
             Fonts.Write(writer);
             writer.WriteAscii(SoundBankId);
             Sounds.Write(writer);
+            
             writer.WriteAscii(MusicBankId);
             //music.Write();//cum cum cum cum cum cum cum cum
             writer.WriteInt32(0);//someone is using musics lol?
+            //TODO: Do music
+            //I am not an asshole lol
             writer.WriteAscii(ImageBankId);
             Icons.Write(writer);
+            return;
             writer.WriteAscii(ImageBankId);
             Images.Write(writer);
+            
             writer.AutoWriteUnicode(Name);
             writer.AutoWriteUnicode(Author);
             writer.AutoWriteUnicode(Description);
@@ -208,9 +210,9 @@ namespace NetMFAPatcher.MMFParser.Data
                 writer.AutoWriteUnicode(item.Item3);
                 writer.WriteInt32(item.Item4);
                 writer.WriteBytes(item.Item5);
-                writer.WriteInt32(Frames.Count);
+                
             }
-            writer.WriteInt32(Extensions.Count);
+            writer.WriteInt32(Frames.Count);
             var startPosition = writer.Tell() + 4 * Frames.Count + 4;
             //help
             //how to implement write writer

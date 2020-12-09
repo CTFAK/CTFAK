@@ -1,7 +1,7 @@
 ﻿
-using NetMFAPatcher.MMFParser.Data;
+using DotNetCTFDumper.MMFParser.Data;
 
-namespace NetMFAPatcher.MMFParser.Decompiling
+namespace DotNetCTFDumper.MMFParser.Decompiling
 {
     public static class Pame2Mfa
     {

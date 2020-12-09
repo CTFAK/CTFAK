@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Windows.Forms;
-using NetMFAPatcher.GUI;
-using NetMFAPatcher.MMFParser.Data;
-using NetMFAPatcher.Utils;
-using static NetMFAPatcher.MMFParser.Data.ChunkList;
+using DotNetCTFDumper.GUI;
+using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.Utils;
+using static DotNetCTFDumper.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
+namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
 {
     public class ImageBank : ChunkLoader
     {
+        public bool SaveImages=true;
         public Dictionary<int, ImageItem> Images = new Dictionary<int, ImageItem>();
         public uint NumberOfItems;
 
@@ -38,10 +36,20 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
                 $"Number of images: {NumberOfItems}"
             };
         }
+        public void Read(bool load,bool save)
+        {
+            var cache = Settings.DumpImages;
+            Settings.DumpImages = load;
+            SaveImages = save;
+            Read();
+            Settings.DumpImages = cache;
 
+        }
         public override void Read()
         {
             Reader.Seek(0); //Reset the reader to avoid bugs when dumping more than once
+            Images = new Dictionary<int, ImageItem>();
+            
 
             NumberOfItems = Reader.ReadUInt32();
 
@@ -59,14 +67,13 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
                 var item = new ImageItem(Reader);
                 item.Read();
                 Images.Add(item.Handle, item);
-                if (Settings.DumpImages)
-                {
-                    item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
-                    Console.ReadKey();
+                
+                    if(SaveImages)item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
+ 
                     Helper.OnImageSaved(i, (int) NumberOfItems);
-                }
+                
 
-                if (Exe.LatestInst.GameData.ProductBuild >= 284)
+                if (Exe.Instance.GameData.ProductBuild >= 284)
                     item.Handle -= 1;
 
                 //images[item.handle] = item;
@@ -115,7 +122,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
 
         public override void Read()
         {
-            Handle = Reader.ReadInt32();
+            Handle = Reader.ReadInt32()-1;
             Position = (int) Reader.Tell();
             Load();
         }
@@ -150,6 +157,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
             _width = imageReader.ReadInt16();
             _height = imageReader.ReadInt16();
             _graphicMode = imageReader.ReadByte(); //Graphic mode is always 4 for SL
+            Console.WriteLine("COLORMODE: "+_graphicMode);
             Flags.flag = imageReader.ReadByte();
 
             imageReader.Skip(2);
@@ -262,13 +270,14 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Banks
             chunk.WriteBytes(_transparent);
 
             chunk.WriteBytes(rawImg);
-            chunk.WriteBytes(rawAlpha);
             
+            if(Flags["Alpha"])chunk.WriteBytes(rawAlpha);
             writer.WriteInt32(Handle);
-
-            chunk.Seek(0);
-            MemoryStream ms = (MemoryStream) chunk.BaseStream;
-            writer.WriteBytes(ms.GetBuffer());
+            
+            
+            writer.WriteWriter(chunk);
+            //MemoryStream ms = (MemoryStream) chunk.BaseStream;
+            //writer.WriteBytes(ms.GetBuffer());
         }
 
 

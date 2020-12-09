@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using NetMFAPatcher.Utils;
+using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher.MMFParser.Data
+namespace DotNetCTFDumper.MMFParser.Data
 {
     public class PackData
     {
@@ -47,7 +42,7 @@ namespace NetMFAPatcher.MMFParser.Data
                 exeReader.Skip(value);
                 if (!exeReader.Check(value)) break;
             }
-            exeReader.BaseStream.Position -= 5;//wtf lol
+            
             header = exeReader.ReadFourCc();
 
             exeReader.Seek(offset);

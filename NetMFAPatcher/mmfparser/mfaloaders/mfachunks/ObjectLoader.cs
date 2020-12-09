@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using NetMFAPatcher.MMFParser.Data;
-using NetMFAPatcher.Utils;
+using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher.MMFParser.MFALoaders.mfachunks
+namespace DotNetCTFDumper.MMFParser.MFALoaders.mfachunks
 {
     class ObjectLoader : DataLoader
     {

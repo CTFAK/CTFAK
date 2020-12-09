@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using NetMFAPatcher.MMFParser.Data;
-using NetMFAPatcher.Utils;
+using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher.MMFParser.ChunkLoaders.Objects
+namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Objects
 {
     public class ObjectCommon : ChunkLoader
     {
@@ -76,148 +74,144 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders.Objects
             }
         );
 
+        public Color BackColor;
+        public ObjectInfo Parent;
+        public Counters Counters;
+        public byte[] ExtensionData;
+        public int ExtensionPrivate;
+        public int ExtensionId;
+        public int ExtensionVersion;
+
 
         public ObjectCommon(ByteReader reader) : base(reader)
         {
         }
-
+        public ObjectCommon(ByteReader reader,ObjectInfo parent) : base(reader)
+        {
+            Parent = parent;
+        }
         public ObjectCommon(ChunkList.Chunk chunk) : base(chunk)
         {
         }
+        
 
         public override void Read()
         {
+            if (Parent.ObjectType != 2) return;
             long currentPosition = Reader.Tell();
             int size = Reader.ReadInt32();
-            bool newobj = Settings.Build > 284;
-            if (newobj && true)
+            bool newobj = Settings.Build >= 284;
+            if (newobj)
             {
                 _animationsOffset = (short) Reader.ReadUInt16();
                 _movementsOffset = Reader.ReadUInt16();
-                short version = Reader.ReadInt16();
-                Reader.ReadBytes(2);
-                ushort extensionOffset = Reader.ReadUInt16();
-                ushort counterOffset = Reader.ReadUInt16();
-                flags.flag = Reader.ReadUInt32();
-
-                long end = Reader.Tell() + 16;
-
-                List<short> qualifiers = new List<short>();
-                for (int i = 0; i < 8; i++)
-                {
-                    short qualifier = Reader.ReadInt16();
-                    if (qualifier == -1) break;
-                    qualifiers.Add(qualifier);
-                }
-
-                Reader.Seek(end);
-
-                short systemObjectOffset = Reader.ReadInt16();
-                
-                _valuesOffset = Reader.ReadInt16();
-                _stringsOffset = Reader.ReadInt16();
-                new_flags.flag = Reader.ReadUInt16();
-                preferences.flag = Reader.ReadUInt16();
-                Identifier = Reader.ReadFourCc();
-                Color backColor = Reader.ReadColor();
-                int fadeinOffset = Reader.ReadInt32();
-                int fadeoutOffset = Reader.ReadInt32();
-            }
-            else if (newobj)
-            {
-                _counterOffset = Reader.ReadInt16();
-                short version = Reader.ReadInt16();
-                Reader.ReadBytes(2);
-                _movementsOffset = (ushort) Reader.ReadInt16();
-                _extensionOffset = Reader.ReadInt16();
-                _animationsOffset = Reader.ReadInt16();
-                uint flags = Reader.ReadUInt32();
-                long end = Reader.Tell() + 16;
-                List<short> qualifiers = new List<short>();
-                for (int i = 0; i < 8; i++)
-                {
-                    short qualifier = Reader.ReadInt16();
-                    if (qualifier == -1) break;
-                    qualifiers.Add(qualifier);
-                }
-
-                Reader.Seek(end);
-
-                _valuesOffset = Reader.ReadInt16();
-                _stringsOffset = Reader.ReadInt16();
-                ushort newFlags = Reader.ReadUInt16();
-                byte[] preferences = Reader.ReadFourCc();
-                Color backColor = Reader.ReadColor();
-                _fadeinOffset = Reader.ReadInt32();
-                _fadeoutOffset = Reader.ReadInt32();
             }
             else
             {
                 _movementsOffset = Reader.ReadUInt16();
                 _animationsOffset = Reader.ReadInt16();
-                short version = Reader.ReadInt16();
-                _counterOffset = Reader.ReadInt16();
-                _systemObjectOffset = Reader.ReadInt16();
-                Reader.ReadBytes(2);
-                flags.flag = Reader.ReadUInt32();
-
-                _end = Reader.Tell() + 16;
-
-                List<short> qualifiers = new List<short>();
-                for (int i = 0; i < 8; i++)
-                {
-                    short qualifier = Reader.ReadInt16();
-                    if (qualifier == -1) break;
-                    qualifiers.Add(qualifier);
-                }
-
-                Reader.Seek(_end);
-
-                _extensionOffset = Reader.ReadInt16();
-
-                _valuesOffset = Reader.ReadInt16();
-                _stringsOffset = Reader.ReadInt16();
-                new_flags.flag = Reader.ReadUInt16();
-                preferences.flag = Reader.ReadUInt16();
-                byte[] identifier = Reader.ReadFourCc();
-                Color backColor = Reader.ReadColor();
-                _fadeinOffset = Reader.ReadInt32();
-                _fadeoutOffset = Reader.ReadInt32();
             }
+            short version = Reader.ReadInt16();
+            _counterOffset = (short) Reader.ReadUInt16();
+            _systemObjectOffset = (short) Reader.ReadUInt16();
+
+            flags.flag = Reader.ReadUInt32();
+            var end = Reader.Tell() + 16;
+            Reader.Seek(end);
+            if (newobj)
+            {
+                _systemObjectOffset = Reader.ReadInt16();
+    
+            }
+            else
+            {
+                _extensionOffset = Reader.ReadInt16();
+            }
+            
+            _valuesOffset = Reader.ReadInt16();
+            _stringsOffset = Reader.ReadInt16();
+            new_flags.flag = Reader.ReadUInt16();
+            preferences.flag = Reader.ReadUInt16();
+            byte[] identifier = Reader.ReadFourCc();
+            BackColor = Reader.ReadColor();
+            _fadeinOffset = Reader.ReadInt32();
+            _fadeoutOffset = Reader.ReadInt32();
 
             if (_movementsOffset != 0)
             {
                 //Reader.Seek(currentPosition+_movementsOffset);
                 //var movements = new Movements(Reader);
                 //movements.Read();
+                Console.WriteLine("Movements done");
             }
-
-            Console.WriteLine("Movements done");
+            
+            
             if (_valuesOffset != 0)
             {
                 Reader.Seek(currentPosition + _valuesOffset);
                 AlterableValues values = new AlterableValues(Reader);
                 values.Read();
+                Console.WriteLine("Values done");
             }
-
-            Console.WriteLine("Values done");
+            
+            
             if (_stringsOffset != 0)
             {
                 Reader.Seek(currentPosition + _stringsOffset);
                 AlterableStrings strings = new AlterableStrings(Reader);
                 strings.Read();
+                Console.WriteLine("Strings done");
             }
-
-            Console.WriteLine("Strings done");
-            if (_animationsOffset != 0)
+            
+            
+            if (_animationsOffset != 0&& Parent.ObjectType==2)
             {
-                Reader.Seek(currentPosition + _stringsOffset);
+                Reader.Seek(currentPosition + _animationsOffset);
                 Animations = new Animations(Reader);
-
                 Animations.Read();
+                Console.WriteLine("Animations done");
             }
 
-            Console.WriteLine("Animations done");
+            /*if (_counterOffset != 0)
+            {
+                Reader.Seek(currentPosition + _counterOffset);
+                var counter = new Counter(Reader);
+                counter.Read();
+                Console.WriteLine("Counters done");
+            }
+
+            if (_extensionOffset != 0)
+            {
+                var dataSize = Reader.ReadInt32() - 20;
+                ExtensionVersion = Reader.ReadInt32();
+                ExtensionId = Reader.ReadInt32();
+                ExtensionPrivate = Reader.ReadInt32();
+                if (dataSize != 0)
+                    ExtensionData = Reader.ReadBytes(dataSize);
+                Console.WriteLine("Extensions Done");
+
+            }*/
+
+            if (_systemObjectOffset > 0)
+            {
+                Console.WriteLine("Reading System Object");
+                Reader.Seek(currentPosition+_systemObjectOffset);
+                if (Parent.ObjectType == ((int) Constants.ObjectType.Text) ||
+                    Parent.ObjectType == ((int) Constants.ObjectType.Question))
+                {
+                    //TODO; Text.read();
+                }
+                else if (Parent.ObjectType == ((int) Constants.ObjectType.Score) ||
+                    Parent.ObjectType == ((int) Constants.ObjectType.Lives)||
+                    Parent.ObjectType == ((int) Constants.ObjectType.Counter))
+                {
+                    Counters = new Counters(Reader);
+                    Counters.Read();
+                }
+                
+            }
+            
+            
             Console.WriteLine("SysObjOff: " + _systemObjectOffset);
             Console.WriteLine("ExtOff: " + _extensionOffset);
         }

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows.Forms;
-using NetMFAPatcher.MMFParser.ChunkLoaders;
-using NetMFAPatcher.MMFParser.ChunkLoaders.Banks;
-using NetMFAPatcher.Utils;
-using static NetMFAPatcher.MMFParser.Constants;
+using System.Xml.Linq;
+using DotNetCTFDumper.MMFParser.ChunkLoaders;
+using DotNetCTFDumper.MMFParser.ChunkLoaders.Banks;
+using DotNetCTFDumper.Utils;
 
-namespace NetMFAPatcher.MMFParser.Data
+namespace DotNetCTFDumper.MMFParser.Data
 {
     public class ChunkList
     {
@@ -24,36 +23,14 @@ namespace NetMFAPatcher.MMFParser.Data
                 chunk.Verbose = Verbose;
                 chunk.Read(exeReader);
                 chunk.Loader = LoadChunk(chunk);
-
-                if (chunk.Loader != null)
-                {
-                    if (chunk.Loader.Verbose)
-                    {
-                        //chunk.loader.Print(Program.LogAll);
-                    }
-                }
-                if (chunk.Verbose)
-                {
-                    chunk.Print(false);
-
-
-
-
-
-                }
-
                 Chunks.Add(chunk);
                 if (chunk.Id == 8750)
                 {
                     chunk.BuildKey();
                 }
-                
-
-
+                if (exeReader.Tell() >= exeReader.Size()) break;
                 if (chunk.Id == 32639) break; //LAST chunkID
             }
-
-            //Logger.Log(verbose ? $" Total Chunks Count: {chunks.Count}":"ChunkList Done", true, ConsoleColor.Blue);
         }
 
         public class Chunk
@@ -84,6 +61,7 @@ namespace NetMFAPatcher.MMFParser.Data
 
             public void Read(ByteReader exeReader)
             {
+                
                 Id = exeReader.ReadInt16();
                 Name = this.ActualName();
 
@@ -161,20 +139,20 @@ namespace NetMFAPatcher.MMFParser.Data
                 string copyright = "";
                 string project = "";
                 
-                var titleChunk = _chunkList.get_chunk<AppName>();
+                var titleChunk = _chunkList.GetChunk<AppName>();
                 if (titleChunk != null) title = titleChunk.Value;
 
-                var copyrightChunk = _chunkList.get_chunk<Copyright>();
+                var copyrightChunk = _chunkList.GetChunk<Copyright>();
                 if (copyrightChunk != null) copyright = copyrightChunk.Value;
 
-                var projectChunk = _chunkList.get_chunk<EditorFilename>();
+                var projectChunk = _chunkList.GetChunk<EditorFilename>();
                 if (projectChunk != null) project = projectChunk.Value;
                 Settings.AppName=title;
                 Settings.Copyright = copyright;
                 Settings.ProjectPath = project;
                
 
-                if (Exe.LatestInst.GameData.ProductBuild > 284)
+                if (Exe.Instance.GameData.ProductBuild > 284)
                 {
                     Decryption.MakeKey(title, copyright, project);
                 }
@@ -258,6 +236,9 @@ namespace NetMFAPatcher.MMFParser.Data
                 case 26216:
                     loader = new SoundBank(chunk);
                     break;
+                case 26217:
+                    loader = new MusicBank(chunk);
+                    break;
                 case 17477:
                     loader = new ObjectName(chunk);
                     break;
@@ -281,6 +262,7 @@ namespace NetMFAPatcher.MMFParser.Data
                     //loader = new Events(chunk);//NOT WORKING
                     break;
                 
+                
             }
 
             if (loader != null)
@@ -293,7 +275,7 @@ namespace NetMFAPatcher.MMFParser.Data
         }
 
 
-        public T get_chunk<T>() where T : ChunkLoader
+        public T GetChunk<T>() where T : ChunkLoader
         {
             foreach (Chunk chunk in Chunks)
             {
@@ -308,10 +290,6 @@ namespace NetMFAPatcher.MMFParser.Data
             //Logger.Log($"ChunkLoader {typeof(T).Name} not found", true, ConsoleColor.Red);
             return null;  
         }
-        public T get_loader<T>(ChunkLoader loader) where T : ChunkLoader
-        {
-            
-            return (T)loader;  
-        }
+        
     }
 }

@@ -1,18 +1,23 @@
-﻿using NetMFAPatcher.Utils;
-using static NetMFAPatcher.MMFParser.Data.ChunkList;
+﻿using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.Utils;
+using static DotNetCTFDumper.MMFParser.Data.ChunkList;
 
-namespace NetMFAPatcher.MMFParser.ChunkLoaders
+namespace DotNetCTFDumper.MMFParser.ChunkLoaders
 {
-    public abstract class ChunkLoader//:DataLoader
+    public abstract class ChunkLoader
     {
+
         public Chunk Chunk;
         public ByteReader Reader;
+
         public bool Verbose = false;
 
-        protected ChunkLoader(ByteReader reader)
+
+        public ChunkLoader(ByteReader reader)
         {
             this.Reader = reader;
         }
+
         protected ChunkLoader(Chunk chunk)
         {
             this.Chunk = chunk;
@@ -25,5 +30,7 @@ namespace NetMFAPatcher.MMFParser.ChunkLoaders
 
         public abstract void Print(bool ext);
         public abstract string[] GetReadableData();
+
+
     }
 }
