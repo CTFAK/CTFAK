@@ -24,6 +24,8 @@ namespace DotNetCTFDumper
             var handle = Helper.GetConsoleWindow();
             Helper.ShowWindow(handle, Helper.SW_HIDE);
             InitNativeLibrary();
+            MFAGenerator.ReadTestMFA();
+            Environment.Exit(0);
 
             var path = "";
             var verbose = false;

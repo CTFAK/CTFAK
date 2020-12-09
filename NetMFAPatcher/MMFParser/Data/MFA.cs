@@ -164,11 +164,13 @@ namespace DotNetCTFDumper.MMFParser.Data
             writer.AutoWriteUnicode(Aboutbox);
             writer.WriteInt32(0);//anaconda
             writer.WriteInt32(0);//binary files are not supported because i am lazy asshole
+            
             Controls.Write(writer);
-            Menu = null; //cunt
+            
+            //Menu = null; //TODO:Menu
             if (Menu != null)
             {
-                byte[] menuData = new byte[15]; //Menu.Generate;
+                byte[] menuData = new byte[1]; //Menu.Generate;
                 writer.WriteInt32(menuData.Length);
                 writer.WriteBytes(menuData);
             }
@@ -176,6 +178,7 @@ namespace DotNetCTFDumper.MMFParser.Data
             {
                 writer.WriteInt32(0);
             }
+            return;
             writer.WriteInt32(windowMenuIndex);
             writer.WriteInt32(menuImages.Length);
             foreach (var item in menuImages)

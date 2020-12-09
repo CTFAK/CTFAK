@@ -289,15 +289,6 @@ namespace DotNetCTFDumper.Utils
             return result;
         }
 
-        public static void WriteWriter(this ByteWriter writer, ByteWriter toWrite)
-        {
-            var endPos = toWrite.Tell();
-            toWrite.Seek(0);
-            for (int i = 0; i < endPos; i++)
-            {
-                writer.WriteInt8(((MemoryStream)(toWrite.BaseStream)).GetBuffer()[i]);
-            }
-
-        }
+        
     }
 }

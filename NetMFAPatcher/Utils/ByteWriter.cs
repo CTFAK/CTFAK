@@ -98,6 +98,12 @@ namespace DotNetCTFDumper.Utils
             
 
         }
+        public void WriteWriter(ByteWriter toWrite)
+        {
+            byte[] data = ((MemoryStream) toWrite.BaseStream).GetBuffer();
+            Array.Resize<byte>(ref data,(int) toWrite.Size());
+            this.WriteBytes(data);
+        }
 
 
 

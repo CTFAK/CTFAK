@@ -6,7 +6,7 @@ namespace DotNetCTFDumper.MMFParser.Decompiling
 {
     public static class MFAGenerator
     {
-        public static readonly string TemplatePath = @"C:\Users\ivani\Desktop\CTFResearch\TestWriting.mfa";
+        public static readonly string TemplatePath = @"C:\Users\ivani\Desktop\CTFResearch\testreader.mfa";
 
         public static void BuildMFA()
         {
@@ -29,6 +29,7 @@ namespace DotNetCTFDumper.MMFParser.Decompiling
         {
             var mfaReader = new ByteReader(TemplatePath, FileMode.Open);
             var template = new MFA(mfaReader);
+            Settings.DoMFA = true;
             template.Read();
             var mfaWriter = new ByteWriter("outTest.mfa", FileMode.Create);
             template.Write(mfaWriter);
