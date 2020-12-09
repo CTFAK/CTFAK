@@ -20,7 +20,7 @@ namespace DotNetCTFDumper.Utils
 
             var ptr = Decryption.make_key_combined(rawKeyPtr, MagicChar);
 
-            byte[] key = new byte[257];
+            byte[] key = new byte[256];
             Marshal.Copy(ptr, key, 0, 256);
             Marshal.FreeHGlobal(rawKeyPtr);
 
@@ -41,26 +41,24 @@ namespace DotNetCTFDumper.Utils
             Marshal.Copy(ptr, key, 0, 256);
             Marshal.FreeHGlobal(rawKeyPtr);
             return key;
-
         }
-
 
 
         public static byte[] DecodeMode3(byte[] chunkData, int chunkSize, int chunkId, out int decompressed)
         {
-            var reader = new ByteReader(chunkData);
-            var decompressedSize = reader.ReadUInt32();
+            ByteReader reader = new ByteReader(chunkData);
+            uint decompressedSize = reader.ReadUInt32();
 
-            var rawData = reader.ReadBytes((int) reader.Size());
-            if (chunkId % 2 != 0)
+            byte[] rawData = reader.ReadBytes((int) reader.Size());
+            if ((chunkId & 1) == 1)
             {
-                rawData[0] ^= (byte) (((byte) chunkId & 0xFF) ^ ((byte) chunkId >> 0x8));
+                rawData[0] ^= (byte) ((byte) (chunkId & 0xFF) ^ (byte) (chunkId >> 0x8));
             }
 
             rawData = DecodeChunk(rawData, chunkSize);
-            using (var data = new ByteReader(rawData))
+            using (ByteReader data = new ByteReader(rawData))
             {
-                var compressedSize = data.ReadUInt32();
+                uint compressedSize = data.ReadUInt32();
                 decompressed = (int) decompressedSize;
                 return Decompressor.decompress_block(data, (int) compressedSize, (int) decompressedSize);
             }
@@ -86,7 +84,6 @@ namespace DotNetCTFDumper.Utils
         }
 
 
-
         [DllImport("Decrypter-x64.dll", EntryPoint = "decode_chunk", CharSet = CharSet.Auto)]
         public static extern IntPtr decode_chunk(IntPtr chunkData, int chunkSize, byte magicChar, IntPtr wrapperKey);
 
@@ -95,15 +92,8 @@ namespace DotNetCTFDumper.Utils
 
         [DllImport("Decrypter-x64.dll", EntryPoint = "make_key_combined", CharSet = CharSet.Auto)]
         public static extern IntPtr make_key_combined(IntPtr data, byte magicChar);
+
         [DllImport("Decrypter-x64.dll", EntryPoint = "make_key_w_combined", CharSet = CharSet.Auto)]
         public static extern IntPtr make_key_w_combined(IntPtr data, byte magicChar);
-
-        
     }
 }
-
-
-        
-    
-
-
