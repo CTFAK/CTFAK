@@ -28,7 +28,7 @@ namespace DotNetCTFDumper.Utils
             ZLibDecompressOptions decompOpts = new ZLibDecompressOptions();
             MemoryStream compressedStream = new MemoryStream(reader.ReadBytes(size));
             MemoryStream decompressedStream = new MemoryStream();
-            using (DeflateStream zs = new DeflateStream(compressedStream, decompOpts))
+            using (ZLibStream zs = new ZLibStream(compressedStream, decompOpts))
             {
                 zs.CopyTo(decompressedStream);
                 
