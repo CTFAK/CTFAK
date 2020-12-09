@@ -42,6 +42,8 @@ namespace DotNetCTFDumper.GUI
             saveChunkBtn.BackColor=Color.Black;                       
             viewHexBtn.ForeColor = ColorTheme; 
             viewHexBtn.BackColor=Color.Black;
+            previewFrameBtn.ForeColor = ColorTheme;
+            previewFrameBtn.BackColor=Color.Black;
             //Labels
             label1.ForeColor = ColorTheme;
             label1.Text = Settings.DumperVersion;
@@ -141,6 +143,15 @@ namespace DotNetCTFDumper.GUI
                     break;
                 case "viewHexBtn":
                     ShowHex();
+                    break;
+                case "previewFrameBtn":
+                    var selected = ((ChunkNode) treeView1.SelectedNode).loader;
+                    if (selected is Frame frm)
+                    {
+                        var viewer = new FrameViewer(frm,Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>());
+                        viewer.Show();
+                    }
+
                     break;
             }
         }
@@ -289,69 +300,57 @@ namespace DotNetCTFDumper.GUI
         {
             if (!IsDumpingSounds)
             {
-                soundBar.Visible = true;
-                soundLabel.Visible = true;
-                soundsButton.Text = "Cancel";
-                soundBar.Value = 0;
-                IsDumpingSounds = true;
-                BreakSounds = false;
-                var worker = new BackgroundWorker();
-                worker.DoWork += (senderA, eA) =>
-                {
-                    Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>().Read(true);
-                };
-                worker.RunWorkerCompleted += (senderA, eA) =>
-                {
-                    soundBar.Visible = false;
-                    soundLabel.Visible = false;
-                    Logger.Log("Sounds done");
-                    soundsButton.Text = "Dump Sounds";
-                };
-                worker.RunWorkerAsync();
+                SetSoundElements(true);
+                Backend.DumpSounds(this,true,true);
+                
             }
             else
             {
                 BreakSounds = true;
-                soundBar.Visible = false;
-                soundLabel.Visible = false;
-                soundsButton.Text = "Dump Sounds";
                 IsDumpingSounds = false;
+                SetSoundElements(false);
             }
         }
-
         private void imagesButton_Click(object sender, EventArgs e)
         {
             if (!IsDumpingImages)
             {
-                imageBar.Visible = true;
-                imageLabel.Visible = true;
-                imagesButton.Text = "Cancel";
-                imageBar.Value = 0;
-                IsDumpingImages = true;
-                BreakImages = false;
-                var worker = new BackgroundWorker();
-                worker.DoWork += (senderA, eA) =>
-                {
-                    Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().Read(true,true);
-                };
-                worker.RunWorkerCompleted += (senderA, eA) =>
-                {
-                    imageBar.Visible = false;
-                    imageLabel.Visible = false;
-                    Logger.Log("Images done",true,ConsoleColor.Yellow);
-                    imagesButton.Text = "Dump Images";
-                };
-                worker.RunWorkerAsync();
+                SetImageElements(true);
+                Backend.DumpImages(this,true,true);
+                
             }
             else
             {
                 BreakImages = true;
-                imageBar.Visible = false;
-                imageLabel.Visible = false;
-                imagesButton.Text = "Dump Images";
                 IsDumpingImages = false;
+                SetImageElements(false);
             }
         }
+        
+
+        public void SetSoundElements(bool state)
+        {
+            soundBar.Visible = state;
+            soundLabel.Visible = state;
+            soundsButton.Text = state ? "Cancel":"Dump Sounds";
+            soundBar.Value = 0;
+        }
+        public void SetImageElements(bool state)
+        {
+            imageBar.Visible = state;
+            imageLabel.Visible = state;
+            imagesButton.Text = state ? "Cancel":"Dump Images";
+            imageBar.Value = 0;
+        }
+        public void SetMusicElements(bool state)
+        {
+            musicBar.Visible = state;
+            musicLabel.Visible = state;
+            musicsButton.Text = state ? "Cancel":"Dump Musics";
+            musicBar.Value = 0;
+        }
+
+        
 
         
 
@@ -377,30 +376,24 @@ namespace DotNetCTFDumper.GUI
             KeyForm.Show();
         }
 
-        private void ShowHex_Click(object sender, EventArgs e)
-        {
-            ShowHex();
-            
-        }
+        
 
         private void ShowHex()
         {
-        if ((ChunkNode) treeView1.SelectedNode != null)
-                    {
-                        var node = ((ChunkNode) treeView1.SelectedNode);
-                        HexViewForm hexform = null;
-                        
-                            hexform = new HexViewForm(node.chunk.ChunkData,node.chunk.RawData,ColorTheme,$"Hew View: {node.chunk.Name}"); 
-                        
-                        hexform.Show();
-                    }
-            
+            if ((ChunkNode) treeView1.SelectedNode != null)
+            {
+                var node = ((ChunkNode) treeView1.SelectedNode);
+                HexViewForm hexform = null;
+
+                hexform = new HexViewForm(node.chunk.ChunkData, node.chunk.RawData, ColorTheme,
+                    $"Hew View: {node.chunk.Name}");
+
+                hexform.Show();
+            }
+
         }
 
-        private void loadingLabel_Click(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+
 
         private void dumpSortedBtn_Click(object sender, EventArgs e)
         {
@@ -409,7 +402,6 @@ namespace DotNetCTFDumper.GUI
             var worker = new BackgroundWorker();
             worker.DoWork += (senderA, eA) =>
             {
-                
                 Settings.DumpImages = true;
                 var bank = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
                 bank.SaveImages=false;
@@ -420,24 +412,12 @@ namespace DotNetCTFDumper.GUI
             {
                 imageBar.Visible = false;
                 imageLabel.Visible = false;
-                
-
                 ImageDumper.DumpImages();
             };
             worker.RunWorkerAsync();
         }
 
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            //throw new System.NotImplementedException();
-        }
-
-       
-
-        private void ChunkCombo_Opening(object sender, CancelEventArgs e)
-        {
-            
-        }
+        
 
         private void tabPage1_Click(object sender, EventArgs e)
         {
@@ -452,39 +432,19 @@ namespace DotNetCTFDumper.GUI
 
         private void musicsButton_Click(object sender, EventArgs e)
         {
-            var bank = Exe.Instance.GameData.GameChunks.GetChunk<MusicBank>();
-            if (bank == null) return;
+            
             if (!IsDumpingMusics)
             {
-                musicBar.Visible = true;
-                musicLabel.Visible = true;
-                musicsButton.Text = "Cancel";
-                musicBar.Value = 0;
-                IsDumpingMusics = true;
-                BreakMusics = false;
-                var worker = new BackgroundWorker();
-                worker.DoWork += (senderA, eA) =>
-                {
-                    Exe.Instance.GameData.GameChunks.GetChunk<MusicBank>().Read(true);
-                };
-                worker.RunWorkerCompleted += (senderA, eA) =>
-                {
-                    musicBar.Visible = false;
-                    musicLabel.Visible = false;
-                    Logger.Log("Musics done",true,ConsoleColor.Yellow);
-                    musicsButton.Text = "Dump Musics";
-                };
-                worker.RunWorkerAsync();
+                Backend.DumpMusics(this,true,true);
             }
             else
             {
                 BreakMusics = true;
-                musicBar.Visible = false;
-                musicLabel.Visible = false;
-                musicsButton.Text = "Dump Musics";
                 IsDumpingMusics = false;
+                SetMusicElements(false);
             }
             
         }
+
     }
 }

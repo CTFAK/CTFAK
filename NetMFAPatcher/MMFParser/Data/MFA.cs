@@ -139,7 +139,7 @@ namespace DotNetCTFDumper.MMFParser.Data
             //I am not an asshole lol
             writer.WriteAscii(ImageBankId);
             Icons.Write(writer);
-            return;
+            
             writer.WriteAscii(ImageBankId);
             Images.Write(writer);
             

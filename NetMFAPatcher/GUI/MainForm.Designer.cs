@@ -51,6 +51,7 @@
             this.ChunkCombo = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.saveChunkBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.viewHexBtn = new System.Windows.Forms.ToolStripMenuItem();
+            this.previewFrameBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.packDataBtn = new System.Windows.Forms.Button();
             this.musicsButton = new System.Windows.Forms.Button();
             this.musicBar = new System.Windows.Forms.ProgressBar();
@@ -114,7 +115,7 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(180, 281);
             this.listBox1.TabIndex = 5;
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
+            
             // 
             // GameInfo
             // 
@@ -271,7 +272,6 @@
             this.loadingLabel.Size = new System.Drawing.Size(335, 91);
             this.loadingLabel.TabIndex = 16;
             this.loadingLabel.Text = "Loading...";
-            this.loadingLabel.Click += new System.EventHandler(this.loadingLabel_Click);
             // 
             // cryptKeyBtn
             // 
@@ -302,7 +302,7 @@
             this.showHexBtn.Text = "Show hex";
             this.showHexBtn.UseVisualStyleBackColor = false;
             this.showHexBtn.Visible = false;
-            this.showHexBtn.Click += new System.EventHandler(this.ShowHex_Click);
+            
             // 
             // dumpSortedBtn
             // 
@@ -322,23 +322,29 @@
             // 
             // ChunkCombo
             // 
-            this.ChunkCombo.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {this.saveChunkBtn, this.viewHexBtn});
+            this.ChunkCombo.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {this.saveChunkBtn, this.viewHexBtn, this.previewFrameBtn});
             this.ChunkCombo.Name = "Save";
-            this.ChunkCombo.Size = new System.Drawing.Size(124, 48);
-            this.ChunkCombo.Opening += new System.ComponentModel.CancelEventHandler(this.ChunkCombo_Opening);
+            this.ChunkCombo.Size = new System.Drawing.Size(152, 70);
+            
             this.ChunkCombo.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.ChunkCombo_ItemSelected);
             // 
             // saveChunkBtn
             // 
             this.saveChunkBtn.Name = "saveChunkBtn";
-            this.saveChunkBtn.Size = new System.Drawing.Size(123, 22);
+            this.saveChunkBtn.Size = new System.Drawing.Size(151, 22);
             this.saveChunkBtn.Text = "Save";
             // 
             // viewHexBtn
             // 
             this.viewHexBtn.Name = "viewHexBtn";
-            this.viewHexBtn.Size = new System.Drawing.Size(123, 22);
+            this.viewHexBtn.Size = new System.Drawing.Size(151, 22);
             this.viewHexBtn.Text = "View Hex";
+            // 
+            // previewFrameBtn
+            // 
+            this.previewFrameBtn.Name = "previewFrameBtn";
+            this.previewFrameBtn.Size = new System.Drawing.Size(151, 22);
+            this.previewFrameBtn.Text = "Preview Frame";
             // 
             // packDataBtn
             // 
@@ -436,6 +442,8 @@
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.ToolStripMenuItem previewFrameBtn;
 
         private System.Windows.Forms.Button musicsButton;
 

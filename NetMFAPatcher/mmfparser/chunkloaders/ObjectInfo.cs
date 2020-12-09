@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
+using DotNetCTFDumper.MMFParser.ChunkLoaders.Banks;
 using DotNetCTFDumper.MMFParser.ChunkLoaders.Objects;
 using DotNetCTFDumper.MMFParser.Data;
 using DotNetCTFDumper.Utils;
@@ -83,8 +86,35 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
 
             if (Properties != null)
             {
-                //Properties.ReadNew(ObjectType,this);
+                Properties.ReadNew(ObjectType,this);
             }
+        }
+
+        public ImageItem GetPreview()
+        {
+            ImageItem bmp=null;
+            var images = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
+            if (ObjectType == 2)
+            {
+                    
+                var anims = ((ObjectCommon) (Properties.Loader)).Animations;
+                if (anims != null)
+                {
+                    anims.AnimationDict.TryGetValue(0,
+                        out Animation anim);
+                    anim.DirectionDict.TryGetValue(0, out AnimationDirection direction);
+                    var firstFrameHandle = direction.Frames[0];
+
+                    bmp = images.Images[firstFrameHandle];
+                }
+            }
+            else if (ObjectType == 1)
+            {
+                images.Images.TryGetValue(((Backdrop) Properties.Loader).Image, out var img);
+                bmp = img;
+            }
+
+            return bmp;
         }
     }
 

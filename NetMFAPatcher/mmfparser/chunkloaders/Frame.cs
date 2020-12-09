@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using DotNetCTFDumper.MMFParser.Data;
 using DotNetCTFDumper.Utils;
 using ChunkList = DotNetCTFDumper.MMFParser.Data.ChunkList;
@@ -34,7 +35,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
         public string Password;
         public int Width;
         public int Height;
-        public byte[] Background;
+        public Color Background;
         public int Flags;
         public int CountOfObjs;
         int _top;
@@ -146,7 +147,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
             "ToShow"
                 
         });
-        public byte[] Background;
+        public Color Background;
         public FrameHeader(ByteReader reader) : base(reader)
         {
         }
@@ -174,7 +175,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
         {
             Width = Reader.ReadInt32();
             Height = Reader.ReadInt32();
-            Background = Reader.ReadBytes(4);
+            Background = Reader.ReadColor();
             Flags.flag = Reader.ReadUInt32();
             
             
@@ -244,9 +245,8 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
 
         public override void Read()
         {
-            ObjectInfo = (ushort) Reader.ReadInt16();
             Handle = (ushort) Reader.ReadInt16();
-            
+            ObjectInfo = (ushort) Reader.ReadInt16();
             X = Reader.ReadInt32();
             Y = Reader.ReadInt32();
             ParentType = Reader.ReadInt16();
@@ -264,7 +264,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
         {
             get
             {
-                return Exe.Instance.GameData.GameChunks.GetChunk<FrameItems>().FromHandle(Handle);
+                return Exe.Instance.GameData.GameChunks.GetChunk<FrameItems>().FromHandle(ObjectInfo);
             }
         }
 

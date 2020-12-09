@@ -80,8 +80,8 @@
       <HintPath>..\packages\Be.Windows.Forms.HexBox.1.6.1\lib\net40\Be.Windows.Forms.HexBox.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Ionic.Zlib, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c">
-      <HintPath>..\packages\Ionic.Zlib.1.9.1.5\lib\Ionic.Zlib.dll</HintPath>
+    <Reference Include="DotNetZip, Version=1.15.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745">
+      <HintPath>..\packages\DotNetZip.1.15.0\lib\net40\DotNetZip.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -106,6 +106,12 @@
     <Compile Include="GUI\CryptoKeyForm.Designer.cs">
       <DependentUpon>CryptoKeyForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\FrameViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\FrameViewer.Designer.cs">
+      <DependentUpon>FrameViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\HexViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -118,6 +124,7 @@
     <Compile Include="GUI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\ObjectBox.cs" />
     <Compile Include="GUI\PackDataForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -180,6 +187,7 @@
     <Compile Include="MMFParser\ChunkLoaders\yves.cs" />
     <Compile Include="MMFParser\Constants.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Utils\Backend.cs" />
     <Compile Include="Utils\BitDict.cs" />
     <Compile Include="Utils\ByteFlag.cs" />
     <Compile Include="Utils\ByteWriter.cs" />
@@ -215,6 +223,9 @@
   <ItemGroup>
     <EmbeddedResource Include="GUI\CryptoKeyForm.resx">
       <DependentUpon>CryptoKeyForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\FrameViewer.resx">
+      <DependentUpon>FrameViewer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\HexViewForm.resx">
       <DependentUpon>HexViewForm.cs</DependentUpon>

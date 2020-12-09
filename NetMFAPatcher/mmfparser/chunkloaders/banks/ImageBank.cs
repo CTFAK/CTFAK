@@ -90,10 +90,10 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
         int _width;
         int _height;
         int _graphicMode;
-        int _xHotspot;
-        int _yHotspot;
-        int _actionX;
-        int _actionY;
+        public int XHotspot;
+        public int YHotspot;
+        public int ActionX;
+        public int ActionY;
 
         BitDict Flags = new BitDict(new string[]
         {
@@ -119,6 +119,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
 
         public bool Debug = false;
         public int Debug2 = 1;
+        private Bitmap _bitmap;
 
         public override void Read()
         {
@@ -138,6 +139,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
 
         public void Load()
         {
+            _bitmap = null;
             Reader.Seek(Position);
             ByteReader imageReader;
 
@@ -157,16 +159,15 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
             _width = imageReader.ReadInt16();
             _height = imageReader.ReadInt16();
             _graphicMode = imageReader.ReadByte(); //Graphic mode is always 4 for SL
-            Console.WriteLine("COLORMODE: "+_graphicMode);
             Flags.flag = imageReader.ReadByte();
 
             imageReader.Skip(2);
-            _xHotspot = imageReader.ReadInt16();
-            _yHotspot = imageReader.ReadInt16();
-            _actionX = imageReader.ReadInt16();
-            _actionY = imageReader.ReadInt16();
+            XHotspot = imageReader.ReadInt16();
+            YHotspot = imageReader.ReadInt16();
+            ActionX = imageReader.ReadInt16();
+            ActionY = imageReader.ReadInt16();
             _transparent = imageReader.ReadBytes(4);
-            Logger.Log($"Loading image {Handle.ToString(),4} Size: {_width,4}x{_height,4}");
+            //Logger.Log($"Loading image {Handle.ToString(),4} Size: {_width,4}x{_height,4}");
             byte[] imageData;
             if (Flags["LZX"])
             {
@@ -227,22 +228,52 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
 
         public void Save(string filename)
         {
-            using (var bmp = new Bitmap(_width, _height, PixelFormat.Format32bppArgb))
-            {
-                BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0,
-                        bmp.Width,
-                        bmp.Height),
-                    ImageLockMode.WriteOnly,
-                    bmp.PixelFormat);
+            
+                using (var bmp = new Bitmap(_width, _height, PixelFormat.Format32bppArgb))
+                {
+                    BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0,
+                            bmp.Width,
+                            bmp.Height),
+                        ImageLockMode.WriteOnly,
+                        bmp.PixelFormat);
 
-                IntPtr pNative = bmpData.Scan0;
-                Marshal.Copy(_colorArray, 0, pNative, _colorArray.Length);
+                    IntPtr pNative = bmpData.Scan0;
+                    Marshal.Copy(_colorArray, 0, pNative, _colorArray.Length);
 
-                bmp.UnlockBits(bmpData);
-
-                bmp.Save(filename);
-            }
+                    bmp.UnlockBits(bmpData);
+                    bmp.Save(filename);
+                }
+            
+                
         }
+
+        public Bitmap Bitmap
+        {
+            get
+            {
+                if (_bitmap == null)
+                {
+                    _bitmap = new Bitmap(_width, _height, PixelFormat.Format32bppArgb);
+
+                    BitmapData bmpData = _bitmap.LockBits(new Rectangle(0, 0,
+                            _bitmap.Width,
+                            _bitmap.Height),
+                        ImageLockMode.WriteOnly,
+                        _bitmap.PixelFormat);
+
+                    IntPtr pNative = bmpData.Scan0;
+                    Marshal.Copy(_colorArray, 0, pNative, _colorArray.Length);
+
+                    _bitmap.UnlockBits(bmpData);
+
+                }
+
+                return _bitmap;
+            }
+
+
+        }
+        
 
         public void Write(ByteWriter writer)
         {
@@ -263,10 +294,10 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
             }
 
             chunk.Skip(2);
-            chunk.WriteInt16((short) _xHotspot);
-            chunk.WriteInt16((short) _yHotspot);
-            chunk.WriteInt16((short) _actionX);
-            chunk.WriteInt16((short) _actionY);
+            chunk.WriteInt16((short) XHotspot);
+            chunk.WriteInt16((short) YHotspot);
+            chunk.WriteInt16((short) ActionX);
+            chunk.WriteInt16((short) ActionY);
             chunk.WriteBytes(_transparent);
 
             chunk.WriteBytes(rawImg);
