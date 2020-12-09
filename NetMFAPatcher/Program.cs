@@ -1,10 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using DotNetCTFDumper.GUI;
 using DotNetCTFDumper.MMFParser.Data;
 using DotNetCTFDumper.MMFParser.Decompiling;
 using DotNetCTFDumper.Utils;
+using Joveler.Compression.ZLib;
 
 namespace DotNetCTFDumper
 {
@@ -12,7 +14,7 @@ namespace DotNetCTFDumper
     {
         //public static string path = @"H:\fnaf-world.exe";//test
         //public static string path = @"D:\SteamLibrary\steamapps\common\Five Nights at Freddy's Sister Location\SisterLocation.exe";
-        public static string Path = ""; //TODO: Make Selectable
+        //public static string Path = ""; //TODO: Make Selectable
         public static MainForm MyForm;
 
 
@@ -21,14 +23,13 @@ namespace DotNetCTFDumper
         {
             var handle = Helper.GetConsoleWindow();
             Helper.ShowWindow(handle, Helper.SW_HIDE);
+            InitNativeLibrary();
 
-            //MFAGenerator.BuildMFA();
-            //Environment.Exit(0);
             var path = "";
             var verbose = false;
             var dumpImages = false;
             var dumpSounds = true;
-
+            
             if (args.Length == 0)
             {
                 Settings.UseGUI = true;
@@ -73,6 +74,7 @@ namespace DotNetCTFDumper
             Settings.DumpImages = dumpImages;
             Settings.DumpSounds = dumpSounds;
             Settings.Verbose = verbose;
+            
             var exeReader = new ByteReader(path, FileMode.OpenOrCreate);
             var currentExe = new Exe();
             Exe.Instance = currentExe;
@@ -113,8 +115,31 @@ namespace DotNetCTFDumper
             Directory.CreateDirectory($"{Settings.ChunkPath}");
 
             Directory.CreateDirectory($"{Settings.ExtensionPath}");
+        }
+        public static void InitNativeLibrary()
+        {
+            string arch = null;
+            switch (RuntimeInformation.ProcessArchitecture)
+            {
+                case Architecture.X86:
+                    arch = "x86";
+                    break;
+                case Architecture.X64:
+                    arch = "x64";
+                    break;
+                case Architecture.Arm:
+                    arch = "armhf";
+                    break;
+                case Architecture.Arm64:
+                    arch = "arm64";
+                    break;
+            }
+            string libPath = Path.Combine(arch, "zlibwapi.dll");
 
+            if (!File.Exists(libPath))
+                throw new PlatformNotSupportedException($"Unable to find native library [{libPath}].");
 
+            ZLibInit.GlobalInit(libPath);
         }
     }
 }
