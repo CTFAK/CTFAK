@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using Joveler.Compression.ZLib; 
+using System.Linq;
+using Joveler.Compression.ZLib;
 
 namespace DotNetCTFDumper.Utils
 {
@@ -20,7 +21,7 @@ namespace DotNetCTFDumper.Utils
             Int32 decompSize = exeReader.ReadInt32();
             Int32 compSize = exeReader.ReadInt32();
             decompressed = decompSize;
-            return new ByteReader(decompress_block(exeReader,compSize,decompSize));
+            return new ByteReader(decompress_block(exeReader, compSize, decompSize));
         }
 
         public static byte[] decompress_block(ByteReader reader, int size, int decompSize)
@@ -31,13 +32,13 @@ namespace DotNetCTFDumper.Utils
             using (ZLibStream zs = new ZLibStream(compressedStream, decompOpts))
             {
                 zs.CopyTo(decompressedStream);
-                
             }
-            return decompressedStream.GetBuffer();
 
+            byte[] decompressedData = decompressedStream.GetBuffer();
+            // Trimming array to decompSize,
+            // because ZlibStream always pads to 0x100
+            Array.Resize<byte>(ref decompressedData, decompSize);
+            return decompressedData;
         }
-
-
-        
     }
 }
