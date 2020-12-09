@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using Joveler.Compression.ZLib; 
 
 namespace DotNetCTFDumper.Utils
 {
@@ -17,24 +19,24 @@ namespace DotNetCTFDumper.Utils
         {
             Int32 decompSize = exeReader.ReadInt32();
             Int32 compSize = exeReader.ReadInt32();
-            byte[] compressedData = exeReader.ReadBytes(compSize);
-            byte[] actualData = Ionic.Zlib.ZlibStream.UncompressBuffer(compressedData);
-            Debug.Assert(actualData.Length == decompSize);
             decompressed = decompSize;
-            return new ByteReader(actualData);
+            return new ByteReader(decompress_block(exeReader,compSize,decompSize));
         }
 
         public static byte[] decompress_block(ByteReader reader, int size, int decompSize)
         {
-            byte[] compressedData = reader.ReadBytes(size);
-            byte[] actualData = Ionic.Zlib.ZlibStream.UncompressBuffer(compressedData);
-            return actualData;
+            ZLibDecompressOptions decompOpts = new ZLibDecompressOptions();
+            MemoryStream compressedStream = new MemoryStream(reader.ReadBytes(size));
+            MemoryStream decompressedStream = new MemoryStream();
+            using (DeflateStream zs = new DeflateStream(compressedStream, decompOpts))
+            {
+                zs.CopyTo(decompressedStream);
+                
+            }
+            return decompressedStream.GetBuffer();
+
         }
 
-        public static ByteReader decompress_asReader(ByteReader imageData, int v, int decompressedSize)
-        {
-            return new ByteReader(decompress_block(imageData, v, decompressedSize));
-        }
 
         
     }
