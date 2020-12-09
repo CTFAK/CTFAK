@@ -50,7 +50,7 @@ namespace DotNetCTFDumper.Utils
             uint decompressedSize = reader.ReadUInt32();
 
             byte[] rawData = reader.ReadBytes((int) reader.Size());
-            if ((chunkId & 1) == 1)
+            if ((chunkId & 1) == 1&&Settings.Build>284)
             {
                 rawData[0] ^= (byte) ((byte) (chunkId & 0xFF) ^ (byte) (chunkId >> 0x8));
             }
