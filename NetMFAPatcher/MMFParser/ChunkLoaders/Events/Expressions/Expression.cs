@@ -11,6 +11,11 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Events.Expressions
         public int ObjectInfo;
         public int ObjectInfoList;
         public Expression(ByteReader reader) : base(reader) { }
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print()
         {
             throw new NotImplementedException();

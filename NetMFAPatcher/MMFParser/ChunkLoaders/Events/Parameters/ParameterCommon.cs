@@ -9,6 +9,11 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Events.Parameters
         
 
         public ParameterCommon(ByteReader reader) : base(reader) { }
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print()
         {
             throw new NotImplementedException();

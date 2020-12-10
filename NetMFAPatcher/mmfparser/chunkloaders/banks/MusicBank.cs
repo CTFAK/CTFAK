@@ -35,7 +35,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
         {
             //Someone is using this lol?
             //Actually,yes
-            Reader.Seek(0);
+            if (!Settings.DoMFA)Reader.Seek(0);//Reset the reader to avoid bugs when dumping more than once
             Items = new List<MusicFile>();
             NumOfItems = Reader.ReadInt32();
             if (!Settings.DumpMusic) return;

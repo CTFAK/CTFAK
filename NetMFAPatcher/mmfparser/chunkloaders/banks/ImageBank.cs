@@ -47,7 +47,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
         }
         public override void Read()
         {
-            Reader.Seek(0); //Reset the reader to avoid bugs when dumping more than once
+            if (!Settings.DoMFA)Reader.Seek(0);//Reset the reader to avoid bugs when dumping more than once
             Images = new Dictionary<int, ImageItem>();
             
 
@@ -300,7 +300,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
             chunk.WriteInt16((short) ActionY);
             chunk.WriteBytes(_transparent);
 
-            chunk.WriteBytes(rawImg);
+            chunk.WriteBytes(_colorArray);
             
             if(Flags["Alpha"])chunk.WriteBytes(rawAlpha);
             writer.WriteInt32(Handle);

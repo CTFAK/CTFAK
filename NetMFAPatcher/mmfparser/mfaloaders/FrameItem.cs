@@ -10,12 +10,24 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders
         public int ObjectType;
         public int Handle;
         public string Name;
-        public bool Transparent;
+        public int Transparent;
         public int InkEffect;
         public int InkEffectParameter;
         public int AntiAliasing;
         public int Flags;
         public int IconType;
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt32(this.ObjectType);
+            Writer.WriteInt32(Handle);
+            Writer.AutoWriteUnicode(Name);
+            Writer.WriteInt32(Transparent);
+            Writer.WriteInt32(InkEffect);
+            Writer.WriteInt32(InkEffectParameter);
+            
+            
+        }
 
         public override void Print()
         {
@@ -27,7 +39,7 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders
             ObjectType = Reader.ReadInt32();
             Handle = Reader.ReadInt32();
             Name = Helper.AutoReadUnicode(Reader);
-            var transparent1 = Reader.ReadInt32();
+            Transparent = Reader.ReadInt32();
             
             InkEffect = Reader.ReadInt32();
             InkEffectParameter = Reader.ReadInt32();
@@ -47,18 +59,15 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders
             chunks.Read();
             if(ObjectType>=32)//extension base
             {
-                //swallow some cum
+               //TODO: Nonactives
 
             }
             else
             {
-              
                 var loader = new Active(Reader);
                 loader.Read();
-
-
             }
-            Print();
+           
             
 
 

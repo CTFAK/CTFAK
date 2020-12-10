@@ -20,7 +20,7 @@ namespace DotNetCTFDumper.MMFParser.Data
         }
 
         public abstract void Read();
-        //public abstract void Write();
+        public abstract void Write(ByteWriter Writer);
         public abstract void Print();
 
 

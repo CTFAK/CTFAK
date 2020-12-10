@@ -190,7 +190,9 @@
     <Compile Include="MMFParser\Decompiling\PAME2MFA.cs" />
     <Compile Include="MMFParser\MFALoaders\ChunkList.cs" />
     <Compile Include="MMFParser\MFALoaders\Frame.cs" />
+    <Compile Include="MMFParser\MFALoaders\FrameInstance.cs" />
     <Compile Include="MMFParser\MFALoaders\FrameItem.cs" />
+    <Compile Include="MMFParser\MFALoaders\ItemFolder.cs" />
     <Compile Include="MMFParser\MFALoaders\Layer.cs" />
     <Compile Include="MMFParser\MFALoaders\mfachunks\Active.cs" />
     <Compile Include="MMFParser\MFALoaders\mfachunks\AnimationObject.cs" />

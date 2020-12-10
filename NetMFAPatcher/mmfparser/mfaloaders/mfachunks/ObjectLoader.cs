@@ -15,7 +15,12 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders.mfachunks
         public ValueList Strings;
         public Movements Movements;
         public Behaviours Behaviours;
-        
+
+        public override void Write(ByteWriter Writer)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void Print()
         {
             Logger.Log("Object Loader: ");

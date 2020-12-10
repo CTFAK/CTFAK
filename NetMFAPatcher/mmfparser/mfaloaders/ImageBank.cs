@@ -46,7 +46,7 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders
                 var item = new ImageItem(Reader);
                 item.Debug = true;
                 item.Read();
-                item.Save($"{Settings.ImagePath}\\{i}.png");
+                //item.Save($"{Settings.ImagePath}\\{i}.png");
                 Items.Add(item.Handle,item);
                 
             }
@@ -55,7 +55,7 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders
 
         
 
-        public void Write(ByteWriter writer)
+        public override void Write(ByteWriter writer)
         {
             writer.WriteInt32(GraphicMode);
             writer.WriteInt16((short) PaletteVersion);
@@ -64,10 +64,11 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders
             {
                 writer.WriteColor(Palette[i]);
             }
-            writer.WriteInt32(Items.Count);
+
+            writer.WriteInt32(0);//(Items.Count);
             foreach (var key in Items.Keys)
             {
-                Items[key].Write(writer);
+                //Items[key].Write(writer);
             }
         }
         public AgmiBank(ByteReader reader) : base(reader)

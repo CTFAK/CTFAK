@@ -31,7 +31,7 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders
             }
         }
 
-        public void Write(ByteWriter writer)
+        public override void Write(ByteWriter writer)
         {
             writer.WriteInt32(Items.Count);
             foreach (var item in Items)
@@ -85,7 +85,7 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders
             }
         }
 
-        public void Write(ByteWriter writer)
+        public override void Write(ByteWriter writer)
         {
             writer.WriteInt32(ControlType);
             writer.WriteUInt32(16);

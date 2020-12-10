@@ -4,13 +4,21 @@ using DotNetCTFDumper.Utils;
 
 namespace DotNetCTFDumper.MMFParser.MFALoaders
 {
-    class Layer : DataLoader
+    public class Layer : DataLoader
     {
         public string Name="ERROR";
         public float XCoefficient;
         public float YCoefficient;
         public int Flags;
 
+
+        public override void Write(ByteWriter Writer)
+        {
+            Helper.AutoWriteUnicode(Writer,Name);
+            Writer.WriteInt32(Flags);
+            Writer.WriteSingle(XCoefficient);
+            Writer.WriteSingle(YCoefficient);
+        }
 
         public override void Print()
         {

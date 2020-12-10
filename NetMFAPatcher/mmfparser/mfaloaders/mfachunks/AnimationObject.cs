@@ -29,6 +29,11 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders.mfachunks
     class Animation : DataLoader
     {
         public string Name = "Animation-UNKNOWN";
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print()
         {
             Logger.Log($"   Found animation: {Name} ");
@@ -54,6 +59,11 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders.mfachunks
     class AnimationDirection : DataLoader
     {
         public string Name = "Animation-UNKNOWN";
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print()
         {
             throw new NotImplementedException();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using DotNetCTFDumper.MMFParser.ChunkLoaders;
 using DotNetCTFDumper.MMFParser.ChunkLoaders.Banks;
 using DotNetCTFDumper.MMFParser.MFALoaders;
@@ -106,6 +107,8 @@ namespace DotNetCTFDumper.MMFParser.Data
         public List<Frame> Frames;
 
 
+        
+
         public override void Print()
         {
             //Logger.Log($"MFA Product:{product}");
@@ -113,115 +116,72 @@ namespace DotNetCTFDumper.MMFParser.Data
             //Logger.Log($"MFA Product:{buildVersion}");
 
         }
-        public void Write(ByteWriter writer)
+        public override void Write(ByteWriter Writer)
         {
             
-            writer.WriteAscii("MFU2");
-            writer.WriteInt32(MfaBuild);
-            writer.WriteInt32(Product);
-            writer.WriteInt32(BuildVersion);
-            writer.WriteInt32(LangId);
-            writer.AutoWriteUnicode(Name);
-            writer.AutoWriteUnicode(Description);
-            writer.AutoWriteUnicode(Path);
+            Writer.WriteAscii("MFU2");
+            Writer.WriteInt32(MfaBuild);
+            Writer.WriteInt32(Product);
+            Writer.WriteInt32(BuildVersion);
+            Writer.WriteInt32(LangId);
+            Writer.AutoWriteUnicode(Name);
+            Writer.AutoWriteUnicode(Description);
+            Writer.AutoWriteUnicode(Path);
 
-            writer.WriteUInt32((uint)Stamp.Length);
-            writer.WriteBytes(Stamp);
-            writer.WriteAscii(FontBankId);
-            Fonts.Write(writer);
-            writer.WriteAscii(SoundBankId);
-            Sounds.Write(writer);
+            Writer.WriteUInt32((uint)Stamp.Length);
+            Writer.WriteBytes(Stamp);
+            Writer.WriteAscii(FontBankId);
+            Fonts.Write(Writer);
+            Writer.WriteAscii(SoundBankId);
+            Sounds.Write(Writer);
             
-            writer.WriteAscii(MusicBankId);
-            //music.Write();//cum cum cum cum cum cum cum cum
-            writer.WriteInt32(0);//someone is using musics lol?
+            Writer.WriteAscii(MusicBankId);
+            //music.Write();
+            Writer.WriteInt32(0);//someone is using musics lol?
             //TODO: Do music
-            //I am not an asshole lol
-            writer.WriteAscii(ImageBankId);
-            Icons.Write(writer);
             
-            writer.WriteAscii(ImageBankId);
-            Images.Write(writer);
+            Writer.WriteAscii(ImageBankId);
+            Icons.Write(Writer);
             
-            writer.AutoWriteUnicode(Name);
-            writer.AutoWriteUnicode(Author);
-            writer.AutoWriteUnicode(Description);
-            writer.AutoWriteUnicode(Copyright);
-            writer.AutoWriteUnicode(Company);
-            writer.AutoWriteUnicode(Version);
-            writer.WriteInt32(WindowX);
-            writer.WriteInt32(WindowY);
-            writer.WriteColor(Color.White);
-            writer.WriteInt32((int) DisplayFlags.flag);
-            writer.WriteInt32((int) GraphicFlags.flag);
-            writer.WriteUInt32((uint) InitialScore);
-            writer.WriteUInt32((uint) InitialLifes);
-            writer.WriteInt32(FrameRate);
-            writer.WriteInt32(BuildType);
-            writer.AutoWriteUnicode(BuildPath);
-            writer.WriteInt32(0);
-            writer.AutoWriteUnicode(CommandLine);
-            writer.AutoWriteUnicode(Aboutbox);
-            writer.WriteInt32(0);//anaconda
-            writer.WriteInt32(0);//binary files are not supported because i am lazy asshole
+            Writer.WriteAscii(ImageBankId);
+            Images.Write(Writer);
+      
             
-            Controls.Write(writer);
-            
-            //Menu = null; //TODO:Menu
+            Writer.AutoWriteUnicode(Name);
+            Writer.AutoWriteUnicode(Author);
+            Writer.AutoWriteUnicode(Description);
+            Writer.AutoWriteUnicode(Copyright);
+            Writer.AutoWriteUnicode(Company);
+            Writer.AutoWriteUnicode(Version);
+            Writer.WriteInt32(WindowX);
+            Writer.WriteInt32(WindowY);
+            Writer.WriteColor(Color.White);
+            Writer.WriteInt32((int) DisplayFlags.flag);
+            Writer.WriteInt32((int) GraphicFlags.flag);
+            Writer.WriteUInt32((uint) InitialScore);
+            Writer.WriteUInt32((uint) InitialLifes);
+            Writer.WriteInt32(FrameRate);
+            Writer.WriteInt32(BuildType);
+            Writer.AutoWriteUnicode(BuildPath);
+            Writer.AutoWriteUnicode(CommandLine);
+            Writer.AutoWriteUnicode(Aboutbox);
+            Menu = null; //TODO:Menu
             if (Menu != null)
             {
                 byte[] menuData = new byte[1]; //Menu.Generate;
-                writer.WriteInt32(menuData.Length);
-                writer.WriteBytes(menuData);
+                Writer.WriteInt32(menuData.Length);
+                Writer.WriteBytes(menuData);
             }
             else
             {
-                writer.WriteInt32(0);
+                Writer.WriteInt32(0);
             }
-            return;
-            writer.WriteInt32(windowMenuIndex);
-            writer.WriteInt32(menuImages.Length);
-            foreach (var item in menuImages)
-            {
-                writer.WriteInt32(item);
-            }
+            
+            
+            
 
-            GlobalValues.Write(writer);
-            GlobalStrings.Write(writer);
-            writer.WriteInt32(GlobalEvents.Length);
-            writer.WriteBytes(GlobalEvents);
-            writer.WriteInt32(GraphicMode);
-            writer.WriteInt32(IconImages.Count);
-            foreach (var item in IconImages)
-            {
-                writer.WriteInt32(item);
-            }
-            
-            //Qualifiers
-            writer.WriteInt32(CustomQuals.Count);
-            foreach (var item in CustomQuals)
-            {
-                writer.AutoWriteUnicode(item.Item1);
-                writer.WriteInt32(item.Item2);
-            }
-            //Extensions
-            
-            foreach (var item in Extensions)
-            {
-                writer.WriteInt32(item.Item1);
-                writer.AutoWriteUnicode(item.Item2);
-                writer.AutoWriteUnicode(item.Item3);
-                writer.WriteInt32(item.Item4);
-                writer.WriteBytes(item.Item5);
-                
-            }
-            writer.WriteInt32(Frames.Count);
-            var startPosition = writer.Tell() + 4 * Frames.Count + 4;
-            //help
-            //how to implement write writer
-            
-            
-            
+
+
 
 
 

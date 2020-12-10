@@ -18,6 +18,11 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Events
         public int ObjectInfoList;
         public List<Parameter> Items = new List<Parameter>();
         public Condition(ByteReader reader) : base(reader) { }
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print()
         {
             throw new NotImplementedException();
@@ -65,6 +70,11 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Events
         public int ObjectInfoList;
         public List<Parameter> Items = new List<Parameter>();
         public Action(ByteReader reader) : base(reader) { }
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print( )
         {
             throw new NotImplementedException();
@@ -105,6 +115,11 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Events
         public DataLoader Loader;
 
         public Parameter(ByteReader reader) : base(reader) { }
+
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
 
         public override void Print()
         {

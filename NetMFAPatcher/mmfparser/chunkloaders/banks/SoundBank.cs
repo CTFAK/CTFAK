@@ -37,8 +37,11 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
         public override void Read()
         {
             //Implementing for standalone-only because of my lazyness
+            if (!Settings.DoMFA)Reader.Seek(0);//Reset the reader to avoid bugs when dumping more than once
             
-            Reader.Seek(0);//Reset the reader to avoid bugs when dumping more than once
+                
+            
+            
             Items = new List<SoundItem>();
             NumOfItems = Reader.ReadInt32();
             Logger.Log("Found " + NumOfItems + " sounds");

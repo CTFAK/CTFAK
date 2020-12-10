@@ -63,10 +63,11 @@ namespace DotNetCTFDumper.Utils
         public static void AutoWriteUnicode(this ByteWriter writer, string value)
         {
             writer.WriteInt16((short) value.Length);
-            writer.Skip(2);
+            writer.Skip(1);
+            writer.WriteInt8(0x80);
             writer.WriteUnicode(value);
         }
-
+       
         public static DataLoader LoadParameter(int code, ByteReader reader)
         {
             DataLoader item = null;

@@ -29,7 +29,7 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders
             }
         }
 
-        public void Write(ByteWriter Writer)
+        public override void Write(ByteWriter Writer)
         {
             Writer.WriteInt32(Items.Count);
             foreach (var item in Items)
@@ -72,7 +72,7 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders
             }
         }
 
-        public void Write(ByteWriter Writer)
+        public override void Write(ByteWriter Writer)
         {
             Writer.AutoWriteUnicode(Name);
             if (Value is string)

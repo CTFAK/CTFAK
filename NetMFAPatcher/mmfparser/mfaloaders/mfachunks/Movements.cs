@@ -8,6 +8,11 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders.mfachunks
     class Movements : DataLoader
     {
         public List<Movement> Items = new List<Movement>();
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print()
         {
             throw new NotImplementedException();
@@ -31,6 +36,11 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders.mfachunks
     class Movement : DataLoader
     {
         public string Name="ERROR";
+
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
 
         public override void Print()
         {

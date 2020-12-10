@@ -65,7 +65,7 @@ namespace DotNetCTFDumper.Utils
         public void WriteUInt16(ushort value) => Write(value);
         public void WriteUInt32(uint value) => Write(value);
         public void WriteUInt64(ulong value) => Write(value);
-
+        public void WriteSingle(float value) => Write(value);
        
         public void WriteBytes(byte[] value) => Write(value);
 

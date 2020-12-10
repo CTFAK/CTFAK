@@ -8,6 +8,11 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders.mfachunks
     class Behaviours : DataLoader
     {
         List<Behaviour> _items = new List<Behaviour>();
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print()
         {
             throw new NotImplementedException();
@@ -29,6 +34,11 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders.mfachunks
     {
         public string Name = "ERROR";
         public ByteReader Data;
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print()
         {
             throw new NotImplementedException();
