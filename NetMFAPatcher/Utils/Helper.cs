@@ -65,7 +65,7 @@ namespace DotNetCTFDumper.Utils
             writer.WriteInt16((short) value.Length);
             writer.Skip(1);
             writer.WriteInt8(0x80);
-            writer.WriteUnicode(value);
+            writer.WriteUnicode(value,false);
         }
        
         public static DataLoader LoadParameter(int code, ByteReader reader)
@@ -289,7 +289,19 @@ namespace DotNetCTFDumper.Utils
             // Step 3: return the new array.
             return result;
         }
-
         
+        
+    }
+    public static class StringExtensionMethods
+    {
+        public static string ReplaceFirst(this string text, string search, string replace)
+        {
+            int pos = text.IndexOf(search);
+            if (pos < 0)
+            {
+                return text;
+            }
+            return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
+        }
     }
 }

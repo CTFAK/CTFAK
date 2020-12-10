@@ -282,7 +282,7 @@ namespace DotNetCTFDumper.MMFParser.Data
             unknown_string_2 = Helper.AutoReadUnicode(Reader);
             CommandLine = Helper.AutoReadUnicode(Reader);
             Aboutbox = Helper.AutoReadUnicode(Reader);
-            
+            Reader.ReadUInt32();
 
             var binCount = Reader.ReadInt32(); //wtf i cant put it in loop fuck shit
 

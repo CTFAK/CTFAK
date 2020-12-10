@@ -6,8 +6,8 @@ namespace DotNetCTFDumper.MMFParser.Decompiling
 {
     public static class MFAGenerator
     {
-        //public static readonly string TemplatePath = @"F:\CPP\DotNetCTFDumper\testNoFrames.mfa";
-        public static readonly string TemplatePath = @"C:\Users\ivani\Desktop\CTFResearch\testNoFrames.mfa";
+        public static readonly string TemplatePath = @"C:\Users\MED45\Downloads\testNoFrames.mfa";
+        // public static readonly string TemplatePath = @"C:\Users\ivani\Desktop\CTFResearch\testNoFrames.mfa";
 
         public static void BuildMFA()
         {

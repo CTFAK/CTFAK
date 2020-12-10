@@ -36,7 +36,7 @@ namespace DotNetCTFDumper.Utils
         {
             BaseStream.Seek(count, SeekOrigin.Current);
         }
-        
+
 
         public Int64 Tell()
         {
@@ -57,19 +57,19 @@ namespace DotNetCTFDumper.Utils
         {
             return BaseStream.Position < BaseStream.Length;
         }
+
         public void WriteInt8(byte value) => Write(value);
-        public void WriteInt16(short value)=>Write(value);
+        public void WriteInt16(short value) => Write(value);
         public void WriteInt32(int value) => Write(value);
         public void WriteInt64(long value) => Write(value);
-        
+
         public void WriteUInt16(ushort value) => Write(value);
         public void WriteUInt32(UInt32 value) => Write(value);
         public void WriteUInt64(ulong value) => Write(value);
         public void WriteSingle(float value) => Write(value);
-       
+
         public void WriteBytes(byte[] value) => Write(value);
 
-        
 
         public void WriteAscii(string value)
         {
@@ -79,42 +79,31 @@ namespace DotNetCTFDumper.Utils
                 WriteInt8(bytes[i]);
             }
         }
-        public void WriteUnicode(string value)
+
+        public void WriteUnicode(string value, bool appendZero = false)
         {
             var bytes = Encoding.Unicode.GetBytes(value);
             for (int i = 0; i < bytes.Length; i++)
             {
                 WriteInt8(bytes[i]);
-
             }
+
+            if (appendZero) WriteInt16(0);
         }
+
         public void WriteColor(Color color)
         {
-            
             WriteInt8(color.R);
             WriteInt8(color.G);
             WriteInt8(color.B);
             WriteInt8(0);
-            
-
         }
+
         public void WriteWriter(ByteWriter toWrite)
         {
             byte[] data = ((MemoryStream) toWrite.BaseStream).GetBuffer();
-            Array.Resize<byte>(ref data,(int) toWrite.Size());
+            Array.Resize<byte>(ref data, (int) toWrite.Size());
             this.WriteBytes(data);
         }
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
