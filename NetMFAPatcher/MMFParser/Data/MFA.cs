@@ -89,7 +89,8 @@ namespace DotNetCTFDumper.MMFParser.Data
         });
 
         public string HelpFile;
-        public string unknown_string; //Found in original mfa build 283
+        public string unknown_string; //Found in original mfa build 283 after help file
+        public string unknown_string_2; //Found in original mfa build 283 after build path
         public byte[] VitalizePreview;
         public int InitialScore;
         public int InitialLifes;
@@ -163,15 +164,15 @@ namespace DotNetCTFDumper.MMFParser.Data
             Writer.WriteInt32((int) GraphicFlags.flag);
             Writer.AutoWriteUnicode(HelpFile);
             Writer.AutoWriteUnicode(unknown_string);
-            Writer.WriteInt32(VitalizePreview.Length);
-            Writer.WriteBytes(VitalizePreview);
             Writer.WriteUInt32((uint) InitialScore);
             Writer.WriteUInt32((uint) InitialLifes);
             Writer.WriteInt32(FrameRate);
             Writer.WriteInt32(BuildType);
             Writer.AutoWriteUnicode(BuildPath);
+            Writer.AutoWriteUnicode(unknown_string_2);
             Writer.AutoWriteUnicode(CommandLine);
             Writer.AutoWriteUnicode(Aboutbox);
+            Writer.WriteInt32(0);
 
             Writer.WriteInt32(BinaryFiles.Count);
             foreach (byte[] binaryFile in BinaryFiles)
@@ -182,6 +183,7 @@ namespace DotNetCTFDumper.MMFParser.Data
 
             Controls.Write(Writer);
             
+
             if (Menu != null)
             {
                 using (ByteWriter menuWriter = new ByteWriter(new MemoryStream()))
@@ -269,17 +271,15 @@ namespace DotNetCTFDumper.MMFParser.Data
             GraphicFlags.flag = Reader.ReadUInt32();
             HelpFile = Helper.AutoReadUnicode(Reader);
             unknown_string = Helper.AutoReadUnicode(Reader);
-            Int32 vit_size = Reader.ReadInt32();
-            VitalizePreview = Reader.ReadBytes(vit_size);
+            //Int32 vit_size = Reader.ReadInt32();
+            //VitalizePreview = Reader.ReadBytes(vit_size);
             
             InitialScore = Reader.ReadInt32();
             InitialLifes = Reader.ReadInt32();
             FrameRate = Reader.ReadInt32();
             BuildType = Reader.ReadInt32();
             BuildPath = Helper.AutoReadUnicode(Reader);
-            //Console.WriteLine(BuildPath);
-            //Helper.CheckPattern(Reader.ReadInt32(),0);
-            Reader.ReadInt32();
+            unknown_string_2 = Helper.AutoReadUnicode(Reader);
             CommandLine = Helper.AutoReadUnicode(Reader);
             Aboutbox = Helper.AutoReadUnicode(Reader);
             
