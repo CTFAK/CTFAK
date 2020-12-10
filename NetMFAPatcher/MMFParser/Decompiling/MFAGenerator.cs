@@ -6,7 +6,7 @@ namespace DotNetCTFDumper.MMFParser.Decompiling
 {
     public static class MFAGenerator
     {
-        public static readonly string TemplatePath = @"C:\Users\ivani\Desktop\CTFResearch\testNoFrames.mfa";
+        public static readonly string TemplatePath = @"F:\CPP\DotNetCTFDumper\testNoFrames.mfa";
 
         public static void BuildMFA()
         {
@@ -16,7 +16,7 @@ namespace DotNetCTFDumper.MMFParser.Decompiling
 
             template.Read(); //Loading template
 
-            var gameMFA = template;//Pame2Mfa.Translate(template, Exe.LatestInst.GameData); //Translation
+            var gameMFA = template; //Pame2Mfa.Translate(template, Exe.LatestInst.GameData); //Translation
 
             var mfaWriter =
                 new ByteWriter(

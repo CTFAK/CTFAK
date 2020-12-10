@@ -40,5 +40,23 @@ namespace DotNetCTFDumper.Utils
             Array.Resize<byte>(ref decompressedData, decompSize);
             return decompressedData;
         }
+
+        public static byte[] compress_block(byte[] data)
+        {
+            ZLibCompressOptions compOpts = new ZLibCompressOptions();
+            compOpts.Level = ZLibCompLevel.Default;
+            MemoryStream decompressedStream = new MemoryStream(data);
+            MemoryStream compressedStream = new MemoryStream();
+            byte[] compressedData = null;
+            Int32 compressed_size = 0;
+            ZLibStream zs = new ZLibStream(compressedStream, compOpts);
+            decompressedStream.CopyTo(zs);
+            zs.Close();
+
+            compressedData = compressedStream.GetBuffer();
+            Array.Resize<byte>(ref compressedData, (int) zs.TotalOut);
+
+            return compressedData;
+        }
     }
 }

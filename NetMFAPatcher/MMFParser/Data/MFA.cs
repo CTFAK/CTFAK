@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Numerics;
 using DotNetCTFDumper.MMFParser.ChunkLoaders;
 using DotNetCTFDumper.MMFParser.ChunkLoaders.Banks;
 using DotNetCTFDumper.MMFParser.MFALoaders;
@@ -27,6 +28,8 @@ namespace DotNetCTFDumper.MMFParser.Data
         public string Description;
         public string Path;
 
+        public List<byte[]> BinaryFiles = new List<byte[]>();
+
         public FontBank Fonts;
         public SoundBank Sounds;
         public MusicBank Music;
@@ -47,6 +50,7 @@ namespace DotNetCTFDumper.MMFParser.Data
         public ValueList GlobalValues;
         public ValueList GlobalStrings;
         public Color BorderColor;
+
         public BitDict DisplayFlags = new BitDict(new string[]
         {
             "MaximizedOnBoot",
@@ -63,9 +67,9 @@ namespace DotNetCTFDumper.MMFParser.Data
             "NoCenter",
             "DisableClose",
             "HiddenAtStart",
-            "MDI" 
-            
+            "MDI"
         });
+
         public BitDict GraphicFlags = new BitDict(new string[]
         {
             "MultiSamples",
@@ -83,8 +87,10 @@ namespace DotNetCTFDumper.MMFParser.Data
             "NoDebugger",
             "NoSubappSharing"
         });
+
         public string HelpFile;
-        public int VitalizePreview;
+        public string unknown_string; //Found in original mfa build 283
+        public byte[] VitalizePreview;
         public int InitialScore;
         public int InitialLifes;
         public int FrameRate;
@@ -95,7 +101,7 @@ namespace DotNetCTFDumper.MMFParser.Data
         public uint MenuSize;
         public AppMenu Menu;
         private int windowMenuIndex;
-        private int[] menuImages;
+        private Dictionary<Int32, Int32> menuImages;
         private byte[] GlobalEvents;
         private int GraphicMode;
         private int IcoCount;
@@ -107,18 +113,15 @@ namespace DotNetCTFDumper.MMFParser.Data
         public List<Frame> Frames;
 
 
-        
-
         public override void Print()
         {
             //Logger.Log($"MFA Product:{product}");
             //Logger.Log($"MFA Build:{mfaBuild}");
             //Logger.Log($"MFA Product:{buildVersion}");
-
         }
+
         public override void Write(ByteWriter Writer)
         {
-            
             Writer.WriteAscii("MFU2");
             Writer.WriteInt32(MfaBuild);
             Writer.WriteInt32(Product);
@@ -128,25 +131,25 @@ namespace DotNetCTFDumper.MMFParser.Data
             Writer.AutoWriteUnicode(Description);
             Writer.AutoWriteUnicode(Path);
 
-            Writer.WriteUInt32((uint)Stamp.Length);
+            Writer.WriteUInt32((uint) Stamp.Length);
             Writer.WriteBytes(Stamp);
             Writer.WriteAscii(FontBankId);
             Fonts.Write(Writer);
             Writer.WriteAscii(SoundBankId);
             Sounds.Write(Writer);
-            
+
             Writer.WriteAscii(MusicBankId);
-            //music.Write();
-            Writer.WriteInt32(0);//someone is using musics lol?
+            // music.Write();
+            Writer.WriteInt32(0); //someone is using musics lol?
             //TODO: Do music
-            
+
             Writer.WriteAscii(ImageBankId);
             Icons.Write(Writer);
-            
+
             Writer.WriteAscii(ImageBankId);
             Images.Write(Writer);
-      
-            
+
+
             Writer.AutoWriteUnicode(Name);
             Writer.AutoWriteUnicode(Author);
             Writer.AutoWriteUnicode(Description);
@@ -158,6 +161,10 @@ namespace DotNetCTFDumper.MMFParser.Data
             Writer.WriteColor(Color.White);
             Writer.WriteInt32((int) DisplayFlags.flag);
             Writer.WriteInt32((int) GraphicFlags.flag);
+            Writer.AutoWriteUnicode(HelpFile);
+            Writer.AutoWriteUnicode(unknown_string);
+            Writer.WriteInt32(VitalizePreview.Length);
+            Writer.WriteBytes(VitalizePreview);
             Writer.WriteUInt32((uint) InitialScore);
             Writer.WriteUInt32((uint) InitialLifes);
             Writer.WriteInt32(FrameRate);
@@ -165,35 +172,40 @@ namespace DotNetCTFDumper.MMFParser.Data
             Writer.AutoWriteUnicode(BuildPath);
             Writer.AutoWriteUnicode(CommandLine);
             Writer.AutoWriteUnicode(Aboutbox);
-            Menu = null; //TODO:Menu
+
+            Writer.WriteInt32(BinaryFiles.Count);
+            foreach (byte[] binaryFile in BinaryFiles)
+            {
+                Writer.WriteInt32(binaryFile.Length);
+                Writer.WriteBytes(binaryFile);
+            }
+
+            Controls.Write(Writer);
+
+            // Menu = null; //TODO:Menu
             if (Menu != null)
             {
-                byte[] menuData = new byte[1]; //Menu.Generate;
-                Writer.WriteInt32(menuData.Length);
-                Writer.WriteBytes(menuData);
+                using (ByteWriter menuWriter = new ByteWriter(new MemoryStream()))
+                {
+                    Menu.Write(menuWriter);
+
+                    Writer.WriteUInt32((uint) menuWriter.BaseStream.Position);
+                    Writer.WriteWriter(menuWriter);
+                }
             }
             else
             {
                 Writer.WriteInt32(0);
             }
+
+            Writer.WriteInt32(windowMenuIndex);
+            Writer.WriteInt32(menuImages.Count);
+            foreach (KeyValuePair<int, int> valuePair in menuImages)
+            {
+                Writer.WriteInt32(valuePair.Key);
+                Writer.WriteInt32(valuePair.Value);
+            }
             
-            
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
 
         public override void Read()
@@ -216,7 +228,7 @@ namespace DotNetCTFDumper.MMFParser.Data
             Sounds = new SoundBank(Reader);
             Sounds.IsCompressed = false;
             Sounds.Read();
-            
+
             if (Reader.ReadAscii(4) != MusicBankId) throw new Exception("Invalid Music Bank");
             Music = new MusicBank(Reader);
             Music.Read();
@@ -229,9 +241,9 @@ namespace DotNetCTFDumper.MMFParser.Data
             Images = new AgmiBank(Reader);
             Images.Read();
 
-            Helper.CheckPattern(Helper.AutoReadUnicode(Reader),Name);
+            Helper.CheckPattern(Helper.AutoReadUnicode(Reader), Name);
             Author = Helper.AutoReadUnicode(Reader);
-            Helper.CheckPattern(Helper.AutoReadUnicode(Reader),Description);
+            Helper.CheckPattern(Helper.AutoReadUnicode(Reader), Description);
             Copyright = Helper.AutoReadUnicode(Reader);
             Company = Helper.AutoReadUnicode(Reader);
             Version = Helper.AutoReadUnicode(Reader);
@@ -241,11 +253,14 @@ namespace DotNetCTFDumper.MMFParser.Data
             DisplayFlags.flag = Reader.ReadUInt32();
             GraphicFlags.flag = Reader.ReadUInt32();
             HelpFile = Helper.AutoReadUnicode(Reader);
-            VitalizePreview = Reader.ReadInt32();
+            unknown_string = Helper.AutoReadUnicode(Reader);
+            Int32 vit_size = Reader.ReadInt32();
+            VitalizePreview = Reader.ReadBytes(vit_size);
+            
             InitialScore = Reader.ReadInt32();
             InitialLifes = Reader.ReadInt32();
             FrameRate = Reader.ReadInt32();
-            BuildType = Reader.ReadInt32(); 
+            BuildType = Reader.ReadInt32();
             BuildPath = Helper.AutoReadUnicode(Reader);
             //Console.WriteLine(BuildPath);
             //Helper.CheckPattern(Reader.ReadInt32(),0);
@@ -253,13 +268,14 @@ namespace DotNetCTFDumper.MMFParser.Data
             CommandLine = Helper.AutoReadUnicode(Reader);
             Aboutbox = Helper.AutoReadUnicode(Reader);
             Reader.ReadInt32();
-            
-            var binCount = Reader.ReadInt32();//wtf i cant put it in loop fuck shit
+
+            var binCount = Reader.ReadInt32(); //wtf i cant put it in loop fuck shit
 
             for (int i = 0; i < binCount; i++)
             {
-                Reader.ReadBytes(Reader.ReadInt32());//binaryfiles
+                BinaryFiles.Add(Reader.ReadBytes(Reader.ReadInt32()));
             }
+
             Controls = new Controls(Reader);
             Controls.Read();
 
@@ -270,24 +286,22 @@ namespace DotNetCTFDumper.MMFParser.Data
             Reader.Seek(MenuSize + currentPosition);
 
             windowMenuIndex = Reader.ReadInt32();
-            menuImages = new int[65535];//govnokod suka
-            var miCount = Reader.ReadInt32();
+            menuImages = new Dictionary<Int32, Int32>();
+            int miCount = Reader.ReadInt32();
             for (int i = 0; i < miCount; i++)
             {
-                var id = Reader.ReadInt32();
+                int id = Reader.ReadInt32();
                 menuImages[id] = Reader.ReadInt32();
             }
 
-
-            
 
             GlobalValues = new ValueList(Reader);
             GlobalValues.Read();
             GlobalStrings = new ValueList(Reader);
             GlobalStrings.Read();
             GlobalEvents = Reader.ReadBytes(Reader.ReadInt32());
-            GraphicMode = Reader.ReadInt32();;
-            
+            GraphicMode = Reader.ReadInt32();
+            ;
 
 
             IcoCount = Reader.ReadInt32();
@@ -296,35 +310,37 @@ namespace DotNetCTFDumper.MMFParser.Data
             {
                 IconImages.Add(Reader.ReadInt32());
             }
-            
+
             //I STUCK HERE
             QualCount = Reader.ReadInt32();
             CustomQuals = new List<Tuple<string, int>>();
-            for (int i = 0; i < QualCount; i++)//qualifiers
+            for (int i = 0; i < QualCount; i++) //qualifiers
             {
                 var name = Reader.ReadAscii(Reader.ReadInt32());
                 var handle = Reader.ReadInt32();
-                CustomQuals.Add(new Tuple<string,int>(name,handle));
-
+                CustomQuals.Add(new Tuple<string, int>(name, handle));
             }
+
             var extCount = Reader.ReadInt32();
             Extensions = new List<Tuple<int, string, string, int, byte[]>>();
-            for (int i = 0; i < extCount; i++)//extensions
+            for (int i = 0; i < extCount; i++) //extensions
             {
                 var handle = Reader.ReadInt32();
                 var filename = Helper.AutoReadUnicode(Reader);
                 var name = Helper.AutoReadUnicode(Reader);
                 var magic = Reader.ReadInt32();
                 var data = Reader.ReadBytes(Reader.ReadInt32());
-                var tuple = new Tuple<int,string,string,int,byte[]>(handle,filename,name,magic,data);
+                var tuple = new Tuple<int, string, string, int, byte[]>(handle, filename, name, magic, data);
                 Extensions.Add(tuple);
             }
+
             List<int> frameOffsets = new List<int>();
             var offCount = Reader.ReadInt32();
             for (int i = 0; i < offCount; i++)
             {
                 frameOffsets.Add(Reader.ReadInt32());
             }
+
             var nextOffset = Reader.ReadInt32();
             Frames = new List<Frame>();
             foreach (var item in frameOffsets)
@@ -333,25 +349,18 @@ namespace DotNetCTFDumper.MMFParser.Data
                 var testframe = new Frame(Reader);
                 testframe.Read();
                 Frames.Add(testframe);
-
             }
+
             Reader.Seek(nextOffset);
             var chunks = new MFALoaders.ChunkList(Reader);
             chunks.Read();
             return;
-
-
-
-
-
-
-
-
-        }
-        public MFA(ByteReader reader) : base(reader)
-        {
         }
 
         
+
+        public MFA(ByteReader reader) : base(reader)
+        {
+        }
     }
 }

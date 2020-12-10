@@ -13,7 +13,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
 {
     public class ImageBank : ChunkLoader
     {
-        public bool SaveImages=true;
+        public bool SaveImages = true;
         public Dictionary<int, ImageItem> Images = new Dictionary<int, ImageItem>();
         public uint NumberOfItems;
 
@@ -36,20 +36,21 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
                 $"Number of images: {NumberOfItems}"
             };
         }
-        public void Read(bool load,bool save)
+
+        public void Read(bool load, bool save)
         {
             var cache = Settings.DumpImages;
             Settings.DumpImages = load;
             SaveImages = save;
             Read();
             Settings.DumpImages = cache;
-
         }
+
         public override void Read()
         {
-            if (!Settings.DoMFA)Reader.Seek(0);//Reset the reader to avoid bugs when dumping more than once
+            if (!Settings.DoMFA) Reader.Seek(0); //Reset the reader to avoid bugs when dumping more than once
             Images = new Dictionary<int, ImageItem>();
-            
+
 
             NumberOfItems = Reader.ReadUInt32();
 
@@ -67,11 +68,11 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
                 var item = new ImageItem(Reader);
                 item.Read();
                 Images.Add(item.Handle, item);
-                
-                    if(SaveImages)item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
- 
-                    Helper.OnImageSaved(i, (int) NumberOfItems);
-                
+
+                if (SaveImages) item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
+
+                Helper.OnImageSaved(i, (int) NumberOfItems);
+
 
                 if (Exe.Instance.GameData.ProductBuild >= 284)
                     item.Handle -= 1;
@@ -123,7 +124,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
 
         public override void Read()
         {
-            Handle = Reader.ReadInt32()-1;
+            Handle = Reader.ReadInt32() - 1;
             Position = (int) Reader.Tell();
             Load();
         }
@@ -228,23 +229,20 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
 
         public void Save(string filename)
         {
-            
-                using (var bmp = new Bitmap(_width, _height, PixelFormat.Format32bppArgb))
-                {
-                    BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0,
-                            bmp.Width,
-                            bmp.Height),
-                        ImageLockMode.WriteOnly,
-                        bmp.PixelFormat);
+            using (var bmp = new Bitmap(_width, _height, PixelFormat.Format32bppArgb))
+            {
+                BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0,
+                        bmp.Width,
+                        bmp.Height),
+                    ImageLockMode.WriteOnly,
+                    bmp.PixelFormat);
 
-                    IntPtr pNative = bmpData.Scan0;
-                    Marshal.Copy(_colorArray, 0, pNative, _colorArray.Length);
+                IntPtr pNative = bmpData.Scan0;
+                Marshal.Copy(_colorArray, 0, pNative, _colorArray.Length);
 
-                    bmp.UnlockBits(bmpData);
-                    bmp.Save(filename);
-                }
-            
-                
+                bmp.UnlockBits(bmpData);
+                bmp.Save(filename);
+            }
         }
 
         public Bitmap Bitmap
@@ -265,50 +263,67 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
                     Marshal.Copy(_colorArray, 0, pNative, _colorArray.Length);
 
                     _bitmap.UnlockBits(bmpData);
-
                 }
 
                 return _bitmap;
             }
-
-
         }
-        
+
+        // private byte[] GenerateImage()
+        // {
+        //     Int32 pad = ImageHelper.GetPadding(_width, 3);
+        //     byte[] points = new byte[(_width * _height + pad * _height)*3];
+        //     for (UInt32 y = 0; y < _height; y++)
+        //     {
+        //         for (UInt32 x = 0; x < _height; x++)
+        //         {
+        //             
+        //         }
+        //     }
+        //
+        //     return points;
+        // }
+
 
         public void Write(ByteWriter writer)
         {
             ByteWriter chunk = new ByteWriter(new MemoryStream());
             chunk.WriteInt32(_checksum);
             chunk.WriteInt32(_references);
-            chunk.WriteInt32(_colorArray.Length);
-            chunk.WriteInt16((short) _width);
-            chunk.WriteInt16((short) _height);
-            chunk.WriteInt8((byte) _graphicMode);
-            if (Flags["Alpha"])
+            byte[] compressedImg = null;
+            if (Flags["LZX"])
             {
-                chunk.WriteInt8(16);
+                compressedImg = Decompressor.compress_block(rawImg);
+                chunk.WriteUInt32((uint) compressedImg.Length+4);
             }
             else
             {
-                chunk.WriteInt8(0);
+                chunk.WriteUInt32((uint) rawImg.Length);
             }
 
-            chunk.Skip(2);
+            chunk.WriteInt16((short) _width);
+            chunk.WriteInt16((short) _height);
+            chunk.WriteInt8((byte) _graphicMode);
+            chunk.WriteInt8((byte) Flags.flag);
+            chunk.WriteInt16(0);
             chunk.WriteInt16((short) XHotspot);
             chunk.WriteInt16((short) YHotspot);
             chunk.WriteInt16((short) ActionX);
             chunk.WriteInt16((short) ActionY);
             chunk.WriteBytes(_transparent);
+            if (Flags["LZX"])
+            {
+                chunk.WriteInt32(rawImg.Length);
+                chunk.WriteBytes(compressedImg);
+            }
 
-            chunk.WriteBytes(_colorArray);
-            
-            if(Flags["Alpha"])chunk.WriteBytes(rawAlpha);
-            writer.WriteInt32(Handle);
-            
-            
+            else
+            {
+                chunk.WriteBytes(rawImg);
+            }
+
+            writer.WriteInt32(Handle + 1);
             writer.WriteWriter(chunk);
-            //MemoryStream ms = (MemoryStream) chunk.BaseStream;
-            //writer.WriteBytes(ms.GetBuffer());
         }
 
 

@@ -42,7 +42,7 @@ namespace DotNetCTFDumper.MMFParser.Decompiling
             mfa.WindowY = game.Header.WindowHeight;
             mfa.BorderColor = game.Header.BorderColor;
             mfa.HelpFile = "";
-            mfa.VitalizePreview = 0;
+            mfa.VitalizePreview = new byte[]{0x0};
             mfa.InitialScore = game.Header.InitialScore;
             mfa.InitialLifes = game.Header.InitialLives;
             mfa.FrameRate = game.Header.FrameRate;

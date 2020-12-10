@@ -96,14 +96,12 @@ namespace DotNetCTFDumper.GUI
             this.ResumeLayout(false);
         }
 
-        private System.Windows.Forms.ScrollableControl scrollableControl1;
-
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem deleteObjBtn;
         private System.Windows.Forms.ToolStripMenuItem infoMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nameMenuItem;
         private System.Windows.Forms.ToolStripMenuItem positionMenuItem;
-
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem deleteObjBtn;
+        private System.Windows.Forms.ScrollableControl scrollableControl1;
 
         #endregion
     }

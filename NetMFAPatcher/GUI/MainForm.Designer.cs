@@ -115,7 +115,6 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(180, 281);
             this.listBox1.TabIndex = 5;
-            
             // 
             // GameInfo
             // 
@@ -302,7 +301,6 @@
             this.showHexBtn.Text = "Show hex";
             this.showHexBtn.UseVisualStyleBackColor = false;
             this.showHexBtn.Visible = false;
-            
             // 
             // dumpSortedBtn
             // 
@@ -325,7 +323,6 @@
             this.ChunkCombo.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {this.saveChunkBtn, this.viewHexBtn, this.previewFrameBtn});
             this.ChunkCombo.Name = "Save";
             this.ChunkCombo.Size = new System.Drawing.Size(152, 70);
-            
             this.ChunkCombo.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.ChunkCombo_ItemSelected);
             // 
             // saveChunkBtn
@@ -443,33 +440,30 @@
             this.PerformLayout();
         }
 
-        private System.Windows.Forms.ToolStripMenuItem previewFrameBtn;
-
-        private System.Windows.Forms.Button musicsButton;
-
-        private System.Windows.Forms.ProgressBar imageBar;
-        private System.Windows.Forms.Label imageLabel;
-        private System.Windows.Forms.Button imagesButton;
-        private System.Windows.Forms.ProgressBar musicBar;
-        private System.Windows.Forms.Label musicLabel;
-        private System.Windows.Forms.ProgressBar soundBar;
-        private System.Windows.Forms.Label soundLabel;
-        private System.Windows.Forms.Button soundsButton;
-
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ContextMenuStrip ChunkCombo;
         private System.Windows.Forms.Button cryptKeyBtn;
         private System.Windows.Forms.Button dumpSortedBtn;
         private System.Windows.Forms.Button FolderBTN;
         private System.Windows.Forms.Label GameInfo;
+        private System.Windows.Forms.ProgressBar imageBar;
+        private System.Windows.Forms.Label imageLabel;
+        private System.Windows.Forms.Button imagesButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Label loadingLabel;
         private System.Windows.Forms.Button MFABtn;
+        private System.Windows.Forms.ProgressBar musicBar;
+        private System.Windows.Forms.Label musicLabel;
+        private System.Windows.Forms.Button musicsButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Button packDataBtn;
+        private System.Windows.Forms.ToolStripMenuItem previewFrameBtn;
         private System.Windows.Forms.ToolStripMenuItem saveChunkBtn;
         private System.Windows.Forms.Button showHexBtn;
+        private System.Windows.Forms.ProgressBar soundBar;
+        private System.Windows.Forms.Label soundLabel;
+        private System.Windows.Forms.Button soundsButton;
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.ToolStripMenuItem viewHexBtn;
 

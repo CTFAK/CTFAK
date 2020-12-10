@@ -61,9 +61,9 @@ namespace DotNetCTFDumper.Utils
         public void WriteInt16(short value)=>Write(value);
         public void WriteInt32(int value) => Write(value);
         public void WriteInt64(long value) => Write(value);
-
+        
         public void WriteUInt16(ushort value) => Write(value);
-        public void WriteUInt32(uint value) => Write(value);
+        public void WriteUInt32(UInt32 value) => Write(value);
         public void WriteUInt64(ulong value) => Write(value);
         public void WriteSingle(float value) => Write(value);
        
@@ -94,7 +94,7 @@ namespace DotNetCTFDumper.Utils
             WriteInt8(color.R);
             WriteInt8(color.G);
             WriteInt8(color.B);
-            Skip(1);
+            WriteInt8(0);
             
 
         }
