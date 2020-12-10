@@ -97,6 +97,10 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders
             writer.WriteInt32(Button2);
             writer.WriteInt32(Button3);
             writer.WriteInt32(Button4);
+            for (int i = 0; i < 8; i++)
+            {
+                writer.WriteInt32(0);
+            }
 
 
         }
