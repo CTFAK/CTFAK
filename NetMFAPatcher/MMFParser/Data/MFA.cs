@@ -181,8 +181,7 @@ namespace DotNetCTFDumper.MMFParser.Data
             }
 
             Controls.Write(Writer);
-
-            // Menu = null; //TODO:Menu
+            
             if (Menu != null)
             {
                 using (ByteWriter menuWriter = new ByteWriter(new MemoryStream()))
@@ -205,7 +204,23 @@ namespace DotNetCTFDumper.MMFParser.Data
                 Writer.WriteInt32(valuePair.Key);
                 Writer.WriteInt32(valuePair.Value);
             }
-            
+            GlobalValues.Write(Writer);
+            GlobalStrings.Write(Writer);
+            Writer.WriteInt32(GlobalEvents.Length);
+            Writer.WriteBytes(GlobalEvents);
+            Writer.WriteInt32(GraphicMode);
+            Writer.WriteUInt32((uint) IconImages.Count);
+            foreach (int iconImage in IconImages)
+            {
+                Writer.WriteInt32(iconImage);
+            }
+            Writer.WriteInt32(0);//custom qualifiers
+            Writer.WriteInt32(0); //extensions
+            Writer.WriteInt32(0); //frame
+
+
+
+
         }
 
         public override void Read()
@@ -267,7 +282,7 @@ namespace DotNetCTFDumper.MMFParser.Data
             Reader.ReadInt32();
             CommandLine = Helper.AutoReadUnicode(Reader);
             Aboutbox = Helper.AutoReadUnicode(Reader);
-            Reader.ReadInt32();
+            
 
             var binCount = Reader.ReadInt32(); //wtf i cant put it in loop fuck shit
 
@@ -301,7 +316,7 @@ namespace DotNetCTFDumper.MMFParser.Data
             GlobalStrings.Read();
             GlobalEvents = Reader.ReadBytes(Reader.ReadInt32());
             GraphicMode = Reader.ReadInt32();
-            ;
+            
 
 
             IcoCount = Reader.ReadInt32();
@@ -340,6 +355,7 @@ namespace DotNetCTFDumper.MMFParser.Data
             {
                 frameOffsets.Add(Reader.ReadInt32());
             }
+            
 
             var nextOffset = Reader.ReadInt32();
             Frames = new List<Frame>();
