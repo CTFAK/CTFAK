@@ -241,6 +241,7 @@ namespace DotNetCTFDumper.MMFParser.Data
             MfaBuild = Reader.ReadInt32();
             Product = Reader.ReadInt32();
             BuildVersion = Reader.ReadInt32();
+            Settings.Build = BuildVersion;
             LangId = Reader.ReadInt32();
             Name = Helper.AutoReadUnicode(Reader);
             Description = Helper.AutoReadUnicode(Reader);
@@ -335,8 +336,7 @@ namespace DotNetCTFDumper.MMFParser.Data
             {
                 IconImages.Add(Reader.ReadInt32());
             }
-
-            //I STUCK HERE
+            
             QualCount = Reader.ReadInt32();
             CustomQuals = new List<Tuple<string, int>>();
             for (int i = 0; i < QualCount; i++) //qualifiers

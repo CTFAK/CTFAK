@@ -21,7 +21,10 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Events
         public List<int> NumberOfConditions = new List<int>();
 
 
-        public Events(Chunk chunk) : base(chunk) { }
+        public Events(Chunk chunk) : base(chunk)
+        {
+        }
+
         public override void Print(bool ext)
         {
             throw new NotImplementedException();
@@ -34,7 +37,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Events
 
         public override void Read()
         {
-            while(true)
+            while (true)
             {
                 var identifier = Reader.ReadAscii(4);
                 if (identifier == Header)
@@ -46,14 +49,14 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Events
                     {
                         NumberOfConditions.Add(Reader.ReadInt16());
                     }
-                    var qualifierCount = Reader.ReadInt16();//should be 0, so i dont give a fuck
+
+                    var qualifierCount = Reader.ReadInt16(); //should be 0, so i dont give a fuck
                     Quailifers = new Quailifer[qualifierCount + 1];
                     for (int i = 0; i < qualifierCount; i++)
                     {
                         var newQualifier = new Quailifer(Reader);
-                        QualifiersList.Add(newQualifier);//fucking python types
+                        QualifiersList.Add(newQualifier); //fucking python types
                         //THIS IS NOT DONE
-
                     }
                 }
                 else if (identifier == EventCount)
@@ -71,9 +74,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Events
                     }
                 }
                 else if (identifier == End) break;
-
             }
-            
         }
     }
 
@@ -82,10 +83,15 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Events
         public int ObjectInfo;
         public int Type;
         public Quailifer Qualifier;
-        List<int> _objects = new List<int>();        
+        List<int> _objects = new List<int>();
 
-        public Quailifer(Chunk chunk) : base(chunk) { }
-        public Quailifer(ByteReader reader) : base(reader) { }
+        public Quailifer(Chunk chunk) : base(chunk)
+        {
+        }
+
+        public Quailifer(ByteReader reader) : base(reader)
+        {
+        }
 
         public override void Print(bool ext)
         {
@@ -102,7 +108,6 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Events
             ObjectInfo = Reader.ReadUInt16();
             Type = Reader.ReadInt16();
             Qualifier = this;
-
         }
     }
 
@@ -117,8 +122,13 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Events
         public List<Condition> Conditions = new List<Condition>();
         public List<Action> Actions = new List<Action>();
 
-        public EventGroup(Chunk chunk) : base(chunk) { }
-        public EventGroup(ByteReader reader) : base(reader) { }
+        public EventGroup(Chunk chunk) : base(chunk)
+        {
+        }
+
+        public EventGroup(ByteReader reader) : base(reader)
+        {
+        }
 
         public override void Print(bool ext)
         {
@@ -137,30 +147,44 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Events
             var numberOfConditions = Reader.ReadByte();
             var numberOfActions = Reader.ReadByte();
             var flags = Reader.ReadUInt16();
-            var nop = Reader.ReadInt16();
-            IsRestricted = Reader.ReadInt32();
-            RestrictCpt = Reader.ReadInt32();
+            if (Settings.Build >= 284)
+            {
+                var nop = Reader.ReadInt16();
+                IsRestricted = Reader.ReadInt32();
+                RestrictCpt = Reader.ReadInt32();
+            }
+            else
+            {
+                IsRestricted = Reader.ReadInt16();
+                RestrictCpt = Reader.ReadInt16();
+                Identifier = Reader.ReadInt16();
+                Undo = Reader.ReadInt16();
+            }
+
             for (int i = 0; i < numberOfConditions; i++)
             {
                 var item = new Condition(Reader);
                 item.Read();
                 Conditions.Add(item);
             }
+
             for (int i = 0; i < numberOfActions; i++)
             {
                 var item = new Action(Reader);
                 item.Read();
                 Actions.Add(item);
             }
+
             Reader.Seek(currentPosition + size);
             Console.WriteLine("IF:");
-            if (Conditions!=null)
+            if (Conditions != null)
             {
                 foreach (var item in Conditions)
                 {
                     Console.WriteLine("\t" + item.ToString());
                 }
             }
+
             Console.WriteLine("DO:");
             if (Actions != null)
             {
@@ -169,20 +193,10 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Events
                     Console.WriteLine("\t" + item.ToString());
                 }
             }
-
-
         }
 
         public void Write(ByteWriter Writer)
         {
-            
         }
     }
-
-
-
-
-
-
-
 }

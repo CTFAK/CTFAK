@@ -33,7 +33,6 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
 
         public override void Read()
         {
-            
             long currentPosition = Reader.Tell();
             uint headerSize = Reader.ReadUInt32();
             int menuOffset = Reader.ReadInt32();
@@ -52,9 +51,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
             AccelId = new List<short>();
             for (int i = 0; i < accelSize / 8; i++)
             {
-                
                 AccelShift.Add(Reader.ReadByte());
-                
                 Reader.Skip(1);
                 AccelKey.Add(Reader.ReadInt16());
                 AccelId.Add(Reader.ReadInt16());
@@ -66,7 +63,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
         {
             writer.WriteInt32(20);
             writer.WriteInt32(20);
-            writer.WriteInt32(458);
+            writer.WriteInt32(0);
 
             ByteWriter menuDataWriter = new ByteWriter(new MemoryStream());
 
@@ -75,7 +72,9 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
                 item.Write(menuDataWriter);
             }
 
-            writer.WriteUInt32((uint) ( menuDataWriter.BaseStream.Position)+62);//shit
+            writer.WriteUInt32((uint) menuDataWriter.BaseStream.Position);
+
+            writer.WriteUInt32((uint) (24 + menuDataWriter.BaseStream.Position));
             writer.WriteInt32(AccelKey.Count * 8);
             writer.WriteInt32(0);
             writer.WriteWriter(menuDataWriter);
@@ -97,7 +96,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
                 newItem.Read();
                 Items.Add(newItem);
 
-                if (newItem.Name.Contains("About")) break;
+                // if (newItem.Name.Contains("About")) break;
                 if (ByteFlag.GetFlag((uint) newItem.Flags, 4))
                 {
                     Load(reader);
@@ -114,8 +113,8 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
     public class AppMenuItem : ChunkLoader
     {
         public string Name = "";
-        public short Flags = 0;
-        public short Id = 0;
+        public Int16 Flags = 0;
+        public Int16 Id = 0;
         public string Mnemonic = null;
 
         public AppMenuItem(ByteReader reader) : base(reader)
@@ -150,10 +149,10 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
             {
                 if (Name[i] == '&')
                 {
-                    Mnemonic = Name[i + 1].ToString().ToUpper();
+                    Mnemonic = Name[i + 1].ToString();
+                    Name = Name.Replace("&", "");
+                    break;
                 }
-
-                //Name = Name.Replace("&", "");
             }
 
             Console.WriteLine(Name);
@@ -172,12 +171,12 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
             }
 
             String MName = Name;
-            if (Mnemonic!=null)
+            if (Mnemonic != null)
             {
-                //MName = MName.Replace(Mnemonic, "&" + Mnemonic);
+                MName = MName.ReplaceFirst(Mnemonic, "&" + Mnemonic);
             }
 
-            writer.WriteUnicode(MName);
+            writer.WriteUnicode(MName, true);
         }
     }
 }
