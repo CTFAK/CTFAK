@@ -16,10 +16,11 @@ namespace DotNetCTFDumper.GUI
 
         public HexViewForm(byte[] parsedData, byte[] rawData,Color color)
         {
-            InitializeComponent();           
-            sizeLabel.ForeColor = color;
-            rawBox.ForeColor = color;
-            hexBox1.ForeColor = color;
+            InitializeComponent();
+            foreach (Control item in Controls)
+            {
+                item.ForeColor = color;
+            }
             hexBox1.InfoForeColor = Color.FromArgb(color.R/2, color.G/2, color.B/2);
             hexBox1.SelectionForeColor=Color.FromArgb(color.R, color.G, color.B);
             hexBox1.SelectionBackColor=Color.FromArgb(color.R/4, color.G/4, color.B/4);

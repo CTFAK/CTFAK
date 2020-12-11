@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using DotNetCTFDumper.MMFParser.Data;
 using DotNetCTFDumper.Utils;
 
@@ -6,8 +7,8 @@ namespace DotNetCTFDumper.MMFParser.Decompiling
 {
     public static class MFAGenerator
     {
-        public static readonly string TemplatePath = @"C:\Users\MED45\Downloads\testNoFrames.mfa";
-        // public static readonly string TemplatePath = @"C:\Users\ivani\Desktop\CTFResearch\testNoFrames.mfa";
+        //public static readonly string TemplatePath = @"C:\Users\MED45\Downloads\testNoFrames.mfa";
+        public static readonly string TemplatePath = @"C:\Users\ivani\Desktop\CTFResearch\testNoFrames.mfa";
 
         public static void BuildMFA()
         {
@@ -17,13 +18,15 @@ namespace DotNetCTFDumper.MMFParser.Decompiling
 
             template.Read(); //Loading template
 
-            var gameMFA = template; //Pame2Mfa.Translate(template, Exe.LatestInst.GameData); //Translation
+            Pame2Mfa.Translate(ref template, Exe.Instance.GameData); //Translation
 
             var mfaWriter =
                 new ByteWriter(
                     Settings.GameName.Length > 0 ? $"{Settings.DumpPath}\\{Exe.Instance.GameData.Name}.mfa" : "out.mfa",
                     FileMode.Create); //New writer for new MFA
-            gameMFA.Write(mfaWriter); //Writing new MFA
+            template.Write(mfaWriter); //Writing new MFA
+            mfaWriter.Dispose();
+            Logger.Log("MFA Done",true,ConsoleColor.Yellow);
         }
 
         public static void ReadTestMFA()
@@ -32,6 +35,9 @@ namespace DotNetCTFDumper.MMFParser.Decompiling
             var template = new MFA(mfaReader);
             Settings.DoMFA = true;
             template.Read();
+            
+            //Add modifications
+            
             var mfaWriter = new ByteWriter("outTest.mfa", FileMode.Create);
             template.Write(mfaWriter);
         }

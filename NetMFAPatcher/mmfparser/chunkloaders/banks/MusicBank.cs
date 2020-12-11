@@ -30,7 +30,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
             Read();
             Settings.DumpMusic = cache;
         }
-
+        public event MainForm.SaveHandler OnMusicSaved;
         public override void Read()
         {
             //Someone is using this lol?
@@ -45,7 +45,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
                 if (MainForm.BreakMusics) break;
                 var item = new MusicFile(Reader);
                 item.Read();
-                Helper.OnMusicSaved(i,NumOfItems);
+                OnMusicSaved?.Invoke(i,(int) NumOfItems);
                 Items.Add(item);
             }
         }

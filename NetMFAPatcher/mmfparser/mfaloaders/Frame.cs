@@ -25,6 +25,7 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders
         public int StampHandle;
         public int ActiveLayer;
         public List<Layer> Layers;
+        public Events Events;
 
         public Frame(ByteReader reader) : base(reader)
         {
@@ -58,19 +59,25 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders
             }
             //TODO: Do transitions
             Writer.WriteInt8(0);
+            Writer.WriteInt8(0);
+
+            Writer.WriteInt32(Items.Count);
             foreach (var item in Items)
             {
                 item.Write(Writer);
             }
+            Writer.WriteInt32(Folders.Count);
             foreach (var item in Folders)
             {
                 item.Write(Writer);
             }
+            Writer.WriteInt32(Instances.Count);
             foreach (var item in Instances)
             {
                 item.Write(Writer);
             }
-            
+            Events.Write(Writer);
+
 
 
 
@@ -145,6 +152,8 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders
                 //inst.Read();
                 Instances.Add(inst);
             }
+            Events = new Events(Reader);
+            Events.Read();
             
 
 

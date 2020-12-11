@@ -33,6 +33,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
 
         public override void Read()
         {
+            
             long currentPosition = Reader.Tell();
             uint headerSize = Reader.ReadUInt32();
             int menuOffset = Reader.ReadInt32();
@@ -46,14 +47,14 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
             Load(Reader);
 
             Reader.Seek(currentPosition + accelOffset);
-
+            AccelShift = new List<byte>();
+            AccelKey = new List<short>();
+            AccelId = new List<short>();
             for (int i = 0; i < accelSize / 8; i++)
             {
-                AccelShift = new List<byte>();
-                AccelKey = new List<short>();
-                AccelId = new List<short>();
+                
                 AccelShift.Add(Reader.ReadByte());
-                ;
+                
                 Reader.Skip(1);
                 AccelKey.Add(Reader.ReadInt16());
                 AccelId.Add(Reader.ReadInt16());
@@ -65,7 +66,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
         {
             writer.WriteInt32(20);
             writer.WriteInt32(20);
-            writer.WriteInt32(0);
+            writer.WriteInt32(458);
 
             ByteWriter menuDataWriter = new ByteWriter(new MemoryStream());
 
@@ -74,7 +75,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
                 item.Write(menuDataWriter);
             }
 
-            writer.WriteUInt32((uint) (24 + menuDataWriter.BaseStream.Position));
+            writer.WriteUInt32((uint) ( menuDataWriter.BaseStream.Position)+62);//shit
             writer.WriteInt32(AccelKey.Count * 8);
             writer.WriteInt32(0);
             writer.WriteWriter(menuDataWriter);
@@ -152,7 +153,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
                     Mnemonic = Name[i + 1].ToString().ToUpper();
                 }
 
-                Name = Name.Replace("&", "");
+                //Name = Name.Replace("&", "");
             }
 
             Console.WriteLine(Name);
@@ -171,12 +172,12 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders
             }
 
             String MName = Name;
-            if (Mnemonic != null)
+            if (Mnemonic!=null)
             {
-                MName = MName.Replace(Mnemonic, "&" + Mnemonic);
+                //MName = MName.Replace(Mnemonic, "&" + Mnemonic);
             }
 
-            writer.AutoWriteUnicode(MName);
+            writer.WriteUnicode(MName);
         }
     }
 }

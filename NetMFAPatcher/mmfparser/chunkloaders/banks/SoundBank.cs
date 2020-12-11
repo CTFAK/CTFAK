@@ -33,7 +33,7 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
             Settings.DumpSounds = cache;
 
         }
-
+        public event MainForm.SaveHandler OnSoundSaved;
         public override void Read()
         {
             //Implementing for standalone-only because of my lazyness
@@ -58,7 +58,8 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
                 var item = new SoundItem(Reader);
                 item.IsCompressed = IsCompressed;
                 item.Read();
-                Helper.OnSoundSaved(i, NumOfItems);
+                
+                OnSoundSaved?.Invoke(i,(int) NumOfItems);
                 Items.Add(item);
 
 

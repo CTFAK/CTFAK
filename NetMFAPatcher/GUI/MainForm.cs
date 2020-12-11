@@ -24,39 +24,33 @@ namespace DotNetCTFDumper.GUI
         public Color ColorTheme = Color.FromArgb(223,114,38);
         public PackDataForm PackForm;
         
-
+        public delegate void SaveHandler(int index, int all);
         public MainForm()
         {
             //Buttons
             InitializeComponent();
-            cryptKeyBtn.ForeColor = ColorTheme;
-            dumpSortedBtn.ForeColor = ColorTheme;
-            showHexBtn.ForeColor = ColorTheme;
-            FolderBTN.ForeColor = ColorTheme; 
-            MFABtn.ForeColor = ColorTheme;
-            imagesButton.ForeColor = ColorTheme;
-            soundsButton.ForeColor = ColorTheme;
-            packDataBtn.ForeColor = ColorTheme;
-            //Menu
-            saveChunkBtn.ForeColor = ColorTheme;
-            saveChunkBtn.BackColor=Color.Black;                       
-            viewHexBtn.ForeColor = ColorTheme; 
-            viewHexBtn.BackColor=Color.Black;
-            previewFrameBtn.ForeColor = ColorTheme;
-            previewFrameBtn.BackColor=Color.Black;
-            //Labels
-            label1.ForeColor = ColorTheme;
+            foreach (Control item in Controls)
+            {
+                item.ForeColor = ColorTheme;
+                item.BackColor=Color.Black;
+                if(item is Button) item.BackColor=Color.FromArgb(30,30,30);
+
+                if (item is Label)
+                {
+                    item.BackColor = Color.Transparent;
+                    item.Refresh();
+                }
+
+            }
+            
+            foreach (var item in ChunkCombo.Items)
+            {
+                ((ToolStripItem)item).ForeColor = ColorTheme;
+                ((ToolStripItem)item).BackColor=Color.Black;
+            }
+            
             label1.Text = Settings.DumperVersion;
-            button1.ForeColor = ColorTheme;
-            GameInfo.ForeColor = ColorTheme;
-            loadingLabel.ForeColor = ColorTheme;
-            imageLabel.ForeColor = ColorTheme;
-            soundLabel.ForeColor=ColorTheme;
-            //Other
-            treeView1.ForeColor = ColorTheme;
-            listBox1.ForeColor = ColorTheme;
-            imageBar.ForeColor = ColorTheme;
-            soundBar.ForeColor = ColorTheme;
+
             
             
             
@@ -187,6 +181,9 @@ namespace DotNetCTFDumper.GUI
                     }
                 }
             }
+            GameInfo.BackColor=Color.Transparent;
+            
+            GameInfo.Refresh();
         }
 
         public void AfterLoad()
@@ -253,12 +250,13 @@ namespace DotNetCTFDumper.GUI
             toLog += $"Unique FrameItems: {Exe.Instance.GameData.Frameitems.NumberOfItems}\n";
             toLog += $"Frame Count: {Exe.Instance.GameData.Frames.Count}\n";
             toLog += $"Chunks Count: {Exe.Instance.GameData.GameChunks.Chunks.Count}\n";
+            if (Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>() != null)
+                Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().OnImageSaved += UpdateImageBar;
+            if (Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>() != null)
+                Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>().OnSoundSaved += UpdateSoundBar;
+            if (Exe.Instance.GameData.GameChunks.GetChunk<MusicBank>() != null)
+                Exe.Instance.GameData.GameChunks.GetChunk<MusicBank>().OnMusicSaved += UpdateMusicBar;
             
-
-
-
-            //toLog += $"Runtime Subversion: {Exe.LatestInst.GameData.RuntimeSubversion}\n";
-                        
             GameInfo.Text = toLog;
         }
 
@@ -301,6 +299,7 @@ namespace DotNetCTFDumper.GUI
             if (!IsDumpingSounds)
             {
                 SetSoundElements(true);
+                IsDumpingSounds = true;
                 Backend.DumpSounds(this,true,true);
                 
             }
@@ -316,6 +315,7 @@ namespace DotNetCTFDumper.GUI
             if (!IsDumpingImages)
             {
                 SetImageElements(true);
+                IsDumpingImages = true;
                 Backend.DumpImages(this,true,true);
                 
             }
@@ -325,6 +325,23 @@ namespace DotNetCTFDumper.GUI
                 IsDumpingImages = false;
                 SetImageElements(false);
             }
+        }
+        private void musicsButton_Click(object sender, EventArgs e)
+        {
+            
+            if (!IsDumpingMusics)
+            {
+                SetMusicElements(true);
+                IsDumpingMusics = true;
+                Backend.DumpMusics(this,true,true);
+            }
+            else
+            {
+                BreakMusics = true;
+                IsDumpingMusics = false;
+                SetMusicElements(false);
+            }
+            
         }
         
 
@@ -430,21 +447,19 @@ namespace DotNetCTFDumper.GUI
             PackForm.Show();
         }
 
-        private void musicsButton_Click(object sender, EventArgs e)
-        {
-            
-            if (!IsDumpingMusics)
-            {
-                Backend.DumpMusics(this,true,true);
-            }
-            else
-            {
-                BreakMusics = true;
-                IsDumpingMusics = false;
-                SetMusicElements(false);
-            }
-            
-        }
+        
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            var myPic = new PictureBox();
+            var img = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().Images[65].Bitmap;
+            myPic.SizeMode = PictureBoxSizeMode.StretchImage;
+            
+            myPic.Image = img;
+            myPic.Width = img.Width / 2;
+            myPic.Height = img.Height / 2;
+            Controls.Add(myPic);
+
+        }
     }
 }

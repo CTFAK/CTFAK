@@ -119,6 +119,7 @@
             // GameInfo
             // 
             this.GameInfo.AutoSize = true;
+            this.GameInfo.BackColor = System.Drawing.Color.Transparent;
             this.GameInfo.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.GameInfo.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
             this.GameInfo.Location = new System.Drawing.Point(9, 55);
@@ -216,7 +217,6 @@
             // 
             this.MFABtn.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.MFABtn.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
-            this.MFABtn.Enabled = false;
             this.MFABtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.MFABtn.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.MFABtn.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));

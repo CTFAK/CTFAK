@@ -189,6 +189,7 @@
     <Compile Include="MMFParser\Decompiling\MFAGenerator.cs" />
     <Compile Include="MMFParser\Decompiling\PAME2MFA.cs" />
     <Compile Include="MMFParser\MFALoaders\ChunkList.cs" />
+    <Compile Include="MMFParser\MFALoaders\Events.cs" />
     <Compile Include="MMFParser\MFALoaders\Frame.cs" />
     <Compile Include="MMFParser\MFALoaders\FrameInstance.cs" />
     <Compile Include="MMFParser\MFALoaders\FrameItem.cs" />

@@ -5,17 +5,19 @@ namespace DotNetCTFDumper.MMFParser.Decompiling
 {
     public static class Pame2Mfa
     {
-        public static MFA Translate(MFA template, GameData game)
+        public static void Translate(ref MFA mfa, GameData game)
         {
-            MFA mfa = template;
-            mfa.MfaBuild = 4;
-            mfa.Product = (int) game.ProductVersion;
+            
+            //mfa.MfaBuild = 4;
+            //mfa.Product = (int) game.ProductVersion;
             mfa.BuildVersion = 283;
             mfa.Name = game.Name;
             mfa.Description = $"Decompiled with {Settings.DumperVersion}";
             mfa.Path = game.EditorFilename;
+            return;
             //mfa.Stamp = wtf;
-            mfa.Fonts = game.Fonts;
+            if (game.Fonts != null) mfa.Fonts = game.Fonts;
+            
             mfa.Sounds = game.Sounds;
             foreach (var item in mfa.Sounds.Items)
             {
@@ -49,20 +51,11 @@ namespace DotNetCTFDumper.MMFParser.Decompiling
             mfa.BuildType = 0;
             mfa.BuildPath = game.TargetFilename;
             mfa.CommandLine = "";
-            mfa.Aboutbox = game.AboutText.Length > 0
-                ? game.AboutText
+            mfa.Aboutbox = game.AboutText?.Length > 0
+                ? game?.AboutText
                 : "This game was decompiled with " + Settings.DumperVersion;
             
-            
-            
-            
-            
-            
-            
-            
 
-
-            return mfa;
         }
     }
 }

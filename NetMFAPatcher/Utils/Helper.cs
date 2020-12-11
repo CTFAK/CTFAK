@@ -53,7 +53,7 @@ namespace DotNetCTFDumper.Utils
             return temp;
         }
 
-        public static string AutoReadUnicode(ByteReader reader)
+        public static string AutoReadUnicode(this ByteReader reader)
         {
             var len = reader.ReadInt16();
             reader.Skip(2);
@@ -180,19 +180,7 @@ namespace DotNetCTFDumper.Utils
             }
         }
 
-        public static void OnImageSaved(int index, int all)
-        {
-           Program.MyForm.UpdateImageBar(index, all);
-        }
-
-        public static void OnSoundSaved(int index, int all)
-        {
-            Program.MyForm.UpdateSoundBar(index, all);
-        }
-        public static void OnMusicSaved(int index, int all)
-        {
-            Program.MyForm.UpdateSoundBar(index, all);
-        }
+        
 
         private const long OneKb = 1024;
         private const long OneMb = OneKb * 1024;

@@ -123,6 +123,7 @@ namespace DotNetCTFDumper.MMFParser.Data
 
         public override void Write(ByteWriter Writer)
         {
+
             Writer.WriteAscii("MFU2");
             Writer.WriteInt32(MfaBuild);
             Writer.WriteInt32(Product);
@@ -189,7 +190,7 @@ namespace DotNetCTFDumper.MMFParser.Data
                 using (ByteWriter menuWriter = new ByteWriter(new MemoryStream()))
                 {
                     Menu.Write(menuWriter);
-
+                    
                     Writer.WriteUInt32((uint) menuWriter.BaseStream.Position);
                     Writer.WriteWriter(menuWriter);
                 }
@@ -198,7 +199,7 @@ namespace DotNetCTFDumper.MMFParser.Data
             {
                 Writer.WriteInt32(0);
             }
-
+            
             Writer.WriteInt32(windowMenuIndex);
             Writer.WriteInt32(menuImages.Count);
             foreach (KeyValuePair<int, int> valuePair in menuImages)
@@ -218,7 +219,16 @@ namespace DotNetCTFDumper.MMFParser.Data
             }
             Writer.WriteInt32(0);//custom qualifiers
             Writer.WriteInt32(0); //extensions
-            Writer.WriteInt32(0); //frame
+            Writer.WriteInt32(Frames.Count); //frame
+            var startPos = Reader.Tell() + 4 * Frames.Count + 4;
+            ByteWriter newWriter = new ByteWriter(new MemoryStream());
+            foreach (Frame frame in Frames)
+            {
+                Writer.WriteUInt32((uint) (startPos+newWriter.Tell()+4));
+                frame.Write(newWriter);
+            }
+            Writer.WriteUInt32((uint) (startPos+newWriter.Tell()+4));
+            Writer.WriteWriter(newWriter);
 
 
 

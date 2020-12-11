@@ -54,6 +54,14 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders
         public int Button2;
         public int Button3;
         public int Button4;
+        public int Unk1;
+        public int Unk2;
+        public int Unk3;
+        public int Unk4;
+        public int Unk5;
+        public int Unk6;
+        public int Unk7;
+        public int Unk8;
 
 
         public PlayerControl(ByteReader reader) : base(reader)
@@ -79,10 +87,15 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders
             Button2 = Reader.ReadInt32();
             Button3 = Reader.ReadInt32();
             Button4 = Reader.ReadInt32();
-            for (int i = 0; i < 8; i++)
-            {
-                Reader.ReadInt32();
-            }
+            Unk1 = Reader.ReadInt32();
+            Unk2 = Reader.ReadInt32();
+            Unk3 = Reader.ReadInt32();
+            Unk4 = Reader.ReadInt32();
+            Unk5 = Reader.ReadInt32();
+            Unk6 = Reader.ReadInt32();
+            Unk7 = Reader.ReadInt32();
+            Unk8 = Reader.ReadInt32();
+
         }
 
         public override void Write(ByteWriter writer)
@@ -97,10 +110,15 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders
             writer.WriteInt32(Button2);
             writer.WriteInt32(Button3);
             writer.WriteInt32(Button4);
-            for (int i = 0; i < 8; i++)
-            {
-                writer.WriteInt32(0);
-            }
+            writer.WriteInt32(Unk1);
+            writer.WriteInt32(Unk2);
+            writer.WriteInt32(Unk3);
+            writer.WriteInt32(Unk4);
+            writer.WriteInt32(Unk5);
+            writer.WriteInt32(Unk6);
+            writer.WriteInt32(Unk7);
+            writer.WriteInt32(Unk8);
+
 
 
         }

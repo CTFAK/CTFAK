@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using DotNetCTFDumper.Utils;
 using static DotNetCTFDumper.MMFParser.Data.ChunkList;
 
@@ -170,8 +171,11 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Events
             }
 
 
+        }
 
-
+        public void Write(ByteWriter Writer)
+        {
+            
         }
     }
 

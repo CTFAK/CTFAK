@@ -46,6 +46,13 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
             Settings.DumpImages = cache;
         }
 
+        
+        
+        public event MainForm.SaveHandler OnImageSaved;
+        
+        
+
+
         public override void Read()
         {
             if (!Settings.DoMFA) Reader.Seek(0); //Reset the reader to avoid bugs when dumping more than once
@@ -70,11 +77,11 @@ namespace DotNetCTFDumper.MMFParser.ChunkLoaders.Banks
                 Images.Add(item.Handle, item);
 
                 if (SaveImages) item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
+                OnImageSaved?.Invoke(i,(int) NumberOfItems);
 
-                Helper.OnImageSaved(i, (int) NumberOfItems);
 
 
-                if (Exe.Instance.GameData.ProductBuild >= 284)
+                if (Settings.Build >= 284)
                     item.Handle -= 1;
 
                 //images[item.handle] = item;
