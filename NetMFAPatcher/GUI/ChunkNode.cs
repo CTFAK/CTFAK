@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
-using DotNetCTFDumper.MMFParser.ChunkLoaders;
-using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.MMFParser.EXE;
+using DotNetCTFDumper.MMFParser.EXE.Loaders;
 
 namespace DotNetCTFDumper.GUI
 {

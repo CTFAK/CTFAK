@@ -59,6 +59,8 @@ namespace DotNetCTFDumper.Utils
         }
 
         public void WriteInt8(byte value) => Write(value);
+        public void WriteUInt8(sbyte value) => Write(value);
+
         public void WriteInt16(short value) => Write(value);
         public void WriteInt32(int value) => Write(value);
         public void WriteInt64(long value) => Write(value);

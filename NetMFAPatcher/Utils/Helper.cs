@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using DotNetCTFDumper.GUI;
 using DotNetCTFDumper.MMFParser;
-using DotNetCTFDumper.MMFParser.ChunkLoaders.Events.Parameters;
-using DotNetCTFDumper.MMFParser.ChunkLoaders.Objects;
-using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.MMFParser.EXE;
+using DotNetCTFDumper.MMFParser.EXE.Loaders.Events.Parameters;
+using DotNetCTFDumper.MMFParser.EXE.Loaders.Objects;
 
 namespace DotNetCTFDumper.Utils
 {

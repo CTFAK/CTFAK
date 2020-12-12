@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using DotNetCTFDumper.GUI;
-using DotNetCTFDumper.MMFParser.ChunkLoaders.Banks;
-using static DotNetCTFDumper.MMFParser.Data.Exe;
+using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
+using static DotNetCTFDumper.MMFParser.EXE.Exe;
 
 namespace DotNetCTFDumper.Utils
 {

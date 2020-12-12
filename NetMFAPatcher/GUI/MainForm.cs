@@ -4,10 +4,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
-using DotNetCTFDumper.MMFParser.ChunkLoaders;
-using DotNetCTFDumper.MMFParser.ChunkLoaders.Banks;
-using DotNetCTFDumper.MMFParser.Data;
 using DotNetCTFDumper.MMFParser.Decompiling;
+using DotNetCTFDumper.MMFParser.EXE;
+using DotNetCTFDumper.MMFParser.EXE.Loaders;
+using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
 using DotNetCTFDumper.Utils;
 
 namespace DotNetCTFDumper.GUI

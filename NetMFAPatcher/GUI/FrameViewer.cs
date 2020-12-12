@@ -3,12 +3,10 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using DotNetCTFDumper.MMFParser.ChunkLoaders;
-using DotNetCTFDumper.MMFParser.ChunkLoaders.Banks;
-using DotNetCTFDumper.MMFParser.ChunkLoaders.Objects;
-using DotNetCTFDumper.MMFParser.Data;
-using DotNetCTFDumper.MMFParser.MFALoaders;
-using Frame = DotNetCTFDumper.MMFParser.ChunkLoaders.Frame;
+using DotNetCTFDumper.MMFParser.EXE;
+using DotNetCTFDumper.MMFParser.EXE.Loaders;
+using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
+using Frame = DotNetCTFDumper.MMFParser.EXE.Loaders.Frame;
 
 namespace DotNetCTFDumper.GUI
 {

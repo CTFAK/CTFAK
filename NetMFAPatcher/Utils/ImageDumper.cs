@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using DotNetCTFDumper.MMFParser.ChunkLoaders;
-using DotNetCTFDumper.MMFParser.ChunkLoaders.Banks;
-using DotNetCTFDumper.MMFParser.ChunkLoaders.Objects;
-using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.MMFParser.EXE;
+using DotNetCTFDumper.MMFParser.EXE.Loaders;
+using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
+using DotNetCTFDumper.MMFParser.EXE.Loaders.Objects;
 
 namespace DotNetCTFDumper.Utils
 {

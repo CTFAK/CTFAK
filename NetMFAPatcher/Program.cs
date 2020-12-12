@@ -3,8 +3,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using DotNetCTFDumper.GUI;
-using DotNetCTFDumper.MMFParser.Data;
 using DotNetCTFDumper.MMFParser.Decompiling;
+using DotNetCTFDumper.MMFParser.EXE;
 using DotNetCTFDumper.Utils;
 using Joveler.Compression.ZLib;
 
