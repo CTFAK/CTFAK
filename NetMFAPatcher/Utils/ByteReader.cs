@@ -129,9 +129,9 @@ namespace DotNetCTFDumper.Utils
             var r = ReadByte();
             var g = ReadByte();
             var b = ReadByte();
-            Skip(1);
+            var a = ReadByte();
 
-            return Color.FromArgb(r, g, b);
+            return Color.FromArgb(a,r, g, b);
 
         }
 

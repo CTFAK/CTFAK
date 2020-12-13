@@ -14,7 +14,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
         private int PaletteVersion;
         private int PaletteEntries;
         public Dictionary<int, ImageItem> Items = new Dictionary<int, ImageItem>();
-        private List<Color> Palette;
+        public List<Color> Palette;
 
         public override void Print()
         {

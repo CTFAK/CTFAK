@@ -30,6 +30,7 @@ namespace DotNetCTFDumper.Utils
 
             return false;
         }
+       
 
         public static string ToDebugString<TKey, TValue>(IDictionary<TKey, TValue> dictionary)
         {

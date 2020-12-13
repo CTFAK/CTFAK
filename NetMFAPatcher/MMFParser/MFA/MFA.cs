@@ -115,6 +115,9 @@ namespace DotNetCTFDumper.MMFParser.MFA
         public List<Frame> Frames;
         public ChunkList Chunks;
 
+        public static Events emptyEvents;
+        public static ChunkList emptyFrameChunks;
+
 
         public override void Print()
         {
@@ -162,7 +165,7 @@ namespace DotNetCTFDumper.MMFParser.MFA
             Writer.AutoWriteUnicode(Version);
             Writer.WriteInt32(WindowX);
             Writer.WriteInt32(WindowY);
-            Writer.WriteColor(Color.White);
+            Writer.WriteColor(Color.FromArgb(0,255,255,255));
             Writer.WriteInt32((int) DisplayFlags.flag);
             Writer.WriteInt32((int) GraphicFlags.flag);
             Writer.AutoWriteUnicode(HelpFile);

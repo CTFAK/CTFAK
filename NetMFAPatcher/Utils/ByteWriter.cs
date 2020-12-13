@@ -98,7 +98,7 @@ namespace DotNetCTFDumper.Utils
             WriteInt8(color.R);
             WriteInt8(color.G);
             WriteInt8(color.B);
-            WriteInt8(0);
+            WriteInt8(color.A);
         }
 
         public void WriteWriter(ByteWriter toWrite)

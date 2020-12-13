@@ -38,6 +38,7 @@ namespace DotNetCTFDumper.MMFParser.Decompiling
             
             //Add modifications
             
+
             var mfaWriter = new ByteWriter("outTest.mfa", FileMode.Create);
             template.Write(mfaWriter);
         }

@@ -201,8 +201,8 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Events
         public void Write(ByteWriter Writer)
         {
             ByteWriter newWriter = new ByteWriter(new MemoryStream());
-            newWriter.WriteInt8((byte) Conditions.Count);
-            newWriter.WriteInt8((byte) Actions.Count);
+            newWriter.WriteUInt8( (sbyte) Conditions.Count);
+            newWriter.WriteUInt8((sbyte) Actions.Count);
             newWriter.WriteUInt16(Flags);
             if (Settings.Build >= 284)
             {

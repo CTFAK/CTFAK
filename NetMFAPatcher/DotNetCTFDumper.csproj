@@ -217,6 +217,8 @@
     <Compile Include="MMFParser\MFA\Loaders\mfachunks\Movements.cs" />
     <Compile Include="MMFParser\MFA\Loaders\mfachunks\ObjectLoader.cs" />
     <Compile Include="MMFParser\MFA\Loaders\ValueList.cs" />
+    <Compile Include="PluginAPI\IPlugin.cs" />
+    <Compile Include="PluginAPI\PluginAPI.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Utils\Backend.cs" />
     <Compile Include="Utils\BitDict.cs" />

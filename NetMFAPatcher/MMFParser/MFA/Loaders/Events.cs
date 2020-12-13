@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
 using System.Text;
 using DotNetCTFDumper.MMFParser.EXE;
 using DotNetCTFDumper.MMFParser.EXE.Loaders.Events;
@@ -41,6 +42,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
         public uint EventLine;
         public uint EventLineY;
         public byte[] Saved;
+        public int EditorDataUnk;
 
         public Events(ByteReader reader) : base(reader)
         {
@@ -52,8 +54,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
 
         public override void Read()
         {
-            Saved = Reader.ReadBytes(92);
-            return;
+            
             Version = Reader.ReadUInt16();
             FrameType = Reader.ReadUInt16();
             Items = new List<EventGroup>();
@@ -109,7 +110,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
                 }
                 else if (name == EventEditorData)
                 {
-                    Reader.Skip(4);
+                    EditorDataUnk = Reader.ReadInt32();
                     ConditionWidth = Reader.ReadUInt16();
                     ObjectHeight = Reader.ReadUInt16();
                     Reader.Skip(12);
@@ -178,91 +179,130 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
 
         public override void Write(ByteWriter Writer)
         {
-            Writer.WriteBytes(Saved);
-            return;
-            Writer.WriteUInt16(Version);
-            Writer.WriteInt16((short) FrameType);
-            Writer.WriteBytes(new byte[]{0x04,0x04,0x00,0x00});
-            if (Items != null)
+            //Writer.WriteBytes(Saved);
+            //return;
+            using (ByteWriter debug = new ByteWriter(new MemoryStream()))
             {
-                Writer.WriteAscii(EventData);
+
+                //Writer = new ByteWriter(new MemoryStream());
+                Writer.WriteUInt16(Version);
+                Writer.WriteInt16((short) FrameType);
+               
+                //Writer.WriteBytes(new byte[] {0x04, 0x04, 0x00, 0x00});
+                // if (Items != null)
+                //     {
+                //         Console.WriteLine("Writing EventData");
+                //         Writer.WriteAscii(EventData);
+                //      
+                //         ByteWriter newWriter = new ByteWriter(new MemoryStream());
+                //         foreach (EventGroup eventGroup in Items)
+                //         {
+                //         eventGroup.Write(newWriter);
+                //         }
+                //     
+                //         Writer.WriteWriter(newWriter);
+                //     }
+                // if (Objects != null)
+                // {
+                //     Console.WriteLine("Writing EventObjects");
+                //     Writer.WriteAscii(ObjectData);
+                //     Writer.WriteUInt32((uint) Objects.Count);
+                //     foreach (EventObject eventObject in Objects)
+                //     {
+                //         eventObject.Write(Writer);
+                //     }
+                // }
+                if (ObjectTypes != null)
+                {
+                    Console.WriteLine("Writing ObjectTypes");
+                    Writer.WriteAscii(ObjectListData);
+                    Writer.WriteInt16(-1);
+                    Writer.WriteInt16((short) ObjectTypes.Count);
+                    foreach (ushort objectType in ObjectTypes)
+                    {
+                        Writer.WriteUInt16(objectType);
+                    }
+
+                    foreach (ushort objectHandle in ObjectHandles)
+                    {
+                        Writer.WriteUInt16(objectHandle);
+                    }
+
+                    foreach (ushort objectFlag in ObjectFlags)
+                    {
+                        Writer.WriteUInt16(objectFlag);
+                    }
+
+                    Writer.WriteUInt16((ushort) Folders.Count);
+                    foreach (string folder in Folders)
+                    {
+                        Writer.AutoWriteUnicode(folder);
+                    }
+                }
+                if (X != 0)
+                {
+                    Console.WriteLine("Writing X");
+                    Writer.WriteAscii(EditorPositionData);
+                    Writer.WriteInt16(1);
+                    Writer.WriteInt32((int) X);
+                    Writer.WriteInt32((int) Y);
+                    Writer.WriteUInt32(CaretType);
+                    Writer.WriteUInt32(CaretX);
+                    Writer.WriteUInt32(CaretY);
+                }
+                if (LineY != 0)
+                {
+                    Console.WriteLine("Writing LineY");
+                    Writer.WriteAscii(EditorLineData);
+                    Writer.WriteInt16(1);
+                    Writer.WriteUInt32(LineY);
+                    Writer.WriteUInt32(LineItemType);
+                    Writer.WriteUInt32(EventLine);
+                    Writer.WriteUInt32(EventLineY);
+                }
+                Console.WriteLine("Writing EventEditorData");
+                Writer.WriteAscii(EventEditorData);
+                Writer.WriteInt32(EditorDataUnk);
+                Writer.WriteInt16((short) ConditionWidth);
+                Writer.WriteInt16((short) ObjectHeight);
+                Writer.Skip(12);
                 
-                ByteWriter newWriter = new ByteWriter(new MemoryStream());
-                foreach (EventGroup eventGroup in Items)
-                {
-                    eventGroup.Write(newWriter);
-                }
-                Writer.WriteWriter(newWriter);
-            }
-            
-            if (Comments != null)
-            {
-                Writer.WriteAscii(CommentData);
-                foreach (Comment comment in Comments)
-                {
-                    comment.Write(Writer);
-                }
-            }
-
-            if (Objects != null)
-            {
-                Writer.WriteAscii(ObjectData);
-                Writer.WriteUInt32((uint) Objects.Count);
-                foreach (EventObject eventObject in Objects)
-                {
-                    eventObject.Write(Writer);
-                }
-            }
-            Writer.WriteAscii(EventEditorData);
-            Writer.Skip(4+2*2+4*3);
-            if (ObjectTypes != null)
-            {
-                Writer.WriteAscii(ObjectListData);
-                Writer.WriteInt16(-1);
-                Writer.WriteInt16((short) ObjectTypes.Count);
-                foreach (ushort objectType in ObjectTypes)
-                {
-                    Writer.WriteUInt16(objectType);
-                }
-                foreach (ushort objectHandle in ObjectHandles)
-                {
-                    Writer.WriteUInt16(objectHandle);
-                }
-                foreach (ushort objectFlag in ObjectFlags)
-                {
-                    Writer.WriteUInt16(objectFlag);
-                }
-                Writer.WriteUInt16((ushort) Folders.Count);
-                foreach (string folder in Folders)
-                {
-                    Writer.AutoWriteUnicode(folder);
-                }
                 
+                //Writer.Skip((4 + 2 * 2 + 4 * 3)-4);
+                
+                Writer.WriteAscii(EventEnd);
+                
+                
+                //TODO: Fix commented part
+                // 
+                
+                //
+                // if (Comments != null)
+                // {
+                //     Console.WriteLine("Writing Comments");
+                //     Writer.WriteAscii(CommentData);
+                //     foreach (Comment comment in Comments)
+                //     {
+                //         comment.Write(Writer);
+                //     }
+                // }
+
+                
+
+                
+                
+
+                
+
+                
+
+                
+                var data = ((MemoryStream) Writer.BaseStream).GetBuffer();
+                Array.Resize(ref data,(int) Writer.Size());
+                File.WriteAllBytes("MyEvents.bin",data);
             }
 
-            if (X != 0)
-            {
-                Writer.WriteAscii(EditorPositionData);
-                Writer.WriteInt16(1);
-                Writer.WriteInt32((int) X);
-                Writer.WriteInt32((int) Y);
-                Writer.WriteUInt32(CaretType);
-                Writer.WriteUInt32(CaretX);
-                Writer.WriteUInt32(CaretY);
-            }
 
-            if (LineY != 0)
-            {
-                Writer.WriteAscii(EditorLineData);
-                Writer.WriteInt16(1);
-                Writer.WriteUInt32(LineY);
-                Writer.WriteUInt32(LineItemType);
-                Writer.WriteUInt32(EventLine);
-                Writer.WriteUInt32(EventLineY);
-            }
-            Writer.WriteAscii(EventEnd);
-            
-            
 
 
 

@@ -226,8 +226,14 @@ namespace DotNetCTFDumper.MMFParser.EXE
                 case 13108:
                     loader = new FrameHeader(chunk);
                     break;
+                case 13111:
+                    loader = new FramePalette(chunk);
+                    break;
                 case 13112:
                     loader = new ObjectInstances(chunk);
+                    break;
+                case 13121:
+                    loader = new Layers(chunk);
                     break;
                 case 26214:
                     loader = new ImageBank(chunk);

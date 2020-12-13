@@ -13,12 +13,12 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
         public int SizeY;
         public Color Background;
         public int MaxObjects;
-        public List<FrameItem> Items;
+        public List<FrameItem> Items=new List<FrameItem>();
         public int Handle;
         public int LastViewedX;
         public int LastViewedY;
-        public List<ItemFolder> Folders;
-        public List<FrameInstance> Instances;
+        public List<ItemFolder> Folders=new List<ItemFolder>();
+        public List<FrameInstance> Instances=new List<FrameInstance>();
         public uint Flags;
         public string Password;
         public List<Color> Palette;
@@ -31,6 +31,8 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
         public Frame(ByteReader reader) : base(reader)
         {
         }
+
+        
 
 
         public override void Write(ByteWriter Writer)
@@ -74,14 +76,17 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             {
                 item.Write(Writer);
             }
-            Writer.WriteInt32(Instances.Count);
-            foreach (var item in Instances)
+
+            if (Instances != null)
             {
-                item.Write(Writer);
+                Writer.WriteInt32(Instances.Count);
+                foreach (var item in Instances)
+                {
+                    item.Write(Writer);
+                }
             }
-            Console.WriteLine("BeforeEventsPos: "+Writer.Tell());
+
             Events.Write(Writer);
-            Console.WriteLine("AfterEventsPos: "+Writer.Tell());
             Chunks.Write(Writer);
 
 
@@ -151,21 +156,25 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             }
             
             Instances = new List<FrameInstance>();
-            var instancesCount = 0;//Reader.ReadInt32();
+            var instancesCount = Reader.ReadInt32();
             for (int i = 0; i < instancesCount; i++)
             {
                 var inst = new FrameInstance(Reader);
-                //inst.Read();
+                inst.Read();
                 Instances.Add(inst);
             }
             Events = new Events(Reader);
+            Console.WriteLine("BeforeEventsPos: "+Reader.Tell());
             Events.Read();
+            Console.WriteLine("AfterEventsPos: "+Reader.Tell());
             Chunks = new ChunkList(Reader);
             Chunks.Read();
-            
+            MFA.emptyEvents = Events;
+            MFA.emptyFrameChunks = Chunks;
 
 
-            
+
+
 
 
         }

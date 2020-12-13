@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using DotNetCTFDumper.Utils;
 
 namespace DotNetCTFDumper.MMFParser.EXE.Loaders
@@ -43,6 +44,9 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
         public ChunkList Chunks;
         public FrameHeader Header;
         public ObjectInstances Objects;
+        public Layers Layers;
+        public Events.Events Events;
+        public FramePalette Palette;
 
 
         public override void Print(bool ext)
@@ -85,8 +89,22 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
             {
                 this.Password = password.Value;
             }
-            
-            
+
+            var layers = Chunks.GetChunk<Layers>();
+            if (layers != null)
+            {
+                Layers = layers;
+            }
+            var events = Chunks.GetChunk<Events.Events>();
+            if (events != null)
+            {
+                Events = events;
+            }
+            var palette = Chunks.GetChunk<FramePalette>();
+            if (palette != null)
+            {
+                Palette = palette;
+            }
             Header = Chunks.GetChunk<FrameHeader>();
             Width = Header.Width;
             Height = Header.Height;
@@ -97,6 +115,8 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
             {
                 CountOfObjs = Objects.CountOfObjects;              
             }
+            
+            
             
 
 
@@ -283,8 +303,51 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
         }
     }
 
-    class Layer : ChunkLoader
+    public class Layers : ChunkLoader
     {
+        public List<Layer> Items;
+
+        public Layers(ByteReader reader) : base(reader)
+        {
+        }
+
+        public Layers(ChunkList.Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+            Items = new List<Layer>();
+            var count = Reader.ReadUInt32();
+            for (int i = 0; i < count; i++)
+            {
+                Layer item = new Layer(Reader);
+                item.Read();
+                Items.Add(item);
+            }
+
+        }
+
+        public override void Print(bool ext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string[] GetReadableData()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class Layer : ChunkLoader
+    {
+        public string Name;
+        public uint Flags;
+        public float XCoeff;
+        public float YCoeff;
+        public int NumberOfBackgrounds;
+        public int BackgroudIndex;
+
         public Layer(ByteReader reader) : base(reader)
         {
         }
@@ -295,7 +358,45 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
 
         public override void Read()
         {
-            
+            Flags = Reader.ReadUInt32();
+            XCoeff = Reader.ReadSingle();
+            YCoeff = Reader.ReadSingle();
+            NumberOfBackgrounds = Reader.ReadInt32();
+            BackgroudIndex = Reader.ReadInt32();
+            Name = Reader.ReadWideString();
+            Console.WriteLine(Name);
+        }
+
+        public override void Print(bool ext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string[] GetReadableData()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class FramePalette : ChunkLoader
+    {
+        public List<Color> Items;
+
+        public FramePalette(ByteReader reader) : base(reader)
+        {
+        }
+
+        public FramePalette(ChunkList.Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+            Items = new List<Color>();
+            for (int i = 0; i < 256; i++)
+            {
+                Items.Add(Reader.ReadColor());
+            }
         }
 
         public override void Print(bool ext)
