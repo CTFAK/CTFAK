@@ -26,9 +26,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
         {
             var currentPos = Reader.Tell();
             Module = Reader.ReadAscii(4);
-            Console.WriteLine("TransitionModule: "+Module);
             Name = Reader.ReadAscii(4);
-            Console.WriteLine("TransitionModule: "+Name);
             Duration = Reader.ReadInt32();
             Flags = Reader.ReadInt32();
             Color = Reader.ReadColor();

@@ -310,10 +310,11 @@ namespace DotNetCTFDumper.MMFParser.EXE
                 {
                     if (chunk.Loader.GetType().Name == typeof(T).Name)
                     {
+                        Chunks.Remove(chunk);
                         return (T) chunk.Loader;
                     }
 
-                    Chunks.Remove(chunk);
+                    
                 }
             }
             //Logger.Log($"ChunkLoader {typeof(T).Name} not found", true, ConsoleColor.Red);

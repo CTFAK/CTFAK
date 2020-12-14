@@ -39,11 +39,11 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
 
         public override void Read()
         {
-            Name = Helper.AutoReadUnicode(Reader);
+            Name = Reader.AutoReadUnicode();
             Flags.flag = (uint) Reader.ReadInt32();
             XCoefficient = Reader.ReadSingle();
             YCoefficient = Reader.ReadSingle();
-            Console.WriteLine("LayerAss: "+Flags["Visible"]);
+  
 
 
 

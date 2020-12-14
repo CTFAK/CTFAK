@@ -36,8 +36,8 @@ namespace DotNetCTFDumper.MMFParser.Translation
                 mfa.Images.Items[key].Debug = true;
             }
             */
-            mfa.Author = game.Author!=null? game.Author:"Kostya";
-            mfa.Copyright = game.Copyright;
+            mfa.Author = game.Author ?? "Kostya";
+            mfa.Copyright = game.Copyright ??"CTFAN Team";
             mfa.Company = "CTFAN Team";
             mfa.Version = "";
             //TODO:Binary Files
@@ -74,7 +74,7 @@ namespace DotNetCTFDumper.MMFParser.Translation
         {
             var mfaTrans = new MFA.Loaders.Transition((ByteReader) null);
             mfaTrans.Module = gameTrans.ModuleFile;
-            mfaTrans.Name = "Transition";
+            mfaTrans.Name = gameTrans.Name.FirstCharToUpper();
             mfaTrans.Id = gameTrans.Module;
             mfaTrans.TransitionId = gameTrans.Name;
             mfaTrans.Flags = gameTrans.Flags;
@@ -88,19 +88,16 @@ namespace DotNetCTFDumper.MMFParser.Translation
         public static MFA.Loaders.Frame ConvertFrame(EXE.Loaders.Frame gameFrame)
         {
             MFA.Loaders.Frame mfaFrame = new MFA.Loaders.Frame(null);
-            TranslatingFrame.Invoke(gameFrame.Name);
-            //mfaFrame.Handle = game.Frames.IndexOf(gameFrame);
+            TranslatingFrame?.Invoke(gameFrame.Name);
             mfaFrame.Name = gameFrame.Name;
             mfaFrame.SizeX = gameFrame.Width;
             mfaFrame.SizeY = gameFrame.Height;
             mfaFrame.Background = gameFrame.Background;
             if (gameFrame.FadeIn != null)mfaFrame.FadeIn = ConvertTransition(gameFrame.FadeIn);
             if (gameFrame.FadeOut != null)mfaFrame.FadeOut = ConvertTransition(gameFrame.FadeOut);
-                
-                
-
-            //TODO: Flags
-            mfaFrame.MaxObjects = gameFrame.Events?.MaxObjects ?? 1337;
+            
+            //TODO:Flags
+            mfaFrame.MaxObjects = gameFrame.Events?.MaxObjects ?? 10000;
             mfaFrame.Password = gameFrame?.Password ?? "";
             mfaFrame.LastViewedX = 320;
             mfaFrame.LastViewedY = 240;
@@ -108,26 +105,28 @@ namespace DotNetCTFDumper.MMFParser.Translation
             mfaFrame.StampHandle = 12;
             mfaFrame.ActiveLayer = 0;
             mfaFrame.Layers = new List<Layer>();
-            var layer = new Layer(null)
+
+            foreach (EXE.Loaders.Layer gameLayer in gameFrame.Layers.Items)
             {
-                Name = "New Layer",
-                    
-                    
-            };
-            layer.Flags["Visible"] = true;
-            mfaFrame.Layers.Add(layer);
+                Layer mfaLayer = new Layer(null)
+                {
+                    Name = gameLayer.Name,
+                    Flags =
+                    {
+                        ["HideAtStart"] = gameLayer.Flags["ToHide"],
+                        ["Visible"] = true,
+                        ["NoBackground"] = gameLayer.Flags["DoNotSaveBackground"],
+                        ["WrapHorizontally"] = gameLayer.Flags["WrapHorizontally"],
+                        ["WrapVertically"] = gameLayer.Flags["WrapVertically"]
                 
-                
-            /*foreach (EXE.Loaders.Layer gameLayer in gameFrame.Layers.Items)
-            {
-                Layer mfaLayer = new Layer(null);
-                mfaLayer.Name = gameLayer.Name;
-                mfaLayer.Flags = (int) gameLayer.Flags;
-                //TODO: Flags
-                mfaLayer.XCoefficient = gameLayer.XCoeff;
-                mfaLayer.YCoefficient = gameLayer.YCoeff;
+                    },
+                    XCoefficient = gameLayer.XCoeff,
+                    YCoefficient = gameLayer.YCoeff
+                };
                 mfaFrame.Layers.Add(mfaLayer);
-            }*/
+                break;
+                //TODO: Fix layers
+            }
             mfaFrame.Events = MFA.MFA.emptyEvents;
             mfaFrame.Chunks = MFA.MFA.emptyFrameChunks;
             return mfaFrame;

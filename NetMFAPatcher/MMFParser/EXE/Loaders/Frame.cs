@@ -284,9 +284,10 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
         {
             get
             {
+                if (Exe.Instance.GameData.GameChunks.GetChunk<FrameItems>() == null) return null;
                 return Exe.Instance.GameData.GameChunks.GetChunk<FrameItems>().FromHandle(ObjectInfo);
             }
-        }
+        } 
 
         public override void Print(bool ext)
         {
@@ -345,11 +346,28 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
     public class Layer : ChunkLoader
     {
         public string Name;
-        public uint Flags;
+        public BitDict Flags = new BitDict(new string[]
+        {
+            "XCoefficient",
+            "YCoefficient",
+            "DoNotSaveBackground",
+            "",
+            "Visible",
+            "WrapHorizontally",
+            "WrapVertically",
+            "", "", "", "",
+            "", "", "", "", "",
+            "Redraw",
+            "ToHide",
+            "ToShow"
+        }
+
+        );
         public float XCoeff;
         public float YCoeff;
         public int NumberOfBackgrounds;
         public int BackgroudIndex;
+        
 
         public Layer(ByteReader reader) : base(reader)
         {
@@ -361,13 +379,12 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
 
         public override void Read()
         {
-            Flags = Reader.ReadUInt32();
+            Flags.flag = Reader.ReadUInt32();
             XCoeff = Reader.ReadSingle();
             YCoeff = Reader.ReadSingle();
             NumberOfBackgrounds = Reader.ReadInt32();
             BackgroudIndex = Reader.ReadInt32();
             Name = Reader.ReadWideString();
-            Console.WriteLine(Name);
         }
 
         public override void Print(bool ext)

@@ -244,9 +244,9 @@ namespace DotNetCTFDumper.GUI
             toLog += $"Product Version: {Exe.Instance.GameData.ProductVersion}\n";
             toLog += $"Build: {Exe.Instance.GameData.Build}\n";
             toLog += $"Runtime Version: {Exe.Instance.GameData.RuntimeVersion}\n";
-            toLog += $"Number Of Images: {Exe.Instance.GameData.Images.NumberOfItems}\n";
-            toLog += $"Number Of Sounds: {(Exe.Instance.GameData.Sounds!= null ?  Exe.Instance.GameData.Sounds.NumOfItems: 0)}\n";
-            toLog += $"Unique FrameItems: {Exe.Instance.GameData.Frameitems.NumberOfItems}\n";
+            toLog += $"Number Of Images: {Exe.Instance.GameData.Images?.NumberOfItems}\n";
+            toLog += $"Number Of Sounds: {Exe.Instance.GameData.Sounds?.NumOfItems}\n";
+            toLog += $"Unique FrameItems: {Exe.Instance.GameData.Frameitems?.NumberOfItems}\n";
             toLog += $"Frame Count: {Exe.Instance.GameData.Frames.Count}\n";
             toLog += $"Chunks Count: {Exe.Instance.GameData.GameChunks.Chunks.Count}\n";
             if (Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>() != null)

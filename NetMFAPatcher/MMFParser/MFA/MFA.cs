@@ -241,7 +241,7 @@ namespace DotNetCTFDumper.MMFParser.MFA
             }
             
             Writer.WriteInt32(Frames.Count); //frame
-            var startPos = Reader.Tell() + 4 * Frames.Count + 4;
+            var startPos = Writer.Tell() + 4 * Frames.Count + 4;
             
             ByteWriter newWriter = new ByteWriter(new MemoryStream());
             foreach (Frame frame in Frames)
@@ -259,6 +259,7 @@ namespace DotNetCTFDumper.MMFParser.MFA
 
         public override void Read()
         {
+            
             Logger.Log($"MFA HEADER:{Reader.ReadAscii(4)}\n");
             MfaBuild = Reader.ReadInt32();
             Product = Reader.ReadInt32();
@@ -402,6 +403,7 @@ namespace DotNetCTFDumper.MMFParser.MFA
             Reader.Seek(nextOffset);
             Chunks = new ChunkList(Reader);
             Chunks.Read();
+            Reader.Dispose();
             return;
         }
 
