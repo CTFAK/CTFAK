@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net.NetworkInformation;
 using DotNetCTFDumper.MMFParser.EXE;
 using DotNetCTFDumper.Utils;
 
@@ -10,7 +12,11 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
         public List<Movement> Items = new List<Movement>();
         public override void Write(ByteWriter Writer)
         {
-            throw new NotImplementedException();
+            Writer.WriteInt32(Items.Count);
+            foreach (Movement movement in Items)
+            {
+                movement.Write(Writer);
+            }
         }
 
         public override void Print()
@@ -20,7 +26,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
 
         public override void Read()
         {
-            var count = Reader.ReadInt32();
+            var count = Reader.ReadUInt32();
             for (int i = 0; i < count; i++)
             {
                 var item = new Movement(Reader);
@@ -37,10 +43,34 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
     public class Movement : DataLoader
     {
         public string Name="ERROR";
+        public string Extension;
+        public int Identifier;
+        public short Player;
+        public short Type;
+        public byte MovingAtStart;
+        public int DirectionAtStart;
+        public int DataSize;
 
         public override void Write(ByteWriter Writer)
         {
-            throw new NotImplementedException();
+            Writer.WriteUnicode(Name);
+            Writer.WriteUnicode(Extension);
+            Writer.WriteUInt32((uint) Identifier);
+            Writer.WriteInt32(DataSize);
+            var newWriter = new ByteWriter(new MemoryStream());
+            if (Extension == null)
+            {
+                
+                newWriter.WriteInt16(Player);
+                newWriter.WriteInt16(Type);
+                newWriter.WriteInt8(MovingAtStart);
+                newWriter.Skip(3);
+                newWriter.WriteInt32(DirectionAtStart);
+            }
+            //Loader.write(newWriter)
+            Writer.WriteWriter(newWriter);
+            
+            
         }
 
         public override void Print()
@@ -51,22 +81,25 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
         public override void Read()
         {
             Name = Helper.AutoReadUnicode(Reader);
-            var extension = Helper.AutoReadUnicode(Reader);
-            var identifier = Reader.ReadInt32();
-            var dataSize = Reader.ReadInt32();
-            if(extension.Length>0)
+            Extension = Helper.AutoReadUnicode(Reader);
+            Identifier = (int) Reader.ReadUInt32();
+            DataSize = (int) Reader.ReadUInt32();
+            if(Extension.Length>0)
             {
-                var newReader = new ByteReader(Reader.ReadBytes(dataSize));
+                var newReader = new ByteReader(Reader.ReadBytes(DataSize));
 
 
             }
             else
             {
-                var player = Reader.ReadInt16();
-                var type = Reader.ReadInt16();
-                var movingAtStart = Reader.ReadByte();
+                Player = Reader.ReadInt16();
+                Type = Reader.ReadInt16();
+                MovingAtStart = Reader.ReadByte();
                 Reader.Skip(3);
-                var directionAtStart = Reader.ReadInt32();
+                DirectionAtStart = Reader.ReadInt32();
+                var newReader = new ByteReader(Reader.ReadBytes(DataSize - 12));
+                //ONLY STATIC MOVEMENT IS SUPPORTED RN
+                //TODO:Movement Types
                 //implement types, but i am tired, fuck this shit
             }
 

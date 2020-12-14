@@ -14,9 +14,9 @@ namespace DotNetCTFDumper
         public static string GamePath;
         public static string GameName => Path.GetFileNameWithoutExtension(GamePath);
         public static string DumpPath => $"DUMP\\{GameName}";
-        public static string ImagePath=>$"{DumpPath}\\ImageBank";
-        public static string SoundPath=>$"{DumpPath}\\SoundBank";
-        public static string MusicPath=>$"{DumpPath}\\MusicBank";
+        public static string ImagePath=>$"{DumpPath}\\Images";
+        public static string SoundPath=>$"{DumpPath}\\Sounds";
+        public static string MusicPath=>$"{DumpPath}\\Musics";
 
         public static string ChunkPath=>$"{DumpPath}\\Chunks";
         public static string ExtensionPath=>$"{DumpPath}\\Extensions";

@@ -10,7 +10,10 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
         List<Behaviour> _items = new List<Behaviour>();
         public override void Write(ByteWriter Writer)
         {
-            throw new NotImplementedException();
+            foreach (Behaviour behaviour in _items)
+            {
+                behaviour.Write(Writer);
+            }
         }
 
         public override void Print()
@@ -36,7 +39,8 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
         public ByteReader Data;
         public override void Write(ByteWriter Writer)
         {
-            throw new NotImplementedException();
+            Writer.AutoWriteUnicode(Name);
+            Writer.WriteBytes(Data.ReadBytes((int) Data.Size()));
         }
 
         public override void Print()
@@ -46,7 +50,8 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
 
         public override void Read()
         {
-            Name = Reader.ReadAscii(Reader.ReadInt32());
+            Name = Reader.AutoReadUnicode();
+
             Data = new ByteReader(Reader.ReadBytes(Reader.ReadInt32()));
             
         }

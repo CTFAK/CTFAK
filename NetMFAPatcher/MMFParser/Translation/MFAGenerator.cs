@@ -3,14 +3,14 @@ using System.IO;
 using DotNetCTFDumper.MMFParser.EXE;
 using DotNetCTFDumper.Utils;
 
-namespace DotNetCTFDumper.MMFParser.Decompiling
+namespace DotNetCTFDumper.MMFParser.Translation
 {
     public static class MFAGenerator
     {
         //public static readonly string TemplatePath = @"C:\Users\MED45\Downloads\testNoFrames.mfa";
         public static readonly string TemplatePath = @"C:\Users\ivani\Desktop\CTFResearch\testNoFrames.mfa";
 
-        public static void BuildMFA()
+        public static MFA.MFA BuildMFA()
         {
             Settings.DoMFA = true;
             var mfaReader = new ByteReader(TemplatePath, FileMode.Open);
@@ -26,12 +26,14 @@ namespace DotNetCTFDumper.MMFParser.Decompiling
                     FileMode.Create); //New writer for new MFA
             template.Write(mfaWriter); //Writing new MFA
             mfaWriter.Dispose();
+            return template;
+            
             Logger.Log("MFA Done",true,ConsoleColor.Yellow);
         }
 
         public static void ReadTestMFA()
         {
-            var mfaReader = new ByteReader(TemplatePath, FileMode.Open);
+            var mfaReader = new ByteReader(@"C:\Users\ivani\Desktop\CTFResearch\ObjTEST.mfa", FileMode.Open);
             var template = new MFA.MFA(mfaReader);
             Settings.DoMFA = true;
             template.Read();

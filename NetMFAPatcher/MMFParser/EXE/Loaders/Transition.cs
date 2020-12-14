@@ -1,0 +1,56 @@
+﻿using System;
+using System.Drawing;
+using DotNetCTFDumper.Utils;
+
+namespace DotNetCTFDumper.MMFParser.EXE.Loaders
+{
+    public class Transition:ChunkLoader
+    {
+        public string Module;
+        public string Name;
+        public int Duration;
+        public int Flags;
+        public Color Color;
+        public string ModuleFile;
+        public byte[] ParameterData;
+
+        public Transition(ByteReader reader) : base(reader)
+        {
+        }
+
+        public Transition(ChunkList.Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+            var currentPos = Reader.Tell();
+            Module = Reader.ReadAscii(4);
+            Console.WriteLine("TransitionModule: "+Module);
+            Name = Reader.ReadAscii(4);
+            Console.WriteLine("TransitionModule: "+Name);
+            Duration = Reader.ReadInt32();
+            Flags = Reader.ReadInt32();
+            Color = Reader.ReadColor();
+            var nameOffset = Reader.ReadInt32();
+            var parameterOffset = Reader.ReadInt32();
+            var parameterSize = Reader.ReadInt32();
+            Reader.Seek(currentPos+nameOffset);
+            ModuleFile = Reader.ReadAscii();
+            Reader.Seek(currentPos+parameterOffset);
+            ParameterData = Reader.ReadBytes(parameterSize);
+
+
+        }
+
+        public override void Print(bool ext)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override string[] GetReadableData()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+}

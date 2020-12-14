@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using DotNetCTFDumper.MMFParser.EXE;
 using DotNetCTFDumper.Utils;
@@ -18,6 +19,28 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
 
         public override void Write(ByteWriter Writer)
         {
+            Writer.WriteInt32(ObjectFlags);
+            Writer.WriteInt32(NewObjectFlags);
+            Writer.WriteColor(BackgroundColor);
+            for (int i = 0; i < 9; i++)
+            {
+                try
+                {
+                    var value = _qualifiers[i];
+                    Writer.WriteInt16(value);
+                }
+                catch
+                {
+                    Writer.WriteInt16(-1);
+                }
+            }
+            Values.Write(Writer);
+            Strings.Write(Writer);
+            Movements.Write(Writer);
+            Behaviours.Write(Writer);
+            Writer.WriteInt8(0);//FadeIn
+            Writer.WriteInt8(0);//FadeOut
+
             
         }
 
@@ -47,8 +70,8 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
             ObjectFlags = Reader.ReadInt32();
             NewObjectFlags = Reader.ReadInt32();
             BackgroundColor = Reader.ReadColor();
-            var end = Reader.Tell() + 2 * 9;
-            for (int i = 0; i < 9; i++)
+            var end = Reader.Tell() + 2 * (8+1);
+            for (int i = 0; i < 8+1; i++)
             {
                 var value = Reader.ReadInt16();
                 if(value==-1)
@@ -67,7 +90,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
             Movements.Read();
             Behaviours = new Behaviours(Reader);
             Behaviours.Read();
-            Reader.Skip(56);
+            //Reader.Skip(50);//TODO: Help
             Print();
 
 

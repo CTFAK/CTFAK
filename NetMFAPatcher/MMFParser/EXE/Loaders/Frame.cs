@@ -47,6 +47,8 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
         public Layers Layers;
         public Events.Events Events;
         public FramePalette Palette;
+        public Transition FadeIn;
+        public Transition FadeOut;
 
 
         public override void Print(bool ext)
@@ -115,9 +117,10 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
             {
                 CountOfObjs = Objects.CountOfObjects;              
             }
-            
-            
-            
+
+            FadeIn = Chunks.PopChunk<Transition>();
+            FadeOut = Chunks.PopChunk<Transition>();
+
 
 
 

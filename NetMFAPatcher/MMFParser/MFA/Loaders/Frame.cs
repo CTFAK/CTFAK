@@ -27,6 +27,8 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
         public List<Layer> Layers;
         public Events Events;
         public ChunkList Chunks;
+        public Transition FadeIn;
+        public Transition FadeOut;
 
         public Frame(ByteReader reader) : base(reader)
         {
@@ -63,8 +65,20 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             }
             
             //TODO: Do transitions
-            Writer.WriteInt8(0);
-            Writer.WriteInt8(0);
+            if (FadeIn != null)
+            {
+                Writer.WriteInt8(1);
+                FadeIn.Write(Writer);
+            }
+            else Writer.Skip(1);
+            if (FadeOut != null)
+            {
+                Writer.WriteInt8(1);
+                FadeOut.Write(Writer);
+            }
+            else Writer.Skip(1);
+            //Writer.Skip(2);
+            
 
             Writer.WriteInt32(Items.Count);
             foreach (var item in Items)
@@ -132,10 +146,18 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
                 Layers.Add(layer);
 
             }
-            //fadein
 
-            //fadeout
-            Reader.Skip(2);
+            if (Reader.ReadByte() == 1)
+            {
+                FadeIn = new Transition(Reader);
+                FadeIn.Read();
+            }
+            
+            if (Reader.ReadByte() == 1)
+            {
+                FadeOut = new Transition(Reader);
+                FadeOut.Read();
+            }
             Items = new List<FrameItem>();
             var frameitemsCount = Reader.ReadInt32();
             for (int i = 0; i < frameitemsCount; i++)

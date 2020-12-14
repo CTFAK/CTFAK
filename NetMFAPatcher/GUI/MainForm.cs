@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
-using DotNetCTFDumper.MMFParser.Decompiling;
 using DotNetCTFDumper.MMFParser.EXE;
 using DotNetCTFDumper.MMFParser.EXE.Loaders;
 using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
@@ -291,7 +290,9 @@ namespace DotNetCTFDumper.GUI
 
         private void MFABtn_Click(object sender, EventArgs e)
         {
-            MFAGenerator.BuildMFA();
+            var mfaForm = new MFABuilderForm(ColorTheme);
+            mfaForm.Show();
+            
         }
 
         private void soundsButton_Click(object sender, EventArgs e)

@@ -149,6 +149,12 @@
     <Compile Include="GUI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\MFABuilderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\MFABuilderForm.Designer.cs">
+      <DependentUpon>MFABuilderForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\ObjectBox.cs" />
     <Compile Include="GUI\PackDataForm.cs">
       <SubType>Form</SubType>
@@ -156,6 +162,8 @@
     <Compile Include="GUI\PackDataForm.Designer.cs">
       <DependentUpon>PackDataForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MMFParser\Translation\MFAGenerator.cs" />
+    <Compile Include="MMFParser\Translation\PAME2MFA.cs" />
     <Compile Include="MMFParser\EXE\ChunkList.cs" />
     <Compile Include="MMFParser\EXE\Loaders\AppHeader.cs" />
     <Compile Include="MMFParser\EXE\Loaders\AppMenu.cs" />
@@ -193,14 +201,14 @@
     <Compile Include="MMFParser\EXE\Loaders\Objects\ObjectCommon.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Objects\Value.cs" />
     <Compile Include="MMFParser\EXE\Loaders\StringChunk.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Transition.cs" />
     <Compile Include="MMFParser\EXE\Loaders\yves.cs" />
     <Compile Include="MMFParser\EXE\DataLoader.cs" />
     <Compile Include="MMFParser\EXE\EXE.cs" />
     <Compile Include="MMFParser\EXE\GameData.cs" />
     <Compile Include="MMFParser\EXE\PackData.cs" />
     <Compile Include="MMFParser\Constants.cs" />
-    <Compile Include="MMFParser\MFA\Decompiling\MFAGenerator.cs" />
-    <Compile Include="MMFParser\MFA\Decompiling\PAME2MFA.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\Transition.cs" />
     <Compile Include="MMFParser\MFA\MFA.cs" />
     <Compile Include="MMFParser\MFA\Loaders\ChunkList.cs" />
     <Compile Include="MMFParser\MFA\Loaders\Controls.cs" />
@@ -262,6 +270,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\MFABuilderForm.resx">
+      <DependentUpon>MFABuilderForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\PackDataForm.resx">
       <DependentUpon>PackDataForm.cs</DependentUpon>

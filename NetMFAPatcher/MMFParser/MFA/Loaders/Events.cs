@@ -188,7 +188,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
                 Writer.WriteUInt16(Version);
                 Writer.WriteInt16((short) FrameType);
                
-                //Writer.WriteBytes(new byte[] {0x04, 0x04, 0x00, 0x00});
+                // Writer.WriteBytes(new byte[] {0x04, 0x04, 0x00, 0x00});
                 // if (Items != null)
                 //     {
                 //         Console.WriteLine("Writing EventData");

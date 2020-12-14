@@ -232,6 +232,12 @@ namespace DotNetCTFDumper.MMFParser.EXE
                 case 13112:
                     loader = new ObjectInstances(chunk);
                     break;
+                case 13115:
+                    loader = new Transition(chunk);
+                    break;
+                case 13116:
+                    loader = new Transition(chunk);
+                    break;
                 case 13121:
                     loader = new Layers(chunk);
                     break;
@@ -290,6 +296,24 @@ namespace DotNetCTFDumper.MMFParser.EXE
                     {
                         return (T) chunk.Loader;
                     }
+                }
+            }
+            //Logger.Log($"ChunkLoader {typeof(T).Name} not found", true, ConsoleColor.Red);
+            return null;  
+        }
+        public T PopChunk<T>() where T : ChunkLoader
+        {
+            for(int i=0;i<Chunks.Count;i++)
+            {
+                var chunk = Chunks[i];
+                if (chunk.Loader != null)
+                {
+                    if (chunk.Loader.GetType().Name == typeof(T).Name)
+                    {
+                        return (T) chunk.Loader;
+                    }
+
+                    Chunks.Remove(chunk);
                 }
             }
             //Logger.Log($"ChunkLoader {typeof(T).Name} not found", true, ConsoleColor.Red);

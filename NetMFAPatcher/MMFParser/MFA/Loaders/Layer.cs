@@ -9,13 +9,25 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
         public string Name="ERROR";
         public float XCoefficient;
         public float YCoefficient;
-        public int Flags;
+
+        public BitDict Flags = new BitDict(new string[]
+            {
+                "Visible",
+                "Locked",
+                "Obsolete",
+                "HideAtStart",
+                "NoBackground",
+                "WrapHorizontally",
+                "WrapVertically",
+                "PreviousEffect"
+            }
+        );
 
 
         public override void Write(ByteWriter Writer)
         {
             Writer.AutoWriteUnicode(Name);
-            Writer.WriteInt32(Flags);
+            Writer.WriteInt32((int) Flags.flag);
             Writer.WriteSingle(XCoefficient);
             Writer.WriteSingle(YCoefficient);
         }
@@ -28,9 +40,10 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
         public override void Read()
         {
             Name = Helper.AutoReadUnicode(Reader);
-            Flags = Reader.ReadInt32();
+            Flags.flag = (uint) Reader.ReadInt32();
             XCoefficient = Reader.ReadSingle();
             YCoefficient = Reader.ReadSingle();
+            Console.WriteLine("LayerAss: "+Flags["Visible"]);
 
 
 

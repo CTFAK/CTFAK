@@ -14,6 +14,12 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
         {
             base.Read();
         }
+
+        public override void Write(ByteWriter Writer)
+        {
+            base.Write(Writer);
+        }
+
         public Active(ByteReader reader) : base(reader) { }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using DotNetCTFDumper.MMFParser.EXE;
 using DotNetCTFDumper.Utils;
 
@@ -13,7 +14,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
             base.Read();
             if(Reader.ReadByte()!=0)
             {
-                var animationCount = Reader.ReadInt32();
+                var animationCount = Reader.ReadUInt32();
                 for (int i = 0; i < animationCount; i++)
                 {
                     var item = new Animation(Reader);
@@ -42,7 +43,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
 
         public override void Read()
         {
-            Name = Reader.ReadAscii(Reader.ReadInt32());
+            Name = Reader.AutoReadUnicode();
             var directionCount = Reader.ReadInt32();
             var directions = new List<AnimationDirection>();
             for (int i = 0; i < directionCount; i++)
@@ -60,9 +61,25 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
     class AnimationDirection : DataLoader
     {
         public string Name = "Animation-UNKNOWN";
+        public int Index;
+        public int MinSpeed;
+        public int MaxSpeed;
+        public int Repeat;
+        public int BackTo;
+        public List<int> Frames= new List<int>();
+
         public override void Write(ByteWriter Writer)
         {
-            throw new NotImplementedException();
+            Writer.WriteInt32(Index);
+            Writer.WriteInt32(MinSpeed);
+            Writer.WriteInt32(MaxSpeed);
+            Writer.WriteInt32(Repeat);
+            Writer.WriteInt32(BackTo);
+            foreach (int frame in Frames)
+            {
+                Writer.WriteInt32(frame);
+            }
+            
         }
 
         public override void Print()
@@ -72,12 +89,16 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
 
         public override void Read()
         {
-            var index = Reader.ReadInt32();
-            var minSpeed = Reader.ReadInt32();
-            var maxSpeed= Reader.ReadInt32();
-            var repeat= Reader.ReadInt32();
-            var backTo= Reader.ReadInt32();
-            var frames = new List<int>();
+            Index = Reader.ReadInt32();
+            MinSpeed = Reader.ReadInt32();
+            MaxSpeed = Reader.ReadInt32();
+            Repeat = Reader.ReadInt32();
+            BackTo = Reader.ReadInt32();
+            var animCount = Reader.ReadInt32();
+            for (int i = 0; i < animCount; i++)
+            {
+                Frames.Add(Reader.ReadInt32()); 
+            }
 
         }
         public AnimationDirection(ByteReader reader) : base(reader) { }
