@@ -37,6 +37,10 @@ namespace DotNetCTFDumper.Utils
             {
                 flag |= (uint) Math.Pow(2,Array.IndexOf(Keys,key));
             }
+            else
+            {
+                flag &= (uint) Math.Pow(~2,Array.IndexOf(Keys,key));
+            }
         }
        
 

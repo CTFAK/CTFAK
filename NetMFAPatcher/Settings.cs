@@ -10,6 +10,7 @@ namespace DotNetCTFDumper
         public static bool DumpMusic;
         public static bool SaveChunks;
         public static bool Verbose;
+        public static bool Old;
         
         public static string GamePath;
         public static string GameName => Path.GetFileNameWithoutExtension(GamePath);

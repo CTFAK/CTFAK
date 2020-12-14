@@ -37,7 +37,12 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
 
         public override string[] GetReadableData()
         {
-            throw new NotImplementedException();
+            return new string[]
+            {
+                $"Name: {this.Name}",
+                $"Type: {(Constants.ObjectType)this.ObjectType}"
+                
+            };
         }
 
         public override void Read()

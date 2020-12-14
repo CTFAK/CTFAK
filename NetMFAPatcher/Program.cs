@@ -27,7 +27,7 @@ namespace DotNetCTFDumper
 
             var path = "";
             var verbose = false;
-            var dumpImages = false;
+            var dumpImages = true;
             var dumpSounds = true;
             
             if (args.Length == 0)

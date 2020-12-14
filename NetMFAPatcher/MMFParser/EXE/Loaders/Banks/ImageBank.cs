@@ -149,9 +149,9 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
             _bitmap = null;
             Reader.Seek(Position);
             ByteReader imageReader;
-
+             
+            // imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
             imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
-
             long start = imageReader.Tell();
 
             _checksum = imageReader.ReadInt32();

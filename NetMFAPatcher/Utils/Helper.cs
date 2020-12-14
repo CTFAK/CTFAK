@@ -217,6 +217,7 @@ namespace DotNetCTFDumper.Utils
 
         public static string ActualName(this ChunkList.Chunk chunk)
         {
+            return "Placeholder";
             var constName = ((Constants.ChunkNames) chunk.Id).ToString();
             int tempId = 0;
             int.TryParse(constName, out tempId);

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+using DotNetCTFDumper.MMFParser;
 using DotNetCTFDumper.MMFParser.EXE;
 using DotNetCTFDumper.MMFParser.EXE.Loaders;
 using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
@@ -196,16 +197,13 @@ namespace DotNetCTFDumper.GUI
             foreach (var item in gameData.GameChunks.Chunks)
             {
                 string ActualName = item.Name;
-                if (item.Loader is Frame frm) ActualName = ActualName + " "+frm.Name;
-                ChunkNode newNode = Helper.GetChunkNode(item,ActualName);
+                if (item.Loader is Frame frm) ActualName = ActualName + " " + frm.Name;
+                ChunkNode newNode = Helper.GetChunkNode(item, ActualName);
                 //if (item.Loader != null) newNode = new ChunkNode(ActualName, item.Loader);
                 //else newNode = new ChunkNode(ActualName, item);
-                
-                    
-                
-                
                 treeView1.Nodes.Add(newNode);
                 if (item.Loader is Frame frame)
+                {
                     foreach (var frmChunk in frame.Chunks.Chunks)
                     {
                         var frameNode = Helper.GetChunkNode(frmChunk);
@@ -223,8 +221,18 @@ namespace DotNetCTFDumper.GUI
                             }
                         }
                     }
-            }
+                }
+                else if (item.Loader is FrameItems items)
+                {
+                    foreach (var key in items.ItemDict.Keys)
+                    {
+                        var frameItem = items.ItemDict[key];
+                        var objNode = new ChunkNode($"{(Constants.ObjectType)frameItem.ObjectType} - {frameItem.Name}", frameItem);
+                        newNode.Nodes.Add(objNode);
 
+                    }
+                }
+            }
             
             MFABtn.Visible = true;
             FolderBTN.Visible = true;
@@ -239,8 +247,8 @@ namespace DotNetCTFDumper.GUI
             loadingLabel.Visible = false;
             var toLog = "";
             toLog += $"Title:{Exe.Instance.GameData.Name}\n";
-            toLog += $"Copyright:{Exe.Instance.GameData.Copyright}\n";
-            toLog += $"Editor Filename: {Exe.Instance.GameData.EditorFilename}\n";
+            toLog += $"Copyright:{Exe.Instance.GameData.Copyright}\n"; 
+            //toLog += $"Editor Filename: {Exe.Instance.GameData.EditorFilename}\n";
             toLog += $"Product Version: {Exe.Instance.GameData.ProductVersion}\n";
             toLog += $"Build: {Exe.Instance.GameData.Build}\n";
             toLog += $"Runtime Version: {Exe.Instance.GameData.RuntimeVersion}\n";

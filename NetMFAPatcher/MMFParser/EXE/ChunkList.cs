@@ -62,7 +62,7 @@ namespace DotNetCTFDumper.MMFParser.EXE
             {
                 
                 Id = exeReader.ReadInt16();
-                Name = this.ActualName();
+                Name = _chunkList.GetNameByID(Id);
 
                 Flag = (ChunkFlags) exeReader.ReadInt16();
                 Size = exeReader.ReadInt32();
@@ -317,8 +317,88 @@ namespace DotNetCTFDumper.MMFParser.EXE
                     
                 }
             }
-            //Logger.Log($"ChunkLoader {typeof(T).Name} not found", true, ConsoleColor.Red);
             return null;  
+        }
+
+        public string GetNameByID(int id)
+        {
+            switch (id)
+            {
+                case 4386: return "PREVIEW";
+                case 8738: return "Mini Header";
+                case 8739: return "Header";
+                case 8740: return "Title";
+                case 8741: return "Author";
+                case 8742: return "Menu";
+                case 8743: return "Extra Path";
+                case 8744: return "Extensions";
+                case 8745: return "Object Bank";
+                case 8746: return "Global Events";
+                case 8747: return "Frame Handles";
+                case 8748: return "Extra Data";
+                case 8749: return "Additional Extensions";
+                case 8750: return "Project Path";
+                case 8751: return "Output Path";
+                case 8752: return "App Doc";
+                case 8753: return "Other Extensions";
+                case 8754: return "Global Values";
+                case 8755: return "Global Strings";
+                case 8756: return "Extensions List";
+                case 8757: return "Icon";
+                case 8758: return "Demo Version";
+                case 8759: return "Security Number";
+                case 8760: return "Binary Files";
+                case 8761: return "Menu Images";
+                case 8762: return "About";
+                case 8763: return "Copyright";
+                case 8764: return "Global Value Names";
+                case 8765: return "Global String Names";
+                case 8766: return "Movement Extensions";
+                case 8767: return "Object Bank 2";
+                case 8768: return "EXE Only";
+                case 8770: return "Protection";
+                case 8771: return "Shaders";
+                case 8773: return "Extended Header";
+                case 13107:return "Frame";
+                case 13108:return "Frame Header";
+                case 13109:return "Frame Name";
+                case 13110:return "Frame Password";
+                case 13111:return "Frame Palette";
+                case 13112:return "Frame Objects";
+                case 13113:return "Frame Fade In Frame";
+                case 13114:return "Frame Fade Out Frame";
+                case 13115:return "Frame Fade In";
+                case 13116:return "Frame Fade Out";
+                case 13117:return "Frame Events";
+                case 13118:return "Frame Play Header";
+                case 13119:return "Additional Frame Item";
+                case 13120:return "Additional Object Instance";
+                case 13121:return "Frame Layers";
+                case 13122:return "Frame Virtual Rect";
+                case 13123:return "Demo File Path";
+                case 13124:return "Random Seed";
+                case 13125:return "Frame Layer Effects";
+                case 13126:return "Bluray Options";
+                case 13127:return "MVTimer Base";
+                case 13128:return "Mosaic Image Table";
+                case 13129:return "Frame Effects";
+                case 13130:return "Frame Iphone Options";
+                case 17476:return "Object Header";
+                case 17477:return "Object Name";
+                case 17478:return "Object Common";
+                case 17479:return "Object Unknown";
+                case 17480:return "Object Effects";
+                case 21845:return "Image Offsets";
+                case 21846:return "Font Offsets";
+                case 21847:return "Sound Offsets";
+                case 21848:return "Music Offsets";
+                case 26214:return "Image Bank";
+                case 26215:return "Font Bank";
+                case 26216:return "Sound Bank";
+                case 26217:return "Music Bank";
+                case 32639:return "Last";
+                default: return $"Unknown-{id}";
+            }
         }
         
     }

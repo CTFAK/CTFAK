@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.OleDb;
 using System.IO;
 using DotNetCTFDumper.Utils;
 
@@ -66,18 +67,25 @@ namespace DotNetCTFDumper.MMFParser.EXE
             exeReader.Seek((int)possition);
             UInt16 firstShort = exeReader.PeekUInt16();
             Logger.Log("First Short: " + firstShort.ToString("X2"), true, ConsoleColor.Yellow);
-
-            if (firstShort == 0x7777)
+            if (firstShort == 0x7777) Settings.Old = false;
+            else Settings.Old = true;
+            if (!Settings.Old)
             {
-                Logger.Log("Found PackData header!\nReading PackData header.", true, ConsoleColor.Blue);
                 PackData = new PackData();
                 PackData.Read(exeReader);
                 GameData = new GameData();
                 GameData.Read(exeReader);
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Logger.Log("Found PackData header!\nReading PackData header.", true, ConsoleColor.Blue);
+                
             }
             else
             {
+                var oldData = new ChunkList();
+                oldData.Read(exeReader);
+                GameData = new GameData();
+                GameData.Read(exeReader);
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Logger.Log("Failed to find PackData header!\n", true, ConsoleColor.Red);
             }
             
