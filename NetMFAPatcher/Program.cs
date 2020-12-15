@@ -3,19 +3,17 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using DotNetCTFDumper.GUI;
-using DotNetCTFDumper.MMFParser.Data;
-using DotNetCTFDumper.MMFParser.Decompiling;
+using DotNetCTFDumper.MMFParser.EXE;
+using DotNetCTFDumper.MMFParser.Translation;
 using DotNetCTFDumper.Utils;
 using Joveler.Compression.ZLib;
 
 namespace DotNetCTFDumper
 {
-    internal class Program
+    public class Program
     {
-        //public static string path = @"H:\fnaf-world.exe";//test
-        //public static string path = @"D:\SteamLibrary\steamapps\common\Five Nights at Freddy's Sister Location\SisterLocation.exe";
-        //public static string Path = ""; //TODO: Make Selectable
         public static MainForm MyForm;
+        public delegate void DumperEvent(object obj);
 
 
         [STAThread]
@@ -24,12 +22,12 @@ namespace DotNetCTFDumper
             var handle = Helper.GetConsoleWindow();
             Helper.ShowWindow(handle, Helper.SW_HIDE);
             InitNativeLibrary();
-            MFAGenerator.ReadTestMFA();
-            Environment.Exit(0);
+            // MFAGenerator.ReadTestMFA();
+            // Environment.Exit(0);
 
             var path = "";
             var verbose = false;
-            var dumpImages = false;
+            var dumpImages = true;
             var dumpSounds = true;
             
             if (args.Length == 0)

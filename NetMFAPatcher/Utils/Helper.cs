@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using DotNetCTFDumper.GUI;
 using DotNetCTFDumper.MMFParser;
-using DotNetCTFDumper.MMFParser.ChunkLoaders.Events.Parameters;
-using DotNetCTFDumper.MMFParser.ChunkLoaders.Objects;
-using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.MMFParser.EXE;
+using DotNetCTFDumper.MMFParser.EXE.Loaders.Events.Parameters;
+using DotNetCTFDumper.MMFParser.EXE.Loaders.Objects;
 
 namespace DotNetCTFDumper.Utils
 {
@@ -51,6 +51,15 @@ namespace DotNetCTFDumper.Utils
             }
 
             return temp;
+        }
+        public static string FirstCharToUpper(this string input)
+        {
+            switch (input)
+            {
+                case null: throw new ArgumentNullException(nameof(input));
+                case "": throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
+                default: return input.First().ToString().ToUpper() + input.Substring(1);
+            }
         }
 
         public static string AutoReadUnicode(this ByteReader reader)
@@ -208,6 +217,7 @@ namespace DotNetCTFDumper.Utils
 
         public static string ActualName(this ChunkList.Chunk chunk)
         {
+            return "Placeholder";
             var constName = ((Constants.ChunkNames) chunk.Id).ToString();
             int tempId = 0;
             int.TryParse(constName, out tempId);

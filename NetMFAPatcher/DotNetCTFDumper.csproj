@@ -149,6 +149,12 @@
     <Compile Include="GUI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\MFABuilderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\MFABuilderForm.Designer.cs">
+      <DependentUpon>MFABuilderForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\ObjectBox.cs" />
     <Compile Include="GUI\PackDataForm.cs">
       <SubType>Form</SubType>
@@ -156,73 +162,77 @@
     <Compile Include="GUI\PackDataForm.Designer.cs">
       <DependentUpon>PackDataForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MMFParser\ChunkLoaders\AppMenu.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Events\Events.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Events\EventsParts.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Events\Expressions\Expression.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Position.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Int.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\GlobalValue.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\ParameterCommon.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Float.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Every.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Sample.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Remark.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Colour.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Short.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\AlterableValue.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Create.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\Time.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Events\Parameters\ParamObject.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\ExtData.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Globals.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\ObjectInfo.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\FrameItems.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\ObjectNames.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Objects\Animations.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Objects\Backdrop.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Objects\Counters.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Objects\ObjectCommon.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Objects\Value.cs" />
-    <Compile Include="MMFParser\Data\DataLoader.cs" />
-    <Compile Include="MMFParser\Data\EXE.cs" />
-    <Compile Include="MMFParser\Decompiling\MFAGenerator.cs" />
-    <Compile Include="MMFParser\Decompiling\PAME2MFA.cs" />
-    <Compile Include="MMFParser\MFALoaders\ChunkList.cs" />
-    <Compile Include="MMFParser\MFALoaders\Events.cs" />
-    <Compile Include="MMFParser\MFALoaders\Frame.cs" />
-    <Compile Include="MMFParser\MFALoaders\FrameInstance.cs" />
-    <Compile Include="MMFParser\MFALoaders\FrameItem.cs" />
-    <Compile Include="MMFParser\MFALoaders\ItemFolder.cs" />
-    <Compile Include="MMFParser\MFALoaders\Layer.cs" />
-    <Compile Include="MMFParser\MFALoaders\mfachunks\Active.cs" />
-    <Compile Include="MMFParser\MFALoaders\mfachunks\AnimationObject.cs" />
-    <Compile Include="MMFParser\MFALoaders\mfachunks\Behaviours.cs" />
-    <Compile Include="MMFParser\MFALoaders\mfachunks\Movements.cs" />
-    <Compile Include="MMFParser\MFALoaders\mfachunks\ObjectLoader.cs" />
-    <Compile Include="MMFParser\MFALoaders\ValueList.cs" />
-    <Compile Include="MMFParser\MFALoaders\Controls.cs" />
-    <Compile Include="MMFParser\MFALoaders\ImageBank.cs" />
-    <Compile Include="MMFParser\Data\MFA.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\AppHeader.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\ChunkLoader.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Banks\FontBank.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Frame.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Banks\ImageBank.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Banks\MusicBank.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\Banks\SoundBank.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\StringChunk.cs" />
-    <Compile Include="MMFParser\ChunkLoaders\yves.cs" />
+    <Compile Include="MMFParser\Translation\MFAGenerator.cs" />
+    <Compile Include="MMFParser\Translation\PAME2MFA.cs" />
+    <Compile Include="MMFParser\EXE\ChunkList.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\AppHeader.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\AppMenu.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Banks\FontBank.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Banks\ImageBank.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Banks\MusicBank.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Banks\SoundBank.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\ChunkLoader.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Events.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\EventsParts.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Expressions\Expression.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\AlterableValue.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Colour.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Create.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Every.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Float.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\GlobalValue.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Int.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\ParameterCommon.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\ParamObject.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Position.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Remark.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Sample.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Short.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Time.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\ExtData.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Frame.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\FrameItems.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Globals.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\ObjectInfo.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\ObjectNames.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Objects\Animations.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Objects\Backdrop.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Objects\Counters.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Objects\ObjectCommon.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Objects\Value.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\StringChunk.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Transition.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\yves.cs" />
+    <Compile Include="MMFParser\EXE\DataLoader.cs" />
+    <Compile Include="MMFParser\EXE\EXE.cs" />
+    <Compile Include="MMFParser\EXE\GameData.cs" />
+    <Compile Include="MMFParser\EXE\PackData.cs" />
     <Compile Include="MMFParser\Constants.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\Transition.cs" />
+    <Compile Include="MMFParser\MFA\MFA.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\ChunkList.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\Controls.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\Events.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\Frame.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\FrameInstance.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\FrameItem.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\ImageBank.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\ItemFolder.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\Layer.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\mfachunks\Active.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\mfachunks\AnimationObject.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\mfachunks\Behaviours.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\mfachunks\Movements.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\mfachunks\ObjectLoader.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\ValueList.cs" />
+    <Compile Include="PluginAPI\IPlugin.cs" />
+    <Compile Include="PluginAPI\PluginAPI.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Utils\Backend.cs" />
     <Compile Include="Utils\BitDict.cs" />
     <Compile Include="Utils\ByteFlag.cs" />
     <Compile Include="Utils\ByteWriter.cs" />
     <Compile Include="Utils\Helper.cs" />
-    <Compile Include="MMFParser\Data\ChunkList.cs" />
-    <Compile Include="MMFParser\Data\GameData.cs" />
-    <Compile Include="MMFParser\Data\PackData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utils\ByteReader.cs" />
@@ -260,6 +270,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\MFABuilderForm.resx">
+      <DependentUpon>MFABuilderForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\PackDataForm.resx">
       <DependentUpon>PackDataForm.cs</DependentUpon>

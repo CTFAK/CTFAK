@@ -40,6 +40,7 @@ namespace DotNetCTFDumper.Utils
             Array.Resize<byte>(ref decompressedData, decompSize);
             return decompressedData;
         }
+        
 
         public static byte[] compress_block(byte[] data)
         {

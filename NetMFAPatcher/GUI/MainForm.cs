@@ -1,13 +1,14 @@
 ﻿using System;
+using System.CodeDom;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
-using DotNetCTFDumper.MMFParser.ChunkLoaders;
-using DotNetCTFDumper.MMFParser.ChunkLoaders.Banks;
-using DotNetCTFDumper.MMFParser.Data;
-using DotNetCTFDumper.MMFParser.Decompiling;
+using DotNetCTFDumper.MMFParser;
+using DotNetCTFDumper.MMFParser.EXE;
+using DotNetCTFDumper.MMFParser.EXE.Loaders;
+using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
 using DotNetCTFDumper.Utils;
 
 namespace DotNetCTFDumper.GUI
@@ -25,6 +26,11 @@ namespace DotNetCTFDumper.GUI
         public PackDataForm PackForm;
         
         public delegate void SaveHandler(int index, int all);
+
+        public delegate void IncrementSortedProgressBar(int all);
+        
+
+        
         public MainForm()
         {
             //Buttons
@@ -89,11 +95,11 @@ namespace DotNetCTFDumper.GUI
         private void StartReading()
         {
             var path = openFileDialog1.FileName;
+            loadingLabel.Visible = true;
             Program.ReadFile(path, Settings.Verbose, Settings.DumpImages, Settings.DumpSounds);
             imageBar.Value = 0;
-            soundBar.Value = 0;
+            soundBar.Value = 0; 
             GameInfo.Text = "";
-            loadingLabel.Visible = true;
             imageLabel.Text = "Using nonGUI mode";
             soundLabel.Text = "Using nonGUI mode";
 
@@ -196,17 +202,15 @@ namespace DotNetCTFDumper.GUI
             treeView1.Nodes.Clear();
             foreach (var item in gameData.GameChunks.Chunks)
             {
+  
                 string ActualName = item.Name;
-                if (item.Loader is Frame frm) ActualName = ActualName + " "+frm.Name;
-                ChunkNode newNode = Helper.GetChunkNode(item,ActualName);
+                if (item.Loader is Frame frm) ActualName = ActualName + " " + frm.Name;
+                ChunkNode newNode = Helper.GetChunkNode(item, ActualName);
                 //if (item.Loader != null) newNode = new ChunkNode(ActualName, item.Loader);
                 //else newNode = new ChunkNode(ActualName, item);
-                
-                    
-                
-                
                 treeView1.Nodes.Add(newNode);
                 if (item.Loader is Frame frame)
+                {
                     foreach (var frmChunk in frame.Chunks.Chunks)
                     {
                         var frameNode = Helper.GetChunkNode(frmChunk);
@@ -224,8 +228,18 @@ namespace DotNetCTFDumper.GUI
                             }
                         }
                     }
-            }
+                }
+                else if (item.Loader is FrameItems items)
+                {
+                    foreach (var key in items.ItemDict.Keys)
+                    {
+                        var frameItem = items.ItemDict[key];
+                        var objNode = new ChunkNode($"{(Constants.ObjectType)frameItem.ObjectType} - {frameItem.Name}", frameItem);
+                        newNode.Nodes.Add(objNode);
 
+                    }
+                }
+            }
             
             MFABtn.Visible = true;
             FolderBTN.Visible = true;
@@ -240,14 +254,14 @@ namespace DotNetCTFDumper.GUI
             loadingLabel.Visible = false;
             var toLog = "";
             toLog += $"Title:{Exe.Instance.GameData.Name}\n";
-            toLog += $"Copyright:{Exe.Instance.GameData.Copyright}\n";
-            toLog += $"Editor Filename: {Exe.Instance.GameData.EditorFilename}\n";
+            toLog += $"Copyright:{Exe.Instance.GameData.Copyright}\n"; 
+            //toLog += $"Editor Filename: {Exe.Instance.GameData.EditorFilename}\n";
             toLog += $"Product Version: {Exe.Instance.GameData.ProductVersion}\n";
             toLog += $"Build: {Exe.Instance.GameData.Build}\n";
             toLog += $"Runtime Version: {Exe.Instance.GameData.RuntimeVersion}\n";
-            toLog += $"Number Of Images: {Exe.Instance.GameData.Images.NumberOfItems}\n";
-            toLog += $"Number Of Sounds: {(Exe.Instance.GameData.Sounds!= null ?  Exe.Instance.GameData.Sounds.NumOfItems: 0)}\n";
-            toLog += $"Unique FrameItems: {Exe.Instance.GameData.Frameitems.NumberOfItems}\n";
+            toLog += $"Number Of Images: {Exe.Instance.GameData.Images?.NumberOfItems}\n";
+            toLog += $"Number Of Sounds: {Exe.Instance.GameData.Sounds?.NumOfItems}\n";
+            toLog += $"Unique FrameItems: {Exe.Instance.GameData.Frameitems?.NumberOfItems}\n";
             toLog += $"Frame Count: {Exe.Instance.GameData.Frames.Count}\n";
             toLog += $"Chunks Count: {Exe.Instance.GameData.GameChunks.Chunks.Count}\n";
             if (Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>() != null)
@@ -256,6 +270,8 @@ namespace DotNetCTFDumper.GUI
                 Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>().OnSoundSaved += UpdateSoundBar;
             if (Exe.Instance.GameData.GameChunks.GetChunk<MusicBank>() != null)
                 Exe.Instance.GameData.GameChunks.GetChunk<MusicBank>().OnMusicSaved += UpdateMusicBar;
+            ImageDumper.SortedImageSaved += IncrementSortedBar;
+            
             
             GameInfo.Text = toLog;
         }
@@ -283,6 +299,17 @@ namespace DotNetCTFDumper.GUI
             musicLabel.Text = $"{index}/{all}";
         }
 
+        public void IncrementSortedBar(int all)
+        {
+            SortedProgressBar.Visible = true;
+            SortedProgressBar.Maximum = all;
+            SortedProgressBar.Value += 1;
+            if (SortedProgressBar.Value >= SortedProgressBar.Maximum)
+            {
+                SortedProgressBar.Visible = false;
+            }
+        }
+
 
         private void FolderBTN_Click(object sender, EventArgs e)
         {
@@ -291,7 +318,9 @@ namespace DotNetCTFDumper.GUI
 
         private void MFABtn_Click(object sender, EventArgs e)
         {
-            MFAGenerator.BuildMFA();
+            var mfaForm = new MFABuilderForm(ColorTheme);
+            mfaForm.Show();
+            
         }
 
         private void soundsButton_Click(object sender, EventArgs e)

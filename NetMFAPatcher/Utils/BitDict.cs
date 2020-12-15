@@ -17,7 +17,7 @@ namespace DotNetCTFDumper.Utils
         public bool this[String key]
         {
             get => GetFlag(key);
-            // set => SetFlag(key,value);
+            set => SetFlag(key,value);
         }
 
         public bool GetFlag(String key)
@@ -30,6 +30,19 @@ namespace DotNetCTFDumper.Utils
 
             return false;
         }
+
+        public void SetFlag(String key, bool value)
+        {
+            if (value)
+            {
+                flag |= (uint) Math.Pow(2,Array.IndexOf(Keys,key));
+            }
+            else
+            {
+                flag &= (uint) Math.Pow(~2,Array.IndexOf(Keys,key));
+            }
+        }
+       
 
         public static string ToDebugString<TKey, TValue>(IDictionary<TKey, TValue> dictionary)
         {
@@ -46,5 +59,7 @@ namespace DotNetCTFDumper.Utils
 
             return ToDebugString(actualKeys);
         }
+
+        
     }
 }

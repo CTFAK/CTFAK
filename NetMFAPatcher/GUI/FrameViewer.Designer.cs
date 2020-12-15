@@ -33,12 +33,12 @@ namespace DotNetCTFDumper.GUI
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrameViewer));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.infoMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nameMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.positionMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteObjBtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.scrollableControl1 = new System.Windows.Forms.ScrollableControl();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,22 +74,13 @@ namespace DotNetCTFDumper.GUI
             this.deleteObjBtn.Size = new System.Drawing.Size(107, 22);
             this.deleteObjBtn.Text = "Delete";
             // 
-            // scrollableControl1
-            // 
-            this.scrollableControl1.AutoScroll = true;
-            this.scrollableControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.scrollableControl1.Location = new System.Drawing.Point(0, 0);
-            this.scrollableControl1.Name = "scrollableControl1";
-            this.scrollableControl1.Size = new System.Drawing.Size(1008, 733);
-            this.scrollableControl1.TabIndex = 1;
-            this.scrollableControl1.Text = "scrollableControl1";
-            // 
             // FrameViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(1008, 733);
-            this.Controls.Add(this.scrollableControl1);
+            this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
             this.Name = "FrameViewer";
             this.Text = "FrameViewer";
             this.contextMenuStrip1.ResumeLayout(false);
@@ -101,7 +92,6 @@ namespace DotNetCTFDumper.GUI
         private System.Windows.Forms.ToolStripMenuItem infoMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nameMenuItem;
         private System.Windows.Forms.ToolStripMenuItem positionMenuItem;
-        private System.Windows.Forms.ScrollableControl scrollableControl1;
 
         #endregion
     }

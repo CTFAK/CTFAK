@@ -11,9 +11,7 @@ namespace DotNetCTFDumper.GUI
     {
         public byte[] parsedData;
         public byte[] rawData;
-        private ByteViewer _viewer;
-
-
+        
         public HexViewForm(byte[] parsedData, byte[] rawData,Color color)
         {
             InitializeComponent();
@@ -74,7 +72,7 @@ namespace DotNetCTFDumper.GUI
 
         private void hexBox1_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("Semen");
+            
         }
     }
 

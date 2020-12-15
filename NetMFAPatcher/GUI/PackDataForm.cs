@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
-using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.MMFParser.EXE;
 using DotNetCTFDumper.Utils;
 
 namespace DotNetCTFDumper.GUI

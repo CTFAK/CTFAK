@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using DotNetCTFDumper.MMFParser.ChunkLoaders;
-using DotNetCTFDumper.MMFParser.ChunkLoaders.Banks;
-using DotNetCTFDumper.MMFParser.ChunkLoaders.Objects;
-using DotNetCTFDumper.MMFParser.Data;
+using DotNetCTFDumper.GUI;
+using DotNetCTFDumper.MMFParser.EXE;
+using DotNetCTFDumper.MMFParser.EXE.Loaders;
+using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
+using DotNetCTFDumper.MMFParser.EXE.Loaders.Objects;
 
 namespace DotNetCTFDumper.Utils
 {
@@ -13,14 +15,26 @@ namespace DotNetCTFDumper.Utils
     {
         public static void DumpImages()
         {
-            Dump();
+            using (var worker = new BackgroundWorker())
+            {
+                
+                worker.DoWork += (senderA, eA) => { Dump(); };
+                worker.RunWorkerCompleted += (senderA, eA) =>
+                {
+                    
+                };
+                worker.RunWorkerAsync();
+            }
             
         }
 
+        public static MainForm.IncrementSortedProgressBar SortedImageSaved;
+
         public static void Dump()
         {
-            var rootFolder = $"{Settings.DumpPath}\\ImageBank\\Sorted";
+            var rootFolder = $"{Settings.ImagePath}\\Sorted";
             var Bank = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
+            var NumberOfImgFrames = CalculateFrameCount();
             foreach (var frame in Exe.Instance.GameData.Frames)
             {
                 if (frame.Objects != null)
@@ -31,7 +45,7 @@ namespace DotNetCTFDumper.Utils
                     {
                         
                         var currentObjPath = currentFramePath + "\\" + Helper.CleanInput(item.Name);
-                        Directory.CreateDirectory(currentObjPath);
+                        //Directory.CreateDirectory(currentObjPath);
                         var frames = item.FrameItem.GetFrames();
                         foreach (var key in frames.Keys)
                         {
@@ -43,8 +57,11 @@ namespace DotNetCTFDumper.Utils
                                  var path =
                                      $"{Settings.ImagePath}\\Sorted\\{frame.Name}\\{Helper.CleanInput(item.Name)}\\{name}";
                                  Directory.CreateDirectory(Path.GetDirectoryName(path));
-                                 Logger.Log("Saving Image: "+path);
+                                 //Logger.Log("Saving Image: "+path);
                                  actualFrame.Save(path);
+                                 
+                                 SortedImageSaved.Invoke(NumberOfImgFrames);
+                                 
                                  
                              }
                              catch (Exception e)
@@ -59,6 +76,19 @@ namespace DotNetCTFDumper.Utils
                 }
             }
             Logger.Log("Sorted Images Done",true,ConsoleColor.Yellow);
+        }
+
+        public static int CalculateFrameCount()
+        {
+            int count = 0;
+            foreach (var frame in Exe.Instance.GameData.Frames)
+            {
+                foreach (ObjectInstance objectInstance in frame.Objects.Items)
+                {
+                    count += objectInstance.FrameItem.GetFrames().Count;
+                }
+            }
+            return count;
         }
         
 

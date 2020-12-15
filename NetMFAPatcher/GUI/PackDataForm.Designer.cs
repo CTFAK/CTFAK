@@ -58,7 +58,7 @@ namespace DotNetCTFDumper.GUI
             // 
             this.dumpButton.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
             this.dumpButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.dumpButton.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.dumpButton.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.dumpButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
             this.dumpButton.Location = new System.Drawing.Point(204, 105);
             this.dumpButton.Name = "dumpButton";
@@ -72,7 +72,7 @@ namespace DotNetCTFDumper.GUI
             // 
             this.dumpAllButton.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
             this.dumpAllButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.dumpAllButton.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.dumpAllButton.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.dumpAllButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
             this.dumpAllButton.Location = new System.Drawing.Point(204, 148);
             this.dumpAllButton.Name = "dumpAllButton";
@@ -88,7 +88,7 @@ namespace DotNetCTFDumper.GUI
             this.infoLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
             this.infoLabel.Location = new System.Drawing.Point(204, 14);
             this.infoLabel.Name = "infoLabel";
-            this.infoLabel.Size = new System.Drawing.Size(142, 91);
+            this.infoLabel.Size = new System.Drawing.Size(255, 91);
             this.infoLabel.TabIndex = 3;
             this.infoLabel.Text = "Name: PackFile1.mvx\r\nSize: 5 MB\r\n";
             // 

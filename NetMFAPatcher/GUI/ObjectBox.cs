@@ -1,5 +1,5 @@
 ﻿using System.Windows.Forms;
-using DotNetCTFDumper.MMFParser.ChunkLoaders;
+using DotNetCTFDumper.MMFParser.EXE.Loaders;
 
 namespace DotNetCTFDumper.GUI
 {
