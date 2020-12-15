@@ -67,7 +67,6 @@ namespace DotNetCTFDumper.MMFParser.MFALoaders.mfachunks
             Movements.Read();
             Behaviours = new Behaviours(Reader);
             Behaviours.Read();
-            Reader.Skip(56);
             Print();
 
 
