@@ -12,9 +12,10 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
 {
     public class ImageBank : ChunkLoader
     {
-        public bool SaveImages = true;
+        public bool SaveImages = false;
         public Dictionary<int, ImageItem> Images = new Dictionary<int, ImageItem>();
         public uint NumberOfItems;
+        public bool PreloadOnly=true;
 
         public ImageBank(ByteReader reader) : base(reader)
         {
@@ -45,6 +46,16 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
             Settings.DumpImages = cache;
         }
 
+        public void Preload()
+        {
+            
+        }
+
+        public void LoadByHandle(int handle)
+        {
+            Images[handle].Load();
+        }
+
         
         
         public event MainForm.SaveHandler OnImageSaved;
@@ -55,25 +66,26 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
         public override void Read()
         {
             if (!Settings.DoMFA) Reader.Seek(0); //Reset the reader to avoid bugs when dumping more than once
-            Images = new Dictionary<int, ImageItem>();
+            var tempImages = new Dictionary<int, ImageItem>();
 
 
             NumberOfItems = Reader.ReadUInt32();
 
             Console.WriteLine($"Found {NumberOfItems} images");
+            
 
-            if (!Settings.DumpImages) return;
+            //if (!Settings.DumpImages) return;
             for (int i = 0; i < NumberOfItems; i++)
             {
                 if (MainForm.BreakImages)
                 {
-                    MainForm.BreakImages = false;
+                    
                     break;
                 }
 
                 var item = new ImageItem(Reader);
-                item.Read();
-                Images.Add(item.Handle, item);
+                item.Read(!PreloadOnly);
+                tempImages.Add(item.Handle, item);
 
                 if (SaveImages) item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
                 OnImageSaved?.Invoke(i,(int) NumberOfItems);
@@ -85,6 +97,10 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
 
                 //images[item.handle] = item;
             }
+
+            if (!MainForm.BreakImages) Images = tempImages;
+            MainForm.BreakImages = false;
+            Console.WriteLine("Len:"+Images.Keys.Count);
         }
     }
 
@@ -128,11 +144,19 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
         public int Debug2 = 1;
         private Bitmap _bitmap;
 
+        public void Read(bool load)
+        {
+            Handle = Reader.ReadInt32() - 1;
+            Position = (int) Reader.Tell();
+            if (load) Load();
+            else Preload();
+
+        }
         public override void Read()
         {
             Handle = Reader.ReadInt32() - 1;
             Position = (int) Reader.Tell();
-            Load();
+            Preload();
         }
 
         public override void Print(bool ext)
@@ -143,6 +167,24 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
         {
             throw new NotImplementedException();
         }
+
+        public void Preload()
+        {
+            _bitmap = null;
+            Reader.Seek(Position);
+            ByteReader imageReader;
+             
+            // imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
+            imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
+            long start = imageReader.Tell();
+
+            _checksum = imageReader.ReadInt32();
+            _references = imageReader.ReadInt32();
+            Size = (int) imageReader.ReadUInt32();
+            imageReader.Seek(start+Size);
+            
+        }
+        
 
         public void Load()
         {
@@ -255,6 +297,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
         {
             get
             {
+                if (_colorArray==null) Load();
                 if (_bitmap == null)
                 {
                     _bitmap = new Bitmap(_width, _height, PixelFormat.Format32bppArgb);

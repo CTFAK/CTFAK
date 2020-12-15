@@ -28,7 +28,11 @@ namespace DotNetCTFDumper.Utils
             {
                 if (Instance.GameData.GameChunks.GetChunk<ImageBank>() == null) return;
                 form.SetImageElements(true);
-                worker.DoWork += (senderA, eA) => { Instance.GameData.GameChunks.GetChunk<ImageBank>().Read(load,save); };
+                worker.DoWork += (senderA, eA) =>
+                {
+                    Instance.GameData.GameChunks.GetChunk<ImageBank>().PreloadOnly = false;
+                    Instance.GameData.GameChunks.GetChunk<ImageBank>().Read(load,save);
+                };
                 worker.RunWorkerCompleted += (senderA, eA) =>
                 {
                     form.SetImageElements(false);

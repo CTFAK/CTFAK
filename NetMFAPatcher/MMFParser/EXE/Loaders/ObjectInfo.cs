@@ -105,7 +105,14 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
                     anims.AnimationDict.TryGetValue(0,
                         out Animation anim);
                     anim.DirectionDict.TryGetValue(0, out AnimationDirection direction);
-                    var firstFrameHandle = direction.Frames[0];
+                    
+                        var firstFrameHandle = direction.Frames[0];
+
+                        if (images.Images[firstFrameHandle].Bitmap == null)
+                        {
+                            Console.WriteLine("Preloading "+firstFrameHandle);
+                            images.LoadByHandle(firstFrameHandle);
+                        }
 
                     bmp = images.Images[firstFrameHandle];
                 }

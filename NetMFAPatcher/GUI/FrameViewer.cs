@@ -25,7 +25,7 @@ namespace DotNetCTFDumper.GUI
             InitializeComponent();
             this.Width = frame.Width;
             this.Height = frame.Height;
-            this.BackColor = frame.Background;
+            this.BackColor = Color.Black;
             this.Text = "Frame Viewer: "+frame.Name;
             images = imgs;
             contextMenuStrip1.ItemClicked+= new ToolStripItemClickedEventHandler(MenuItemSelected);
