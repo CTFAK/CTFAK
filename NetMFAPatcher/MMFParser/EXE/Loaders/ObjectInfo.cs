@@ -53,7 +53,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
 
             foreach (var infoChunk in infoChunks.Chunks)
             {
-                
+
                 infoChunk.Verbose = false;
                 var loader = infoChunk.Loader;
                 if (loader != null)

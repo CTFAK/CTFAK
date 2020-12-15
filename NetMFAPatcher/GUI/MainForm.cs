@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -25,6 +26,11 @@ namespace DotNetCTFDumper.GUI
         public PackDataForm PackForm;
         
         public delegate void SaveHandler(int index, int all);
+
+        public delegate void IncrementSortedProgressBar(int all);
+        
+
+        
         public MainForm()
         {
             //Buttons
@@ -89,11 +95,11 @@ namespace DotNetCTFDumper.GUI
         private void StartReading()
         {
             var path = openFileDialog1.FileName;
+            loadingLabel.Visible = true;
             Program.ReadFile(path, Settings.Verbose, Settings.DumpImages, Settings.DumpSounds);
             imageBar.Value = 0;
-            soundBar.Value = 0;
+            soundBar.Value = 0; 
             GameInfo.Text = "";
-            loadingLabel.Visible = true;
             imageLabel.Text = "Using nonGUI mode";
             soundLabel.Text = "Using nonGUI mode";
 
@@ -196,6 +202,7 @@ namespace DotNetCTFDumper.GUI
             treeView1.Nodes.Clear();
             foreach (var item in gameData.GameChunks.Chunks)
             {
+  
                 string ActualName = item.Name;
                 if (item.Loader is Frame frm) ActualName = ActualName + " " + frm.Name;
                 ChunkNode newNode = Helper.GetChunkNode(item, ActualName);
@@ -263,6 +270,8 @@ namespace DotNetCTFDumper.GUI
                 Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>().OnSoundSaved += UpdateSoundBar;
             if (Exe.Instance.GameData.GameChunks.GetChunk<MusicBank>() != null)
                 Exe.Instance.GameData.GameChunks.GetChunk<MusicBank>().OnMusicSaved += UpdateMusicBar;
+            ImageDumper.SortedImageSaved += IncrementSortedBar;
+            
             
             GameInfo.Text = toLog;
         }
@@ -288,6 +297,17 @@ namespace DotNetCTFDumper.GUI
             all -= 1;
             musicBar.Value = (int) (index / (float) all * 100);
             musicLabel.Text = $"{index}/{all}";
+        }
+
+        public void IncrementSortedBar(int all)
+        {
+            SortedProgressBar.Visible = true;
+            SortedProgressBar.Maximum = all;
+            SortedProgressBar.Value += 1;
+            if (SortedProgressBar.Value >= SortedProgressBar.Maximum)
+            {
+                SortedProgressBar.Visible = false;
+            }
         }
 
 
