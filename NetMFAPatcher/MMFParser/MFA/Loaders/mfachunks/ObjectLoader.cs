@@ -90,7 +90,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
             Movements.Read();
             Behaviours = new Behaviours(Reader);
             Behaviours.Read();
-            //Reader.Skip(56);//TODO: Help
+            Reader.Skip(2);//TODO: Help
             Print();
 
 

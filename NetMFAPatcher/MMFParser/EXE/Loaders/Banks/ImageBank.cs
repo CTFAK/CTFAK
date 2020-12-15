@@ -156,7 +156,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
         {
             Handle = Reader.ReadInt32() - 1;
             Position = (int) Reader.Tell();
-            Preload();
+            Load();
         }
 
         public override void Print(bool ext)

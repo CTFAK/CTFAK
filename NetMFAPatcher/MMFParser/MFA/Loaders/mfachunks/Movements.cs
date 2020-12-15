@@ -50,15 +50,15 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
         public byte MovingAtStart;
         public int DirectionAtStart;
         public int DataSize;
-
+        public byte[] extData;
         public override void Write(ByteWriter Writer)
-        {
-            Writer.WriteUnicode(Name);
-            Writer.WriteUnicode(Extension);
+        {    
+            Writer.AutoWriteUnicode(Name);
+            Writer.AutoWriteUnicode(Extension);
             Writer.WriteUInt32((uint) Identifier);
             Writer.WriteInt32(DataSize);
             var newWriter = new ByteWriter(new MemoryStream());
-            if (Extension == null)
+            if (Extension.Length==0)
             {
                 
                 newWriter.WriteInt16(Player);
@@ -66,8 +66,8 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
                 newWriter.WriteInt8(MovingAtStart);
                 newWriter.Skip(3);
                 newWriter.WriteInt32(DirectionAtStart);
+                newWriter.WriteBytes(extData);
             }
-            //Loader.write(newWriter)
             Writer.WriteWriter(newWriter);
             
             
@@ -86,7 +86,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
             DataSize = (int) Reader.ReadUInt32();
             if(Extension.Length>0)
             {
-                var newReader = new ByteReader(Reader.ReadBytes(DataSize));
+                extData = Reader.ReadBytes(DataSize);
 
 
             }
@@ -97,7 +97,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
                 MovingAtStart = Reader.ReadByte();
                 Reader.Skip(3);
                 DirectionAtStart = Reader.ReadInt32();
-                var newReader = new ByteReader(Reader.ReadBytes(DataSize - 12));
+                extData = Reader.ReadBytes(DataSize-12);
                 //ONLY STATIC MOVEMENT IS SUPPORTED RN
                 //TODO:Movement Types
                 //implement types, but i am tired, fuck this shit

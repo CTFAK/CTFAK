@@ -13,12 +13,13 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
         public int SizeY;
         public Color Background;
         public int MaxObjects;
-        public List<FrameItem> Items=new List<FrameItem>();
+        public List<FrameItem> Items = new List<FrameItem>();
         public int Handle;
         public int LastViewedX;
         public int LastViewedY;
-        public List<ItemFolder> Folders=new List<ItemFolder>();
-        public List<FrameInstance> Instances=new List<FrameInstance>();
+        public List<ItemFolder> Folders = new List<ItemFolder>();
+        public List<FrameInstance> Instances = new List<FrameInstance>();
+        public List<byte[]> UnkBlocks = new List<byte[]>();
 
         public BitDict Flags = new BitDict(new string[]
         {
@@ -36,6 +37,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
         });
 
         public string Password;
+        public string UnkString;
         public List<Color> Palette;
         public int StampHandle;
         public int ActiveLayer;
@@ -49,8 +51,6 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
         {
         }
 
-        
-
 
         public override void Write(ByteWriter Writer)
         {
@@ -62,7 +62,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             Writer.WriteUInt32(Flags.flag);
             Writer.WriteInt32(MaxObjects);
             Writer.AutoWriteUnicode(Password);
-            Writer.WriteInt32(0);
+            Writer.AutoWriteUnicode(UnkString);
             Writer.WriteInt32(LastViewedX);
             Writer.WriteInt32(LastViewedY);
             Writer.WriteInt32(Palette.Count);
@@ -78,12 +78,14 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             {
                 layer.Write(Writer);
             }
+
             if (FadeIn != null)
             {
                 Writer.WriteInt8(1);
                 FadeIn.Write(Writer);
             }
             else Writer.Skip(1);
+
             if (FadeOut != null)
             {
                 Writer.WriteInt8(1);
@@ -91,7 +93,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             }
             else Writer.Skip(1);
             //Writer.Skip(2);
-            
+
 
             Writer.WriteInt32(Items.Count);
             foreach (var item in Items)
@@ -109,6 +111,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             foreach (var item in Instances)
             {
                 item.Write(Writer);
+            }
 
             if (Instances != null)
             {
@@ -116,6 +119,15 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
                 foreach (var item in Instances)
                 {
                     item.Write(Writer);
+                }
+            }
+
+            if (UnkBlocks != null)
+            {
+                Writer.WriteInt32(UnkBlocks.Count);
+                foreach (var item in UnkBlocks)
+                {
+                    Writer.WriteBytes(item);
                 }
             }
 
@@ -140,7 +152,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
 
             MaxObjects = Reader.ReadInt32();
             Password = Helper.AutoReadUnicode(Reader);
-            Reader.Skip(4);
+            UnkString = Helper.AutoReadUnicode(Reader);
 
             LastViewedX = Reader.ReadInt32();
             LastViewedY = Reader.ReadInt32();
@@ -151,6 +163,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             {
                 Palette.Add(Reader.ReadColor());
             }
+
             StampHandle = Reader.ReadInt32();
             ActiveLayer = Reader.ReadInt32();
             int layersCount = Reader.ReadInt32();
@@ -160,7 +173,6 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
                 var layer = new Layer(Reader);
                 layer.Read();
                 Layers.Add(layer);
-
             }
 
             if (Reader.ReadByte() == 1)
@@ -168,12 +180,13 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
                 FadeIn = new Transition(Reader);
                 FadeIn.Read();
             }
-            
+
             if (Reader.ReadByte() == 1)
             {
                 FadeOut = new Transition(Reader);
                 FadeOut.Read();
             }
+
             Items = new List<FrameItem>();
             var frameItemsCount = Reader.ReadInt32();
             for (int i = 0; i < frameItemsCount; i++)
@@ -201,21 +214,21 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
                 inst.Read();
                 Instances.Add(inst);
             }
-            Reader.Skip(96);
+
+            var unkCount = Reader.ReadInt32();
+            for (int i = 0; i < unkCount; i++)
+            {
+                UnkBlocks.Add(Reader.ReadBytes(32));
+            }
+
             Events = new Events(Reader);
-            Console.WriteLine("BeforeEventsPos: "+Reader.Tell());
+            Console.WriteLine("BeforeEventsPos: " + Reader.Tell());
             Events.Read();
-            Console.WriteLine("AfterEventsPos: "+Reader.Tell());
+            Console.WriteLine("AfterEventsPos: " + Reader.Tell());
             Chunks = new ChunkList(Reader);
             Chunks.Read();
             MFA.emptyEvents = Events;
             MFA.emptyFrameChunks = Chunks;
-
-
-
-
-
-
         }
     }
 }

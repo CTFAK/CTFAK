@@ -172,7 +172,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
                     EventLineY = Reader.ReadUInt32();
                 }
                 else if (name == EventEnd) break;
-                //else throw new NotImplementedException("Fuck Something Broken");
+                else throw new NotImplementedException("Fuck Something is Broken");
 
             }
         }

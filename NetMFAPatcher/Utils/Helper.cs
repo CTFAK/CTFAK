@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -52,6 +53,7 @@ namespace DotNetCTFDumper.Utils
 
             return temp;
         }
+
         public static string FirstCharToUpper(this string input)
         {
             switch (input)
@@ -65,7 +67,8 @@ namespace DotNetCTFDumper.Utils
         public static string AutoReadUnicode(this ByteReader reader)
         {
             var len = reader.ReadInt16();
-            reader.Skip(2);
+            short check = reader.ReadInt16();
+            Debug.Assert(check == -32768);
             return reader.ReadWideString(len);
         }
 
@@ -74,9 +77,9 @@ namespace DotNetCTFDumper.Utils
             writer.WriteInt16((short) value.Length);
             writer.Skip(1);
             writer.WriteInt8(0x80);
-            writer.WriteUnicode(value,false);
+            writer.WriteUnicode(value, false);
         }
-       
+
         public static DataLoader LoadParameter(int code, ByteReader reader)
         {
             DataLoader item = null;
@@ -189,7 +192,6 @@ namespace DotNetCTFDumper.Utils
             }
         }
 
-        
 
         private const long OneKb = 1024;
         private const long OneMb = OneKb * 1024;
@@ -287,9 +289,8 @@ namespace DotNetCTFDumper.Utils
             // Step 3: return the new array.
             return result;
         }
-        
-        
     }
+
     public static class StringExtensionMethods
     {
         public static string ReplaceFirst(this string text, string search, string replace)
@@ -299,6 +300,7 @@ namespace DotNetCTFDumper.Utils
             {
                 return text;
             }
+
             return text.Substring(0, pos) + replace + text.Substring(pos + search.Length);
         }
     }

@@ -7,8 +7,8 @@ namespace DotNetCTFDumper.MMFParser.Translation
 {
     public static class MFAGenerator
     {
-        //public static readonly string TemplatePath = @"C:\Users\MED45\Downloads\testNoFrames.mfa";
-        public static readonly string TemplatePath = @"C:\Users\ivani\Desktop\CTFResearch\testNoFrames.mfa";
+        public static readonly string TemplatePath = @"C:\Users\MED45\Downloads\OneObjOneFrame.mfa";
+        // public static readonly string TemplatePath = @"C:\Users\ivani\Desktop\CTFResearch\OneObjOneFrame.mfa";
 
         public static MFA.MFA BuildMFA()
         {
@@ -27,21 +27,22 @@ namespace DotNetCTFDumper.MMFParser.Translation
             template.Write(mfaWriter); //Writing new MFA
             mfaWriter.Dispose();
             return template;
-            
-            Logger.Log("MFA Done",true,ConsoleColor.Yellow);
+
+            Logger.Log("MFA Done", true, ConsoleColor.Yellow);
         }
 
         public static void ReadTestMFA()
         {
-            var mfaReader = new ByteReader(@"C:\Users\ivani\Desktop\CTFResearch\ObjTEST.mfa", FileMode.Open);
+            var output_path = Path.Combine(Path.GetDirectoryName(TemplatePath), "decompiled.mfa");
+            var mfaReader = new ByteReader(TemplatePath, FileMode.Open);
             var template = new MFA.MFA(mfaReader);
             Settings.DoMFA = true;
             template.Read();
-            
-            //Add modifications
-            
 
-            var mfaWriter = new ByteWriter("outTest.mfa", FileMode.Create);
+            //Add modifications
+
+
+            var mfaWriter = new ByteWriter(output_path, FileMode.Create);
             template.Write(mfaWriter);
         }
     }

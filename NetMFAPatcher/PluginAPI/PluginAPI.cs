@@ -12,7 +12,8 @@ namespace DotNetCTFDumper.PluginAPI
 {
     public class PluginAPI
     {
-        public static Frame GetEmptyFrame(List<Color> palette,int handle=0,int x=640,int y=480,string name="New Frame")
+        public static Frame GetEmptyFrame(List<Color> palette, int handle = 0, int x = 640, int y = 480,
+            string name = "New Frame")
         {
             var frame = new Frame(null)
             {
@@ -22,25 +23,20 @@ namespace DotNetCTFDumper.PluginAPI
                 SizeX = x,
                 SizeY = y,
                 Background = Color.Green,
-                Flags = 260,
                 Palette = palette,
                 Layers = new List<Layer>(),
                 Folders = new List<ItemFolder>(),
                 Items = new List<FrameItem>(),
                 Events = MFA.emptyEvents,
                 Chunks = MFA.emptyFrameChunks
-                
             };
+            frame.Flags.flag = 260;
             //frame.Instances = template.Frames[0].Instances;
             var testLayer = new Layer(null) {Name = "New Super Layer"};
             frame.Layers.Add(testLayer);
-            
 
-            
-            
+
             return frame;
-
         }
-        
     }
 }
