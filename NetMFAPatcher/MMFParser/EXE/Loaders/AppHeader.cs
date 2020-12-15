@@ -59,13 +59,12 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
 
         public override void Read()
         {
-            Reader = new ByteReader(Chunk.ChunkData);
             Size = Reader.ReadInt32();
             Flags.flag=(uint) Reader.ReadInt16();
 
             NewFlags.flag = (uint) Reader.ReadInt16();
             var graphicsMode = Reader.ReadInt16();
-            var otherflags = Reader.ReadInt16();// I am an asshole
+            var otherflags = Reader.ReadInt16();
             //TODO: Add OtherFlags
             
             WindowWidth = Reader.ReadInt16();
@@ -99,6 +98,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
                             $"Screen Resolution: {WindowWidth}x{WindowHeight}",
                             $"Initial Score: {InitialScore}",
                             $"Initial Lives: {InitialLives}",
+                            "",
                             $"Flags:;{Flags.ToString()}"
                         };
         }

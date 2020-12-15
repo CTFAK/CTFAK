@@ -129,7 +129,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
             {
                 var handle = Reader.ReadInt16();
                 Frames.Add(handle);
-                Console.WriteLine("Frame Found: "+handle);
+                
                 
             }
             

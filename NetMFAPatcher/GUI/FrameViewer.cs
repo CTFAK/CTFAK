@@ -25,7 +25,7 @@ namespace DotNetCTFDumper.GUI
             InitializeComponent();
             this.Width = frame.Width;
             this.Height = frame.Height;
-            this.BackColor = Color.Black;
+            this.BackColor = Color.FromArgb(255,frame.Background.R,frame.Background.G,frame.Background.B);
             this.Text = "Frame Viewer: "+frame.Name;
             images = imgs;
             contextMenuStrip1.ItemClicked+= new ToolStripItemClickedEventHandler(MenuItemSelected);
@@ -44,7 +44,7 @@ namespace DotNetCTFDumper.GUI
                 pictureBox1.ClientSize = new Size(img.Bitmap.Width, img.Bitmap.Height);
                 pictureBox1.Image = img.Bitmap;
                 pictureBox1.MouseClick += new MouseEventHandler(OnObjectSelected);
-                scrollableControl1.Controls.Add(pictureBox1);
+                Controls.Add(pictureBox1);
             }
         }
 
@@ -68,7 +68,7 @@ namespace DotNetCTFDumper.GUI
         private void LoadObjects(Frame frame)
         {
             var size = new Size(Exe.Instance.GameData.Header.WindowWidth,Exe.Instance.GameData.Header.WindowHeight);
-            scrollableControl1.Size = new Size(frame.Width,frame.Height);;
+            //scrollableControl1.Size = new Size(frame.Width,frame.Height);;
             ClientSize = size;
             var list = frame.Objects.Items.OrderBy(x=>x.Handle);
             foreach (var obj in list)

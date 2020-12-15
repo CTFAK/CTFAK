@@ -141,7 +141,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
                 //Reader.Seek(currentPosition+_movementsOffset);
                 //var movements = new Movements(Reader);
                 //movements.Read();
-                Console.WriteLine("Movements done");
+                // Console.WriteLine("Movements done");
             }
             
             
@@ -150,7 +150,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
                 Reader.Seek(currentPosition + _valuesOffset);
                 AlterableValues values = new AlterableValues(Reader);
                 values.Read();
-                Console.WriteLine("Values done");
+                // Console.WriteLine("Values done");
             }
             
             
@@ -159,7 +159,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
                 Reader.Seek(currentPosition + _stringsOffset);
                 AlterableStrings strings = new AlterableStrings(Reader);
                 strings.Read();
-                Console.WriteLine("Strings done");
+                // Console.WriteLine("Strings done");
             }
             
             
@@ -168,7 +168,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
                 Reader.Seek(currentPosition + _animationsOffset);
                 Animations = new Animations(Reader);
                 Animations.Read();
-                Console.WriteLine("Animations done");
+                // Console.WriteLine("Animations done");
             }
 
             /*if (_counterOffset != 0)
@@ -211,8 +211,8 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
             }
             
             
-            Console.WriteLine("SysObjOff: " + _systemObjectOffset);
-            Console.WriteLine("ExtOff: " + _extensionOffset);
+            // Console.WriteLine("SysObjOff: " + _systemObjectOffset);
+            // Console.WriteLine("ExtOff: " + _extensionOffset);
         }
 
         public override void Print(bool ext)

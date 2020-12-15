@@ -56,10 +56,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
 
                 infoChunk.Verbose = false;
                 var loader = infoChunk.Loader;
-                if (loader != null)
-                {
-                    Console.WriteLine($"Reading {loader.GetType().Name}");
-                }
+                
                 
                 if (loader is ObjectName)
                 {
@@ -155,7 +152,6 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
         {
             
             //TODO: Fix shit
-            Console.WriteLine("Reading properties of "+parent.Name);
             if (ObjectType == 1)//Backdrop
             {
                 Loader = new Backdrop(Reader);
