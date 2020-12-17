@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Web.UI.WebControls.Expressions;
 using System.Xml.Schema;
@@ -101,7 +102,7 @@ namespace DotNetCTFDumper.MMFParser.Translation
                     var newLoader = new Active(null);
                     newLoader.ObjectFlags = (int) itemLoader.Flags.flag;
                     newLoader.NewObjectFlags = (int) itemLoader.NewFlags.flag;
-                    newLoader.BackgroundColor = itemLoader.BackColor;
+                    newLoader.BackgroundColor = Color.FromArgb(itemLoader.BackColor.R,itemLoader.BackColor.G,itemLoader.BackColor.B);
                     //newLoader.Qualifiers;
                     newLoader.Strings = ConvertStrings(itemLoader.Strings);
                     newLoader.Values = ConvertValue(itemLoader.Values);
@@ -232,20 +233,23 @@ namespace DotNetCTFDumper.MMFParser.Translation
                                 frameItem = FrameItems[instance.ObjectInfo];
                             }
                             catch{}
-                            if(frameItem!=null) newFrameItems.Add(frameItem);
-                            var newInstance = new FrameInstance((ByteReader) null);
-                            newInstance.X = instance.X;
-                            newInstance.Y = instance.Y;
-                            newInstance.Handle = i;
-                            newInstance.Flags = 8;
-                            newInstance.ParentType = (uint) instance.ParentType;
-                            newInstance.ItemHandle = instance.ObjectInfo;
-                            newInstance.ParentHandle = (uint) instance.ParentHandle;
-                            newInstance.Layer = (uint)instance.Layer;
-                            newInstances.Add(newInstance);
 
+                            if (frameItem != null)
+                            {
+                                newFrameItems.Add(frameItem);
+                                var newInstance = new FrameInstance((ByteReader) null);
+                                newInstance.X = instance.X;
+                                newInstance.Y = instance.Y;
+                                newInstance.Handle = i;
+                                newInstance.Flags = 0;
+                                newInstance.ParentType = (uint) instance.ParentType;
+                                newInstance.ItemHandle = instance.ObjectInfo;
+                                newInstance.ParentHandle = (uint) instance.ParentHandle;
+                                newInstance.Layer = (uint) instance.Layer;
+                                newInstances.Add(newInstance);
+                            }
+                            break;
                         }
-
                     }
                 }
 
