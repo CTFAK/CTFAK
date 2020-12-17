@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DotNetCTFDumper.MMFParser.EXE;
 using DotNetCTFDumper.Utils;
 
@@ -8,6 +9,8 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
     {
         public List<uint> Items;
         public string Name;
+        public uint UnkHeader;
+        public uint NonFolder;
 
         public ItemFolder(ByteReader reader) : base(reader)
         {
@@ -19,10 +22,11 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
 
         public override void Read()
         {
-            var value = Reader.ReadUInt32();
-            if (value == 0x70000004)
+            UnkHeader = Reader.ReadUInt32();
+            Console.WriteLine("UNK HEADER: "+UnkHeader.ToString("X4"));
+            if (UnkHeader == 0x70000004)
             {
-                Name = Helper.AutoReadUnicode(Reader);
+                Name = Reader.AutoReadUnicode();
                 Items = new List<uint>();
                 var count = Reader.ReadUInt32();
                 for (int i = 0; i < count; i++)
@@ -32,30 +36,31 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             }
             else
             {
-                Name = "";
+                Name = null;
                 Items = new List<uint>();
+                Items.Add(Reader.ReadUInt32());
             }
-            
-
         }
 
         public override void Write(ByteWriter Writer)
         {
-            if (Name.Length == 0)
+            if (Name == null)
             {
-                Writer.WriteUInt32(0x70000005);
+                Writer.WriteInt32(0x70000005);
             }
             else
             {
-                Writer.WriteUInt32(0x70000004);
+                Writer.WriteInt32(0x70000004);
                 Writer.AutoWriteUnicode(Name);
                 Writer.WriteInt32(Items.Count);
             }
 
+            
             foreach (var item in Items)
             {
                 Writer.WriteUInt32(item);
             }
+            
         }
 
         public override void Print()

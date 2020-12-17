@@ -47,7 +47,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
         public int Identifier;
         public short Player;
         public short Type;
-        public byte MovingAtStart;
+        public byte MovingAtStart=1;
         public int DirectionAtStart;
         public int DataSize;
         public byte[] extData;
@@ -66,7 +66,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
                 newWriter.WriteInt8(MovingAtStart);
                 newWriter.Skip(3);
                 newWriter.WriteInt32(DirectionAtStart);
-                newWriter.WriteBytes(extData);
+                // newWriter.WriteBytes(extData);
             }
             Writer.WriteWriter(newWriter);
             
@@ -97,6 +97,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
                 MovingAtStart = Reader.ReadByte();
                 Reader.Skip(3);
                 DirectionAtStart = Reader.ReadInt32();
+                Console.WriteLine($"Player: {Player}, Type: {Type}, DirectionAtStart: {DirectionAtStart}, Identifier: {Identifier}");
                 extData = Reader.ReadBytes(DataSize-12);
                 //ONLY STATIC MOVEMENT IS SUPPORTED RN
                 //TODO:Movement Types

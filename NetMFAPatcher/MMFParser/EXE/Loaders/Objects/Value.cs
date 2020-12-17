@@ -6,6 +6,8 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
 {
     public class AlterableValues:ChunkLoader
     {
+        public List<int> Items;
+
         public AlterableValues(ByteReader reader) : base(reader)
         {
         }
@@ -16,7 +18,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
-            var items = new List<int>();
+            Items = new List<int>();
 
             var count = Reader.ReadUInt16();
             Console.WriteLine(count);
@@ -24,7 +26,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
             {
                 var item = Reader.ReadInt32();
                 
-                items.Add(item);
+                Items.Add(item);
                 Console.WriteLine("Found Value: "+item);
                 
             }
@@ -42,6 +44,8 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
     }
     public class AlterableStrings:ChunkLoader
     {
+        public List<string> Items;
+
         public AlterableStrings(ByteReader reader) : base(reader)
         {
         }
@@ -52,14 +56,14 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
-            var items = new List<string>();
+            Items = new List<string>();
 
             var count = Reader.ReadUInt16();
 
             for (int i = 0; i < count; i++)
             {
                 var item = Reader.ReadWideString();
-                items.Add(item);
+                Items.Add(item);
                 Console.WriteLine("Found String: "+item);
                 
             }

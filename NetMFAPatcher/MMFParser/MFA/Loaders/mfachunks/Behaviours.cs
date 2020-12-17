@@ -36,11 +36,12 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
     class Behaviour : DataLoader
     {
         public string Name = "ERROR";
-        public ByteReader Data;
+        public byte[] Data;
         public override void Write(ByteWriter Writer)
         {
             Writer.AutoWriteUnicode(Name);
-            Writer.WriteBytes(Data.ReadBytes((int) Data.Size()));
+            Writer.WriteUInt32((uint) Data.Length);
+            Writer.WriteBytes(Data);
         }
 
         public override void Print()
@@ -52,7 +53,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
         {
             Name = Reader.AutoReadUnicode();
 
-            Data = new ByteReader(Reader.ReadBytes(Reader.ReadInt32()));
+            Data = Reader.ReadBytes((int) Reader.ReadUInt32());
             
         }
         public Behaviour(ByteReader reader) : base(reader) { }

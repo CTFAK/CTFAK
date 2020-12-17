@@ -1,4 +1,5 @@
-﻿using DotNetCTFDumper.MMFParser.EXE;
+﻿using System;
+using DotNetCTFDumper.MMFParser.EXE;
 using DotNetCTFDumper.Utils;
 
 namespace DotNetCTFDumper.MMFParser.MFA.Loaders
@@ -31,7 +32,8 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             Flags = Reader.ReadUInt32();
             ParentType = Reader.ReadUInt32();
             ItemHandle = Reader.ReadUInt32();
-            ParentHandle = Reader.ReadUInt32();
+            ParentHandle = (uint) Reader.ReadInt32();
+            Console.WriteLine($"ParentH:{ParentHandle}, ParentT: {ParentType}, Handle: {Handle}, Flags: {Flags}, ItemHandle: {ItemHandle}");
         }
 
         public override void Write(ByteWriter Writer)
@@ -43,7 +45,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             Writer.WriteUInt32(Flags);
             Writer.WriteUInt32(ParentType);
             Writer.WriteUInt32(ItemHandle);
-            Writer.WriteUInt32(ParentHandle);
+            Writer.WriteInt32((int) ParentHandle);
             
         }
 

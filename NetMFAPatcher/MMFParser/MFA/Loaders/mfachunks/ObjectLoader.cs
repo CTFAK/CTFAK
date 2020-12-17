@@ -38,6 +38,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
             Strings.Write(Writer);
             Movements.Write(Writer);
             Behaviours.Write(Writer);
+
             Writer.WriteInt8(0);//FadeIn
             Writer.WriteInt8(0);//FadeOut
 

@@ -36,8 +36,8 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             "NoGlobalEvents"
         });
 
-        public string Password;
-        public string UnkString;
+        public string Password="";
+        public string UnkString="";
         public List<Color> Palette;
         public int StampHandle;
         public int ActiveLayer;
@@ -99,37 +99,35 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             foreach (var item in Items)
             {
                 item.Write(Writer);
+                Writer.Skip(4);
+                var bytes = new byte[] {0x01,0x01,0x00,0x00, 0x00,0x00,0x00,0x00, 0x80,0x01,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x32,0x00, 0x00,0x00,0x32,0x00, 0x00,0x00,0x01,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x01,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00};
+                Writer.WriteBytes(bytes);
             }
+            // Writer.WriteAscii("AA");
 
             Writer.WriteInt32(Folders.Count);
             foreach (var item in Folders)
             {
                 item.Write(Writer);
             }
-
+            // Writer.WriteAscii("AF");
             Writer.WriteInt32(Instances.Count);
             foreach (var item in Instances)
             {
                 item.Write(Writer);
             }
+            // Writer.WriteAscii("AI");
 
-            if (Instances != null)
-            {
-                Writer.WriteInt32(Instances.Count);
-                foreach (var item in Instances)
-                {
-                    item.Write(Writer);
-                }
-            }
+            
 
-            if (UnkBlocks != null)
+            /*if (UnkBlocks != null)
             {
                 Writer.WriteInt32(UnkBlocks.Count);
                 foreach (var item in UnkBlocks)
                 {
                     Writer.WriteBytes(item);
                 }
-            }
+            }*/
 
             Events.Write(Writer);
             Chunks.Write(Writer);
@@ -215,11 +213,11 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
                 Instances.Add(inst);
             }
 
-            var unkCount = Reader.ReadInt32();
-            for (int i = 0; i < unkCount; i++)
-            {
-                UnkBlocks.Add(Reader.ReadBytes(32));
-            }
+            //var unkCount = Reader.ReadInt32();
+            //for (int i = 0; i < unkCount; i++)
+            //{
+            //    UnkBlocks.Add(Reader.ReadBytes(32));
+            //}
 
             Events = new Events(Reader);
             Console.WriteLine("BeforeEventsPos: " + Reader.Tell());

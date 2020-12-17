@@ -35,7 +35,21 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
         public int Width;
         public int Height;
         public Color Background;
-        public int Flags;
+        public BitDict Flags=new BitDict(new string[]
+        {
+           "XCoefficient",
+           "YCoefficient",
+           "DoNotSaveBackground",
+           "Wrap",
+           "Visible",
+           "WrapHorizontally",
+           "WrapVertically",
+           "","","","","","","","","",
+           "Redraw",
+           "ToHide",
+           "ToShow"
+        });
+        
         public int CountOfObjs;
         int _top;
         int _bottom;
@@ -111,7 +125,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
             Width = Header.Width;
             Height = Header.Height;
             Background = Header.Background;
-            //Flags = header.Flags;
+            Flags.flag = Header.Flags.flag;
             Objects = Chunks.GetChunk<ObjectInstances>();
             if(Objects!=null)
             {

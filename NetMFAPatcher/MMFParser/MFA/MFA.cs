@@ -252,6 +252,7 @@ namespace DotNetCTFDumper.MMFParser.MFA
             Writer.WriteUInt32((uint) (startPos+newWriter.Tell()+4));
             Writer.WriteWriter(newWriter);
             Chunks.Write(Writer);
+            Console.WriteLine("Writing done");
 
 
 

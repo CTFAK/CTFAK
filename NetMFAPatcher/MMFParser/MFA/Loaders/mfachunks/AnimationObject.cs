@@ -8,7 +8,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
 {
     public class AnimationObject:ObjectLoader
     {
-        List<Animation> _items = new List<Animation>();
+        public List<Animation> Items = new List<Animation>();
         public override void Read()
         {
             base.Read();
@@ -19,7 +19,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
                 {
                     var item = new Animation(Reader);
                     item.Read();
-                    _items.Add(item);
+                    Items.Add(item);
                 }
             }
 
@@ -28,9 +28,12 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
 
         public AnimationObject(ByteReader reader) : base(reader) { }
     }
-    class Animation : DataLoader
+
+    public class Animation : DataLoader
     {
         public string Name = "Animation-UNKNOWN";
+        public List<AnimationDirection> Directions;
+
         public override void Write(ByteWriter Writer)
         {
             throw new NotImplementedException();
@@ -45,12 +48,12 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
         {
             Name = Reader.AutoReadUnicode();
             var directionCount = Reader.ReadInt32();
-            var directions = new List<AnimationDirection>();
+            Directions = new List<AnimationDirection>();
             for (int i = 0; i < directionCount; i++)
             {
                 var direction = new AnimationDirection(Reader);
                 direction.Read();
-                directions.Add(direction);
+                Directions.Add(direction);
             }
             
 
@@ -58,7 +61,8 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
         }
         public Animation(ByteReader reader) : base(reader) { }
     }
-    class AnimationDirection : DataLoader
+
+    public class AnimationDirection : DataLoader
     {
         public string Name = "Animation-UNKNOWN";
         public int Index;

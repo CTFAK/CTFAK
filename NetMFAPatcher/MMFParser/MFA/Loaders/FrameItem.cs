@@ -35,19 +35,22 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             Chunks.Write(Writer);
             Loader.Write(Writer);
             
-            
+
+
         }
 
         public override void Print()
         {
-            Console.WriteLine($"Name: {Name}");
+            
         }
 
         public override void Read()
         {
+            
             ObjectType = Reader.ReadInt32();
             Handle = Reader.ReadInt32();
             Name = Helper.AutoReadUnicode(Reader);
+            Console.WriteLine($"Name: {Name}");
             Transparent = Reader.ReadInt32();
             
             InkEffect = Reader.ReadInt32();

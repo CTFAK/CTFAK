@@ -36,7 +36,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
             }
         );
 
-        private BitDict flags = new BitDict(new string[]
+        public BitDict Flags = new BitDict(new string[]
             {
                 "DisplayInFront",
                 "Background",
@@ -61,7 +61,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
             }
         );
 
-        private BitDict new_flags = new BitDict(new string[]
+        public BitDict NewFlags = new BitDict(new string[]
             {
                 "DoNotSaveBackground",
                 "SolidBackground",
@@ -80,6 +80,8 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
         public int ExtensionPrivate;
         public int ExtensionId;
         public int ExtensionVersion;
+        public AlterableValues Values;
+        public AlterableStrings Strings;
 
 
         public ObjectCommon(ByteReader reader) : base(reader)
@@ -114,7 +116,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
             _counterOffset = (short) Reader.ReadUInt16();
             _systemObjectOffset = (short) Reader.ReadUInt16();
 
-            flags.flag = Reader.ReadUInt32();
+            Flags.flag = Reader.ReadUInt32();
             var end = Reader.Tell() + 16;
             Reader.Seek(end);
             if (newobj)
@@ -129,7 +131,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
             
             _valuesOffset = Reader.ReadInt16();
             _stringsOffset = Reader.ReadInt16();
-            new_flags.flag = Reader.ReadUInt16();
+            NewFlags.flag = Reader.ReadUInt16();
             preferences.flag = Reader.ReadUInt16();
             byte[] identifier = Reader.ReadFourCc();
             BackColor = Reader.ReadColor();
@@ -148,8 +150,8 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
             if (_valuesOffset != 0)
             {
                 Reader.Seek(currentPosition + _valuesOffset);
-                AlterableValues values = new AlterableValues(Reader);
-                values.Read();
+                Values = new AlterableValues(Reader);
+                Values.Read();
                 // Console.WriteLine("Values done");
             }
             
@@ -157,8 +159,8 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
             if (_stringsOffset != 0)
             {
                 Reader.Seek(currentPosition + _stringsOffset);
-                AlterableStrings strings = new AlterableStrings(Reader);
-                strings.Read();
+                Strings = new AlterableStrings(Reader);
+                Strings.Read();
                 // Console.WriteLine("Strings done");
             }
             

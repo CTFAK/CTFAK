@@ -87,7 +87,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
                 item.Read(!PreloadOnly);
                 tempImages.Add(item.Handle, item);
 
-                if (SaveImages) item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
+                //if (SaveImages) item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
                 OnImageSaved?.Invoke(i,(int) NumberOfItems);
 
 
