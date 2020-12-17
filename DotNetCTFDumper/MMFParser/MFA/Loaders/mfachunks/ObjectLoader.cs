@@ -22,6 +22,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
             Writer.WriteInt32(ObjectFlags);
             Writer.WriteInt32(NewObjectFlags);
             Writer.WriteColor(BackgroundColor);
+
             for (int i = 0; i < 9; i++)
             {
                 try
@@ -31,9 +32,10 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
                 }
                 catch
                 {
-                    Writer.WriteInt16(-1);
+                    
                 }
             }
+            
             Values.Write(Writer);
             Strings.Write(Writer);
             Movements.Write(Writer);
@@ -91,7 +93,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
             Movements.Read();
             Behaviours = new Behaviours(Reader);
             Behaviours.Read();
-            Reader.Skip(2);//TODO: Help
+            Reader.Skip(2);//Transitions
             Print();
 
 

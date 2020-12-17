@@ -92,16 +92,16 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
                 FadeOut.Write(Writer);
             }
             else Writer.Skip(1);
-            //Writer.Skip(2);
 
 
             Writer.WriteInt32(Items.Count);
             foreach (var item in Items)
             {
                 item.Write(Writer);
-                Writer.Skip(4);
+                //Writer.Skip(4);
                 var bytes = new byte[] {0x01,0x01,0x00,0x00, 0x00,0x00,0x00,0x00, 0x80,0x01,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x32,0x00, 0x00,0x00,0x32,0x00, 0x00,0x00,0x01,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x01,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00};
-                Writer.WriteBytes(bytes);
+                //Writer.WriteBytes(bytes);
+                //wtf help
             }
             // Writer.WriteAscii("AA");
 

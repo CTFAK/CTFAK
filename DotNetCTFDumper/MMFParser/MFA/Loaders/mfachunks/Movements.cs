@@ -12,7 +12,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
         public List<Movement> Items = new List<Movement>();
         public override void Write(ByteWriter Writer)
         {
-            Writer.WriteInt32(Items.Count);
+            Writer.WriteUInt32((uint) Items.Count);
             foreach (Movement movement in Items)
             {
                 movement.Write(Writer);
@@ -50,13 +50,13 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
         public byte MovingAtStart=1;
         public int DirectionAtStart;
         public int DataSize;
-        public byte[] extData;
+        public byte[] extData=new byte[0];
         public override void Write(ByteWriter Writer)
         {    
             Writer.AutoWriteUnicode(Name);
             Writer.AutoWriteUnicode(Extension);
-            Writer.WriteUInt32((uint) Identifier);
-            Writer.WriteInt32(DataSize);
+            Writer.WriteInt32(Identifier);
+            //
             var newWriter = new ByteWriter(new MemoryStream());
             if (Extension.Length==0)
             {
@@ -66,8 +66,9 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
                 newWriter.WriteInt8(MovingAtStart);
                 newWriter.Skip(3);
                 newWriter.WriteInt32(DirectionAtStart);
-                // newWriter.WriteBytes(extData);
+                //newWriter.WriteBytes(extData);
             }
+            //write loader
             Writer.WriteWriter(newWriter);
             
             
@@ -87,8 +88,6 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
             if(Extension.Length>0)
             {
                 extData = Reader.ReadBytes(DataSize);
-
-
             }
             else
             {

@@ -197,16 +197,16 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
                 Writer.WriteWriter(newWriter);*/
             }
 
-            if (Objects != null)
-            {
-                Console.WriteLine("Writing EventObjects");
-                Writer.WriteAscii(ObjectData);
-                Writer.WriteUInt32((uint) Objects.Count);
-                foreach (EventObject eventObject in Objects)
-                {
-                    eventObject.Write(Writer);
-                }
-            }
+            // if (Objects != null)
+            // {
+                // Console.WriteLine("Writing EventObjects");
+                // Writer.WriteAscii(ObjectData);
+                // Writer.WriteUInt32((uint) Objects.Count);
+                // foreach (EventObject eventObject in Objects)
+                // {
+                    // eventObject.Write(Writer);
+                // }
+            // }
 
             if (ObjectTypes != null)
             {

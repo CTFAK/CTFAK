@@ -56,7 +56,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
 
         public override void Read()
         {
-            Name = Helper.AutoReadUnicode(Reader);
+            Name = Reader.AutoReadUnicode();
             var type = Reader.ReadInt32();
             switch (type)
             {
@@ -88,7 +88,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             else if (Value is double || Value is float)
             {
                 Writer.WriteInt32(1);
-                Writer.Write((float)Value);
+                Writer.WriteSingle((float)Value);
             }
         }
     }

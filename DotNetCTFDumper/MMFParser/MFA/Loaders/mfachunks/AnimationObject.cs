@@ -22,9 +22,19 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
                     Items.Add(item);
                 }
             }
-
         }
-        
+
+        public override void Write(ByteWriter Writer)
+        {
+            base.Write(Writer);
+            Writer.WriteInt8(1);
+            Writer.WriteUInt32((uint) Items.Count);
+            foreach (Animation animation in Items)
+            {
+                animation.Write(Writer);
+            }
+        }
+
 
         public AnimationObject(ByteReader reader) : base(reader) { }
     }
@@ -36,7 +46,12 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
 
         public override void Write(ByteWriter Writer)
         {
-            throw new NotImplementedException();
+            Writer.AutoWriteUnicode(Name);
+            Writer.WriteInt32(Directions.Count);
+            foreach (AnimationDirection direction in Directions)
+            {
+                direction.Write(Writer);
+            }
         }
 
         public override void Print()
@@ -79,6 +94,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
             Writer.WriteInt32(MaxSpeed);
             Writer.WriteInt32(Repeat);
             Writer.WriteInt32(BackTo);
+            Writer.WriteInt32(Frames.Count);
             foreach (int frame in Frames)
             {
                 Writer.WriteInt32(frame);

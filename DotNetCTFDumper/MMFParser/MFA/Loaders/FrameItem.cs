@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using DotNetCTFDumper.MMFParser.EXE;
 using DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks;
 using DotNetCTFDumper.Utils;
@@ -22,6 +23,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
 
         public override void Write(ByteWriter Writer)
         {
+            Debug.Assert(ObjectType==2);
             Writer.WriteInt32(this.ObjectType);
             Writer.WriteInt32(Handle);
             Writer.AutoWriteUnicode(Name);
