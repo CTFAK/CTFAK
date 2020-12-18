@@ -6,6 +6,7 @@ using DotNetCTFDumper.MMFParser.EXE;
 using DotNetCTFDumper.MMFParser.EXE.Loaders;
 using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
 using DotNetCTFDumper.MMFParser.MFA.Loaders;
+using DotNetCTFDumper.MMFParser.Translation;
 using DotNetCTFDumper.Utils;
 using ChunkList = DotNetCTFDumper.MMFParser.MFA.Loaders.ChunkList;
 using Controls = DotNetCTFDumper.MMFParser.MFA.Loaders.Controls;
@@ -137,22 +138,24 @@ namespace DotNetCTFDumper.MMFParser.MFA
             Writer.AutoWriteUnicode(Name);
             Writer.AutoWriteUnicode(Description);
             Writer.AutoWriteUnicode(Path);
-
+            Pame2Mfa.Message("Writing Stamp");
             Writer.WriteUInt32((uint) Stamp.Length);
             Writer.WriteBytes(Stamp);
+            Pame2Mfa.Message("Writing Fonts");
             Writer.WriteAscii(FontBankId);
             Fonts.Write(Writer);
+            Pame2Mfa.Message("Writing Sounds");
             Writer.WriteAscii(SoundBankId);
             Sounds.Write(Writer);
-
+            Pame2Mfa.Message("Writing Musics");
             Writer.WriteAscii(MusicBankId);
             // music.Write();
             Writer.WriteInt32(0); //someone is using musics lol?
             //TODO: Do music
-
+            Pame2Mfa.Message("Writing Icons");
             Writer.WriteAscii(ImageBankId);
             Icons.Write(Writer);
-
+            Pame2Mfa.Message("Writing Images");
             Writer.WriteAscii(ImageBankId);
             Images.Write(Writer);
 
@@ -246,6 +249,7 @@ namespace DotNetCTFDumper.MMFParser.MFA
             ByteWriter newWriter = new ByteWriter(new MemoryStream());
             foreach (Frame frame in Frames)
             {
+                Pame2Mfa.Message("Writing Frame");
                 Writer.WriteUInt32((uint) (startPos+newWriter.Tell()+4));
                 frame.Write(newWriter);
             }

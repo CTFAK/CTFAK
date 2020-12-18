@@ -41,23 +41,45 @@
             this.soundLabel = new System.Windows.Forms.Label();
             this.soundBar = new System.Windows.Forms.ProgressBar();
             this.FolderBTN = new System.Windows.Forms.Button();
-            this.MFABtn = new System.Windows.Forms.Button();
             this.soundsButton = new System.Windows.Forms.Button();
             this.imagesButton = new System.Windows.Forms.Button();
             this.loadingLabel = new System.Windows.Forms.Label();
-            this.cryptKeyBtn = new System.Windows.Forms.Button();
-            this.showHexBtn = new System.Windows.Forms.Button();
             this.dumpSortedBtn = new System.Windows.Forms.Button();
             this.ChunkCombo = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.saveChunkBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.viewHexBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.previewFrameBtn = new System.Windows.Forms.ToolStripMenuItem();
-            this.packDataBtn = new System.Windows.Forms.Button();
             this.musicsButton = new System.Windows.Forms.Button();
             this.musicBar = new System.Windows.Forms.ProgressBar();
             this.musicLabel = new System.Windows.Forms.Label();
             this.SortedProgressBar = new System.Windows.Forms.ProgressBar();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.mainTab = new System.Windows.Forms.TabPage();
+            this.mfaTab = new System.Windows.Forms.TabPage();
+            this.dumpMFAButton = new System.Windows.Forms.Button();
+            this.mfaLogBox = new System.Windows.Forms.TextBox();
+            this.packDataTab = new System.Windows.Forms.TabPage();
+            this.infoLabel = new System.Windows.Forms.Label();
+            this.dumpAllPackButton = new System.Windows.Forms.Button();
+            this.dumpPackButton = new System.Windows.Forms.Button();
+            this.packDataListBox = new System.Windows.Forms.ListBox();
+            this.cryptKeyTab = new System.Windows.Forms.TabPage();
+            this.minusCharButton = new System.Windows.Forms.Button();
+            this.plusCharBtn = new System.Windows.Forms.Button();
+            this.hexBox1 = new Be.Windows.Forms.HexBox();
+            this.charBox = new System.Windows.Forms.TextBox();
+            this.advDumpTab = new System.Windows.Forms.TabPage();
+            this.advancedPictureBox = new System.Windows.Forms.PictureBox();
+            this.advancedTreeView = new System.Windows.Forms.TreeView();
+            this.packDataDialog = new System.Windows.Forms.SaveFileDialog();
             this.ChunkCombo.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            this.mainTab.SuspendLayout();
+            this.mfaTab.SuspendLayout();
+            this.packDataTab.SuspendLayout();
+            this.cryptKeyTab.SuspendLayout();
+            this.advDumpTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize) (this.advancedPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -66,7 +88,7 @@
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.button1.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.button1.Location = new System.Drawing.Point(12, 12);
+            this.button1.Location = new System.Drawing.Point(8, 10);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(101, 23);
             this.button1.TabIndex = 0;
@@ -86,14 +108,13 @@
             this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Right)));
             this.treeView1.BackColor = System.Drawing.Color.Black;
             this.treeView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.treeView1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.treeView1.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.treeView1.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.treeView1.Location = new System.Drawing.Point(642, 9);
+            this.treeView1.Location = new System.Drawing.Point(649, 8);
             this.treeView1.Margin = new System.Windows.Forms.Padding(0);
-            this.treeView1.MaximumSize = new System.Drawing.Size(286, 900);
-            this.treeView1.MinimumSize = new System.Drawing.Size(286, 489);
+            this.treeView1.MaximumSize = new System.Drawing.Size(500, 900);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(286, 489);
+            this.treeView1.Size = new System.Drawing.Size(286, 460);
             this.treeView1.TabIndex = 1;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             this.treeView1.DoubleClick += new System.EventHandler(this.treeView1_AfterDblClick);
@@ -109,7 +130,7 @@
             this.listBox1.FormattingEnabled = true;
             this.listBox1.IntegralHeight = false;
             this.listBox1.ItemHeight = 17;
-            this.listBox1.Location = new System.Drawing.Point(342, 9);
+            this.listBox1.Location = new System.Drawing.Point(349, 8);
             this.listBox1.Margin = new System.Windows.Forms.Padding(0);
             this.listBox1.MaximumSize = new System.Drawing.Size(300, 50000);
             this.listBox1.MinimumSize = new System.Drawing.Size(180, 234);
@@ -123,7 +144,7 @@
             this.GameInfo.BackColor = System.Drawing.Color.Transparent;
             this.GameInfo.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.GameInfo.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.GameInfo.Location = new System.Drawing.Point(9, 55);
+            this.GameInfo.Location = new System.Drawing.Point(8, 36);
             this.GameInfo.Margin = new System.Windows.Forms.Padding(5, 0, 3, 0);
             this.GameInfo.Name = "GameInfo";
             this.GameInfo.Size = new System.Drawing.Size(182, 45);
@@ -136,7 +157,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.label1.Location = new System.Drawing.Point(119, 15);
+            this.label1.Location = new System.Drawing.Point(115, 13);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(176, 17);
             this.label1.TabIndex = 4;
@@ -147,9 +168,9 @@
             this.imageBar.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.imageBar.BackColor = System.Drawing.Color.Black;
             this.imageBar.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.imageBar.Location = new System.Drawing.Point(190, 367);
+            this.imageBar.Location = new System.Drawing.Point(95, 292);
             this.imageBar.Name = "imageBar";
-            this.imageBar.Size = new System.Drawing.Size(126, 23);
+            this.imageBar.Size = new System.Drawing.Size(126, 24);
             this.imageBar.Step = 2;
             this.imageBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.imageBar.TabIndex = 8;
@@ -162,7 +183,7 @@
             this.imageLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.imageLabel.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.imageLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.imageLabel.Location = new System.Drawing.Point(322, 367);
+            this.imageLabel.Location = new System.Drawing.Point(227, 292);
             this.imageLabel.Name = "imageLabel";
             this.imageLabel.Size = new System.Drawing.Size(126, 24);
             this.imageLabel.TabIndex = 9;
@@ -177,7 +198,7 @@
             this.soundLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.soundLabel.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.soundLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.soundLabel.Location = new System.Drawing.Point(322, 415);
+            this.soundLabel.Location = new System.Drawing.Point(227, 340);
             this.soundLabel.Name = "soundLabel";
             this.soundLabel.Size = new System.Drawing.Size(126, 24);
             this.soundLabel.TabIndex = 11;
@@ -190,7 +211,7 @@
             this.soundBar.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.soundBar.BackColor = System.Drawing.Color.Black;
             this.soundBar.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.soundBar.Location = new System.Drawing.Point(190, 415);
+            this.soundBar.Location = new System.Drawing.Point(95, 340);
             this.soundBar.Name = "soundBar";
             this.soundBar.Size = new System.Drawing.Size(126, 23);
             this.soundBar.Step = 2;
@@ -205,7 +226,7 @@
             this.FolderBTN.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FolderBTN.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.FolderBTN.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.FolderBTN.Location = new System.Drawing.Point(101, 309);
+            this.FolderBTN.Location = new System.Drawing.Point(6, 234);
             this.FolderBTN.Name = "FolderBTN";
             this.FolderBTN.Size = new System.Drawing.Size(83, 42);
             this.FolderBTN.TabIndex = 12;
@@ -214,22 +235,6 @@
             this.FolderBTN.Visible = false;
             this.FolderBTN.Click += new System.EventHandler(this.FolderBTN_Click);
             // 
-            // MFABtn
-            // 
-            this.MFABtn.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.MFABtn.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
-            this.MFABtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.MFABtn.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.MFABtn.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.MFABtn.Location = new System.Drawing.Point(12, 453);
-            this.MFABtn.Name = "MFABtn";
-            this.MFABtn.Size = new System.Drawing.Size(83, 42);
-            this.MFABtn.TabIndex = 13;
-            this.MFABtn.Text = "Generate MFA";
-            this.MFABtn.UseVisualStyleBackColor = false;
-            this.MFABtn.Visible = false;
-            this.MFABtn.Click += new System.EventHandler(this.MFABtn_Click);
-            // 
             // soundsButton
             // 
             this.soundsButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -237,7 +242,7 @@
             this.soundsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.soundsButton.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.soundsButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.soundsButton.Location = new System.Drawing.Point(101, 405);
+            this.soundsButton.Location = new System.Drawing.Point(6, 330);
             this.soundsButton.Name = "soundsButton";
             this.soundsButton.Size = new System.Drawing.Size(83, 42);
             this.soundsButton.TabIndex = 14;
@@ -253,7 +258,7 @@
             this.imagesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.imagesButton.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.imagesButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.imagesButton.Location = new System.Drawing.Point(101, 357);
+            this.imagesButton.Location = new System.Drawing.Point(6, 282);
             this.imagesButton.Name = "imagesButton";
             this.imagesButton.Size = new System.Drawing.Size(83, 42);
             this.imagesButton.TabIndex = 15;
@@ -265,43 +270,13 @@
             // loadingLabel
             // 
             this.loadingLabel.BackColor = System.Drawing.Color.Transparent;
-            this.loadingLabel.Font = new System.Drawing.Font("Courier New", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.loadingLabel.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.loadingLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.loadingLabel.Location = new System.Drawing.Point(119, 12);
+            this.loadingLabel.Location = new System.Drawing.Point(4, 10);
             this.loadingLabel.Name = "loadingLabel";
-            this.loadingLabel.Size = new System.Drawing.Size(197, 91);
+            this.loadingLabel.Size = new System.Drawing.Size(110, 23);
             this.loadingLabel.TabIndex = 16;
             this.loadingLabel.Text = "Loading...";
-            // 
-            // cryptKeyBtn
-            // 
-            this.cryptKeyBtn.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.cryptKeyBtn.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
-            this.cryptKeyBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cryptKeyBtn.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.cryptKeyBtn.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.cryptKeyBtn.Location = new System.Drawing.Point(12, 357);
-            this.cryptKeyBtn.Name = "cryptKeyBtn";
-            this.cryptKeyBtn.Size = new System.Drawing.Size(83, 42);
-            this.cryptKeyBtn.TabIndex = 17;
-            this.cryptKeyBtn.Text = "Crypto Key";
-            this.cryptKeyBtn.UseVisualStyleBackColor = false;
-            this.cryptKeyBtn.Visible = false;
-            this.cryptKeyBtn.Click += new System.EventHandler(this.cryptKeyBtn_Click);
-            // 
-            // showHexBtn
-            // 
-            this.showHexBtn.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.showHexBtn.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
-            this.showHexBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.showHexBtn.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.showHexBtn.Location = new System.Drawing.Point(-171, 191);
-            this.showHexBtn.Name = "showHexBtn";
-            this.showHexBtn.Size = new System.Drawing.Size(180, 29);
-            this.showHexBtn.TabIndex = 18;
-            this.showHexBtn.Text = "Show hex";
-            this.showHexBtn.UseVisualStyleBackColor = false;
-            this.showHexBtn.Visible = false;
             // 
             // dumpSortedBtn
             // 
@@ -310,7 +285,7 @@
             this.dumpSortedBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.dumpSortedBtn.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.dumpSortedBtn.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.dumpSortedBtn.Location = new System.Drawing.Point(12, 405);
+            this.dumpSortedBtn.Location = new System.Drawing.Point(6, 426);
             this.dumpSortedBtn.Name = "dumpSortedBtn";
             this.dumpSortedBtn.Size = new System.Drawing.Size(83, 42);
             this.dumpSortedBtn.TabIndex = 19;
@@ -344,22 +319,6 @@
             this.previewFrameBtn.Size = new System.Drawing.Size(151, 22);
             this.previewFrameBtn.Text = "Preview Frame";
             // 
-            // packDataBtn
-            // 
-            this.packDataBtn.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.packDataBtn.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
-            this.packDataBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.packDataBtn.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.packDataBtn.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.packDataBtn.Location = new System.Drawing.Point(12, 309);
-            this.packDataBtn.Name = "packDataBtn";
-            this.packDataBtn.Size = new System.Drawing.Size(83, 42);
-            this.packDataBtn.TabIndex = 20;
-            this.packDataBtn.Text = "Pack Data";
-            this.packDataBtn.UseVisualStyleBackColor = false;
-            this.packDataBtn.Visible = false;
-            this.packDataBtn.Click += new System.EventHandler(this.packDataBtn_Click);
-            // 
             // musicsButton
             // 
             this.musicsButton.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -367,7 +326,7 @@
             this.musicsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.musicsButton.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.musicsButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.musicsButton.Location = new System.Drawing.Point(101, 453);
+            this.musicsButton.Location = new System.Drawing.Point(6, 378);
             this.musicsButton.Name = "musicsButton";
             this.musicsButton.Size = new System.Drawing.Size(83, 42);
             this.musicsButton.TabIndex = 21;
@@ -381,7 +340,7 @@
             this.musicBar.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.musicBar.BackColor = System.Drawing.Color.Black;
             this.musicBar.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.musicBar.Location = new System.Drawing.Point(190, 463);
+            this.musicBar.Location = new System.Drawing.Point(95, 388);
             this.musicBar.Name = "musicBar";
             this.musicBar.Size = new System.Drawing.Size(126, 23);
             this.musicBar.Step = 2;
@@ -396,7 +355,7 @@
             this.musicLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.musicLabel.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.musicLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.musicLabel.Location = new System.Drawing.Point(322, 463);
+            this.musicLabel.Location = new System.Drawing.Point(227, 388);
             this.musicLabel.Name = "musicLabel";
             this.musicLabel.Size = new System.Drawing.Size(126, 24);
             this.musicLabel.TabIndex = 23;
@@ -406,12 +365,258 @@
             // 
             // SortedProgressBar
             // 
-            this.SortedProgressBar.Location = new System.Drawing.Point(190, 310);
+            this.SortedProgressBar.Location = new System.Drawing.Point(95, 236);
             this.SortedProgressBar.Name = "SortedProgressBar";
             this.SortedProgressBar.Size = new System.Drawing.Size(209, 41);
             this.SortedProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.SortedProgressBar.TabIndex = 24;
             this.SortedProgressBar.Visible = false;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.AllowDrop = true;
+            this.tabControl1.Controls.Add(this.mainTab);
+            this.tabControl1.Controls.Add(this.mfaTab);
+            this.tabControl1.Controls.Add(this.packDataTab);
+            this.tabControl1.Controls.Add(this.cryptKeyTab);
+            this.tabControl1.Controls.Add(this.advDumpTab);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.tabControl1.HotTrack = true;
+            this.tabControl1.ImeMode = System.Windows.Forms.ImeMode.On;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Multiline = true;
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(943, 507);
+            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
+            this.tabControl1.TabIndex = 25;
+            // 
+            // mainTab
+            // 
+            this.mainTab.BackColor = System.Drawing.Color.Black;
+            this.mainTab.Controls.Add(this.imagesButton);
+            this.mainTab.Controls.Add(this.listBox1);
+            this.mainTab.Controls.Add(this.label1);
+            this.mainTab.Controls.Add(this.loadingLabel);
+            this.mainTab.Controls.Add(this.button1);
+            this.mainTab.Controls.Add(this.SortedProgressBar);
+            this.mainTab.Controls.Add(this.imageBar);
+            this.mainTab.Controls.Add(this.treeView1);
+            this.mainTab.Controls.Add(this.musicLabel);
+            this.mainTab.Controls.Add(this.imageLabel);
+            this.mainTab.Controls.Add(this.GameInfo);
+            this.mainTab.Controls.Add(this.musicBar);
+            this.mainTab.Controls.Add(this.soundBar);
+            this.mainTab.Controls.Add(this.musicsButton);
+            this.mainTab.Controls.Add(this.soundLabel);
+            this.mainTab.Controls.Add(this.FolderBTN);
+            this.mainTab.Controls.Add(this.dumpSortedBtn);
+            this.mainTab.Controls.Add(this.soundsButton);
+            this.mainTab.Location = new System.Drawing.Point(4, 24);
+            this.mainTab.Name = "mainTab";
+            this.mainTab.Padding = new System.Windows.Forms.Padding(3);
+            this.mainTab.Size = new System.Drawing.Size(935, 479);
+            this.mainTab.TabIndex = 0;
+            this.mainTab.Text = "Main";
+            // 
+            // mfaTab
+            // 
+            this.mfaTab.BackColor = System.Drawing.Color.Black;
+            this.mfaTab.Controls.Add(this.dumpMFAButton);
+            this.mfaTab.Controls.Add(this.mfaLogBox);
+            this.mfaTab.Location = new System.Drawing.Point(4, 24);
+            this.mfaTab.Name = "mfaTab";
+            this.mfaTab.Size = new System.Drawing.Size(935, 479);
+            this.mfaTab.TabIndex = 2;
+            this.mfaTab.Text = "MFA Dump";
+            // 
+            // dumpMFAButton
+            // 
+            this.dumpMFAButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.dumpMFAButton.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.dumpMFAButton.ForeColor = System.Drawing.SystemColors.Desktop;
+            this.dumpMFAButton.Location = new System.Drawing.Point(411, 3);
+            this.dumpMFAButton.Name = "dumpMFAButton";
+            this.dumpMFAButton.Size = new System.Drawing.Size(103, 61);
+            this.dumpMFAButton.TabIndex = 1;
+            this.dumpMFAButton.Text = "Dump MFA";
+            this.dumpMFAButton.UseVisualStyleBackColor = true;
+            this.dumpMFAButton.Click += new System.EventHandler(this.dumpMFAButton_Click);
+            // 
+            // mfaLogBox
+            // 
+            this.mfaLogBox.Dock = System.Windows.Forms.DockStyle.Left;
+            this.mfaLogBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.mfaLogBox.Location = new System.Drawing.Point(0, 0);
+            this.mfaLogBox.MaxLength = 999999999;
+            this.mfaLogBox.Multiline = true;
+            this.mfaLogBox.Name = "mfaLogBox";
+            this.mfaLogBox.ReadOnly = true;
+            this.mfaLogBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.mfaLogBox.Size = new System.Drawing.Size(405, 479);
+            this.mfaLogBox.TabIndex = 0;
+            // 
+            // packDataTab
+            // 
+            this.packDataTab.BackColor = System.Drawing.Color.Black;
+            this.packDataTab.Controls.Add(this.infoLabel);
+            this.packDataTab.Controls.Add(this.dumpAllPackButton);
+            this.packDataTab.Controls.Add(this.dumpPackButton);
+            this.packDataTab.Controls.Add(this.packDataListBox);
+            this.packDataTab.Location = new System.Drawing.Point(4, 24);
+            this.packDataTab.Name = "packDataTab";
+            this.packDataTab.Size = new System.Drawing.Size(935, 479);
+            this.packDataTab.TabIndex = 4;
+            this.packDataTab.Text = "Pack Data";
+            // 
+            // infoLabel
+            // 
+            this.infoLabel.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.infoLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.infoLabel.Location = new System.Drawing.Point(204, 11);
+            this.infoLabel.Name = "infoLabel";
+            this.infoLabel.Size = new System.Drawing.Size(255, 91);
+            this.infoLabel.TabIndex = 7;
+            this.infoLabel.Text = "Name: PackFile1.mvx\r\nSize: 5 MB\r\n";
+            // 
+            // dumpAllPackButton
+            // 
+            this.dumpAllPackButton.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
+            this.dumpAllPackButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.dumpAllPackButton.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.dumpAllPackButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.dumpAllPackButton.Location = new System.Drawing.Point(204, 148);
+            this.dumpAllPackButton.Name = "dumpAllPackButton";
+            this.dumpAllPackButton.Size = new System.Drawing.Size(143, 37);
+            this.dumpAllPackButton.TabIndex = 6;
+            this.dumpAllPackButton.Text = "Dump All";
+            this.dumpAllPackButton.UseVisualStyleBackColor = false;
+            this.dumpAllPackButton.Click += new System.EventHandler(this.dumpAllPackButton_Click);
+            // 
+            // dumpPackButton
+            // 
+            this.dumpPackButton.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
+            this.dumpPackButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.dumpPackButton.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.dumpPackButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.dumpPackButton.Location = new System.Drawing.Point(204, 105);
+            this.dumpPackButton.Name = "dumpPackButton";
+            this.dumpPackButton.Size = new System.Drawing.Size(143, 37);
+            this.dumpPackButton.TabIndex = 5;
+            this.dumpPackButton.Text = "Dump";
+            this.dumpPackButton.UseVisualStyleBackColor = false;
+            this.dumpPackButton.Click += new System.EventHandler(this.dumpPackButton_Click);
+            // 
+            // packDataListBox
+            // 
+            this.packDataListBox.BackColor = System.Drawing.SystemColors.WindowText;
+            this.packDataListBox.Dock = System.Windows.Forms.DockStyle.Left;
+            this.packDataListBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.packDataListBox.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.packDataListBox.FormattingEnabled = true;
+            this.packDataListBox.ItemHeight = 14;
+            this.packDataListBox.Items.AddRange(new object[] {"PackFile1", "PackFile2", "PackFile3", "PackFile4", "PackFile5", "PackFile6"});
+            this.packDataListBox.Location = new System.Drawing.Point(0, 0);
+            this.packDataListBox.Name = "packDataListBox";
+            this.packDataListBox.Size = new System.Drawing.Size(198, 479);
+            this.packDataListBox.TabIndex = 4;
+            this.packDataListBox.SelectedIndexChanged += new System.EventHandler(this.packDataListBox_SelectedIndexChanged);
+            // 
+            // cryptKeyTab
+            // 
+            this.cryptKeyTab.BackColor = System.Drawing.Color.Black;
+            this.cryptKeyTab.Controls.Add(this.minusCharButton);
+            this.cryptKeyTab.Controls.Add(this.plusCharBtn);
+            this.cryptKeyTab.Controls.Add(this.hexBox1);
+            this.cryptKeyTab.Controls.Add(this.charBox);
+            this.cryptKeyTab.Location = new System.Drawing.Point(4, 24);
+            this.cryptKeyTab.Name = "cryptKeyTab";
+            this.cryptKeyTab.Size = new System.Drawing.Size(935, 479);
+            this.cryptKeyTab.TabIndex = 3;
+            this.cryptKeyTab.Text = "CryptoKey";
+            // 
+            // minusCharButton
+            // 
+            this.minusCharButton.Dock = System.Windows.Forms.DockStyle.Left;
+            this.minusCharButton.Location = new System.Drawing.Point(0, 21);
+            this.minusCharButton.Name = "minusCharButton";
+            this.minusCharButton.Size = new System.Drawing.Size(20, 458);
+            this.minusCharButton.TabIndex = 3;
+            this.minusCharButton.Text = "-";
+            this.minusCharButton.UseVisualStyleBackColor = true;
+            this.minusCharButton.Click += new System.EventHandler(this.minusCharButton_Click);
+            // 
+            // plusCharBtn
+            // 
+            this.plusCharBtn.Dock = System.Windows.Forms.DockStyle.Right;
+            this.plusCharBtn.Location = new System.Drawing.Point(915, 21);
+            this.plusCharBtn.Name = "plusCharBtn";
+            this.plusCharBtn.Size = new System.Drawing.Size(20, 458);
+            this.plusCharBtn.TabIndex = 2;
+            this.plusCharBtn.Text = "+";
+            this.plusCharBtn.UseVisualStyleBackColor = true;
+            this.plusCharBtn.Click += new System.EventHandler(this.plusCharBtn_Click);
+            // 
+            // hexBox1
+            // 
+            this.hexBox1.ColumnInfoVisible = true;
+            this.hexBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hexBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.hexBox1.LineInfoVisible = true;
+            this.hexBox1.Location = new System.Drawing.Point(0, 21);
+            this.hexBox1.Name = "hexBox1";
+            this.hexBox1.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int) (((byte) (100)))), ((int) (((byte) (60)))), ((int) (((byte) (188)))), ((int) (((byte) (255)))));
+            this.hexBox1.Size = new System.Drawing.Size(935, 458);
+            this.hexBox1.StringViewVisible = true;
+            this.hexBox1.TabIndex = 1;
+            // 
+            // charBox
+            // 
+            this.charBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.charBox.Location = new System.Drawing.Point(0, 0);
+            this.charBox.Name = "charBox";
+            this.charBox.Size = new System.Drawing.Size(935, 21);
+            this.charBox.TabIndex = 0;
+            this.charBox.Text = "54";
+            this.charBox.TextChanged += new System.EventHandler(this.charBox_TextChanged);
+            // 
+            // advDumpTab
+            // 
+            this.advDumpTab.BackColor = System.Drawing.Color.DimGray;
+            this.advDumpTab.Controls.Add(this.advancedPictureBox);
+            this.advDumpTab.Controls.Add(this.advancedTreeView);
+            this.advDumpTab.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.advDumpTab.Location = new System.Drawing.Point(4, 24);
+            this.advDumpTab.Name = "advDumpTab";
+            this.advDumpTab.Padding = new System.Windows.Forms.Padding(3);
+            this.advDumpTab.Size = new System.Drawing.Size(935, 479);
+            this.advDumpTab.TabIndex = 1;
+            this.advDumpTab.Text = "Advanced";
+            // 
+            // advancedPictureBox
+            // 
+            this.advancedPictureBox.BackColor = System.Drawing.Color.DimGray;
+            this.advancedPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.advancedPictureBox.Location = new System.Drawing.Point(170, 3);
+            this.advancedPictureBox.Name = "advancedPictureBox";
+            this.advancedPictureBox.Size = new System.Drawing.Size(762, 473);
+            this.advancedPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.advancedPictureBox.TabIndex = 1;
+            this.advancedPictureBox.TabStop = false;
+            // 
+            // advancedTreeView
+            // 
+            this.advancedTreeView.Dock = System.Windows.Forms.DockStyle.Left;
+            this.advancedTreeView.Location = new System.Drawing.Point(3, 3);
+            this.advancedTreeView.Name = "advancedTreeView";
+            this.advancedTreeView.Size = new System.Drawing.Size(167, 473);
+            this.advancedTreeView.TabIndex = 0;
+            this.advancedTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.advancedTreeView_AfterSelect);
+            // 
+            // packDataDialog
+            // 
+            this.packDataDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.packDataDialog_FileOk);
             // 
             // MainForm
             // 
@@ -419,43 +624,62 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
             this.ClientSize = new System.Drawing.Size(943, 507);
-            this.Controls.Add(this.SortedProgressBar);
-            this.Controls.Add(this.musicLabel);
-            this.Controls.Add(this.musicBar);
-            this.Controls.Add(this.musicsButton);
-            this.Controls.Add(this.packDataBtn);
-            this.Controls.Add(this.dumpSortedBtn);
-            this.Controls.Add(this.showHexBtn);
-            this.Controls.Add(this.cryptKeyBtn);
-            this.Controls.Add(this.loadingLabel);
-            this.Controls.Add(this.imagesButton);
-            this.Controls.Add(this.soundsButton);
-            this.Controls.Add(this.MFABtn);
-            this.Controls.Add(this.FolderBTN);
-            this.Controls.Add(this.soundLabel);
-            this.Controls.Add(this.soundBar);
-            this.Controls.Add(this.imageLabel);
-            this.Controls.Add(this.imageBar);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.GameInfo);
-            this.Controls.Add(this.listBox1);
-            this.Controls.Add(this.treeView1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.tabControl1);
             this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
             this.Location = new System.Drawing.Point(15, 15);
             this.Name = "MainForm";
             this.Text = "DotNetCTFDumper";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.ChunkCombo.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
+            this.mainTab.ResumeLayout(false);
+            this.mainTab.PerformLayout();
+            this.mfaTab.ResumeLayout(false);
+            this.mfaTab.PerformLayout();
+            this.packDataTab.ResumeLayout(false);
+            this.cryptKeyTab.ResumeLayout(false);
+            this.cryptKeyTab.PerformLayout();
+            this.advDumpTab.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize) (this.advancedPictureBox)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
         }
+
+        private System.Windows.Forms.PictureBox advancedPictureBox;
+
+        private System.Windows.Forms.TreeView advancedTreeView;
+
+        private System.Windows.Forms.Button dumpAllPackButton;
+        private System.Windows.Forms.Button dumpPackButton;
+        private System.Windows.Forms.SaveFileDialog packDataDialog;
+        private System.Windows.Forms.ListBox packDataListBox;
+
+        private System.Windows.Forms.Label infoLabel;
+
+        private System.Windows.Forms.TabPage advDumpTab;
+        private System.Windows.Forms.TabPage mainTab;
+        private System.Windows.Forms.TabPage mfaTab;
+        private System.Windows.Forms.TabPage packDataTab;
+
+        private System.Windows.Forms.TextBox charBox;
+
+        private System.Windows.Forms.Button minusCharButton;
+
+        private System.Windows.Forms.Button plusCharBtn;
+
+        private Be.Windows.Forms.HexBox hexBox1;
+
+        private System.Windows.Forms.TabPage cryptKeyTab;
+
+        private System.Windows.Forms.TextBox mfaLogBox;
+
+        private System.Windows.Forms.Button dumpMFAButton;
+
+        private System.Windows.Forms.TabControl tabControl1;
 
         private System.Windows.Forms.ProgressBar SortedProgressBar;
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ContextMenuStrip ChunkCombo;
-        private System.Windows.Forms.Button cryptKeyBtn;
         private System.Windows.Forms.Button dumpSortedBtn;
         private System.Windows.Forms.Button FolderBTN;
         private System.Windows.Forms.Label GameInfo;
@@ -465,15 +689,12 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Label loadingLabel;
-        private System.Windows.Forms.Button MFABtn;
         private System.Windows.Forms.ProgressBar musicBar;
         private System.Windows.Forms.Label musicLabel;
         private System.Windows.Forms.Button musicsButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.Button packDataBtn;
         private System.Windows.Forms.ToolStripMenuItem previewFrameBtn;
         private System.Windows.Forms.ToolStripMenuItem saveChunkBtn;
-        private System.Windows.Forms.Button showHexBtn;
         private System.Windows.Forms.ProgressBar soundBar;
         private System.Windows.Forms.Label soundLabel;
         private System.Windows.Forms.Button soundsButton;

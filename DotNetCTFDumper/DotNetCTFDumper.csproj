@@ -76,6 +76,9 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Be.Windows.Forms.HexBox, Version=1.6.0.18788, Culture=neutral, PublicKeyToken=e0e5adf0ebc99863">
+      <HintPath>C:\Users\ivani\Desktop\Be.HexEditor-1.6.0\sources\Be.Windows.Forms.HexBox\bin\Debug\Be.Windows.Forms.HexBox.dll</HintPath>
+    </Reference>
     <Reference Include="Be.Windows.Forms.HexBox, Version=1.6.1.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Be.Windows.Forms.HexBox.1.6.1\lib\net40\Be.Windows.Forms.HexBox.dll</HintPath>
       <Private>True</Private>
@@ -114,7 +117,9 @@
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Mobile" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -124,19 +129,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GUI\ChunkNode.cs" />
-    <Compile Include="GUI\CryptoKeyForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\CryptoKeyForm.Designer.cs">
-      <DependentUpon>CryptoKeyForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="GUI\FrameViewer.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="GUI\FrameViewer.Designer.cs">
       <DependentUpon>FrameViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\GUIComponents\ChunkNode.cs" />
+    <Compile Include="GUI\GUIComponents\ObjectBox.cs" />
     <Compile Include="GUI\HexViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -149,19 +149,7 @@
     <Compile Include="GUI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\MFABuilderForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\MFABuilderForm.Designer.cs">
-      <DependentUpon>MFABuilderForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GUI\ObjectBox.cs" />
-    <Compile Include="GUI\PackDataForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GUI\PackDataForm.Designer.cs">
-      <DependentUpon>PackDataForm.cs</DependentUpon>
-    </Compile>
+    <Compile Include="MMFParser\EXE\Loaders\Objects\Movements.cs" />
     <Compile Include="MMFParser\Translation\MFAGenerator.cs" />
     <Compile Include="MMFParser\Translation\PAME2MFA.cs" />
     <Compile Include="MMFParser\EXE\ChunkList.cs" />
@@ -259,9 +247,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GUI\CryptoKeyForm.resx">
-      <DependentUpon>CryptoKeyForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="GUI\FrameViewer.resx">
       <DependentUpon>FrameViewer.cs</DependentUpon>
     </EmbeddedResource>
@@ -270,12 +255,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\MFABuilderForm.resx">
-      <DependentUpon>MFABuilderForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GUI\PackDataForm.resx">
-      <DependentUpon>PackDataForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

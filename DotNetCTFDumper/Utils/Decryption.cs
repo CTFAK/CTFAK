@@ -40,6 +40,9 @@ namespace DotNetCTFDumper.Utils
             byte[] key = new byte[256];
             Marshal.Copy(ptr, key, 0, 256);
             Marshal.FreeHGlobal(rawKeyPtr);
+            Array.Resize(ref key,data.Length);
+            Array.Resize(ref key,256);
+
             return key;
         }
 

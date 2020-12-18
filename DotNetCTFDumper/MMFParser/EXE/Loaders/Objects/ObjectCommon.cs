@@ -82,6 +82,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
         public int ExtensionVersion;
         public AlterableValues Values;
         public AlterableStrings Strings;
+        public Movements Movements;
 
 
         public ObjectCommon(ByteReader reader) : base(reader)
@@ -140,10 +141,10 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
 
             if (_movementsOffset != 0)
             {
-                //Reader.Seek(currentPosition+_movementsOffset);
-                //var movements = new Movements(Reader);
-                //movements.Read();
-                // Console.WriteLine("Movements done");
+                Reader.Seek(currentPosition+_movementsOffset);
+                Movements = new Movements(Reader);
+                Movements.Read();
+                Console.WriteLine("Movements done");
             }
             
             

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Web.UI.WebControls;
 
 namespace DotNetCTFDumper.Utils
 {
@@ -22,8 +23,8 @@ namespace DotNetCTFDumper.Utils
                 Console.ForegroundColor = color;
                 Console.WriteLine(text);
                 Console.ForegroundColor = ConsoleColor.White;
-
             }
+
 
         }
     }

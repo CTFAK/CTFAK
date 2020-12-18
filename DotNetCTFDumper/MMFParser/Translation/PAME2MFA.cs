@@ -15,17 +15,20 @@ using AnimationDirection = DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks.Anima
 using ChunkList = DotNetCTFDumper.MMFParser.MFA.Loaders.ChunkList;
 using Frame = DotNetCTFDumper.MMFParser.EXE.Loaders.Frame;
 using Layer = DotNetCTFDumper.MMFParser.MFA.Loaders.Layer;
+using Movement = DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks.Movement;
 
 namespace DotNetCTFDumper.MMFParser.Translation
 {
     public static class Pame2Mfa
     {
         public static Dictionary<int, FrameItem> FrameItems;
-        public static event Program.DumperEvent TranslatingFrame;
+        public static event Program.DumperEvent OnMessage;
         
         public static void Translate(ref MFA.MFA mfa, GameData game)
         {
-            
+            Message("Running Pame2MFA");
+            Message("Original MFA Build: "+mfa.BuildVersion);
+            Message("");
             //mfa.MfaBuild = 4;
             //mfa.Product = (int) game.ProductVersion;
             //mfa.BuildVersion = 283;
@@ -94,6 +97,7 @@ namespace DotNetCTFDumper.MMFParser.Translation
                     newItem.InkEffectParameter = item.InkEffectValue;
                     newItem.AntiAliasing = item.Antialias ? 1 : 0;
                     newItem.Flags = (int) item.Flags;
+                    newItem.IconHandle = 10;
                     newItem.Chunks=new ChunkList(null);
                     var itemLoader = (ObjectCommon)item.Properties.Loader;
                     //Only actives
@@ -106,11 +110,19 @@ namespace DotNetCTFDumper.MMFParser.Translation
                     //newLoader.Qualifiers;
                     newLoader.Strings = ConvertStrings(itemLoader.Strings);
                     newLoader.Values = ConvertValue(itemLoader.Values);
-                    newLoader.Movements=new Movements(null);
-                    var testMovement = new Movement(null);
-                    testMovement.Name = "New Movement";
-                    testMovement.Extension = "";
-                    newLoader.Movements.Items.Add(testMovement);
+                    newLoader.Movements=new MFA.Loaders.mfachunks.Movements(null);
+                    for (int j = 0; j < itemLoader.Movements.Items.Count; j++)
+                    {
+                        var mov = itemLoader.Movements.Items[j];
+                        var newMov = new Movement(null);
+                        newMov.Name = $"Movement {j+1}";
+                        newMov.Extension = "";
+                        newMov.Identifier = mov.Type;
+                        newMov.Player = mov.Player;
+                        newMov.MovingAtStart = mov.MovingAtStart;
+                        newMov.DirectionAtStart = mov.DirectionAtStart;
+                        newLoader.Movements.Items.Add(newMov);
+                    }
                     newLoader.Behaviours=new Behaviours(null);
                     //TODO: Transitions
                     if (itemLoader.Animations != null)
@@ -216,6 +228,7 @@ namespace DotNetCTFDumper.MMFParser.Translation
                     newLayer.YCoefficient = layer.YCoeff;
                     newFrame.Layers.Add(newLayer);
                 }
+                Message("Translating frame: "+newFrame.Name);
                 var newFrameItems = new List<FrameItem>();
                 var newInstances = new List<FrameInstance>();
                 if (frame.Objects != null)
@@ -236,7 +249,7 @@ namespace DotNetCTFDumper.MMFParser.Translation
 
                             if (frameItem != null)
                             {
-                                newFrameItems.Add(frameItem);
+                                //newFrameItems.Add(frameItem);
                                 var newInstance = new FrameInstance((ByteReader) null);
                                 newInstance.X = instance.X;
                                 newInstance.Y = instance.Y;
@@ -246,7 +259,7 @@ namespace DotNetCTFDumper.MMFParser.Translation
                                 newInstance.ItemHandle = instance.ObjectInfo;
                                 newInstance.ParentHandle = (uint) instance.ParentHandle;
                                 newInstance.Layer = (uint) instance.Layer;
-                                newInstances.Add(newInstance);
+                                //newInstances.Add(newInstance);
                             }
                             break;
                         }
@@ -340,6 +353,11 @@ namespace DotNetCTFDumper.MMFParser.Translation
             }
 
             return alterables;
+        }
+
+        public static void Message(string msg)
+        {
+            OnMessage.Invoke(msg);
         }
 
         
