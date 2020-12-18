@@ -56,7 +56,7 @@ namespace DotNetCTFDumper
                     ConsoleColor.Green);
                 Logger.Log("   DumpSounds - Dump sounds to 'DUMP\\[your game]\\SoundBank'(default:true)\n", true,
                     ConsoleColor.Green);
-                Logger.Log("Exaple: DotNetCTFDumper.exe E:\\SisterLocation.exe true true false true", true,
+                Logger.Log("Example: DotNetCTFDumper.exe E:\\SisterLocation.exe true true false true", true,
                     ConsoleColor.Green);
                 Console.ReadKey();
                 Environment.Exit(0);
@@ -113,8 +113,8 @@ namespace DotNetCTFDumper
             Directory.CreateDirectory($"{Settings.SoundPath}");
             Directory.CreateDirectory($"{Settings.MusicPath}");
             Directory.CreateDirectory($"{Settings.ChunkPath}");
-
             Directory.CreateDirectory($"{Settings.ExtensionPath}");
+            Directory.CreateDirectory($"{PluginAPI.PluginAPI.PluginPath}");
         }
         public static void InitNativeLibrary()
         {

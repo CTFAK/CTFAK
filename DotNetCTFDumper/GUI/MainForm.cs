@@ -11,6 +11,8 @@ using DotNetCTFDumper.MMFParser;
 using DotNetCTFDumper.MMFParser.EXE;
 using DotNetCTFDumper.MMFParser.EXE.Loaders;
 using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
+using DotNetCTFDumper.MMFParser.EXE.Loaders.Objects;
+using DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks;
 using DotNetCTFDumper.MMFParser.Translation;
 using DotNetCTFDumper.Utils;
 
@@ -41,7 +43,8 @@ namespace DotNetCTFDumper.GUI
             foreach (Control item in Controls)
             {
                 item.ForeColor = ColorTheme;
-                item.BackColor=Color.Black;
+                if(!(item is PictureBox)&&!(item is TabPage))item.BackColor=Color.Black;
+                
                 if(item is Button) item.BackColor=Color.FromArgb(30,30,30);
 
                 if (item is Label)
@@ -56,7 +59,7 @@ namespace DotNetCTFDumper.GUI
                 foreach (Control item in tabPage.Controls)
                 {
                     item.ForeColor = ColorTheme;
-                    item.BackColor=Color.Black;
+                    if(!(item is PictureBox)&&!(item is TabPage))item.BackColor=Color.Black;
                     if(item is Button) item.BackColor=Color.FromArgb(30,30,30);
 
                     if (item is Label)
@@ -278,6 +281,7 @@ namespace DotNetCTFDumper.GUI
             InitKeyTab();
             InitPackDataTab();
             InitAdvancedDump();
+            InitPlugins();
             var toLog = "";
             toLog += $"Title:{Exe.Instance.GameData.Name}\n";
             toLog += $"Copyright:{Exe.Instance.GameData.Copyright}\n"; 
@@ -576,20 +580,78 @@ namespace DotNetCTFDumper.GUI
             var bank = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
             var items = bank.Images.ToList();
             var filtered = items.OrderBy(x=>x.Value.Handle);
-            foreach (var keypair in filtered)
+            foreach (Frame frame in Exe.Instance.GameData.Frames)
             {
-                advancedTreeView.Nodes.Add(new ChunkNode(keypair.Key.ToString(),keypair.Value));
+                var frameNode = new ChunkNode(frame.Name,frame);
+                advancedTreeView.Nodes.Add(frameNode);
+                if (frame.Objects != null)
+                {
+                    foreach (ObjectInstance objInst in frame.Objects.Items)
+                    {
+                        var objInstNode = new ChunkNode(objInst.FrameItem.Name, objInst);
+                        frameNode.Nodes.Add(objInstNode);
+                        var loader = objInst.FrameItem.Properties.Loader;
+                        if (loader is ObjectCommon common)
+                        {
+                            if (common.Animations != null)
+                            {
+                                foreach (var pair in common.Animations.AnimationDict)
+                                {
+                                    var animNode = new ChunkNode($"Animation {pair.Key}", pair.Value);
+                                    objInstNode.Nodes.Add(animNode);
+                                    foreach (var dir in pair.Value.DirectionDict)
+                                    {
+                                        for (int a = 0; a < dir.Value.Frames.Count; a++)
+                                        {
+                                            var animFrame = dir.Value.Frames[a];
+                                            bank.Images.TryGetValue(animFrame, out var img);
+                                            var animFrameNode = new ChunkNode(a.ToString(), img);
+                                            animNode.Nodes.Add(animFrameNode);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else if (loader is Backdrop backdrop)
+                        {
+                            var backdropNode = new ChunkNode("Image", bank.Images[backdrop.Image]);
+                            objInstNode.Nodes.Add(backdropNode);
+                        }
+                    }
+                }
             }
+        }
+
+        public void InitPlugins()
+        {
+            PluginAPI.PluginAPI.InitializePlugins();
+            foreach (var plugin in PluginAPI.PluginAPI.Plugins)
+            {
+                pluginsList.Items.Add(plugin.Name);
+
+            }
+            
         }
 
 
         private void advancedTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
             var node = e.Node;
-            var img = ((ImageItem) ((ChunkNode) node).loader);
-            if(img.Bitmap==null)img.Load();
+            if (!(((ChunkNode) node).loader is ImageItem))
+            {
+                advancedPictureBox.Image = advancedPictureBox.ErrorImage;     
+            }
+            else
+            {
+                var img = ((ImageItem) ((ChunkNode) node).loader);            
+                advancedPictureBox.Image = img.Bitmap; 
+            }
             
-            advancedPictureBox.Image = img.Bitmap;
+        }
+
+        private void activatePluginBtn_Click(object sender, EventArgs e)
+        {
+            PluginAPI.PluginAPI.Plugins[pluginsList.SelectedIndex].pluginClass.Activate(null);
         }
     }
 }

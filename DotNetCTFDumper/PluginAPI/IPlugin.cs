@@ -2,7 +2,7 @@
 {
     public interface IPlugin
     {
-        
-        
+        object Activate(object input);
+
     }
 }

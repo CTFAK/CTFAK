@@ -114,11 +114,16 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
                     bmp = images.Images[firstFrameHandle];
                 }
             }
-            else if (ObjectType == 1)
+            else if (ObjectType == 1)//Backdrop
             {
                 images.Images.TryGetValue(((Backdrop) Properties.Loader).Image, out var img);
                 bmp = img;
             }
+            else if (ObjectType==0)//QuickBackdrop
+            {
+            
+            }
+            
 
             return bmp;
         }
@@ -152,7 +157,12 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
         {
             
             //TODO: Fix shit
-            if (ObjectType == 1)//Backdrop
+            if(ObjectType==0)//QuickBackdrop
+            {
+                
+            
+            }
+            else if (ObjectType == 1)//Backdrop
             {
                 Loader = new Backdrop(Reader);
             }

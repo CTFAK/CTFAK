@@ -71,6 +71,9 @@
             this.advDumpTab = new System.Windows.Forms.TabPage();
             this.advancedPictureBox = new System.Windows.Forms.PictureBox();
             this.advancedTreeView = new System.Windows.Forms.TreeView();
+            this.pluginTab = new System.Windows.Forms.TabPage();
+            this.activatePluginBtn = new System.Windows.Forms.Button();
+            this.pluginsList = new System.Windows.Forms.ListBox();
             this.packDataDialog = new System.Windows.Forms.SaveFileDialog();
             this.ChunkCombo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -80,6 +83,7 @@
             this.cryptKeyTab.SuspendLayout();
             this.advDumpTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.advancedPictureBox)).BeginInit();
+            this.pluginTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -380,6 +384,7 @@
             this.tabControl1.Controls.Add(this.packDataTab);
             this.tabControl1.Controls.Add(this.cryptKeyTab);
             this.tabControl1.Controls.Add(this.advDumpTab);
+            this.tabControl1.Controls.Add(this.pluginTab);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.tabControl1.HotTrack = true;
@@ -456,6 +461,7 @@
             this.mfaLogBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.mfaLogBox.Size = new System.Drawing.Size(405, 479);
             this.mfaLogBox.TabIndex = 0;
+            this.mfaLogBox.Text = "MFA Generation is currently unstable\r\nUSE AT YOUR OWN RISK";
             // 
             // packDataTab
             // 
@@ -596,7 +602,7 @@
             // 
             // advancedPictureBox
             // 
-            this.advancedPictureBox.BackColor = System.Drawing.Color.DimGray;
+            this.advancedPictureBox.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
             this.advancedPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.advancedPictureBox.Location = new System.Drawing.Point(170, 3);
             this.advancedPictureBox.Name = "advancedPictureBox";
@@ -613,6 +619,40 @@
             this.advancedTreeView.Size = new System.Drawing.Size(167, 473);
             this.advancedTreeView.TabIndex = 0;
             this.advancedTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.advancedTreeView_AfterSelect);
+            // 
+            // pluginTab
+            // 
+            this.pluginTab.BackColor = System.Drawing.Color.Black;
+            this.pluginTab.Controls.Add(this.activatePluginBtn);
+            this.pluginTab.Controls.Add(this.pluginsList);
+            this.pluginTab.Location = new System.Drawing.Point(4, 24);
+            this.pluginTab.Name = "pluginTab";
+            this.pluginTab.Size = new System.Drawing.Size(935, 479);
+            this.pluginTab.TabIndex = 5;
+            this.pluginTab.Text = "Plugins";
+            // 
+            // activatePluginBtn
+            // 
+            this.activatePluginBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.activatePluginBtn.Font = new System.Drawing.Font("Feast of Flesh BB", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte) (77)));
+            this.activatePluginBtn.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.activatePluginBtn.Location = new System.Drawing.Point(258, 3);
+            this.activatePluginBtn.Name = "activatePluginBtn";
+            this.activatePluginBtn.Size = new System.Drawing.Size(140, 67);
+            this.activatePluginBtn.TabIndex = 1;
+            this.activatePluginBtn.Text = "Activate";
+            this.activatePluginBtn.UseVisualStyleBackColor = true;
+            this.activatePluginBtn.Click += new System.EventHandler(this.activatePluginBtn_Click);
+            // 
+            // pluginsList
+            // 
+            this.pluginsList.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pluginsList.FormattingEnabled = true;
+            this.pluginsList.ItemHeight = 15;
+            this.pluginsList.Location = new System.Drawing.Point(0, 0);
+            this.pluginsList.Name = "pluginsList";
+            this.pluginsList.Size = new System.Drawing.Size(252, 479);
+            this.pluginsList.TabIndex = 0;
             // 
             // packDataDialog
             // 
@@ -641,8 +681,14 @@
             this.cryptKeyTab.PerformLayout();
             this.advDumpTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize) (this.advancedPictureBox)).EndInit();
+            this.pluginTab.ResumeLayout(false);
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Button activatePluginBtn;
+        private System.Windows.Forms.ListBox pluginsList;
+
+        private System.Windows.Forms.TabPage pluginTab;
 
         private System.Windows.Forms.PictureBox advancedPictureBox;
 

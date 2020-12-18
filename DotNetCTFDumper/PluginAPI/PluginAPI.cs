@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using DotNetCTFDumper.MMFParser.EXE.Loaders;
 using DotNetCTFDumper.MMFParser.MFA;
 using DotNetCTFDumper.MMFParser.MFA.Loaders;
@@ -10,33 +12,56 @@ using Layer = DotNetCTFDumper.MMFParser.MFA.Loaders.Layer;
 
 namespace DotNetCTFDumper.PluginAPI
 {
-    public class PluginAPI
+    public static class PluginAPI
     {
-        public static Frame GetEmptyFrame(List<Color> palette, int handle = 0, int x = 640, int y = 480,
-            string name = "New Frame")
+        public static string PluginPath = System.IO.Path.Combine(
+            Directory.GetCurrentDirectory(),
+            "Plugins");
+
+        public static List<Plugin> Plugins = new List<Plugin>();
+
+        public static void InitializePlugins()
         {
-            var frame = new Frame(null)
+            Plugins.Clear();
+            DirectoryInfo pluginDirectory = new DirectoryInfo(PluginPath);
+            if (!pluginDirectory.Exists)
+                pluginDirectory.Create();
+
+
+            var pluginFiles = Directory.GetFiles(PluginPath, "*.dll");
+            foreach (var file in pluginFiles)
             {
-                Handle = 0,
-                Name = name,
-                Password = "",
-                SizeX = x,
-                SizeY = y,
-                Background = Color.Green,
-                Palette = palette,
-                Layers = new List<Layer>(),
-                Folders = new List<ItemFolder>(),
-                Items = new List<FrameItem>(),
-                Events = MFA.emptyEvents,
-                Chunks = MFA.emptyFrameChunks
-            };
-            frame.Flags.flag = 260;
-            //frame.Instances = template.Frames[0].Instances;
-            var testLayer = new Layer(null) {Name = "New Super Layer"};
-            frame.Layers.Add(testLayer);
-
-
-            return frame;
+                Assembly asm = Assembly.LoadFrom(file);
+                var types = asm.GetTypes().Where(t =>
+                    t.GetInterfaces().Where(i => i.FullName == typeof(IPlugin).FullName).Any());
+                foreach (var type in types)
+                {
+                    var pluginClass = asm.CreateInstance(type.FullName) as IPlugin;
+                    var plugin = new Plugin(type.Name,"Kostya",pluginClass);
+                    Plugins.Add(plugin);
+                }
+            }
         }
     }
+
+    public class Plugin
+    {
+        public string Name;
+
+        public Plugin(string name, string author, IPlugin pluginClass)
+        {
+            Name = name;
+            Author = author;
+            this.pluginClass = pluginClass;
+        }
+
+        public string Author;
+        public IPlugin pluginClass;
+
+    }
 }
+
+            
+        
+        
+    
