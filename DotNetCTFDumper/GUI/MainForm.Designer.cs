@@ -69,9 +69,12 @@
             this.hexBox1 = new Be.Windows.Forms.HexBox();
             this.charBox = new System.Windows.Forms.TextBox();
             this.advDumpTab = new System.Windows.Forms.TabPage();
+            this.advancedInfoLabel = new System.Windows.Forms.Label();
+            this.advancedPlayAnimation = new System.Windows.Forms.Button();
             this.advancedPictureBox = new System.Windows.Forms.PictureBox();
             this.advancedTreeView = new System.Windows.Forms.TreeView();
             this.pluginTab = new System.Windows.Forms.TabPage();
+            this.pluginLogBox = new System.Windows.Forms.TextBox();
             this.activatePluginBtn = new System.Windows.Forms.Button();
             this.pluginsList = new System.Windows.Forms.ListBox();
             this.packDataDialog = new System.Windows.Forms.SaveFileDialog();
@@ -590,6 +593,8 @@
             // advDumpTab
             // 
             this.advDumpTab.BackColor = System.Drawing.Color.DimGray;
+            this.advDumpTab.Controls.Add(this.advancedInfoLabel);
+            this.advDumpTab.Controls.Add(this.advancedPlayAnimation);
             this.advDumpTab.Controls.Add(this.advancedPictureBox);
             this.advDumpTab.Controls.Add(this.advancedTreeView);
             this.advDumpTab.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
@@ -599,6 +604,27 @@
             this.advDumpTab.Size = new System.Drawing.Size(935, 479);
             this.advDumpTab.TabIndex = 1;
             this.advDumpTab.Text = "Advanced";
+            // 
+            // advancedInfoLabel
+            // 
+            this.advancedInfoLabel.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.advancedInfoLabel.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
+            this.advancedInfoLabel.Location = new System.Drawing.Point(777, 3);
+            this.advancedInfoLabel.Name = "advancedInfoLabel";
+            this.advancedInfoLabel.Size = new System.Drawing.Size(155, 63);
+            this.advancedInfoLabel.TabIndex = 3;
+            this.advancedInfoLabel.Text = "DEBUG";
+            // 
+            // advancedPlayAnimation
+            // 
+            this.advancedPlayAnimation.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.advancedPlayAnimation.Location = new System.Drawing.Point(170, 441);
+            this.advancedPlayAnimation.Name = "advancedPlayAnimation";
+            this.advancedPlayAnimation.Size = new System.Drawing.Size(762, 35);
+            this.advancedPlayAnimation.TabIndex = 2;
+            this.advancedPlayAnimation.Text = "Play Animation";
+            this.advancedPlayAnimation.UseVisualStyleBackColor = true;
+            this.advancedPlayAnimation.Click += new System.EventHandler(this.advancedPlayAnimation_Click);
             // 
             // advancedPictureBox
             // 
@@ -623,6 +649,7 @@
             // pluginTab
             // 
             this.pluginTab.BackColor = System.Drawing.Color.Black;
+            this.pluginTab.Controls.Add(this.pluginLogBox);
             this.pluginTab.Controls.Add(this.activatePluginBtn);
             this.pluginTab.Controls.Add(this.pluginsList);
             this.pluginTab.Location = new System.Drawing.Point(4, 24);
@@ -631,14 +658,25 @@
             this.pluginTab.TabIndex = 5;
             this.pluginTab.Text = "Plugins";
             // 
+            // pluginLogBox
+            // 
+            this.pluginLogBox.Dock = System.Windows.Forms.DockStyle.Right;
+            this.pluginLogBox.Location = new System.Drawing.Point(530, 0);
+            this.pluginLogBox.Multiline = true;
+            this.pluginLogBox.Name = "pluginLogBox";
+            this.pluginLogBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.pluginLogBox.Size = new System.Drawing.Size(405, 479);
+            this.pluginLogBox.TabIndex = 2;
+            // 
             // activatePluginBtn
             // 
+            this.activatePluginBtn.Dock = System.Windows.Forms.DockStyle.Fill;
             this.activatePluginBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.activatePluginBtn.Font = new System.Drawing.Font("Feast of Flesh BB", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte) (77)));
             this.activatePluginBtn.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.activatePluginBtn.Location = new System.Drawing.Point(258, 3);
+            this.activatePluginBtn.Location = new System.Drawing.Point(252, 0);
             this.activatePluginBtn.Name = "activatePluginBtn";
-            this.activatePluginBtn.Size = new System.Drawing.Size(140, 67);
+            this.activatePluginBtn.Size = new System.Drawing.Size(683, 479);
             this.activatePluginBtn.TabIndex = 1;
             this.activatePluginBtn.Text = "Activate";
             this.activatePluginBtn.UseVisualStyleBackColor = true;
@@ -682,8 +720,15 @@
             this.advDumpTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize) (this.advancedPictureBox)).EndInit();
             this.pluginTab.ResumeLayout(false);
+            this.pluginTab.PerformLayout();
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Label advancedInfoLabel;
+
+        private System.Windows.Forms.Button advancedPlayAnimation;
+
+        public System.Windows.Forms.TextBox pluginLogBox;
 
         private System.Windows.Forms.Button activatePluginBtn;
         private System.Windows.Forms.ListBox pluginsList;

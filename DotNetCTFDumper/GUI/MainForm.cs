@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -15,6 +16,8 @@ using DotNetCTFDumper.MMFParser.EXE.Loaders.Objects;
 using DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks;
 using DotNetCTFDumper.MMFParser.Translation;
 using DotNetCTFDumper.Utils;
+using Animation = DotNetCTFDumper.MMFParser.EXE.Loaders.Objects.Animation;
+using AnimationDirection = DotNetCTFDumper.MMFParser.EXE.Loaders.Objects.AnimationDirection;
 
 namespace DotNetCTFDumper.GUI
 {
@@ -28,14 +31,14 @@ namespace DotNetCTFDumper.GUI
         public static bool BreakMusics;
         public static bool Loaded;
         public Thread LoaderThread;
-        public Color ColorTheme = Color.FromArgb(223,114,38);
-        
+        public Color ColorTheme = Color.FromArgb(223, 114, 38);
+
         public delegate void SaveHandler(int index, int all);
 
         public delegate void IncrementSortedProgressBar(int all);
-        
 
-        
+
+
         public MainForm()
         {
             //Buttons
@@ -43,13 +46,13 @@ namespace DotNetCTFDumper.GUI
             foreach (Control item in Controls)
             {
                 item.ForeColor = ColorTheme;
-                if(!(item is PictureBox)&&!(item is TabPage))item.BackColor=Color.Black;
-                
-                if(item is Button) item.BackColor=Color.FromArgb(30,30,30);
+                if (!(item is PictureBox) && !(item is TabPage)) item.BackColor = Color.Black;
+
+                if (item is Button) item.BackColor = Color.FromArgb(30, 30, 30);
 
                 if (item is Label)
                 {
-                    item.BackColor = Color.Transparent;
+                    //item.BackColor = Color.Transparent;
                     item.Refresh();
                 }
             }
@@ -59,34 +62,35 @@ namespace DotNetCTFDumper.GUI
                 foreach (Control item in tabPage.Controls)
                 {
                     item.ForeColor = ColorTheme;
-                    if(!(item is PictureBox)&&!(item is TabPage))item.BackColor=Color.Black;
-                    if(item is Button) item.BackColor=Color.FromArgb(30,30,30);
+                    if (!(item is PictureBox) && !(item is TabPage)&&!(item is Label)) item.BackColor = Color.Black;
+                    if (item is Button) item.BackColor = Color.FromArgb(30, 30, 30);
 
                     if (item is Label)
                     {
-                        item.BackColor = Color.Transparent;
+                        //item.BackColor = Color.Transparent;
                         item.Refresh();
                     }
-                    
+
                 }
             }
-            
+
             foreach (var item in ChunkCombo.Items)
             {
-                ((ToolStripItem)item).ForeColor = ColorTheme;
-                ((ToolStripItem)item).BackColor=Color.Black;
+                ((ToolStripItem) item).ForeColor = ColorTheme;
+                ((ToolStripItem) item).BackColor = Color.Black;
             }
-             hexBox1.ForeColor = ColorTheme;
-             hexBox1.InfoForeColor = Color.FromArgb(ColorTheme.R/2, ColorTheme.G/2, ColorTheme.B/2);
-             hexBox1.SelectionForeColor=Color.FromArgb(ColorTheme.R, ColorTheme.G, ColorTheme.B);
-             hexBox1.SelectionBackColor=Color.FromArgb(ColorTheme.R/4, ColorTheme.G/4, ColorTheme.B/4);
-             hexBox1.ShadowSelectionColor=Color.FromArgb(150,ColorTheme.R/4, ColorTheme.G/4, ColorTheme.B/4);
+
+            hexBox1.ForeColor = ColorTheme;
+            hexBox1.InfoForeColor = Color.FromArgb(ColorTheme.R / 2, ColorTheme.G / 2, ColorTheme.B / 2);
+            hexBox1.SelectionForeColor = Color.FromArgb(ColorTheme.R, ColorTheme.G, ColorTheme.B);
+            hexBox1.SelectionBackColor = Color.FromArgb(ColorTheme.R / 4, ColorTheme.G / 4, ColorTheme.B / 4);
+            hexBox1.ShadowSelectionColor = Color.FromArgb(150, ColorTheme.R / 4, ColorTheme.G / 4, ColorTheme.B / 4);
             label1.Text = Settings.DumperVersion;
-            
-            Pame2Mfa.OnMessage += (obj)=>
+
+            Pame2Mfa.OnMessage += (obj) =>
             {
                 var date = DateTime.Now;
-                string msg = (string)obj;
+                string msg = (string) obj;
                 mfaLogBox.AppendText(msg.Length > 0
                     ? $"[{date.Hour,2}:{date.Minute,2}:{date.Second,2}:{date.Millisecond,3}] {msg}\r\n"
                     : "\r\n");
@@ -104,13 +108,13 @@ namespace DotNetCTFDumper.GUI
 
         }
 
-        
+
 
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
             var worker = new BackgroundWorker();
-            worker.DoWork +=(workSender,workE)=>  StartReading();
-            worker.RunWorkerCompleted += (workSender,workE)=>  AfterLoad();
+            worker.DoWork += (workSender, workE) => StartReading();
+            worker.RunWorkerCompleted += (workSender, workE) => AfterLoad();
             worker.RunWorkerAsync();
         }
 
@@ -124,16 +128,16 @@ namespace DotNetCTFDumper.GUI
             loadingLabel.Visible = false;
             listBox1.Items.Clear();
         }
-        
-        
+
+
         private void StartReading()
         {
             var path = openFileDialog1.FileName;
             loadingLabel.Visible = true;
             Program.ReadFile(path, Settings.Verbose, Settings.DumpImages, Settings.DumpSounds);
-            
+
             imageBar.Value = 0;
-            soundBar.Value = 0; 
+            soundBar.Value = 0;
             GameInfo.Text = "";
             imageLabel.Text = "Using nonGUI mode";
             soundLabel.Text = "Using nonGUI mode";
@@ -143,34 +147,37 @@ namespace DotNetCTFDumper.GUI
             soundsButton.Visible = false;
             musicsButton.Visible = false;
             dumpSortedBtn.Visible = false;
-            
 
-            
+
+
         }
 
         private void treeView1_AfterDblClick(object sender, EventArgs e)
         {
             ChunkCombo.Show(Cursor.Position);
-            
+
         }
+
         private void treeView1_RightClick(object sender, MouseEventArgs e)
         {
             if ((e.Button & MouseButtons.Right) != 0)
             {
                 ChunkCombo.Show(Cursor.Position);
             }
-            
+
         }
+
         private void ChunkCombo_ItemSelected(object sender, ToolStripItemClickedEventArgs e)
         {
             switch (e.ClickedItem.Name)
             {
                 case "saveChunkBtn":
                     var chunk = ((ChunkNode) treeView1.SelectedNode).chunk;
-                    if ( chunk!= null)
+                    if (chunk != null)
                     {
                         chunk.Save();
                     }
+
                     break;
                 case "viewHexBtn":
                     ShowHex();
@@ -179,7 +186,7 @@ namespace DotNetCTFDumper.GUI
                     var selected = ((ChunkNode) treeView1.SelectedNode).loader;
                     if (selected is Frame frm)
                     {
-                        var viewer = new FrameViewer(frm,Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>());
+                        var viewer = new FrameViewer(frm, Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>());
                         viewer.Show();
                     }
 
@@ -191,18 +198,19 @@ namespace DotNetCTFDumper.GUI
         {
             var nodeChunk = ((ChunkNode) treeView1.SelectedNode).chunk;
             var nodeLoader = ((ChunkNode) treeView1.SelectedNode).loader;
-            
+
             listBox1.Items.Clear();
             if (nodeChunk != null)
             {
-                
+
                 listBox1.Items.Add($"Name: {nodeChunk.Name}");
                 listBox1.Items.Add($"Id: {nodeChunk.Id}");
                 listBox1.Items.Add($"Flag: {nodeChunk.Flag}");
                 listBox1.Items.Add($"Size: {nodeChunk.Size.ToPrettySize()}");
-                if (nodeChunk.DecompressedSize>-1)listBox1.Items.Add($"Decompressed Size: {nodeChunk.DecompressedSize.ToPrettySize()}");
+                if (nodeChunk.DecompressedSize > -1)
+                    listBox1.Items.Add($"Decompressed Size: {nodeChunk.DecompressedSize.ToPrettySize()}");
             }
-            
+
             if (nodeLoader != null)
             {
                 var extData = nodeLoader.GetReadableData();
@@ -218,8 +226,9 @@ namespace DotNetCTFDumper.GUI
                     }
                 }
             }
-            GameInfo.BackColor=Color.Transparent;
-            
+
+            GameInfo.BackColor = Color.Transparent;
+
             GameInfo.Refresh();
         }
 
@@ -233,7 +242,7 @@ namespace DotNetCTFDumper.GUI
             treeView1.Nodes.Clear();
             foreach (var item in gameData.GameChunks.Chunks)
             {
-  
+
                 string ActualName = item.Name;
                 if (item.Loader is Frame frm) ActualName = ActualName + " " + frm.Name;
                 ChunkNode newNode = Helper.GetChunkNode(item, ActualName);
@@ -263,13 +272,14 @@ namespace DotNetCTFDumper.GUI
                     foreach (var key in items.ItemDict.Keys)
                     {
                         var frameItem = items.ItemDict[key];
-                        var objNode = new ChunkNode($"{(Constants.ObjectType)frameItem.ObjectType} - {frameItem.Name}", frameItem);
+                        var objNode = new ChunkNode($"{(Constants.ObjectType) frameItem.ObjectType} - {frameItem.Name}",
+                            frameItem);
                         newNode.Nodes.Add(objNode);
 
                     }
                 }
             }
-            
+
             FolderBTN.Visible = true;
             imagesButton.Visible = true;
             soundsButton.Visible = true;
@@ -284,7 +294,7 @@ namespace DotNetCTFDumper.GUI
             InitPlugins();
             var toLog = "";
             toLog += $"Title:{Exe.Instance.GameData.Name}\n";
-            toLog += $"Copyright:{Exe.Instance.GameData.Copyright}\n"; 
+            toLog += $"Copyright:{Exe.Instance.GameData.Copyright}\n";
             //toLog += $"Editor Filename: {Exe.Instance.GameData.EditorFilename}\n";
             toLog += $"Product Version: {Exe.Instance.GameData.ProductVersion}\n";
             toLog += $"Build: {Exe.Instance.GameData.Build}\n";
@@ -302,13 +312,13 @@ namespace DotNetCTFDumper.GUI
             if (Exe.Instance.GameData.GameChunks.GetChunk<MusicBank>() != null)
                 Exe.Instance.GameData.GameChunks.GetChunk<MusicBank>().OnMusicSaved += UpdateMusicBar;
             ImageDumper.SortedImageSaved += IncrementSortedBar;
-            
-            
+
+
             GameInfo.Text = toLog;
         }
 
 
-        
+
 
         public void UpdateImageBar(int index, int all)
         {
@@ -323,6 +333,7 @@ namespace DotNetCTFDumper.GUI
             soundBar.Value = (int) (index / (float) all * 100);
             soundLabel.Text = $"{index}/{all}";
         }
+
         public void UpdateMusicBar(int index, int all)
         {
             all -= 1;
@@ -347,7 +358,7 @@ namespace DotNetCTFDumper.GUI
             Process.Start($"{Settings.DumpPath}");
         }
 
-        
+
 
         private void soundsButton_Click(object sender, EventArgs e)
         {
@@ -356,8 +367,8 @@ namespace DotNetCTFDumper.GUI
             {
                 SetSoundElements(true);
                 IsDumpingSounds = true;
-                Backend.DumpSounds(this,true,true);
-                
+                Backend.DumpSounds(this, true, true);
+
             }
             else
             {
@@ -366,6 +377,7 @@ namespace DotNetCTFDumper.GUI
                 SetSoundElements(false);
             }
         }
+
         private void imagesButton_Click(object sender, EventArgs e)
         {
             if (Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>() == null) return;
@@ -373,9 +385,9 @@ namespace DotNetCTFDumper.GUI
             {
                 SetImageElements(true);
                 IsDumpingImages = true;
-                Backend.DumpImages(this,true,true);
-                
-                
+                Backend.DumpImages(this, true, true);
+
+
             }
             else
             {
@@ -384,6 +396,7 @@ namespace DotNetCTFDumper.GUI
                 SetImageElements(false);
             }
         }
+
         private void musicsButton_Click(object sender, EventArgs e)
         {
             if (Exe.Instance.GameData.GameChunks.GetChunk<MusicBank>() == null) return;
@@ -391,7 +404,7 @@ namespace DotNetCTFDumper.GUI
             {
                 SetMusicElements(true);
                 IsDumpingMusics = true;
-                Backend.DumpMusics(this,true,true);
+                Backend.DumpMusics(this, true, true);
             }
             else
             {
@@ -399,29 +412,31 @@ namespace DotNetCTFDumper.GUI
                 IsDumpingMusics = false;
                 SetMusicElements(false);
             }
-            
+
         }
-        
+
 
         public void SetSoundElements(bool state)
         {
             soundBar.Visible = state;
             soundLabel.Visible = state;
-            soundsButton.Text = state ? "Cancel":"Dump Sounds";
+            soundsButton.Text = state ? "Cancel" : "Dump Sounds";
             soundBar.Value = 0;
         }
+
         public void SetImageElements(bool state)
         {
             imageBar.Visible = state;
             imageLabel.Visible = state;
-            imagesButton.Text = state ? "Cancel":"Dump Images";
+            imagesButton.Text = state ? "Cancel" : "Dump Images";
             imageBar.Value = 0;
         }
+
         public void SetMusicElements(bool state)
         {
             musicBar.Visible = state;
             musicLabel.Visible = state;
-            musicsButton.Text = state ? "Cancel":"Dump Musics";
+            musicsButton.Text = state ? "Cancel" : "Dump Musics";
             musicBar.Value = 0;
         }
 
@@ -451,9 +466,9 @@ namespace DotNetCTFDumper.GUI
             {
                 Settings.DumpImages = true;
                 var bank = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
-                bank.SaveImages=false;
+                bank.SaveImages = false;
                 bank.Read();
-                    
+
             };
             worker.RunWorkerCompleted += (senderA, eA) =>
             {
@@ -464,34 +479,35 @@ namespace DotNetCTFDumper.GUI
             worker.RunWorkerAsync();
         }
 
-        
 
-       
 
-        
+
+
+
 
         private void dumpMFAButton_Click(object sender, EventArgs e)
         {
             var worker = new BackgroundWorker();
-                        worker.DoWork +=(workSender,workE)=>  MFAGenerator.BuildMFA();
-                        worker.RunWorkerCompleted += (workSender, workE) =>
-                        {
-                            Logger.Log("MFA Done", true, ConsoleColor.Yellow);
-                            var res = MessageBox.Show("Dump Extensions?","Finished",MessageBoxButtons.YesNo);
-                            if (res == DialogResult.Yes)
-                            {
-                                foreach (var item in Exe.Instance.PackData.Items)
-                                {
-                                    item.Dump();
-                                    Pame2Mfa.Message("Dumping "+item.PackFilename);
-                                }
-                                
-                            }
-                            Process.Start($"{Settings.DumpPath}");
+            worker.DoWork += (workSender, workE) => MFAGenerator.BuildMFA();
+            worker.RunWorkerCompleted += (workSender, workE) =>
+            {
+                Logger.Log("MFA Done", true, ConsoleColor.Yellow);
+                var res = MessageBox.Show("Dump Extensions?", "Finished", MessageBoxButtons.YesNo);
+                if (res == DialogResult.Yes)
+                {
+                    foreach (var item in Exe.Instance.PackData.Items)
+                    {
+                        item.Dump();
+                        Pame2Mfa.Message("Dumping " + item.PackFilename);
+                    }
 
-                        };
-                            
-                        worker.RunWorkerAsync();
+                }
+
+                Process.Start($"{Settings.DumpPath}");
+
+            };
+
+            worker.RunWorkerAsync();
         }
 
         public void InitKeyTab()
@@ -510,11 +526,12 @@ namespace DotNetCTFDumper.GUI
                 rawData += Settings.AppName;
                 rawData += Settings.Copyright;
             }
+
             try
             {
                 var previewKey = Decryption.MakeKeyFromBytes(rawData, (byte) int.Parse((charBox.Text)));
-                hexBox1.ByteProvider=new DynamicByteProvider(previewKey);
-                
+                hexBox1.ByteProvider = new DynamicByteProvider(previewKey);
+
             }
             catch
             {
@@ -529,6 +546,7 @@ namespace DotNetCTFDumper.GUI
             {
                 packDataListBox.Items.Add(item.PackFilename);
             }
+
             UpdatePackInfo(0);
         }
 
@@ -537,6 +555,7 @@ namespace DotNetCTFDumper.GUI
             var item = Exe.Instance.PackData.Items[index];
             infoLabel.Text = $"Name: {item.PackFilename}\nSize: {item.Data.Length.ToPrettySize()}";
         }
+
         private void dumpPackButton_Click(object sender, EventArgs e)
         {
             var item = Exe.Instance.PackData.Items[packDataListBox.SelectedIndex];
@@ -545,7 +564,7 @@ namespace DotNetCTFDumper.GUI
             if (item.PackFilename.EndsWith(".mfx")) packDataDialog.Filter = "Clickteam Extension(*.mfx)|.mfx";
             else if (item.PackFilename.EndsWith(".dll")) packDataDialog.Filter = "Clickteam Module(*.dll)|.dll";
 
-            
+
             packDataDialog.InitialDirectory = Path.GetFullPath(Settings.ExtensionPath);
             packDataDialog.ShowDialog();
         }
@@ -557,20 +576,30 @@ namespace DotNetCTFDumper.GUI
                 item.Dump();
             }
         }
+
         private void packDataDialog_FileOk(object sender, CancelEventArgs e)
         {
             var item = Exe.Instance.PackData.Items[packDataListBox.SelectedIndex];
             item.Dump(packDataDialog.FileName);
         }
-        
-        private void packDataListBox_SelectedIndexChanged(object sender, EventArgs e)=>UpdatePackInfo(packDataListBox.SelectedIndex);
 
-        private void plusCharBtn_Click(object sender, EventArgs e){ charBox.Text = (byte.Parse(charBox.Text) + 1).ToString(); InitKeyTab();}
-        
+        private void packDataListBox_SelectedIndexChanged(object sender, EventArgs e) =>
+            UpdatePackInfo(packDataListBox.SelectedIndex);
 
-        private void minusCharButton_Click(object sender, EventArgs e){ charBox.Text = (byte.Parse(charBox.Text) - 1).ToString(); InitKeyTab();}
+        private void plusCharBtn_Click(object sender, EventArgs e)
+        {
+            charBox.Text = (byte.Parse(charBox.Text) + 1).ToString();
+            InitKeyTab();
+        }
 
-        private void charBox_TextChanged(object sender, EventArgs e)=>InitKeyTab();
+
+        private void minusCharButton_Click(object sender, EventArgs e)
+        {
+            charBox.Text = (byte.Parse(charBox.Text) - 1).ToString();
+            InitKeyTab();
+        }
+
+        private void charBox_TextChanged(object sender, EventArgs e) => InitKeyTab();
 
 
 
@@ -579,10 +608,10 @@ namespace DotNetCTFDumper.GUI
         {
             var bank = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
             var items = bank.Images.ToList();
-            var filtered = items.OrderBy(x=>x.Value.Handle);
+            var filtered = items.OrderBy(x => x.Value.Handle);
             foreach (Frame frame in Exe.Instance.GameData.Frames)
             {
-                var frameNode = new ChunkNode(frame.Name,frame);
+                var frameNode = new ChunkNode(frame.Name, frame);
                 advancedTreeView.Nodes.Add(frameNode);
                 if (frame.Objects != null)
                 {
@@ -621,6 +650,52 @@ namespace DotNetCTFDumper.GUI
                 }
             }
         }
+        private void advancedPlayAnimation_Click(object sender, EventArgs e)
+        {
+            if (((ChunkNode) advancedTreeView.SelectedNode).loader is Animation anim)
+            {
+                var animThread = new Thread(PlayAnimation);
+                List<Bitmap> frames = new List<Bitmap>();
+                foreach (var dir in anim.DirectionDict)
+                {
+                    foreach (var frame in dir.Value.Frames)
+                    {
+                        frames.Add(Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().Images[frame].Bitmap);
+                    }
+                    animThread.Start(new Tuple<List<Bitmap>,AnimationDirection>(frames,dir.Value));
+                }
+
+                
+            }
+
+        }
+        public void PlayAnimation(object o)
+        {
+            var (frames,anim) = (Tuple<List<Bitmap>,AnimationDirection>) o;
+            var fps = (float)anim.MaxSpeed;
+            float delay = 1f/fps;
+            Console.WriteLine((int) (delay*1200));
+            foreach (Bitmap frame in frames)
+            {
+                advancedPictureBox.Image = frame;
+                advancedInfoLabel.Text = $"Current frame: {frames.IndexOf(frame)}\nAnimation Speed: {fps}";
+                Thread.Sleep((int) (delay*1500));
+            }
+
+        }
+
+        private void advancedTreeView_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            var node = e.Node;
+            if (((ChunkNode) node).loader is ImageItem)
+            {
+                var img = ((ImageItem) ((ChunkNode) node).loader);
+                advancedPictureBox.Image = img.Bitmap;
+            }
+            
+        }
+
+        
 
         public void InitPlugins()
         {
@@ -630,28 +705,19 @@ namespace DotNetCTFDumper.GUI
                 pluginsList.Items.Add(plugin.Name);
 
             }
-            
-        }
 
-
-        private void advancedTreeView_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            var node = e.Node;
-            if (!(((ChunkNode) node).loader is ImageItem))
-            {
-                advancedPictureBox.Image = advancedPictureBox.ErrorImage;     
-            }
-            else
-            {
-                var img = ((ImageItem) ((ChunkNode) node).loader);            
-                advancedPictureBox.Image = img.Bitmap; 
-            }
-            
         }
 
         private void activatePluginBtn_Click(object sender, EventArgs e)
         {
-            PluginAPI.PluginAPI.Plugins[pluginsList.SelectedIndex].pluginClass.Activate(null);
+            PluginAPI.PluginAPI.ActivatePlugin(PluginAPI.PluginAPI.Plugins[pluginsList.SelectedIndex]);
         }
+
+        
     }
 }
+    
+
+
+
+
