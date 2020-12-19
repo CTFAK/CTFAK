@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using DotNetCTFDumper.Utils;
 
 namespace DotNetCTFDumper
 {
@@ -32,12 +31,6 @@ namespace DotNetCTFDumper
         public static bool DoMFA;
         public static bool UseGUI;
 
-        public static string DumperVersion = "CTFAN 0.1.1-c Debug";
-
-        public static byte[] EncryptionKey=>Decryption.DecryptionKey;
-        
-
-
-
+        public static string DumperVersion = "CTFAN 0.1.5-a Debug";
     }
 }

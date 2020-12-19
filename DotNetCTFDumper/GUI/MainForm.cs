@@ -650,20 +650,33 @@ namespace DotNetCTFDumper.GUI
                 }
             }
         }
+
+        private bool breakAnim;
+        private bool isAnimRunning;
         private void advancedPlayAnimation_Click(object sender, EventArgs e)
         {
             if (((ChunkNode) advancedTreeView.SelectedNode).loader is Animation anim)
             {
-                var animThread = new Thread(PlayAnimation);
-                List<Bitmap> frames = new List<Bitmap>();
-                foreach (var dir in anim.DirectionDict)
+                if (isAnimRunning)
                 {
-                    foreach (var frame in dir.Value.Frames)
-                    {
-                        frames.Add(Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().Images[frame].Bitmap);
-                    }
-                    animThread.Start(new Tuple<List<Bitmap>,AnimationDirection>(frames,dir.Value));
+                    breakAnim = true;
                 }
+                else
+                {
+                    isAnimRunning = true;
+                    var animThread = new Thread(PlayAnimation);
+                    List<Bitmap> frames = new List<Bitmap>();
+                    foreach (var dir in anim.DirectionDict)
+                    {
+                        foreach (var frame in dir.Value.Frames)
+                        {
+                            frames.Add(Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().Images[frame].Bitmap);
+                        }
+                        animThread.Start(new Tuple<List<Bitmap>,AnimationDirection>(frames,dir.Value));
+                    }
+                }
+
+                
 
                 
             }
@@ -674,13 +687,43 @@ namespace DotNetCTFDumper.GUI
             var (frames,anim) = (Tuple<List<Bitmap>,AnimationDirection>) o;
             var fps = (float)anim.MaxSpeed;
             float delay = 1f/fps;
-            Console.WriteLine((int) (delay*1200));
-            foreach (Bitmap frame in frames)
+            int i = 0;
+            if (anim.Repeat > 0)
             {
-                advancedPictureBox.Image = frame;
-                advancedInfoLabel.Text = $"Current frame: {frames.IndexOf(frame)}\nAnimation Speed: {fps}";
-                Thread.Sleep((int) (delay*1500));
+                foreach (Bitmap frame in frames)
+                {
+                    advancedPictureBox.Image = frame;
+                    advancedInfoLabel.Text = $"Current frame: {frames.IndexOf(frame)}\nAnimation Speed: {fps}";
+                    Thread.Sleep((int) (delay*1500));
+                }
+                isAnimRunning = false;
+                Thread.CurrentThread.Abort();
             }
+            else
+            {
+                while (true)
+                {
+                    var frame = frames[i];
+                    advancedPictureBox.Image = frame;
+                    advancedInfoLabel.Text = $"Current frame: {i.ToString()}\nAnimation Speed: {fps}";
+                    Thread.Sleep((int) (delay*1500));
+                    i++;
+                    if (i == frames.Count) i = 0;
+                    if (breakAnim)
+                    {
+                        isAnimRunning = false;
+                        breakAnim = false;
+                        Thread.CurrentThread.Abort();
+                        break;
+                    
+                    }
+
+
+                }
+            }
+            
+            //Limited
+            
 
         }
 
