@@ -52,7 +52,6 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             ObjectType = Reader.ReadInt32();
             Handle = Reader.ReadInt32();
             Name = Helper.AutoReadUnicode(Reader);
-            Console.WriteLine($"Name: {Name}");
             Transparent = Reader.ReadInt32();
             
             InkEffect = Reader.ReadInt32();

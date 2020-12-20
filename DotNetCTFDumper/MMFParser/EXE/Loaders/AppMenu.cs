@@ -159,7 +159,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
                 }
             }
 
-            Console.WriteLine(Name);
+
         }
 
         public void Load()

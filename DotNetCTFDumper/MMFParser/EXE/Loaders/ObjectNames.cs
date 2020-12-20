@@ -23,8 +23,8 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
             while(true)
             {
                 if (Reader.Tell() >= endpos+4) break;
-                
-                Console.WriteLine(Reader.ReadWideString());
+                var name = Reader.ReadWideString();
+
             }
             
         }

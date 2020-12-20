@@ -46,10 +46,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
             Settings.DumpImages = cache;
         }
 
-        public void Preload()
-        {
-            
-        }
+        
 
         public void LoadByHandle(int handle)
         {
@@ -71,10 +68,11 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
 
             NumberOfItems = Reader.ReadUInt32();
 
-            Console.WriteLine($"Found {NumberOfItems} images");
+            Logger.Log($"Found {NumberOfItems} images",true,ConsoleColor.Green);
             
 
             //if (!Settings.DumpImages) return;
+            Logger.Log("Reading Images",true,ConsoleColor.Green);
             for (int i = 0; i < NumberOfItems; i++)
             {
                 if (MainForm.BreakImages)
@@ -84,10 +82,11 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
                 }
 
                 var item = new ImageItem(Reader);
+                
                 item.Read(!PreloadOnly);
                 tempImages.Add(item.Handle, item);
 
-                // if (SaveImages) item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
+                if (SaveImages) item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
                 OnImageSaved?.Invoke(i,(int) NumberOfItems);
 
 
@@ -97,10 +96,10 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
 
                 //images[item.handle] = item;
             }
-
+            Logger.Log("Images success",true,ConsoleColor.Green);
             if (!MainForm.BreakImages) Images = tempImages;
             MainForm.BreakImages = false;
-            Console.WriteLine("Len:"+Images.Keys.Count);
+
         }
     }
 

@@ -33,7 +33,6 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             ParentType = Reader.ReadUInt32();
             ItemHandle = Reader.ReadUInt32();
             ParentHandle = (uint) Reader.ReadInt32();
-            Console.WriteLine($"ParentH:{ParentHandle}, ParentT: {ParentType}, Handle: {Handle}, Flags: {Flags}, ItemHandle: {ItemHandle}");
         }
 
         public override void Write(ByteWriter Writer)

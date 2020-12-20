@@ -27,8 +27,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
                 var item = Reader.ReadInt32();
                 
                 Items.Add(item);
-                Console.WriteLine("Found Value: "+item);
-                
+
             }
         }
 
@@ -64,8 +63,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
             {
                 var item = Reader.ReadWideString();
                 Items.Add(item);
-                Console.WriteLine("Found String: "+item);
-                
+
             }
         }
 

@@ -142,7 +142,6 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
         {
             Handle = Reader.ReadInt32();
             Name = Helper.AutoReadUnicode(Reader);
-            Console.WriteLine(Name);
             SizeX = Reader.ReadInt32();
             SizeY = Reader.ReadInt32();
             Background = Reader.ReadColor();
@@ -192,7 +191,6 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
                 var frameitem = new FrameItem(Reader);
                 frameitem.Read();
                 Items.Add(frameitem);
-                Console.WriteLine("Frameitem:" + frameitem.Name);
             }
 
             Folders = new List<ItemFolder>();
@@ -220,9 +218,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             //}
 
             Events = new Events(Reader);
-            Console.WriteLine("BeforeEventsPos: " + Reader.Tell());
             Events.Read();
-            Console.WriteLine("AfterEventsPos: " + Reader.Tell());
             Chunks = new ChunkList(Reader);
             Chunks.Read();
             MFA.emptyEvents = Events;

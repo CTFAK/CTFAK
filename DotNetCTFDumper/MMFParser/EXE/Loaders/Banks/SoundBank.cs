@@ -43,7 +43,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
             
             Items = new List<SoundItem>();
             NumOfItems = Reader.ReadInt32();
-            Logger.Log("Found " + NumOfItems + " sounds");
+            Logger.Log("Found " + NumOfItems + " sounds",true,ConsoleColor.Green);
             //if (!Settings.DumpSounds) return;
 
             for (int i = 0; i < NumOfItems; i++)
@@ -63,6 +63,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
 
 
             }
+            Logger.Log("Sounds Success",true,ConsoleColor.Green);
         }
         public void Write(ByteWriter writer)
         {
@@ -155,7 +156,6 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
             if (Settings.DumpSounds)
             {
                 Name = Helper.CleanInput(Name);
-                Console.WriteLine($"Dumping {Name}");
                 File.WriteAllBytes($"{Settings.SoundPath}\\{Name}.wav", Data);
             }
             //Save($"{Settings.DumpPath}\\SoundBank\\{Name}.wav");

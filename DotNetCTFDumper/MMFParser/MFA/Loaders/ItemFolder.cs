@@ -23,7 +23,6 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
         public override void Read()
         {
             UnkHeader = Reader.ReadUInt32();
-            Console.WriteLine("UNK HEADER: "+UnkHeader.ToString("X4"));
             if (UnkHeader == 0x70000004)
             {
                 Name = Reader.AutoReadUnicode();

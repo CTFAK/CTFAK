@@ -96,7 +96,6 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
                 MovingAtStart = Reader.ReadByte();
                 Reader.Skip(3);
                 DirectionAtStart = Reader.ReadInt32();
-                Console.WriteLine($"Player: {Player}, Type: {Type}, DirectionAtStart: {DirectionAtStart}, Identifier: {Identifier}");
                 extData = Reader.ReadBytes(DataSize-12);
                 //ONLY STATIC MOVEMENT IS SUPPORTED RN
                 //TODO:Movement Types

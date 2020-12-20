@@ -63,7 +63,6 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             {
                 
                 string name = Reader.ReadAscii(4);
-                Console.WriteLine("Group: "+name+" "+Encoding.ASCII.GetBytes(name).GetHex()+", Position: "+Reader.Tell());
                 if (name == EventData)
                 {
                     uint size = Reader.ReadUInt32();
@@ -210,7 +209,6 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
 
             if (ObjectTypes != null)
             {
-                Console.WriteLine("Writing ObjectTypes");
                 Writer.WriteAscii(ObjectListData);
                 Writer.WriteInt16(-1);
                 Writer.WriteInt16((short) ObjectTypes.Count);
@@ -238,7 +236,6 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
 
             //if (X != 0)
             {
-                Console.WriteLine("Writing X");
                 Writer.WriteAscii(EditorPositionData);
                 Writer.WriteInt16(1);
                 Writer.WriteInt32((int) X);
@@ -249,7 +246,6 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             }
             //if (LineY != 0)
             {
-                Console.WriteLine("Writing LineY");
                 Writer.WriteAscii(EditorLineData);
                 Writer.WriteInt16(1);
                 Writer.WriteUInt32(LineY);
@@ -257,7 +253,6 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
                 Writer.WriteUInt32(EventLine);
                 Writer.WriteUInt32(EventLineY);
             }
-            Console.WriteLine("Writing EventEditorData");
             Writer.WriteAscii(EventEditorData);
             Writer.WriteInt32(EditorDataUnk);
             Writer.WriteInt16((short) ConditionWidth);

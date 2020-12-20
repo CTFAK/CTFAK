@@ -107,7 +107,6 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
 
                         if (images.Images[firstFrameHandle].Bitmap == null)
                         {
-                            Console.WriteLine("Preloading "+firstFrameHandle);
                             images.LoadByHandle(firstFrameHandle);
                         }
 

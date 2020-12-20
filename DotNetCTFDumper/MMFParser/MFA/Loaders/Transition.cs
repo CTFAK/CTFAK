@@ -27,13 +27,9 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
         public override void Read()
         {
             Module = Reader.AutoReadUnicode();
-            Console.WriteLine(Module);
             Name = Reader.AutoReadUnicode();
-            Console.WriteLine(Name);
             Id = Reader.ReadAscii(4);
-            Console.WriteLine(Id);
             TransitionId = Reader.ReadAscii(4);
-            Console.WriteLine(TransitionId);
             Duration = Reader.ReadInt32();
             Flags = Reader.ReadInt32();
             Color = Reader.ReadColor();

@@ -16,12 +16,12 @@ namespace DotNetCTFDumper.Utils
                 _writer.AutoFlush = true;
 
             }
-            _writer.WriteLine(text);
+            _writer.WriteLine(Helper.GetCurrentTime()+ text);
             
             if (logToScreen)
             {
                 Console.ForegroundColor = color;
-                Console.WriteLine(text);
+                Console.WriteLine(Helper.GetCurrentTime()+text);
                 Console.ForegroundColor = ConsoleColor.White;
             }
 

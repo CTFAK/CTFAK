@@ -179,23 +179,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Events
             }
 
             Reader.Seek(currentPosition + Size);
-            Console.WriteLine("IF:");
-            if (Conditions != null)
-            {
-                foreach (var item in Conditions)
-                {
-                    Console.WriteLine("\t" + item.ToString());
-                }
-            }
-
-            Console.WriteLine("DO:");
-            if (Actions != null)
-            {
-                foreach (var item in Actions)
-                {
-                    Console.WriteLine("\t" + item.ToString());
-                }
-            }
+            
         }
 
         public void Write(ByteWriter Writer)

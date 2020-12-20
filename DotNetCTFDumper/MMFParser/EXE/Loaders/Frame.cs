@@ -98,7 +98,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
             if (name != null) //Just to be sure
             {
                 this.Name = name.Value;
-                Console.WriteLine("Reading Frame: "+Name);
+                Logger.Log("Reading Frame: "+Name,true,ConsoleColor.Green);
             }
             var password = Chunks.GetChunk<FramePassword>();
             if (password != null) //Just to be sure

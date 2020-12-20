@@ -17,7 +17,6 @@ namespace DotNetCTFDumper.Utils
         {
             var bank = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
             var fullPath = $"{Settings.ImagePath}\\Sorted\\{node.FullPath}";
-            Console.WriteLine("FULL PATH: "+fullPath);
             if (fullPath == null) return;
             
             if (!(node.loader is ImageItem)) Directory.CreateDirectory(fullPath);
@@ -66,7 +65,6 @@ namespace DotNetCTFDumper.Utils
                     for (int i = 0; i < anim.DirectionDict[0].Frames.Count; i++)
                     {
                         var frame = dirpair.Value.Frames[i];
-                        Console.WriteLine("Trying to save: "+$"{fullPath}\\Direction {anim.DirectionDict.ToList().IndexOf(dirpair)}\\{i}.png");
                         bank.Images[frame].Save($"{fullPath}\\Direction {anim.DirectionDict.ToList().IndexOf(dirpair)}\\{i}.png");
                     } 
                 }
@@ -76,7 +74,6 @@ namespace DotNetCTFDumper.Utils
                 for (int i = 0; i < anim.DirectionDict[0].Frames.Count; i++)
                 {
                     var frame = anim.DirectionDict[0].Frames[i];
-                    Console.WriteLine("Trying to save: "+$"{fullPath}\\{i}.png");
                     bank.Images[frame].Save($"{fullPath}\\{i}.png");
                 } 
             }

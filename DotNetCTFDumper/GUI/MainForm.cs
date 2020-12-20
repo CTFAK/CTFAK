@@ -858,7 +858,6 @@ namespace DotNetCTFDumper.GUI
                 {
                     var node = (ChunkNode)imagesTreeView.SelectedNode;
                     var path = $"{Settings.ImagePath}\\{Helper.GetTreePath(imagesTreeView,(ChunkNode) imagesTreeView.SelectedNode)}";
-                    Console.WriteLine(Helper.GetCurrentTime()+ "Saving "+path);
                     if (node == null) return;
                     ImageDumper.SaveFromNode(node);
 

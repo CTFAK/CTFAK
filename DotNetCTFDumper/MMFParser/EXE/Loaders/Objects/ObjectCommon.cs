@@ -144,7 +144,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
                 Reader.Seek(currentPosition+_movementsOffset);
                 Movements = new Movements(Reader);
                 Movements.Read();
-                Console.WriteLine("Movements done");
+                //Console.WriteLine("Movements done");
             }
             
             
