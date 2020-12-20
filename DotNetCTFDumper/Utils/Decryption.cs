@@ -4,17 +4,17 @@ using System.Runtime.InteropServices;
 
 namespace DotNetCTFDumper.Utils
 {
-    class Decryption
+    static class Decryption
     {
-        public static byte[] DecryptionKey;
+        private static byte[] DecryptionKey;
         public static byte MagicChar = 54;
 
-        public static void MakeKey(string sTitle, string sCopyright, string sProject)
+        public static void MakeKey(string data1, string data2, string data3)
         {
             var rawKey = "";
-            rawKey += sTitle;
-            rawKey += sCopyright;
-            rawKey += sProject;
+            rawKey += data1;
+            rawKey += data2;
+            rawKey += data3;
             Logger.Log("Combined data " + rawKey, true, ConsoleColor.Yellow);
             var rawKeyPtr = Marshal.StringToHGlobalAnsi(rawKey);
 
@@ -23,6 +23,7 @@ namespace DotNetCTFDumper.Utils
             byte[] key = new byte[256];
             Marshal.Copy(ptr, key, 0, 256);
             Marshal.FreeHGlobal(rawKeyPtr);
+
 
             DecryptionKey = key;
             Logger.Log($"First 16-Bytes of key: {DecryptionKey.GetHex(16)}", true, ConsoleColor.Yellow);

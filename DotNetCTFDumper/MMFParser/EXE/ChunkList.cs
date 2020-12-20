@@ -70,6 +70,7 @@ namespace DotNetCTFDumper.MMFParser.EXE
                 {                
                     RawData = exeReader.ReadBytes(Size);
                     exeReader.BaseStream.Position -= Size;
+                    //Saving raw data cuz why not 
                 }
 
                 switch (Flag)
@@ -88,13 +89,6 @@ namespace DotNetCTFDumper.MMFParser.EXE
                         break;
                 }
 
-                
-                int tempId=0;
-                int.TryParse(Name,out tempId);
-                if(tempId==Id)
-                {
-                    //chunk_data.Log(true, "X2");
-                }
 
             }
 
@@ -134,32 +128,16 @@ namespace DotNetCTFDumper.MMFParser.EXE
             }
             public void BuildKey()
             {
-                string title = "";
-                string copyright = "";
-                string project = "";
                 
-                var titleChunk = _chunkList.GetChunk<AppName>();
-                if (titleChunk != null) title = titleChunk.Value;
-
-                var copyrightChunk = _chunkList.GetChunk<Copyright>();
-                if (copyrightChunk != null) copyright = copyrightChunk.Value;
-
-                var projectChunk = _chunkList.GetChunk<EditorFilename>();
-                if (projectChunk != null) project = projectChunk.Value;
-                Settings.AppName=title;
-                Settings.Copyright = copyright;
-                Settings.ProjectPath = project;
+                
+                
+                Settings.AppName=_chunkList.GetChunk<AppName>()?.Value;
+                Settings.Copyright = _chunkList.GetChunk<Copyright>()?.Value;
+                Settings.ProjectPath = _chunkList.GetChunk<EditorFilename>()?.Value;
                
 
-                if (Exe.Instance.GameData.ProductBuild > 284)
-                {
-                    Decryption.MakeKey(title, copyright, project);
-                }
-                else
-                {
-                    Decryption.MakeKey(project, title, copyright);
-                }
-
+                if (Exe.Instance.GameData.ProductBuild > 284)Decryption.MakeKey(Settings.AppName,Settings.Copyright,Settings.ProjectPath);
+                else Decryption.MakeKey(Settings.ProjectPath, Settings.AppName, Settings.Copyright);
                 Logger.Log("New Key!"); 
 
 

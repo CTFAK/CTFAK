@@ -29,12 +29,19 @@ namespace DotNetCTFDumper
             var verbose = false;
             var dumpImages = true;
             var dumpSounds = true;
-            
+            AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
+            {
+                var error = new ErrorLogBox(eventArgs.Exception);
+                Application.Run(error);
+            };
             if (args.Length == 0)
             {
-                Settings.UseGUI = true;
-                MyForm = new MainForm();
-                Application.Run(MyForm);
+                
+                    Settings.UseGUI = true;
+                    MyForm = new MainForm();
+                    Application.Run(MyForm);
+                
+                
             }
 
 

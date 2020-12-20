@@ -129,6 +129,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GUI\ErrorLogBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ErrorLogBox.Designer.cs">
+      <DependentUpon>ErrorLogBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\FrameViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -248,6 +254,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="GUI\ErrorLogBox.resx">
+      <DependentUpon>ErrorLogBox.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\FrameViewer.resx">
       <DependentUpon>FrameViewer.cs</DependentUpon>
     </EmbeddedResource>
