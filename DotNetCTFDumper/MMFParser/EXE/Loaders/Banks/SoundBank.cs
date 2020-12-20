@@ -44,7 +44,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
             Items = new List<SoundItem>();
             NumOfItems = Reader.ReadInt32();
             Logger.Log("Found " + NumOfItems + " sounds");
-            if (!Settings.DumpSounds) return;
+            //if (!Settings.DumpSounds) return;
 
             for (int i = 0; i < NumOfItems; i++)
             {

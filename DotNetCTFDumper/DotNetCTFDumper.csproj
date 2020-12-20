@@ -229,6 +229,7 @@
     <Compile Include="Utils\ImageDumper.cs" />
     <Compile Include="Utils\ImageHelper.cs" />
     <Compile Include="Utils\Logger.cs" />
+    <Compile Include="Utils\WAVReading.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

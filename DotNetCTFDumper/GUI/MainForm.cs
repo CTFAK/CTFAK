@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Threading;
 using System.Windows.Forms;
 using Be.Windows.Forms;
@@ -105,6 +106,7 @@ namespace DotNetCTFDumper.GUI
                 if (e.TabPage != mainTab)
                     e.Cancel = true;
             }
+            _soundPlayer.Stop();
 
         }
 
@@ -290,7 +292,8 @@ namespace DotNetCTFDumper.GUI
             Loaded = true;
             InitKeyTab();
             InitPackDataTab();
-            InitAdvancedDump();
+            InitImages();
+            InitSounds();
             InitPlugins();
             var toLog = "";
             toLog += $"Title:{Exe.Instance.GameData.Name}\n";
@@ -604,7 +607,7 @@ namespace DotNetCTFDumper.GUI
 
 
 
-        public void InitAdvancedDump()
+        public void InitImages()
         {
             var bank = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
             var items = bank.Images.ToList();
@@ -612,7 +615,7 @@ namespace DotNetCTFDumper.GUI
             foreach (Frame frame in Exe.Instance.GameData.Frames)
             {
                 var frameNode = new ChunkNode(frame.Name, frame);
-                advancedTreeView.Nodes.Add(frameNode);
+                imagesTreeView.Nodes.Add(frameNode);
                 if (frame.Objects != null)
                 {
                     foreach (ObjectInstance objInst in frame.Objects.Items)
@@ -630,40 +633,72 @@ namespace DotNetCTFDumper.GUI
                                     objInstNode.Nodes.Add(animNode);
                                     foreach (var dir in pair.Value.DirectionDict)
                                     {
-                                        for (int a = 0; a < dir.Value.Frames.Count; a++)
+                                        if (pair.Value.DirectionDict.Count > 1)
                                         {
-                                            var animFrame = dir.Value.Frames[a];
-                                            bank.Images.TryGetValue(animFrame, out var img);
-                                            var animFrameNode = new ChunkNode(a.ToString(), img);
-                                            animNode.Nodes.Add(animFrameNode);
+                                            var dirNode = new ChunkNode($"Direction {pair.Key}",pair.Value);
+                                            animNode.Nodes.Add(dirNode);
+                                            for (int a = 0; a < dir.Value.Frames.Count; a++)
+                                            {
+                                            
+                                                var animFrame = dir.Value.Frames[a];
+                                                bank.Images.TryGetValue(animFrame, out var img);
+                                                if (img != null)
+                                                {
+                                                    var animFrameNode = new ChunkNode(a.ToString(), img);
+                                                    dirNode.Nodes.Add(animFrameNode);
+                                                }
+                                            
+                                            }
                                         }
+                                        else
+                                        {
+                                            for (int a = 0; a < dir.Value.Frames.Count; a++)
+                                            {
+                                            
+                                                var animFrame = dir.Value.Frames[a];
+                                                bank.Images.TryGetValue(animFrame, out var img);
+                                                if (img != null)
+                                                {
+                                                    var animFrameNode = new ChunkNode(a.ToString(), img);
+                                                    animNode.Nodes.Add(animFrameNode);
+                                                }
+                                            
+                                            }
+                                        }
+                                        
                                     }
                                 }
                             }
                         }
                         else if (loader is Backdrop backdrop)
                         {
-                            var backdropNode = new ChunkNode("Image", bank.Images[backdrop.Image]);
-                            objInstNode.Nodes.Add(backdropNode);
+                            bank.Images.TryGetValue(backdrop.Image,out var img);
+                            if (img != null)
+                            {
+                                var backdropNode = new ChunkNode("Image", img);
+                                objInstNode.Nodes.Add(backdropNode);
+                            }
                         }
                     }
                 }
             }
         }
 
-        private bool breakAnim;
-        private bool isAnimRunning;
+        private bool _breakAnim;
+        private bool _isAnimRunning;
+        private SoundPlayer _soundPlayer;
+
         private void advancedPlayAnimation_Click(object sender, EventArgs e)
         {
-            if (((ChunkNode) advancedTreeView.SelectedNode).loader is Animation anim)
+            if (((ChunkNode) imagesTreeView.SelectedNode).loader is Animation anim)
             {
-                if (isAnimRunning)
+                if (_isAnimRunning)
                 {
-                    breakAnim = true;
+                    _breakAnim = true;
                 }
                 else
                 {
-                    isAnimRunning = true;
+                    _isAnimRunning = true;
                     var animThread = new Thread(PlayAnimation);
                     List<Bitmap> frames = new List<Bitmap>();
                     foreach (var dir in anim.DirectionDict)
@@ -673,6 +708,28 @@ namespace DotNetCTFDumper.GUI
                             frames.Add(Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().Images[frame].Bitmap);
                         }
                         animThread.Start(new Tuple<List<Bitmap>,AnimationDirection>(frames,dir.Value));
+                        break;
+                    }
+                }      
+            }
+            else if (((ChunkNode) imagesTreeView.SelectedNode).loader is AnimationDirection dir)
+            {
+                if (_isAnimRunning)
+                {
+                    _breakAnim = true;
+                }
+                else
+                {
+                    _isAnimRunning = true;
+                    var animThread = new Thread(PlayAnimation);
+                    List<Bitmap> frames = new List<Bitmap>();
+                    foreach (var frame in dir.Frames)
+                    {
+                        
+                            frames.Add(Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().Images[frame].Bitmap);
+                        
+                        animThread.Start(new Tuple<List<Bitmap>,AnimationDirection>(frames,dir));
+                        break;
                     }
                 }
 
@@ -692,11 +749,11 @@ namespace DotNetCTFDumper.GUI
             {
                 foreach (Bitmap frame in frames)
                 {
-                    advancedPictureBox.Image = frame;
-                    advancedInfoLabel.Text = $"Current frame: {frames.IndexOf(frame)}\nAnimation Speed: {fps}";
+                    imageViewPictureBox.Image = frame;
+                    imageViewerInfo.Text = $"Current frame: {frames.IndexOf(frame)}\nAnimation Speed: {fps}";
                     Thread.Sleep((int) (delay*1500));
                 }
-                isAnimRunning = false;
+                _isAnimRunning = false;
                 Thread.CurrentThread.Abort();
             }
             else
@@ -704,15 +761,15 @@ namespace DotNetCTFDumper.GUI
                 while (true)
                 {
                     var frame = frames[i];
-                    advancedPictureBox.Image = frame;
-                    advancedInfoLabel.Text = $"Current frame: {i.ToString()}\nAnimation Speed: {fps}";
+                    imageViewPictureBox.Image = frame;
+                    imageViewerInfo.Text = $"Current frame: {i.ToString()}\nAnimation Speed: {fps}";
                     Thread.Sleep((int) (delay*1500));
                     i++;
                     if (i == frames.Count) i = 0;
-                    if (breakAnim)
+                    if (_breakAnim)
                     {
-                        isAnimRunning = false;
-                        breakAnim = false;
+                        _isAnimRunning = false;
+                        _breakAnim = false;
                         Thread.CurrentThread.Abort();
                         break;
                     
@@ -722,7 +779,7 @@ namespace DotNetCTFDumper.GUI
                 }
             }
             
-            //Limited
+            
             
 
         }
@@ -733,7 +790,7 @@ namespace DotNetCTFDumper.GUI
             if (((ChunkNode) node).loader is ImageItem)
             {
                 var img = ((ImageItem) ((ChunkNode) node).loader);
-                advancedPictureBox.Image = img.Bitmap;
+                imageViewPictureBox.Image = img.Bitmap;
             }
             
         }
@@ -756,7 +813,39 @@ namespace DotNetCTFDumper.GUI
             PluginAPI.PluginAPI.ActivatePlugin(PluginAPI.PluginAPI.Plugins[pluginsList.SelectedIndex]);
         }
 
-        
+        public void SoundTest()
+        {
+            
+        }
+
+        public void InitSounds()
+        {
+            var bank = Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>();
+            foreach (SoundItem soundItem in bank.Items)
+            {
+                soundList.Nodes.Add(new ChunkNode(soundItem.Name,soundItem));
+            }
+            _soundPlayer = new SoundPlayer(new MemoryStream(Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>().Items[0].Data));
+
+        }
+
+       
+
+        private void playSoundBtn_Click(object sender, EventArgs e)
+        {
+            _soundPlayer.Stream = new MemoryStream(Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>().Items[soundList.SelectedNode.Index].Data);
+            _soundPlayer.Play();
+            
+            
+            
+            
+            
+        }
+
+        private void soundList_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            
+        }
     }
 }
     
