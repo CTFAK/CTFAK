@@ -13,6 +13,76 @@ namespace DotNetCTFDumper.Utils
 {
     public static class ImageDumper
     {
+        public static void SaveFromNode(ChunkNode node)
+        {
+            var bank = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
+            var fullPath = $"{Settings.ImagePath}\\Sorted\\{node.FullPath}";
+            Console.WriteLine("FULL PATH: "+fullPath);
+            if (fullPath == null) return;
+            
+            if (!(node.loader is ImageItem)) Directory.CreateDirectory(fullPath);
+            else Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
+            
+            if(node.loader is ImageItem img) img.Save($"{fullPath}.png");
+            else if (node.loader is AnimationDirection dir)
+            {
+                SaveDirection(dir,bank,fullPath);
+            }
+            
+            else if (node.loader is Animation anim)
+            {
+                SaveAnimation(anim,bank,fullPath);
+            }
+            
+            else if(node.loader is ObjectInstance) Console.WriteLine("Dumping Common");
+            else if(node.loader is Backdrop) Console.WriteLine("Dumping Backdrop");
+            else if(node.loader is Frame) Console.WriteLine("Dumping Frame");
+            
+            
+            
+            
+            
+
+            else Console.WriteLine("Unknown: "+node.loader.GetType().Name);
+            
+        }
+
+        public static void SaveDirection(AnimationDirection dir, ImageBank bank,string fullPath)
+        {
+            for (int i = 0; i < dir.Frames.Count; i++)
+            {
+                var frame = dir.Frames[i];
+                bank.Images[frame].Save($"{fullPath}\\{i}.png");
+            }
+        }
+
+        public static void SaveAnimation(Animation anim, ImageBank bank, string fullPath)
+        {
+            if (anim.DirectionDict.ToArray().Length > 1)
+            {
+                foreach (var dirpair in anim.DirectionDict.ToList())
+                {
+                    Directory.CreateDirectory($"{fullPath}\\Direction {anim.DirectionDict.ToList().IndexOf(dirpair)}");
+                    for (int i = 0; i < anim.DirectionDict[0].Frames.Count; i++)
+                    {
+                        var frame = dirpair.Value.Frames[i];
+                        Console.WriteLine("Trying to save: "+$"{fullPath}\\Direction {anim.DirectionDict.ToList().IndexOf(dirpair)}\\{i}.png");
+                        bank.Images[frame].Save($"{fullPath}\\Direction {anim.DirectionDict.ToList().IndexOf(dirpair)}\\{i}.png");
+                    } 
+                }
+            }
+            else
+            {
+                for (int i = 0; i < anim.DirectionDict[0].Frames.Count; i++)
+                {
+                    var frame = anim.DirectionDict[0].Frames[i];
+                    Console.WriteLine("Trying to save: "+$"{fullPath}\\{i}.png");
+                    bank.Images[frame].Save($"{fullPath}\\{i}.png");
+                } 
+            }
+            
+        }
+        
         public static void DumpImages()
         {
             using (var worker = new BackgroundWorker())

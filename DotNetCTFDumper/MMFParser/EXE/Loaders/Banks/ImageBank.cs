@@ -277,20 +277,30 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
 
         public void Save(string filename)
         {
-            using (var bmp = new Bitmap(_width, _height, PixelFormat.Format32bppArgb))
+            try
             {
-                BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0,
-                        bmp.Width,
-                        bmp.Height),
-                    ImageLockMode.WriteOnly,
-                    bmp.PixelFormat);
-
-                IntPtr pNative = bmpData.Scan0;
-                Marshal.Copy(_colorArray, 0, pNative, _colorArray.Length);
-
-                bmp.UnlockBits(bmpData);
-                bmp.Save(filename);
+                Bitmap.Save(filename);
             }
+            catch 
+            {
+                using (var bmp = new Bitmap(_width, _height, PixelFormat.Format32bppArgb))
+                {
+                    BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0,
+                            bmp.Width,
+                            bmp.Height),
+                        ImageLockMode.WriteOnly,
+                        bmp.PixelFormat);
+
+                    IntPtr pNative = bmpData.Scan0;
+                    Marshal.Copy(_colorArray, 0, pNative, _colorArray.Length);
+
+                    bmp.UnlockBits(bmpData);
+                    bmp.Save(filename);
+                }
+            } 
+            
+            
+            
         }
 
         public Bitmap Bitmap

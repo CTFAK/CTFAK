@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 using DotNetCTFDumper.GUI;
 using DotNetCTFDumper.MMFParser;
 using DotNetCTFDumper.MMFParser.EXE;
@@ -28,6 +29,20 @@ namespace DotNetCTFDumper.Utils
             {
                 return String.Empty;
             }
+        }
+
+        public static string GetCurrentTime()
+        {
+            var date = DateTime.Now;
+            return $"[{date.Hour,2}:{date.Minute,2}:{date.Second,2}:{date.Millisecond,3}]";
+        }
+
+        public static string GetTreePath(TreeView tree, ChunkNode node)
+        {
+            string CombinedPath=node.FullPath;
+           
+
+            return CombinedPath;
         }
 
         public static string Log(this byte[] bytes, bool log = true, string format = "")

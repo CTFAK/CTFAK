@@ -19,6 +19,7 @@ using DotNetCTFDumper.MMFParser.Translation;
 using DotNetCTFDumper.Utils;
 using Animation = DotNetCTFDumper.MMFParser.EXE.Loaders.Objects.Animation;
 using AnimationDirection = DotNetCTFDumper.MMFParser.EXE.Loaders.Objects.AnimationDirection;
+using Keys = System.Windows.Forms.Keys;
 
 namespace DotNetCTFDumper.GUI
 {
@@ -96,7 +97,9 @@ namespace DotNetCTFDumper.GUI
                     ? $"[{date.Hour,2}:{date.Minute,2}:{date.Second,2}:{date.Millisecond,3}] {msg}\r\n"
                     : "\r\n");
             };
+            KeyPreview = true;
             tabControl1.Selecting += tabControl1_Selecting;
+            
         }
 
         private void tabControl1_Selecting(object sender, TabControlCancelEventArgs e)
@@ -635,7 +638,7 @@ namespace DotNetCTFDumper.GUI
                                     {
                                         if (pair.Value.DirectionDict.Count > 1)
                                         {
-                                            var dirNode = new ChunkNode($"Direction {pair.Key}",pair.Value);
+                                            var dirNode = new ChunkNode($"Direction {pair.Value.DirectionDict.ToList().IndexOf(dir)}",dir.Value);
                                             animNode.Nodes.Add(dirNode);
                                             for (int a = 0; a < dir.Value.Frames.Count; a++)
                                             {
@@ -845,6 +848,22 @@ namespace DotNetCTFDumper.GUI
         private void soundList_AfterSelect(object sender, TreeViewEventArgs e)
         {
             
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (tabControl1.SelectedTab == imgViewerTab)
+            {
+                if (e.Control)
+                {
+                    var node = (ChunkNode)imagesTreeView.SelectedNode;
+                    var path = $"{Settings.ImagePath}\\{Helper.GetTreePath(imagesTreeView,(ChunkNode) imagesTreeView.SelectedNode)}";
+                    Console.WriteLine(Helper.GetCurrentTime()+ "Saving "+path);
+                    if (node == null) return;
+                    ImageDumper.SaveFromNode(node);
+
+                }
+            }
         }
     }
 }
