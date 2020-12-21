@@ -27,12 +27,15 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
             {
                 try
                 {
-                    var value = _qualifiers[i];
-                    Writer.WriteInt16(value);
+                    //var value = _qualifiers[i];
+                    Writer.WriteInt16(-1);
+                    break;
+                    
                 }
                 catch
                 {
                     
+                    break;
                 }
             }
             

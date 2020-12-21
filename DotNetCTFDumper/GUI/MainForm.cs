@@ -748,7 +748,7 @@ namespace DotNetCTFDumper.GUI
             var fps = (float)anim.MaxSpeed;
             float delay = 1f/fps;
             int i = 0;
-            if (anim.Repeat > 0)
+            if (anim.Repeat > 0&& anim.Frames.Count>1)
             {
                 foreach (Bitmap frame in frames)
                 {
@@ -849,6 +849,7 @@ namespace DotNetCTFDumper.GUI
         {
             
         }
+        
 
         protected override void OnKeyDown(KeyEventArgs e)
         {

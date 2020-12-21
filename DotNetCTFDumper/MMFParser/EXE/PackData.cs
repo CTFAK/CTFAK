@@ -30,7 +30,7 @@ namespace DotNetCTFDumper.MMFParser.EXE
 
             uint count = exeReader.ReadUInt32();
 
-            Logger.Log($"Found {count} Pack Files:", true, ConsoleColor.Blue);
+            Logger.Log($"Found {count} Pack Files", true, ConsoleColor.Blue);
 
             long offset = exeReader.Tell();
             for (int i = 0; i < count; i++)

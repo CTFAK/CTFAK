@@ -245,21 +245,24 @@ namespace DotNetCTFDumper.MMFParser.Translation
                             {
                                 frameItem = FrameItems[instance.ObjectInfo];
                             }
-                            catch{}
+                            catch
+                            {
+                                throw new NotImplementedException("ObjectInfo not found, this may cause errors");
+                            }
 
                             if (frameItem != null)
                             {
-                                //newFrameItems.Add(frameItem);
+                                newFrameItems.Add(frameItem);
                                 var newInstance = new FrameInstance((ByteReader) null);
                                 newInstance.X = instance.X;
                                 newInstance.Y = instance.Y;
-                                newInstance.Handle = i;
+                                newInstance.Handle = instance.Handle;
                                 newInstance.Flags = 0;
                                 newInstance.ParentType = (uint) instance.ParentType;
                                 newInstance.ItemHandle = instance.ObjectInfo;
                                 newInstance.ParentHandle = (uint) instance.ParentHandle;
                                 newInstance.Layer = (uint) instance.Layer;
-                                //newInstances.Add(newInstance);
+                                newInstances.Add(newInstance);
                             }
                             break;
                         }

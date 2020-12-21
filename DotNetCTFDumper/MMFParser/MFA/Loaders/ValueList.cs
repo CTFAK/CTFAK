@@ -67,7 +67,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
                     Value = Reader.ReadInt32();
                     break;
                 case 1://double
-                    Value = Reader.ReadDouble();
+                    Value = Reader.ReadSingle();
                     break;
             }
         }

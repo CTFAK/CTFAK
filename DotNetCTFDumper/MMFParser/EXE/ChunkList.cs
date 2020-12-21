@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using DotNetCTFDumper.MMFParser.EXE.Loaders;
 using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
+using DotNetCTFDumper.MMFParser.EXE.Loaders.Events;
 using DotNetCTFDumper.Utils;
 
 namespace DotNetCTFDumper.MMFParser.EXE
@@ -248,7 +249,7 @@ namespace DotNetCTFDumper.MMFParser.EXE
                     loader = new GlobalStrings(chunk);
                     break;
                 case 13117:
-                    //loader = new Events(chunk);//NOT WORKING
+                    // loader = new Events(chunk);//NOT WORKING
                     break;
                 
                 

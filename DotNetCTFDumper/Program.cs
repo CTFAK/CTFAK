@@ -82,7 +82,7 @@ namespace DotNetCTFDumper
             Settings.DumpSounds = dumpSounds;
             Settings.Verbose = verbose;
             
-            var exeReader = new ByteReader(path, FileMode.OpenOrCreate);
+            var exeReader = new ByteReader(path, FileMode.Open);
             var currentExe = new Exe();
             Exe.Instance = currentExe;
             currentExe.ParseExe(exeReader);

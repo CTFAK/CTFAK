@@ -41,9 +41,9 @@ namespace DotNetCTFDumper.MMFParser.EXE
             int possition = 0;
             for (int i = 0; i < numOfSections; i++)
             {
-                var entry = exeReader.Tell();
+                long entry = exeReader.Tell();
 
-                var sectionName = exeReader.ReadAscii();
+                string sectionName = exeReader.ReadAscii();
 
                 if (sectionName == ".extra")
                 {

@@ -63,11 +63,6 @@
             this.dumpAllPackButton = new System.Windows.Forms.Button();
             this.dumpPackButton = new System.Windows.Forms.Button();
             this.packDataListBox = new System.Windows.Forms.ListBox();
-            this.cryptKeyTab = new System.Windows.Forms.TabPage();
-            this.minusCharButton = new System.Windows.Forms.Button();
-            this.plusCharBtn = new System.Windows.Forms.Button();
-            this.hexBox1 = new Be.Windows.Forms.HexBox();
-            this.charBox = new System.Windows.Forms.TextBox();
             this.imgViewerTab = new System.Windows.Forms.TabPage();
             this.imageViewerInfo = new System.Windows.Forms.Label();
             this.imageViewerPlayAnim = new System.Windows.Forms.Button();
@@ -76,6 +71,11 @@
             this.soundViewTab = new System.Windows.Forms.TabPage();
             this.soundList = new System.Windows.Forms.TreeView();
             this.playSoundBtn = new System.Windows.Forms.Button();
+            this.cryptKeyTab = new System.Windows.Forms.TabPage();
+            this.minusCharButton = new System.Windows.Forms.Button();
+            this.plusCharBtn = new System.Windows.Forms.Button();
+            this.hexBox1 = new Be.Windows.Forms.HexBox();
+            this.charBox = new System.Windows.Forms.TextBox();
             this.pluginTab = new System.Windows.Forms.TabPage();
             this.pluginLogBox = new System.Windows.Forms.TextBox();
             this.activatePluginBtn = new System.Windows.Forms.Button();
@@ -86,10 +86,10 @@
             this.mainTab.SuspendLayout();
             this.mfaTab.SuspendLayout();
             this.packDataTab.SuspendLayout();
-            this.cryptKeyTab.SuspendLayout();
             this.imgViewerTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.imageViewPictureBox)).BeginInit();
             this.soundViewTab.SuspendLayout();
+            this.cryptKeyTab.SuspendLayout();
             this.pluginTab.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -389,9 +389,9 @@
             this.tabControl1.Controls.Add(this.mainTab);
             this.tabControl1.Controls.Add(this.mfaTab);
             this.tabControl1.Controls.Add(this.packDataTab);
-            this.tabControl1.Controls.Add(this.cryptKeyTab);
             this.tabControl1.Controls.Add(this.imgViewerTab);
             this.tabControl1.Controls.Add(this.soundViewTab);
+            this.tabControl1.Controls.Add(this.cryptKeyTab);
             this.tabControl1.Controls.Add(this.pluginTab);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
@@ -486,7 +486,7 @@
             // 
             // infoLabel
             // 
-            this.infoLabel.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.infoLabel.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.infoLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
             this.infoLabel.Location = new System.Drawing.Point(204, 11);
             this.infoLabel.Name = "infoLabel";
@@ -526,16 +526,102 @@
             // 
             this.packDataListBox.BackColor = System.Drawing.SystemColors.WindowText;
             this.packDataListBox.Dock = System.Windows.Forms.DockStyle.Left;
-            this.packDataListBox.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.packDataListBox.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.packDataListBox.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
             this.packDataListBox.FormattingEnabled = true;
-            this.packDataListBox.ItemHeight = 14;
+            this.packDataListBox.ItemHeight = 15;
             this.packDataListBox.Items.AddRange(new object[] {"PackFile1", "PackFile2", "PackFile3", "PackFile4", "PackFile5", "PackFile6"});
             this.packDataListBox.Location = new System.Drawing.Point(0, 0);
             this.packDataListBox.Name = "packDataListBox";
             this.packDataListBox.Size = new System.Drawing.Size(198, 479);
             this.packDataListBox.TabIndex = 4;
             this.packDataListBox.SelectedIndexChanged += new System.EventHandler(this.packDataListBox_SelectedIndexChanged);
+            // 
+            // imgViewerTab
+            // 
+            this.imgViewerTab.BackColor = System.Drawing.Color.DimGray;
+            this.imgViewerTab.Controls.Add(this.imageViewerInfo);
+            this.imgViewerTab.Controls.Add(this.imageViewerPlayAnim);
+            this.imgViewerTab.Controls.Add(this.imageViewPictureBox);
+            this.imgViewerTab.Controls.Add(this.imagesTreeView);
+            this.imgViewerTab.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.imgViewerTab.Location = new System.Drawing.Point(4, 24);
+            this.imgViewerTab.Name = "imgViewerTab";
+            this.imgViewerTab.Padding = new System.Windows.Forms.Padding(3);
+            this.imgViewerTab.Size = new System.Drawing.Size(935, 479);
+            this.imgViewerTab.TabIndex = 1;
+            this.imgViewerTab.Text = "Images";
+            // 
+            // imageViewerInfo
+            // 
+            this.imageViewerInfo.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.imageViewerInfo.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
+            this.imageViewerInfo.Location = new System.Drawing.Point(777, 3);
+            this.imageViewerInfo.Name = "imageViewerInfo";
+            this.imageViewerInfo.Size = new System.Drawing.Size(155, 63);
+            this.imageViewerInfo.TabIndex = 3;
+            this.imageViewerInfo.Text = "DEBUG";
+            // 
+            // imageViewerPlayAnim
+            // 
+            this.imageViewerPlayAnim.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.imageViewerPlayAnim.Location = new System.Drawing.Point(203, 441);
+            this.imageViewerPlayAnim.Name = "imageViewerPlayAnim";
+            this.imageViewerPlayAnim.Size = new System.Drawing.Size(729, 35);
+            this.imageViewerPlayAnim.TabIndex = 2;
+            this.imageViewerPlayAnim.Text = "Play Animation";
+            this.imageViewerPlayAnim.UseVisualStyleBackColor = true;
+            this.imageViewerPlayAnim.Click += new System.EventHandler(this.advancedPlayAnimation_Click);
+            // 
+            // imageViewPictureBox
+            // 
+            this.imageViewPictureBox.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
+            this.imageViewPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.imageViewPictureBox.Location = new System.Drawing.Point(203, 3);
+            this.imageViewPictureBox.Name = "imageViewPictureBox";
+            this.imageViewPictureBox.Size = new System.Drawing.Size(729, 473);
+            this.imageViewPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.imageViewPictureBox.TabIndex = 1;
+            this.imageViewPictureBox.TabStop = false;
+            // 
+            // imagesTreeView
+            // 
+            this.imagesTreeView.Dock = System.Windows.Forms.DockStyle.Left;
+            this.imagesTreeView.Location = new System.Drawing.Point(3, 3);
+            this.imagesTreeView.Name = "imagesTreeView";
+            this.imagesTreeView.Size = new System.Drawing.Size(200, 473);
+            this.imagesTreeView.TabIndex = 0;
+            this.imagesTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.advancedTreeView_AfterSelect);
+            // 
+            // soundViewTab
+            // 
+            this.soundViewTab.BackColor = System.Drawing.Color.Black;
+            this.soundViewTab.Controls.Add(this.soundList);
+            this.soundViewTab.Controls.Add(this.playSoundBtn);
+            this.soundViewTab.Location = new System.Drawing.Point(4, 24);
+            this.soundViewTab.Name = "soundViewTab";
+            this.soundViewTab.Size = new System.Drawing.Size(935, 479);
+            this.soundViewTab.TabIndex = 6;
+            this.soundViewTab.Text = "Sounds";
+            // 
+            // soundList
+            // 
+            this.soundList.Dock = System.Windows.Forms.DockStyle.Left;
+            this.soundList.Location = new System.Drawing.Point(0, 0);
+            this.soundList.Name = "soundList";
+            this.soundList.Size = new System.Drawing.Size(200, 479);
+            this.soundList.TabIndex = 1;
+            this.soundList.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.soundList_AfterSelect);
+            // 
+            // playSoundBtn
+            // 
+            this.playSoundBtn.Location = new System.Drawing.Point(209, 3);
+            this.playSoundBtn.Name = "playSoundBtn";
+            this.playSoundBtn.Size = new System.Drawing.Size(113, 50);
+            this.playSoundBtn.TabIndex = 0;
+            this.playSoundBtn.Text = "Play Sound";
+            this.playSoundBtn.UseVisualStyleBackColor = true;
+            this.playSoundBtn.Click += new System.EventHandler(this.playSoundBtn_Click);
             // 
             // cryptKeyTab
             // 
@@ -594,92 +680,6 @@
             this.charBox.TabIndex = 0;
             this.charBox.Text = "54";
             this.charBox.TextChanged += new System.EventHandler(this.charBox_TextChanged);
-            // 
-            // imgViewerTab
-            // 
-            this.imgViewerTab.BackColor = System.Drawing.Color.DimGray;
-            this.imgViewerTab.Controls.Add(this.imageViewerInfo);
-            this.imgViewerTab.Controls.Add(this.imageViewerPlayAnim);
-            this.imgViewerTab.Controls.Add(this.imageViewPictureBox);
-            this.imgViewerTab.Controls.Add(this.imagesTreeView);
-            this.imgViewerTab.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.imgViewerTab.Location = new System.Drawing.Point(4, 24);
-            this.imgViewerTab.Name = "imgViewerTab";
-            this.imgViewerTab.Padding = new System.Windows.Forms.Padding(3);
-            this.imgViewerTab.Size = new System.Drawing.Size(935, 479);
-            this.imgViewerTab.TabIndex = 1;
-            this.imgViewerTab.Text = "Images";
-            // 
-            // imageViewerInfo
-            // 
-            this.imageViewerInfo.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.imageViewerInfo.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
-            this.imageViewerInfo.Location = new System.Drawing.Point(777, 3);
-            this.imageViewerInfo.Name = "imageViewerInfo";
-            this.imageViewerInfo.Size = new System.Drawing.Size(155, 63);
-            this.imageViewerInfo.TabIndex = 3;
-            this.imageViewerInfo.Text = "DEBUG";
-            // 
-            // imageViewerPlayAnim
-            // 
-            this.imageViewerPlayAnim.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.imageViewerPlayAnim.Location = new System.Drawing.Point(170, 441);
-            this.imageViewerPlayAnim.Name = "imageViewerPlayAnim";
-            this.imageViewerPlayAnim.Size = new System.Drawing.Size(762, 35);
-            this.imageViewerPlayAnim.TabIndex = 2;
-            this.imageViewerPlayAnim.Text = "Play Animation";
-            this.imageViewerPlayAnim.UseVisualStyleBackColor = true;
-            this.imageViewerPlayAnim.Click += new System.EventHandler(this.advancedPlayAnimation_Click);
-            // 
-            // imageViewPictureBox
-            // 
-            this.imageViewPictureBox.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
-            this.imageViewPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imageViewPictureBox.Location = new System.Drawing.Point(170, 3);
-            this.imageViewPictureBox.Name = "imageViewPictureBox";
-            this.imageViewPictureBox.Size = new System.Drawing.Size(762, 473);
-            this.imageViewPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.imageViewPictureBox.TabIndex = 1;
-            this.imageViewPictureBox.TabStop = false;
-            // 
-            // imagesTreeView
-            // 
-            this.imagesTreeView.Dock = System.Windows.Forms.DockStyle.Left;
-            this.imagesTreeView.Location = new System.Drawing.Point(3, 3);
-            this.imagesTreeView.Name = "imagesTreeView";
-            this.imagesTreeView.Size = new System.Drawing.Size(167, 473);
-            this.imagesTreeView.TabIndex = 0;
-            this.imagesTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.advancedTreeView_AfterSelect);
-            // 
-            // soundViewTab
-            // 
-            this.soundViewTab.BackColor = System.Drawing.Color.Black;
-            this.soundViewTab.Controls.Add(this.soundList);
-            this.soundViewTab.Controls.Add(this.playSoundBtn);
-            this.soundViewTab.Location = new System.Drawing.Point(4, 24);
-            this.soundViewTab.Name = "soundViewTab";
-            this.soundViewTab.Size = new System.Drawing.Size(935, 479);
-            this.soundViewTab.TabIndex = 6;
-            this.soundViewTab.Text = "Sounds";
-            // 
-            // soundList
-            // 
-            this.soundList.Dock = System.Windows.Forms.DockStyle.Left;
-            this.soundList.Location = new System.Drawing.Point(0, 0);
-            this.soundList.Name = "soundList";
-            this.soundList.Size = new System.Drawing.Size(203, 479);
-            this.soundList.TabIndex = 1;
-            this.soundList.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.soundList_AfterSelect);
-            // 
-            // playSoundBtn
-            // 
-            this.playSoundBtn.Location = new System.Drawing.Point(209, 3);
-            this.playSoundBtn.Name = "playSoundBtn";
-            this.playSoundBtn.Size = new System.Drawing.Size(113, 50);
-            this.playSoundBtn.TabIndex = 0;
-            this.playSoundBtn.Text = "Play Sound";
-            this.playSoundBtn.UseVisualStyleBackColor = true;
-            this.playSoundBtn.Click += new System.EventHandler(this.playSoundBtn_Click);
             // 
             // pluginTab
             // 
@@ -750,11 +750,11 @@
             this.mfaTab.ResumeLayout(false);
             this.mfaTab.PerformLayout();
             this.packDataTab.ResumeLayout(false);
-            this.cryptKeyTab.ResumeLayout(false);
-            this.cryptKeyTab.PerformLayout();
             this.imgViewerTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize) (this.imageViewPictureBox)).EndInit();
             this.soundViewTab.ResumeLayout(false);
+            this.cryptKeyTab.ResumeLayout(false);
+            this.cryptKeyTab.PerformLayout();
             this.pluginTab.ResumeLayout(false);
             this.pluginTab.PerformLayout();
             this.ResumeLayout(false);

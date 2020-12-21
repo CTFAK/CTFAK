@@ -46,6 +46,12 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
             Settings.DumpImages = cache;
         }
 
+        public ImageItem FromHandle(int handle)
+        {
+            Images.TryGetValue(handle, out var img);
+            if (img == null) return null;
+            else return img;
+        }
         
 
         public void LoadByHandle(int handle)
