@@ -15,7 +15,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
         public bool SaveImages = false;
         public Dictionary<int, ImageItem> Images = new Dictionary<int, ImageItem>();
         public uint NumberOfItems;
-        public bool PreloadOnly=false;
+        public bool PreloadOnly=true;
 
         public ImageBank(ByteReader reader) : base(reader)
         {

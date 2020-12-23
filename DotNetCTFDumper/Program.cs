@@ -86,7 +86,6 @@ namespace DotNetCTFDumper
             var currentExe = new Exe();
             Exe.Instance = currentExe;
             currentExe.ParseExe(exeReader);
-            MFAGenerator.BuildMFA();
             Logger.Log("Finished!", true, ConsoleColor.Yellow);
             return;
             if (File.Exists(path))
