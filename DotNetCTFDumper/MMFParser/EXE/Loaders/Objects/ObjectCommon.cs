@@ -14,8 +14,8 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
         private ushort _movementsOffset;
         private short _animationsOffset;
         private short _systemObjectOffset;
-        private short _counterOffset;
-        private short _extensionOffset;
+        public short CounterOffset;
+        public short ExtensionOffset;
         public Animations Animations;
         private long _end;
 
@@ -114,7 +114,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
                 _animationsOffset = Reader.ReadInt16();
             }
             short version = Reader.ReadInt16();
-            _counterOffset = (short) Reader.ReadUInt16();
+            CounterOffset = (short) Reader.ReadUInt16();
             _systemObjectOffset = (short) Reader.ReadUInt16();
 
             Flags.flag = Reader.ReadUInt32();
@@ -127,7 +127,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
             }
             else
             {
-                _extensionOffset = Reader.ReadInt16();
+                ExtensionOffset = Reader.ReadInt16();
             }
             
             _valuesOffset = Reader.ReadInt16();

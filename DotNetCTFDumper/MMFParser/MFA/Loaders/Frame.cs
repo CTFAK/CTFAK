@@ -65,12 +65,13 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             Writer.AutoWriteUnicode(UnkString);
             Writer.WriteInt32(LastViewedX);
             Writer.WriteInt32(LastViewedY);
-            Writer.WriteInt32(Palette.Count);
+            //Writer.WriteInt32(Palette.Count);//WTF HELP 
+            Palette[0] = Color.FromArgb(0, 0, 1, 0);
             foreach (var item in Palette)
             {
                 Writer.WriteColor(item);
             }
-
+            
             Writer.WriteInt32(StampHandle);
             Writer.WriteInt32(ActiveLayer);
             Writer.WriteInt32(Layers.Count);
@@ -78,7 +79,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             {
                 layer.Write(Writer);
             }
-
+            
             if (FadeIn != null)
             {
                 Writer.WriteInt8(1);
@@ -92,25 +93,22 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
                 FadeOut.Write(Writer);
             }
             else Writer.Skip(1);
-
-
+            
             Writer.WriteInt32(Items.Count);
             foreach (var item in Items)
             {
                 item.Write(Writer);
-                //Writer.Skip(4);
                 var bytes = new byte[] {0x01,0x01,0x00,0x00, 0x00,0x00,0x00,0x00, 0x80,0x01,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x32,0x00, 0x00,0x00,0x32,0x00, 0x00,0x00,0x01,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x01,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00};
-                //Writer.WriteBytes(bytes);
-                //wtf help
+
             }
-            // Writer.WriteAscii("AA");
+            
 
             Writer.WriteInt32(Folders.Count);
             foreach (var item in Folders)
             {
                 item.Write(Writer);
             }
-            // Writer.WriteAscii("AF");
+            // Writer.WriteAscii("AA");
             Writer.WriteInt32(Instances.Count);
             foreach (var item in Instances)
             {
@@ -130,6 +128,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             }*/
 
             Events.Write(Writer);
+            
             Chunks.Write(Writer);
         }
 
@@ -154,9 +153,9 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             LastViewedX = Reader.ReadInt32();
             LastViewedY = Reader.ReadInt32();
 
-            var paletteSize = Reader.ReadInt32();
+            //var paletteSize = Reader.ReadInt32();
             Palette = new List<Color>();
-            for (int i = 0; i < paletteSize; i++)
+            for (int i = 0; i < 257; i++)
             {
                 Palette.Add(Reader.ReadColor());
             }
@@ -190,6 +189,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             {
                 var frameitem = new FrameItem(Reader);
                 frameitem.Read();
+                
                 Items.Add(frameitem);
             }
 

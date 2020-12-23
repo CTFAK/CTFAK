@@ -10,6 +10,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
         List<Behaviour> _items = new List<Behaviour>();
         public override void Write(ByteWriter Writer)
         {
+            Writer.WriteInt32(_items.Count);
             foreach (Behaviour behaviour in _items)
             {
                 behaviour.Write(Writer);

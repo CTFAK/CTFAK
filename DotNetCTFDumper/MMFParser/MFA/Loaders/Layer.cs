@@ -26,7 +26,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
 
         public override void Write(ByteWriter Writer)
         {
-            Writer.AutoWriteUnicode(Name);
+            Writer.AutoWriteUnicode("");
             Writer.WriteInt32((int) Flags.flag);
             Writer.WriteSingle(XCoefficient);
             Writer.WriteSingle(YCoefficient);

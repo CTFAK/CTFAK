@@ -12,6 +12,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
         public override void Read()
         {
             base.Read();
+            
             if(Reader.ReadByte()!=0)
             {
                 var animationCount = Reader.ReadUInt32();
@@ -41,7 +42,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
 
     public class Animation : DataLoader
     {
-        public string Name = "Animation-UNKNOWN";
+        public string Name = "";
         public List<AnimationDirection> Directions;
 
         public override void Write(ByteWriter Writer)

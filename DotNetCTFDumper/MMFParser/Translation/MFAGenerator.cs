@@ -8,7 +8,7 @@ namespace DotNetCTFDumper.MMFParser.Translation
     public static class MFAGenerator
     {
         // public static readonly string TemplatePath = @"C:\Users\MED45\Downloads\OneObjOneFrame.mfa";
-        public static readonly string TemplatePath = @"C:\Users\ivani\Downloads\OneObjOneFrame.mfa";
+        public static readonly string TemplatePath = @"C:\Users\ivani\Desktop\CTFResearch\OneObjOneFrame.mfa";
 
         public static MFA.MFA BuildMFA()
         {
@@ -22,7 +22,7 @@ namespace DotNetCTFDumper.MMFParser.Translation
 
             var mfaWriter =
                 new ByteWriter(
-                    Settings.GameName.Length > 0 ? $"{Settings.DumpPath}\\{Exe.Instance.GameData.Name}.mfa" : "out.mfa",
+                    Settings.GameName.Length > 0 ? $"{Settings.DumpPath}\\{Exe.Instance.GameData.Name}-decompiled.mfa" : "out.mfa",
                     FileMode.Create); //New writer for new MFA
             Pame2Mfa.Message("");
             Pame2Mfa.Message("Writing MFA");
@@ -36,7 +36,7 @@ namespace DotNetCTFDumper.MMFParser.Translation
 
         public static void ReadTestMFA()
         {
-            var output_path = Path.Combine(Path.GetDirectoryName(TemplatePath), "decompiled.mfa");
+            var outputPath = Path.Combine(Path.GetDirectoryName(TemplatePath), "decompiled.mfa");
             var mfaReader = new ByteReader(TemplatePath, FileMode.Open);
             var template = new MFA.MFA(mfaReader);
             Settings.DoMFA = true;
@@ -45,7 +45,7 @@ namespace DotNetCTFDumper.MMFParser.Translation
             //Add modifications
 
 
-            var mfaWriter = new ByteWriter(output_path, FileMode.Create);
+            var mfaWriter = new ByteWriter(outputPath, FileMode.Create);
             template.Write(mfaWriter);
         }
     }

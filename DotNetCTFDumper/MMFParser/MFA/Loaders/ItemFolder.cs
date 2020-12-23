@@ -46,19 +46,21 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             if (Name == null)
             {
                 Writer.WriteInt32(0x70000005);
+                Writer.WriteInt32(3);
             }
             else
             {
                 Writer.WriteInt32(0x70000004);
                 Writer.AutoWriteUnicode(Name);
                 Writer.WriteInt32(Items.Count);
+                foreach (var item in Items)
+                {
+                    Writer.WriteUInt32(item);
+                }
             }
 
             
-            foreach (var item in Items)
-            {
-                Writer.WriteUInt32(item);
-            }
+            
             
         }
 

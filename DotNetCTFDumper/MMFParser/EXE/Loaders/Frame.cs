@@ -427,7 +427,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
         public override void Read()
         {
             Items = new List<Color>();
-            for (int i = 0; i < 256; i++)
+            for (int i = 0; i < 257; i++)
             {
                 Items.Add(Reader.ReadColor());
             }

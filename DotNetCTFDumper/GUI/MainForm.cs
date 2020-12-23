@@ -138,7 +138,7 @@ namespace DotNetCTFDumper.GUI
         private void StartReading()
         {
             var path = openFileDialog1.FileName;
-            loadingLabel.Visible = true;
+            //loadingLabel.Visible = true;
             Program.ReadFile(path, Settings.Verbose, Settings.DumpImages, Settings.DumpSounds);
 
             imageBar.Value = 0;

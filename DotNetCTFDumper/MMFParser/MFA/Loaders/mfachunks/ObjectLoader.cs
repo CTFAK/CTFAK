@@ -23,20 +23,24 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
             Writer.WriteInt32(NewObjectFlags);
             Writer.WriteColor(BackgroundColor);
 
-            for (int i = 0; i < 9; i++)
+            /*for (int i = 0; i < 9; i++)
             {
                 try
                 {
-                    //var value = _qualifiers[i];
+                    var value = _qualifiers[i];
                     Writer.WriteInt16(-1);
-                    break;
                     
                 }
                 catch
                 {
-                    
+                    Writer.WriteInt16(-1);
                     break;
                 }
+            }*/
+
+            for (int i = 0; i < 9; i++)
+            {
+                Writer.WriteInt16(-1);//WTF HELP
             }
             
             Values.Write(Writer);

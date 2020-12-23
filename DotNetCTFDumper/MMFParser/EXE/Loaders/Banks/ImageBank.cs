@@ -15,7 +15,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
         public bool SaveImages = false;
         public Dictionary<int, ImageItem> Images = new Dictionary<int, ImageItem>();
         public uint NumberOfItems;
-        public bool PreloadOnly=true;
+        public bool PreloadOnly=false;
 
         public ImageBank(ByteReader reader) : base(reader)
         {
@@ -355,6 +355,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
             chunk.WriteInt32(_checksum);
             chunk.WriteInt32(_references);
             byte[] compressedImg = null;
+            Flags["LZX"] = true;
             if (Flags["LZX"])
             {
                 compressedImg = Decompressor.compress_block(rawImg);
@@ -362,7 +363,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
             }
             else
             {
-                chunk.WriteUInt32((uint) rawImg.Length);
+                chunk?.WriteUInt32((uint) (rawImg?.Length??0));
             }
 
             chunk.WriteInt16((short) _width);

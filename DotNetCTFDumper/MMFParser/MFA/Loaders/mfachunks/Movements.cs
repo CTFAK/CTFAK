@@ -44,19 +44,18 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
     {
         public string Name="ERROR";
         public string Extension;
-        public int Identifier;
+        public uint Identifier;
         public short Player;
         public short Type;
         public byte MovingAtStart=1;
         public int DirectionAtStart;
         public int DataSize;
-        public byte[] extData=new byte[0];
+        public byte[] extData=new byte[14];
         public override void Write(ByteWriter Writer)
         {    
             Writer.AutoWriteUnicode(Name);
             Writer.AutoWriteUnicode(Extension);
-            Writer.WriteInt32(Identifier);
-            //
+            Writer.WriteUInt32(Identifier);
             var newWriter = new ByteWriter(new MemoryStream());
             if (Extension.Length==0)
             {
@@ -66,9 +65,10 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
                 newWriter.WriteInt8(MovingAtStart);
                 newWriter.Skip(3);
                 newWriter.WriteInt32(DirectionAtStart);
-                //newWriter.WriteBytes(extData);
+                newWriter.WriteBytes(extData);
             }
             //write loader
+            Writer.WriteInt32((int) newWriter.Size());
             Writer.WriteWriter(newWriter);
             
             
@@ -81,9 +81,9 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
 
         public override void Read()
         {
-            Name = Helper.AutoReadUnicode(Reader);
-            Extension = Helper.AutoReadUnicode(Reader);
-            Identifier = (int) Reader.ReadUInt32();
+            Name = Reader.AutoReadUnicode();
+            Extension = Reader.AutoReadUnicode();
+            Identifier = Reader.ReadUInt32();
             DataSize = (int) Reader.ReadUInt32();
             if(Extension.Length>0)
             {

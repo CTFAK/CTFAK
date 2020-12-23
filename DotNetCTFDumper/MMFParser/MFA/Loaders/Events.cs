@@ -43,6 +43,9 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
         public uint EventLineY;
         public byte[] Saved;
         public int EditorDataUnk;
+        public uint EventDataLen;
+        public uint CommentDataLen;
+        private byte[] _cache;
 
         public Events(ByteReader reader) : base(reader)
         {
@@ -63,10 +66,11 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             {
                 
                 string name = Reader.ReadAscii(4);
+                Console.WriteLine(name);
                 if (name == EventData)
                 {
-                    uint size = Reader.ReadUInt32();
-                    uint end = (uint) (Reader.Tell() + size);
+                    EventDataLen = Reader.ReadUInt32();
+                    uint end = (uint) (Reader.Tell() + EventDataLen);
                     while (true)
                     {
                         EventGroup evGrp = new EventGroup(Reader);
@@ -79,7 +83,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
                 {
                     try
                     {
-                        uint len = Reader.ReadUInt32();
+                        CommentDataLen = Reader.ReadUInt32();
                         Comments = new List<Comment>();
                         Comment comment = new Comment(Reader);
                         comment.Read();
@@ -170,7 +174,11 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
                     EventLine = Reader.ReadUInt32();
                     EventLineY = Reader.ReadUInt32();
                 }
-                else if (name == EventEnd) break;
+                else if (name == EventEnd)
+                {
+                    _cache = Reader.ReadBytes(122);
+                    break;
+                }
                 else throw new NotImplementedException("Fuck Something is Broken");
 
             }
@@ -178,34 +186,35 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
 
         public override void Write(ByteWriter Writer)
         {
-
             Writer.WriteUInt16(Version);
-            Writer.WriteInt16((short) FrameType);
+            Writer.WriteUInt16(FrameType);
 
-            if (Items != null)
+            if (Items.Count>0)
             {
-                /*Console.WriteLine("Writing EventData");
+                Console.WriteLine("Writing EventData");
                 Writer.WriteAscii(EventData);
 
                 ByteWriter newWriter = new ByteWriter(new MemoryStream());
+                Writer.WriteUInt32(EventDataLen);
+
                 foreach (EventGroup eventGroup in Items)
                 {
                     eventGroup.Write(newWriter);
                 }
 
-                Writer.WriteWriter(newWriter);*/
+                Writer.WriteWriter(newWriter);
             }
 
-            // if (Objects != null)
-            // {
-                // Console.WriteLine("Writing EventObjects");
-                // Writer.WriteAscii(ObjectData);
-                // Writer.WriteUInt32((uint) Objects.Count);
-                // foreach (EventObject eventObject in Objects)
-                // {
-                    // eventObject.Write(Writer);
-                // }
-            // }
+            if (Objects.Count>0)
+            {
+                Console.WriteLine("Writing EventObjects");
+                Writer.WriteAscii(ObjectData);
+                Writer.WriteUInt32((uint) Objects.Count);
+                foreach (EventObject eventObject in Objects)
+                {
+                    eventObject.Write(Writer);
+                }
+            }
 
             if (ObjectTypes != null)
             {
@@ -260,10 +269,10 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             Writer.Skip(12);
 
 
-            //Writer.Skip((4 + 2 * 2 + 4 * 3)-4);
-
             Writer.WriteAscii(EventEnd);
-
+            Writer.WriteBytes(_cache);
+            
+            
 
             //TODO: Fix commented part
             // 

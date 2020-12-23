@@ -8,7 +8,7 @@ using static DotNetCTFDumper.MMFParser.EXE.ChunkList;
 
 namespace DotNetCTFDumper.MMFParser.MFA.Loaders
 {
-    public class AgmiBank : DataLoader
+    public class AGMIBank : DataLoader
     {
         private int GraphicMode;
         private int PaletteVersion;
@@ -54,6 +54,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
 
         public override void Write(ByteWriter writer)
         {
+            Logger.Log("TEX WRITE");
             writer.WriteInt32(GraphicMode);
             writer.WriteInt16((short) PaletteVersion);
             writer.WriteInt16((short) PaletteEntries);
@@ -70,11 +71,11 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             }
         }
 
-        public AgmiBank(ByteReader reader) : base(reader)
+        public AGMIBank(ByteReader reader) : base(reader)
         {
         }
 
-        public AgmiBank(Chunk chunk) : base(chunk)
+        public AGMIBank(Chunk chunk) : base(chunk)
         {
         }
     }

@@ -24,7 +24,7 @@ namespace DotNetCTFDumper.MMFParser.MFA
         public int MfaBuild;
         public int Product;
         public int BuildVersion;
-        public int LangId;
+        public int LangId=32;
 
         public string Name;
         public string Description;
@@ -35,8 +35,8 @@ namespace DotNetCTFDumper.MMFParser.MFA
         public FontBank Fonts;
         public SoundBank Sounds;
         public MusicBank Music;
-        public AgmiBank Icons;
-        public AgmiBank Images;
+        public AGMIBank Icons;
+        public AGMIBank Images;
 
 
         public string Author;
@@ -118,6 +118,8 @@ namespace DotNetCTFDumper.MMFParser.MFA
 
         public static Events emptyEvents;
         public static ChunkList emptyFrameChunks;
+        public static ChunkList defaultObjChunks;
+
 
 
         public override void Print()
@@ -192,7 +194,6 @@ namespace DotNetCTFDumper.MMFParser.MFA
 
             Controls.Write(Writer);
             
-            
             if (Menu != null)
             {
                 using (ByteWriter menuWriter = new ByteWriter(new MemoryStream()))
@@ -244,16 +245,16 @@ namespace DotNetCTFDumper.MMFParser.MFA
             }
             
             Writer.WriteInt32(Frames.Count); //frame
-            var startPos = Writer.Tell() + 4 * Frames.Count + 4;
+            var startPos = Writer.Tell() + 4 * Frames.Count+4;
             
             ByteWriter newWriter = new ByteWriter(new MemoryStream());
             foreach (Frame frame in Frames)
             {
                 Pame2Mfa.Message("Writing Frame");
-                Writer.WriteUInt32((uint) (startPos+newWriter.Tell()+4));
+                Writer.WriteUInt32((uint) (startPos+newWriter.Tell()));
                 frame.Write(newWriter);
             }
-            Writer.WriteUInt32((uint) (startPos+newWriter.Tell()+4));
+            Writer.WriteUInt32((uint) (startPos+newWriter.Tell()));
             Writer.WriteWriter(newWriter);
             Chunks.Write(Writer);
             Console.WriteLine("Writing done");
@@ -290,11 +291,11 @@ namespace DotNetCTFDumper.MMFParser.MFA
             Music.Read();
 
             if (Reader.ReadAscii(4) != "AGMI") throw new Exception("Invalid Icon Bank");
-            Icons = new AgmiBank(Reader);
+            Icons = new AGMIBank(Reader);
             Icons.Read();
 
             if (Reader.ReadAscii(4) != "AGMI") throw new Exception("Invalid Image Bank");
-            Images = new AgmiBank(Reader);
+            Images = new AGMIBank(Reader);
             Images.Read();
 
             Helper.CheckPattern(Helper.AutoReadUnicode(Reader), Name);

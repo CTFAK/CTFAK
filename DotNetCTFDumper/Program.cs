@@ -86,6 +86,7 @@ namespace DotNetCTFDumper
             var currentExe = new Exe();
             Exe.Instance = currentExe;
             currentExe.ParseExe(exeReader);
+            MFAGenerator.BuildMFA();
             Logger.Log("Finished!", true, ConsoleColor.Yellow);
             return;
             if (File.Exists(path))
@@ -96,13 +97,7 @@ namespace DotNetCTFDumper
                    
                    
                 }
-                else if (path.EndsWith(".mfa"))
-                {
-                    Settings.DoMFA = true;
-                    Logger.Log("Reading mfa");
-                    Logger.Log("DEBUG ONLY");
-                    MFAGenerator.ReadTestMFA();
-                }
+                
                 else
                 {
                     Logger.Log($"File '{path}' is not a valid file", true, ConsoleColor.Red);

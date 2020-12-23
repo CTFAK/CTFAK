@@ -34,9 +34,10 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             Writer.WriteInt32(Flags);
             Writer.WriteInt32(1);
             Writer.WriteInt32(IconHandle);
+            
             Chunks.Write(Writer);
             Loader.Write(Writer);
-            
+
 
 
         }
@@ -71,6 +72,7 @@ namespace DotNetCTFDumper.MMFParser.MFA.Loaders
             }
             Chunks = new ChunkList(Reader);
             Chunks.Read();
+            if (MFA.defaultObjChunks == null) MFA.defaultObjChunks = Chunks;
             if(ObjectType>=32)//extension base
             {
                //TODO: Nonactives
