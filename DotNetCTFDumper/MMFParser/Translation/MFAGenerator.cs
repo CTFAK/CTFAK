@@ -7,8 +7,8 @@ namespace DotNetCTFDumper.MMFParser.Translation
 {
     public static class MFAGenerator
     {
-        // public static readonly string TemplatePath = @"C:\Users\MED45\Downloads\OneObjOneFrame.mfa";
-        public static readonly string TemplatePath = @"C:\Users\ivani\Desktop\CTFResearch\OneObjOneFrame.mfa";
+        
+        public static readonly string TemplatePath = @"template.mfa";
 
         public static MFA.MFA BuildMFA()
         {
