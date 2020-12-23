@@ -24,10 +24,7 @@ namespace DotNetCTFDumper.MMFParser.EXE
                 chunk.Read(exeReader);
                 chunk.Loader = LoadChunk(chunk);
                 Chunks.Add(chunk);
-                if (chunk.Id == 8750)
-                {
-                    chunk.BuildKey();
-                }
+                if (chunk.Id == 8750) chunk.BuildKey();
                 if (exeReader.Tell() >= exeReader.Size()) break;
                 if (chunk.Id == 32639) break; //LAST chunkID
             }
@@ -132,14 +129,13 @@ namespace DotNetCTFDumper.MMFParser.EXE
                 
                 
                 
-                Settings.AppName=_chunkList.GetChunk<AppName>()?.Value;
-                Settings.Copyright = _chunkList.GetChunk<Copyright>()?.Value;
-                Settings.ProjectPath = _chunkList.GetChunk<EditorFilename>()?.Value;
+                Settings.AppName=_chunkList.GetChunk<AppName>()?.Value??"";
+                Settings.Copyright = _chunkList.GetChunk<Copyright>()?.Value??"";
+                Settings.ProjectPath = _chunkList.GetChunk<EditorFilename>()?.Value??"";
                
 
                 if (Exe.Instance.GameData.ProductBuild > 284)Decryption.MakeKey(Settings.AppName,Settings.Copyright,Settings.ProjectPath);
                 else Decryption.MakeKey(Settings.ProjectPath, Settings.AppName, Settings.Copyright);
-                Logger.Log("New Key!"); 
 
 
 
@@ -255,12 +251,7 @@ namespace DotNetCTFDumper.MMFParser.EXE
                 
             }
 
-            if (loader != null)
-            {
-                //Logger.Log($"Reading {loader.GetType().Name}...",true,ConsoleColor.Yellow);
-                loader.Read();
-
-            }
+            if (loader != null) loader.Read();
             return loader;
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using DotNetCTFDumper.GUI;
 using DotNetCTFDumper.Utils;
 
 namespace DotNetCTFDumper.MMFParser.EXE.Loaders

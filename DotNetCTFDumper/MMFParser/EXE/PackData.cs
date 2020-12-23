@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using DotNetCTFDumper.GUI;
 using DotNetCTFDumper.Utils;
 
 namespace DotNetCTFDumper.MMFParser.EXE

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.OleDb;
 using System.IO;
+using DotNetCTFDumper.GUI;
 using DotNetCTFDumper.Utils;
 
 namespace DotNetCTFDumper.MMFParser.EXE
@@ -73,6 +74,7 @@ namespace DotNetCTFDumper.MMFParser.EXE
             {
                 PackData = new PackData();
                 PackData.Read(exeReader);
+               
                 GameData = new GameData();
                 GameData.Read(exeReader);
                 Console.ForegroundColor = ConsoleColor.DarkGreen;

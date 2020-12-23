@@ -1,13 +1,14 @@
 ﻿using System;
 using System.IO;
 using System.Web.UI.WebControls;
+using DotNetCTFDumper.GUI;
 
 namespace DotNetCTFDumper.Utils
 {
     public static class Logger
     {
         static StreamWriter _writer;
-        public static void Log(string text, bool logToScreen = true,ConsoleColor color = ConsoleColor.White)
+        public static void Log(string text, bool logToScreen = true,ConsoleColor color = ConsoleColor.White, bool logToConsole=true)
         {
             if (_writer == null)
             {
@@ -24,6 +25,8 @@ namespace DotNetCTFDumper.Utils
                 Console.WriteLine(Helper.GetCurrentTime()+text);
                 Console.ForegroundColor = ConsoleColor.White;
             }
+            if(logToConsole) MainConsole.Message(text);
+                
 
 
         }

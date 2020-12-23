@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DotNetCTFDumper.GUI;
 using DotNetCTFDumper.MMFParser.EXE.Loaders;
 using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
 using DotNetCTFDumper.Utils;

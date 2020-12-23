@@ -149,6 +149,12 @@
     <Compile Include="GUI\HexViewForm.Designer.cs">
       <DependentUpon>HexViewForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\MainConsole.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\MainConsole.Designer.cs">
+      <DependentUpon>MainConsole.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -262,6 +268,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\HexViewForm.resx">
       <DependentUpon>HexViewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\MainConsole.resx">
+      <DependentUpon>MainConsole.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

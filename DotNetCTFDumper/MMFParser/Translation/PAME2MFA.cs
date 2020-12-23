@@ -253,14 +253,6 @@ namespace DotNetCTFDumper.MMFParser.Translation
                         }
                     }
                 }
-
-
-
-
-
-
-
-
                 newFrame.Items = newFrameItems;
                 newFrame.Instances = newInstances;
                 newFrame.Folders=new List<ItemFolder>();
