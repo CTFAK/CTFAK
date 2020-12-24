@@ -11,12 +11,12 @@ Instructions on how to build the decrypter library will be coming soon.
 
 # Features
 
-Image Dumper
-Sound Dumper
-Music Dumper
-Extension Dumper
-Image Viewer
-Animation Player
-Sound Player
-Frame Viewer
-Plugin Support
+Image Dumper<br/>
+Sound Dumper<br/>
+Music Dumper<br/>
+Extension Dumper<br/>
+Image Viewer<br/>
+Animation Player<br/>
+Sound Player<br/>
+Frame Viewer<br/>
+Plugin Support<br/>
