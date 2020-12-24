@@ -50,6 +50,7 @@ namespace DotNetCTFDumper.GUI
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBox1.Size = new System.Drawing.Size(496, 592);
             this.textBox1.TabIndex = 0;
+            this.textBox1.WordWrap = false;
             // 
             // MainConsole
             // 

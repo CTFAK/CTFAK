@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -39,8 +40,8 @@ namespace DotNetCTFDumper
                 
                     Settings.UseGUI = true;
                     MyForm = new MainForm();
-                    var console = new MainConsole();
-                    console.Show();
+                    
+
                     Application.Run(MyForm);
                     
 

@@ -32,8 +32,7 @@ namespace DotNetCTFDumper.GUI
         public static bool BreakSounds;
         public static bool BreakMusics;
         public static bool Loaded;
-        public Thread LoaderThread;
-        public Color ColorTheme = Color.FromArgb(223, 114, 38);
+        public static Color ColorTheme = Color.FromArgb(223, 114, 38);
 
         public delegate void SaveHandler(int index, int all);
 
@@ -97,8 +96,15 @@ namespace DotNetCTFDumper.GUI
                     ? $"[{date.Hour,2}:{date.Minute,2}:{date.Second,2}:{date.Millisecond,3}] {msg}\r\n"
                     : "\r\n");
             };
+            this.Closing += (a, e) =>
+            {
+                var dlg = MessageBox.Show("Are you sure you want to exit?", "Exiting", MessageBoxButtons.YesNo);
+                if (dlg == DialogResult.Yes) Environment.Exit(0);
+                else e.Cancel = true;
+            };
             KeyPreview = true;
             tabControl1.Selecting += tabControl1_Selecting;
+            
             
         }
 
@@ -132,6 +138,12 @@ namespace DotNetCTFDumper.GUI
         {
             loadingLabel.Visible = false;
             listBox1.Items.Clear();
+            var console = new MainConsole();
+            this.Location= new Point(0,0);
+            this.Size= new Size(this.Size.Width-100,this.Size.Height);
+            console.Show();
+            console.Location = new Point(this.Location.X+this.Size.Width-15,0);
+            
         }
 
 

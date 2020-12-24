@@ -73,12 +73,12 @@ namespace DotNetCTFDumper.MMFParser.EXE
             if (!Settings.Old)
             {
                 PackData = new PackData();
+                Logger.Log("Found PackData header!\nReading PackData header.", true, ConsoleColor.Blue);
                 PackData.Read(exeReader);
-               
                 GameData = new GameData();
                 GameData.Read(exeReader);
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Logger.Log("Found PackData header!\nReading PackData header.", true, ConsoleColor.Blue);
+                
                 
             }
             else

@@ -165,10 +165,11 @@
             // 
             // label1
             // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.label1.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.label1.Location = new System.Drawing.Point(115, 13);
+            this.label1.Location = new System.Drawing.Point(6, 457);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(176, 17);
             this.label1.TabIndex = 4;
@@ -179,7 +180,7 @@
             this.imageBar.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.imageBar.BackColor = System.Drawing.Color.Black;
             this.imageBar.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.imageBar.Location = new System.Drawing.Point(95, 292);
+            this.imageBar.Location = new System.Drawing.Point(97, 272);
             this.imageBar.Name = "imageBar";
             this.imageBar.Size = new System.Drawing.Size(126, 24);
             this.imageBar.Step = 2;
@@ -194,7 +195,7 @@
             this.imageLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.imageLabel.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.imageLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.imageLabel.Location = new System.Drawing.Point(227, 292);
+            this.imageLabel.Location = new System.Drawing.Point(229, 272);
             this.imageLabel.Name = "imageLabel";
             this.imageLabel.Size = new System.Drawing.Size(126, 24);
             this.imageLabel.TabIndex = 9;
@@ -209,7 +210,7 @@
             this.soundLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.soundLabel.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.soundLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.soundLabel.Location = new System.Drawing.Point(227, 340);
+            this.soundLabel.Location = new System.Drawing.Point(229, 320);
             this.soundLabel.Name = "soundLabel";
             this.soundLabel.Size = new System.Drawing.Size(126, 24);
             this.soundLabel.TabIndex = 11;
@@ -222,7 +223,7 @@
             this.soundBar.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.soundBar.BackColor = System.Drawing.Color.Black;
             this.soundBar.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.soundBar.Location = new System.Drawing.Point(95, 340);
+            this.soundBar.Location = new System.Drawing.Point(97, 320);
             this.soundBar.Name = "soundBar";
             this.soundBar.Size = new System.Drawing.Size(126, 23);
             this.soundBar.Step = 2;
@@ -237,7 +238,7 @@
             this.FolderBTN.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FolderBTN.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.FolderBTN.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.FolderBTN.Location = new System.Drawing.Point(6, 234);
+            this.FolderBTN.Location = new System.Drawing.Point(8, 214);
             this.FolderBTN.Name = "FolderBTN";
             this.FolderBTN.Size = new System.Drawing.Size(83, 42);
             this.FolderBTN.TabIndex = 12;
@@ -253,7 +254,7 @@
             this.soundsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.soundsButton.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.soundsButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.soundsButton.Location = new System.Drawing.Point(6, 330);
+            this.soundsButton.Location = new System.Drawing.Point(8, 310);
             this.soundsButton.Name = "soundsButton";
             this.soundsButton.Size = new System.Drawing.Size(83, 42);
             this.soundsButton.TabIndex = 14;
@@ -269,7 +270,7 @@
             this.imagesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.imagesButton.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.imagesButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.imagesButton.Location = new System.Drawing.Point(6, 282);
+            this.imagesButton.Location = new System.Drawing.Point(8, 262);
             this.imagesButton.Name = "imagesButton";
             this.imagesButton.Size = new System.Drawing.Size(83, 42);
             this.imagesButton.TabIndex = 15;
@@ -296,7 +297,7 @@
             this.dumpSortedBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.dumpSortedBtn.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.dumpSortedBtn.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.dumpSortedBtn.Location = new System.Drawing.Point(6, 426);
+            this.dumpSortedBtn.Location = new System.Drawing.Point(8, 406);
             this.dumpSortedBtn.Name = "dumpSortedBtn";
             this.dumpSortedBtn.Size = new System.Drawing.Size(83, 42);
             this.dumpSortedBtn.TabIndex = 19;
@@ -337,7 +338,7 @@
             this.musicsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.musicsButton.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.musicsButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.musicsButton.Location = new System.Drawing.Point(6, 378);
+            this.musicsButton.Location = new System.Drawing.Point(8, 358);
             this.musicsButton.Name = "musicsButton";
             this.musicsButton.Size = new System.Drawing.Size(83, 42);
             this.musicsButton.TabIndex = 21;
@@ -351,7 +352,7 @@
             this.musicBar.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.musicBar.BackColor = System.Drawing.Color.Black;
             this.musicBar.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.musicBar.Location = new System.Drawing.Point(95, 388);
+            this.musicBar.Location = new System.Drawing.Point(97, 368);
             this.musicBar.Name = "musicBar";
             this.musicBar.Size = new System.Drawing.Size(126, 23);
             this.musicBar.Step = 2;
@@ -366,7 +367,7 @@
             this.musicLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.musicLabel.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.musicLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.musicLabel.Location = new System.Drawing.Point(227, 388);
+            this.musicLabel.Location = new System.Drawing.Point(229, 368);
             this.musicLabel.Name = "musicLabel";
             this.musicLabel.Size = new System.Drawing.Size(126, 24);
             this.musicLabel.TabIndex = 23;
@@ -376,7 +377,7 @@
             // 
             // SortedProgressBar
             // 
-            this.SortedProgressBar.Location = new System.Drawing.Point(95, 236);
+            this.SortedProgressBar.Location = new System.Drawing.Point(97, 216);
             this.SortedProgressBar.Name = "SortedProgressBar";
             this.SortedProgressBar.Size = new System.Drawing.Size(209, 41);
             this.SortedProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;

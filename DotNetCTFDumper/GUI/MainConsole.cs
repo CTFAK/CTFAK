@@ -11,6 +11,7 @@ namespace DotNetCTFDumper.GUI
         {
             inst = this;
             InitializeComponent();
+            textBox1.ForeColor = MainForm.ColorTheme;
             this.Closing += (a,b) =>
             {
                 Environment.Exit(0);
