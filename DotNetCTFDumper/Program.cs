@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -89,8 +90,11 @@ namespace DotNetCTFDumper
             var exeReader = new ByteReader(path, FileMode.Open);
             var currentExe = new Exe();
             Exe.Instance = currentExe;
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
             currentExe.ParseExe(exeReader);
-            Logger.Log("Finished!", true, ConsoleColor.Yellow);
+            stopWatch.Stop();
+            Logger.Log("Finished in "+stopWatch.Elapsed.ToString("g"), true, ConsoleColor.Yellow);
             return;
             if (File.Exists(path))
             {

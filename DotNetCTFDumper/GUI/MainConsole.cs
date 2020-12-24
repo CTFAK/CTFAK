@@ -31,7 +31,7 @@ namespace DotNetCTFDumper.GUI
         {
             setLineFormat(1,1);
             textBox1.SelectionStart = textBox1.Text.Length;
-            // scroll it automatically
+            
             textBox1.ScrollToCaret();
         }
         
