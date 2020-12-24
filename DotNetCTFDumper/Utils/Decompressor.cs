@@ -18,10 +18,8 @@ namespace DotNetCTFDumper.Utils
 
         public static ByteReader DecompressAsReader(ByteReader exeReader, out int decompressed)
         {
-            Int32 decompSize = exeReader.ReadInt32();
-            Int32 compSize = exeReader.ReadInt32();
-            decompressed = decompSize;
-            return new ByteReader(decompress_block(exeReader, compSize, decompSize));
+            
+            return new ByteReader(Decompress(exeReader, out decompressed));
         }
 
         public static byte[] decompress_block(ByteReader reader, int size, int decompSize)

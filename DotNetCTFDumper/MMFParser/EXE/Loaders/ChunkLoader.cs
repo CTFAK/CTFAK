@@ -20,7 +20,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
         protected ChunkLoader(Chunk chunk)
         {
             this.Chunk = chunk;
-            this.Reader = chunk.get_reader();
+            this.Reader = chunk.GetReader();
         }
 
 

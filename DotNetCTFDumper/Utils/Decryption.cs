@@ -6,7 +6,7 @@ namespace DotNetCTFDumper.Utils
 {
     static class Decryption
     {
-        private static byte[] DecryptionKey;
+        private static byte[] _decryptionKey;
         public static byte MagicChar = 54;
 
         public static void MakeKey(string data1, string data2, string data3)
@@ -25,17 +25,14 @@ namespace DotNetCTFDumper.Utils
             Marshal.FreeHGlobal(rawKeyPtr);
 
 
-            DecryptionKey = key;
-            Logger.Log($"First 16-Bytes of key: {DecryptionKey.GetHex(16)}", true, ConsoleColor.Yellow);
-            File.WriteAllBytes($"{Settings.DumpPath}\\key.bin", DecryptionKey);
+            _decryptionKey = key;
+            Logger.Log($"First 16-Bytes of key: {_decryptionKey.GetHex(16)}", true, ConsoleColor.Yellow);
+            File.WriteAllBytes($"{Settings.DumpPath}\\key.bin", _decryptionKey);
         }
 
-        public static byte[] MakeKeyFromBytes(string data, byte magicChar = 54)
+        public static byte[] MakeKeyFromComb(string data, byte magicChar = 54)
         {
             var rawKeyPtr = Marshal.StringToHGlobalAnsi(data);
-            //var bytes = Encoding.UTF8.GetBytes(data);
-            //var rawKeyPtr = Marshal.AllocHGlobal(bytes.Length);
-            //Marshal.Copy(bytes,0,rawKeyPtr,bytes.Length);
             var ptr = Decryption.make_key_combined(rawKeyPtr, magicChar);
 
             byte[] key = new byte[256];
@@ -73,8 +70,8 @@ namespace DotNetCTFDumper.Utils
             IntPtr inputChunkPtr = Marshal.AllocHGlobal(chunkData.Length);
             Marshal.Copy(chunkData, 0, inputChunkPtr, chunkData.Length);
 
-            IntPtr keyPtr = Marshal.AllocHGlobal(DecryptionKey.Length);
-            Marshal.Copy(DecryptionKey, 0, keyPtr, DecryptionKey.Length);
+            IntPtr keyPtr = Marshal.AllocHGlobal(_decryptionKey.Length);
+            Marshal.Copy(_decryptionKey, 0, keyPtr, _decryptionKey.Length);
 
             var outputChunkPtr = decode_chunk(inputChunkPtr, chunkSize, MagicChar, keyPtr);
 

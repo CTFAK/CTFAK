@@ -547,7 +547,7 @@ namespace DotNetCTFDumper.GUI
 
             try
             {
-                var previewKey = Decryption.MakeKeyFromBytes(rawData, (byte) int.Parse((charBox.Text)));
+                var previewKey = Decryption.MakeKeyFromComb(rawData, (byte) int.Parse((charBox.Text)));
                 hexBox1.ByteProvider = new DynamicByteProvider(previewKey);
 
             }
@@ -769,7 +769,9 @@ namespace DotNetCTFDumper.GUI
                     Thread.Sleep((int) (delay*1500));
                 }
                 _isAnimRunning = false;
-                Thread.CurrentThread.Abort();
+                try {Thread.CurrentThread.Abort();}
+                catch {}
+                
             }
             else
             {
@@ -785,7 +787,7 @@ namespace DotNetCTFDumper.GUI
                     {
                         _isAnimRunning = false;
                         _breakAnim = false;
-                        Thread.CurrentThread.Abort();
+                        if(Thread.CurrentThread.IsAlive) Thread.CurrentThread.Abort();
                         break;
                     
                     }
@@ -828,10 +830,7 @@ namespace DotNetCTFDumper.GUI
             PluginAPI.PluginAPI.ActivatePlugin(PluginAPI.PluginAPI.Plugins[pluginsList.SelectedIndex]);
         }
 
-        public void SoundTest()
-        {
-            
-        }
+       
 
         public void InitSounds()
         {

@@ -92,8 +92,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
             var frameReader = new ByteReader(Chunk.ChunkData);
             Chunks = new ChunkList();
             
-
-            Chunks.Verbose = false;
+            
             Chunks.Read(frameReader);
             var name = Chunks.GetChunk<FrameName>();
             if (name != null) //Just to be sure

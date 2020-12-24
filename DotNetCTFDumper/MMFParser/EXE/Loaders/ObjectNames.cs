@@ -4,7 +4,7 @@ using static DotNetCTFDumper.MMFParser.EXE.ChunkList;
 
 namespace DotNetCTFDumper.MMFParser.EXE.Loaders
 {
-    class ObjectNames : ChunkLoader//Fucking trash
+    class ObjectNames : ChunkLoader//2.5+ trash
     {
         public override void Print(bool ext)
         {

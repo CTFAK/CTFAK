@@ -14,18 +14,18 @@ namespace DotNetCTFDumper.MMFParser.EXE
         public bool Verbose = false;
         public List<Frame> Frames = new List<Frame>();
 
-        public void Read(ByteReader exeReader)
+        public void Read(ByteReader reader)
         {
             Chunks.Clear();
             while (true)
             {
                 Chunk chunk = new Chunk(Chunks.Count, this);
                 chunk.Verbose = Verbose;
-                chunk.Read(exeReader);
+                chunk.Read(reader);
                 chunk.Loader = LoadChunk(chunk);
                 Chunks.Add(chunk);
                 if (chunk.Id == 8750) chunk.BuildKey();
-                if (exeReader.Tell() >= exeReader.Size()) break;
+                if (reader.Tell() >= reader.Size()) break;
                 if (chunk.Id == 32639) break; //LAST chunkID
             }
         }
@@ -41,7 +41,7 @@ namespace DotNetCTFDumper.MMFParser.EXE
             public byte[] ChunkData;
             public byte[] RawData;
             public ChunkFlags Flag;
-            public int Size = 0;
+            public int Size;
             public int DecompressedSize = -1;
             public bool Verbose = false;
 
@@ -51,7 +51,7 @@ namespace DotNetCTFDumper.MMFParser.EXE
                 _chunkList = actualChunkList;
             }
 
-            public ByteReader get_reader()
+            public ByteReader GetReader()
             {
                 return new ByteReader(ChunkData);
             }
@@ -99,7 +99,7 @@ namespace DotNetCTFDumper.MMFParser.EXE
                 }
 
             }
-
+            
             public void Print(bool extented)
             {
                 if(extented)

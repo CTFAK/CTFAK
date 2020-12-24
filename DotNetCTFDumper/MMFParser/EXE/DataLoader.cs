@@ -16,7 +16,7 @@ namespace DotNetCTFDumper.MMFParser.EXE
         protected DataLoader(Chunk chunk)
         {
             this._chunk = chunk;
-            this.Reader = chunk.get_reader();
+            this.Reader = chunk.GetReader();
         }
 
         public abstract void Read();

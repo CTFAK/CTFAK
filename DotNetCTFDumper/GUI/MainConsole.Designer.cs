@@ -32,25 +32,21 @@ namespace DotNetCTFDumper.GUI
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainConsole));
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // textBox1
             // 
-            this.textBox1.AllowDrop = true;
             this.textBox1.BackColor = System.Drawing.Color.Black;
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.ForeColor = System.Drawing.Color.Lime;
             this.textBox1.Location = new System.Drawing.Point(0, 0);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4, 15, 4, 3);
-            this.textBox1.MaxLength = 32767000;
-            this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBox1.Size = new System.Drawing.Size(496, 592);
             this.textBox1.TabIndex = 0;
+            this.textBox1.Text = "";
             this.textBox1.WordWrap = false;
+            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // MainConsole
             // 
@@ -65,10 +61,9 @@ namespace DotNetCTFDumper.GUI
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Console";
             this.ResumeLayout(false);
-            this.PerformLayout();
         }
 
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.RichTextBox textBox1;
 
         #endregion
     }

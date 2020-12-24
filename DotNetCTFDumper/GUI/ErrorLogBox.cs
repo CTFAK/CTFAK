@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using DotNetCTFDumper.Utils;
 
 namespace DotNetCTFDumper.GUI
 {
@@ -21,8 +22,9 @@ namespace DotNetCTFDumper.GUI
                 if (filename == null) filename = "UnknownFile";
                 textBox1.Text +=
                     $" {(filename)} : {sf.GetMethod()}: Line {sf.GetFileLineNumber()}\r\n\r\n";
-
             }
+            Logger.Log("ERROR: ",false,ConsoleColor.White,false);
+            Logger.Log(textBox1.Text,false,ConsoleColor.White,false);
 
             //Console.ReadKey();
         }
