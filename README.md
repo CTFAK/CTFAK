@@ -7,7 +7,7 @@ Experimental tool to decrypt, analyze, dump and decompile games made with ClickT
 # Build instructions
 
 Clone the project and build with VS2019, remember to include the ZLib C# extension and external libraries (GUI and decrypter.dll)
-Instructions on how to build the decrypter library will be coming soon.
+Instructions on how to build the decrypter library will be coming soon. Compiler should put all files to the "Build" folder
 
 # Features
 
