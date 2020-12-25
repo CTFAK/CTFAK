@@ -76,15 +76,8 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Be.Windows.Forms.HexBox, Version=1.6.0.18788, Culture=neutral, PublicKeyToken=e0e5adf0ebc99863">
-      <HintPath>C:\Users\ivani\Desktop\Be.HexEditor-1.6.0\sources\Be.Windows.Forms.HexBox\bin\Debug\Be.Windows.Forms.HexBox.dll</HintPath>
-    </Reference>
     <Reference Include="Be.Windows.Forms.HexBox, Version=1.6.1.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Be.Windows.Forms.HexBox.1.6.1\lib\net40\Be.Windows.Forms.HexBox.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="DotNetZip, Version=1.15.0.0, Culture=neutral, PublicKeyToken=6583c7c814667745">
-      <HintPath>..\packages\DotNetZip.1.15.0\lib\net40\DotNetZip.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Joveler.Compression.ZLib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
@@ -286,5 +279,22 @@
     <Error Condition="!Exists('..\packages\Joveler.Compression.ZLib.4.0.0\build\net451\Joveler.Compression.ZLib.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Joveler.Compression.ZLib.4.0.0\build\net451\Joveler.Compression.ZLib.targets'))" />
   </Target>
   <Import Project="..\packages\Joveler.Compression.ZLib.4.0.0\build\net451\Joveler.Compression.ZLib.targets" Condition="Exists('..\packages\Joveler.Compression.ZLib.4.0.0\build\net451\Joveler.Compression.ZLib.targets')" />
-  
+  <PropertyGroup>
+    <PostBuildEvent>md  $(SolutionDir)\Build\
+md  $(SolutionDir)\Build\x64\
+copy $(TargetPath)  $(SolutionDir)Build\DotNetCTFDumper.exe
+copy $(SolutionDir)Dependencies\Decrypter-x64.dll $(SolutionDir)Build\Decrypter-x64.dll
+copy $(TargetDir)\x64\zlibwapi.dll $(SolutionDir)Build\x64\zlibwapi.dll
+copy $(TargetDir)DotNetCTFDumper.pdb $(SolutionDir)Build\DotNetCTFDumper.pdb
+copy $(TargetDir)Be.Windows.Forms.HexBox.dll $(SolutionDir)Build\Be.Windows.Forms.HexBox.dll
+copy $(TargetDir)Joveler.Compression.ZLib.dll $(SolutionDir)Build\Joveler.Compression.ZLib.dll
+copy $(TargetDir)Joveler.DynLoader.dll $(SolutionDir)Build\Joveler.DynLoader.dll
+copy $(TargetDir)System.Buffers.dll $(SolutionDir)Build\System.Buffers.dll
+copy $(TargetDir)System.Memory.dll $(SolutionDir)Build\System.Memory.dll
+copy $(TargetDir)System.Memory.dll $(SolutionDir)Build\System.Memory.dll
+copy $(TargetDir)System.Numerics.Vectors.dll $(SolutionDir)Build\System.Numerics.Vectors.dll
+copy $(TargetDir)System.Runtime.CompilerServices.Unsafe.dll $(SolutionDir)Build\System.Runtime.CompilerServices.Unsafe.dll
+
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>

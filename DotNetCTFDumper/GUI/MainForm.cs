@@ -125,7 +125,12 @@ namespace DotNetCTFDumper.GUI
         {
             var worker = new BackgroundWorker();
             worker.DoWork += (workSender, workE) => StartReading();
-            worker.RunWorkerCompleted += (workSender, workE) => AfterLoad();
+            worker.RunWorkerCompleted += (workSender, workE) =>
+            {
+                
+                AfterLoad();
+            };
+            
             worker.RunWorkerAsync();
         }
 
@@ -221,10 +226,10 @@ namespace DotNetCTFDumper.GUI
             {
 
                 listBox1.Items.Add($"Name: {nodeChunk.Name}");
-                listBox1.Items.Add($"Id: {nodeChunk.Id}");
+                listBox1.Items.Add($"Id: {nodeChunk.Id} - 0x{nodeChunk.Id:X4}");
                 listBox1.Items.Add($"Flag: {nodeChunk.Flag}");
                 listBox1.Items.Add($"Size: {nodeChunk.Size.ToPrettySize()}");
-                if (nodeChunk.DecompressedSize > -1)
+                if (nodeChunk.DecompressedSize > 0)
                     listBox1.Items.Add($"Decompressed Size: {nodeChunk.DecompressedSize.ToPrettySize()}");
             }
 
@@ -251,6 +256,8 @@ namespace DotNetCTFDumper.GUI
 
         public void AfterLoad()
         {
+            
+            Logger.Log("Loading GUI");
             //GameData gameData = null;
             var exe = Exe.Instance;
             var gameData = exe.GameData;

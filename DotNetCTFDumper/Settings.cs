@@ -31,6 +31,6 @@ namespace DotNetCTFDumper
         public static bool DoMFA;
         public static bool UseGUI;
 
-        public static string DumperVersion = "CTFAN 0.1.5-a Debug";
+        public static string DumperVersion = "CTFAN 0.1.5-с Alpha";
     }
 }
