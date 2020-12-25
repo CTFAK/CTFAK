@@ -23,6 +23,8 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
 
         public override void Read()
         {
+            return;
+            
             
             Logger.Log("dumpingIcon");
             Reader.ReadBytes(Reader.ReadInt32() - 4);
