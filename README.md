@@ -20,3 +20,8 @@ Instructions on how to build the decrypter library will be coming soon. Compiler
 * Sound Player<br/>
 * Frame Viewer<br/>
 * Plugin Support
+
+
+# License
+
+This program is licensed under the AGPLv3 license. This means that if you modify it and wish to re-distribute the compiled build, you have to provide the source code for it. This applies to network distribution too (if you decided to make an online version for example)
