@@ -22,6 +22,7 @@ Instructions on how to build the decrypter library will be coming soon. Compiler
 * Plugin Support
 
 # Requirements
+
 * Microsoft Visual C++ Redistributable 2019
 
 
