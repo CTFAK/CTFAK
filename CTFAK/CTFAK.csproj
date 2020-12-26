@@ -8,9 +8,9 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{86D99F9E-98FB-4E50-AB68-F5C115850C33}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>DotNetCTFDumper</RootNamespace>
-    <AssemblyName>DotNetCTFDumper</AssemblyName>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>CTFAK</RootNamespace>
+    <AssemblyName>CTFAK</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -282,10 +282,10 @@
   <PropertyGroup>
     <PostBuildEvent>md  $(SolutionDir)\Build\
 md  $(SolutionDir)\Build\x64\
-copy $(TargetPath)  $(SolutionDir)Build\DotNetCTFDumper.exe
+copy $(TargetPath)  $(SolutionDir)Build\CTFAK.exe
 copy $(SolutionDir)Dependencies\Decrypter-x64.dll $(SolutionDir)Build\Decrypter-x64.dll
 copy $(TargetDir)\x64\zlibwapi.dll $(SolutionDir)Build\x64\zlibwapi.dll
-copy $(TargetDir)DotNetCTFDumper.pdb $(SolutionDir)Build\DotNetCTFDumper.pdb
+copy $(TargetDir)CTFAK.pdb $(SolutionDir)Build\CTFAK.pdb
 copy $(TargetDir)Be.Windows.Forms.HexBox.dll $(SolutionDir)Build\Be.Windows.Forms.HexBox.dll
 copy $(TargetDir)Joveler.Compression.ZLib.dll $(SolutionDir)Build\Joveler.Compression.ZLib.dll
 copy $(TargetDir)Joveler.DynLoader.dll $(SolutionDir)Build\Joveler.DynLoader.dll

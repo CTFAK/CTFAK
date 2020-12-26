@@ -21,9 +21,8 @@ namespace DotNetCTFDumper
         [STAThread]
         private static void Main(string[] args)
         {
-            var handle = Helper.GetConsoleWindow();
-            Helper.ShowWindow(handle, Helper.SW_HIDE);
             InitNativeLibrary();
+            
             // MFAGenerator.ReadTestMFA();
             // Environment.Exit(0);
 
@@ -36,27 +35,22 @@ namespace DotNetCTFDumper
                 var error = new ErrorLogBox(eventArgs.Exception);
                 Application.Run(error);
             };
-            if (args.Length == 0)
+            
+            Settings.UseGUI = true;
+            
+            if (args.Length > 0)
             {
-                
-                    Settings.UseGUI = true;
-                    MyForm = new MainForm();
-                    
-
-                    Application.Run(MyForm);
-                    
-
-
+                MyForm = new MainForm(Color.FromName(args[0]));
             }
+            else
+            {
+                MyForm = new MainForm(Color.FromArgb(223, 114, 38));
+            }
+            Application.Run(MyForm);
+            
 
+            
 
-            if (args.Length > 0) path = args[0];
-
-            if (args.Length > 1) bool.TryParse(args[1], out verbose);
-
-            if (args.Length > 2) bool.TryParse(args[2], out dumpImages);
-
-            if (args.Length > 3) bool.TryParse(args[3], out dumpSounds);
 
             if (args.Length > 0 && (args[0] == "-h" || args[0] == "-help"))
             {
@@ -74,13 +68,13 @@ namespace DotNetCTFDumper
                 Environment.Exit(0);
             }
 
-            if (args.Length > 0) ReadFile(path, verbose, dumpImages, dumpSounds);
+            if (args.Length > 1) ReadFile(path, verbose, dumpImages, dumpSounds);
         }
 
         public static void ReadFile(string path, bool verbose = false, bool dumpImages = false, bool dumpSounds = true)
         {
             Settings.GamePath = path;
-            
+            Logger.Log("DecryptionLibExist: "+File.Exists("x64\\Decrypter-x64.dll"));
             PrepareFolders();
 
             Settings.DumpImages = dumpImages;
@@ -95,25 +89,7 @@ namespace DotNetCTFDumper
             currentExe.ParseExe(exeReader);
             stopWatch.Stop();
             Logger.Log("Finished in "+stopWatch.Elapsed.ToString("g"), true, ConsoleColor.Yellow);
-            return;
-            if (File.Exists(path))
-            {
-                if (path.EndsWith(".exe"))
-                {
-                    Settings.DoMFA = false;
-                   
-                   
-                }
-                
-                else
-                {
-                    Logger.Log($"File '{path}' is not a valid file", true, ConsoleColor.Red);
-                }
-            }
-            else
-            {
-                Logger.Log($"File '{path}' does not exist", true, ConsoleColor.Red);
-            }
+            
         }
 
         public static void PrepareFolders()

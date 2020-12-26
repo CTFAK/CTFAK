@@ -158,9 +158,9 @@
             this.GameInfo.Location = new System.Drawing.Point(8, 36);
             this.GameInfo.Margin = new System.Windows.Forms.Padding(5, 0, 3, 0);
             this.GameInfo.Name = "GameInfo";
-            this.GameInfo.Size = new System.Drawing.Size(182, 45);
+            this.GameInfo.Size = new System.Drawing.Size(182, 105);
             this.GameInfo.TabIndex = 3;
-            this.GameInfo.Text = "GameInfo will appear here\r\nSemenLine\r\nLine3\r\n";
+            this.GameInfo.Text = "GameInfo will appear here\r\nLine2\r\nLine3\r\nLine4\r\nLine5\r\nLine6\r\n\r\n";
             this.GameInfo.Visible = false;
             // 
             // label1
@@ -377,7 +377,7 @@
             // 
             // SortedProgressBar
             // 
-            this.SortedProgressBar.Location = new System.Drawing.Point(97, 216);
+            this.SortedProgressBar.Location = new System.Drawing.Point(97, 407);
             this.SortedProgressBar.Name = "SortedProgressBar";
             this.SortedProgressBar.Size = new System.Drawing.Size(209, 41);
             this.SortedProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
@@ -701,18 +701,20 @@
             this.pluginLogBox.Multiline = true;
             this.pluginLogBox.Name = "pluginLogBox";
             this.pluginLogBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.pluginLogBox.Size = new System.Drawing.Size(405, 479);
+            this.pluginLogBox.Size = new System.Drawing.Size(405, 448);
             this.pluginLogBox.TabIndex = 2;
             // 
             // activatePluginBtn
             // 
-            this.activatePluginBtn.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.activatePluginBtn.AutoSize = true;
+            this.activatePluginBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.activatePluginBtn.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.activatePluginBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.activatePluginBtn.Font = new System.Drawing.Font("Feast of Flesh BB", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte) (77)));
             this.activatePluginBtn.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.activatePluginBtn.Location = new System.Drawing.Point(252, 0);
+            this.activatePluginBtn.Location = new System.Drawing.Point(252, 448);
             this.activatePluginBtn.Name = "activatePluginBtn";
-            this.activatePluginBtn.Size = new System.Drawing.Size(683, 479);
+            this.activatePluginBtn.Size = new System.Drawing.Size(683, 31);
             this.activatePluginBtn.TabIndex = 1;
             this.activatePluginBtn.Text = "Activate";
             this.activatePluginBtn.UseVisualStyleBackColor = true;

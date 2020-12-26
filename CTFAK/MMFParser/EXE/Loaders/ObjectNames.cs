@@ -22,7 +22,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
             var endpos = start + Chunk.Size;
             while(true)
             {
-                if (Reader.Tell() >= endpos+4) break;
+                if (Reader.Tell() >= endpos) break;
                 var name = Reader.ReadWideString();
 
             }

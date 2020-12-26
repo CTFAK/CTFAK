@@ -28,5 +28,11 @@ namespace DotNetCTFDumper.GUI
 
             //Console.ReadKey();
         }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            Logger.Log("Exiting because of exception");
+            Environment.Exit(-1);
+        }
     }
 }

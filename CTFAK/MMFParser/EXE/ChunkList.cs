@@ -234,7 +234,6 @@ namespace DotNetCTFDumper.MMFParser.EXE
                 case 17478:
                     loader = new ObjectProperties(chunk);
                     return loader;
-                    break;
                 case 8788:
                     //loader = new ObjectNames(chunk);
                     break;

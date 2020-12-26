@@ -47,7 +47,6 @@ namespace DotNetCTFDumper.Utils
             MemoryStream decompressedStream = new MemoryStream(data);
             MemoryStream compressedStream = new MemoryStream();
             byte[] compressedData = null;
-            Int32 compressed_size = 0;
             ZLibStream zs = new ZLibStream(compressedStream, compOpts);
             decompressedStream.CopyTo(zs);
             zs.Close();

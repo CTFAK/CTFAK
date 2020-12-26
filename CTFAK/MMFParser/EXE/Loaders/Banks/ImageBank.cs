@@ -178,7 +178,12 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
             _bitmap = null;
             Reader.Seek(Position);
             ByteReader imageReader;
-             
+            if (Settings.twofiveplus)
+            {
+
+                //Do 2.5+ decryption
+                
+            }
             // imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
             imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
             long start = imageReader.Tell();

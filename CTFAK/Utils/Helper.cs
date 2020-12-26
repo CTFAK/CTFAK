@@ -232,15 +232,7 @@ namespace DotNetCTFDumper.Utils
             return chosenValue;
         }
 
-        public static string ActualName(this ChunkList.Chunk chunk)
-        {
-            return "Placeholder";
-            var constName = ((Constants.ChunkNames) chunk.Id).ToString();
-            int tempId = 0;
-            int.TryParse(constName, out tempId);
-            if (tempId != chunk.Id) return constName;
-            else return $"Unknown-{chunk.Id}";
-        }
+        
 
         public static ChunkNode GetChunkNode(ChunkList.Chunk chunk, string customName = "[DEFAULT-NAME]")
         {

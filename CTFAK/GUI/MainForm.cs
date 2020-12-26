@@ -40,10 +40,11 @@ namespace DotNetCTFDumper.GUI
 
 
 
-        public MainForm()
+        public MainForm(Color color)
         {
             //Buttons
             InitializeComponent();
+            ColorTheme = color;
             foreach (Control item in Controls)
             {
                 item.ForeColor = ColorTheme;
@@ -169,6 +170,7 @@ namespace DotNetCTFDumper.GUI
             soundsButton.Visible = false;
             musicsButton.Visible = false;
             dumpSortedBtn.Visible = false;
+            Loaded = false;
 
 
 
@@ -312,10 +314,10 @@ namespace DotNetCTFDumper.GUI
             GameInfo.Visible = true;
             loadingLabel.Visible = false;
             Loaded = true;
-            InitKeyTab();
             InitPackDataTab();
             InitImages();
             InitSounds();
+            InitKeyTab();
             InitPlugins();
             var toLog = "";
             toLog += $"Title:{Exe.Instance.GameData.Name}\n";

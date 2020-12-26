@@ -10,6 +10,7 @@ namespace DotNetCTFDumper
         public static bool SaveChunks;
         public static bool Verbose;
         public static bool Old;
+        public static bool twofiveplus;
         
         public static string GamePath;
         public static string GameName => Path.GetFileNameWithoutExtension(GamePath);
@@ -31,6 +32,6 @@ namespace DotNetCTFDumper
         public static bool DoMFA;
         public static bool UseGUI;
 
-        public static string DumperVersion = "CTFAK 0.2-a Alpha";
+        public static string DumperVersion = true ? "CTFAK 0.2-b Alpha" : "CTFAK 0.2.1-a Debug";
     }
 }

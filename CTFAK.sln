@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30517.126
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetCTFDumper", "DotNetCTFDumper\DotNetCTFDumper.csproj", "{86D99F9E-98FB-4E50-AB68-F5C115850C33}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CTFAK", "CTFAK\CTFAK.csproj", "{86D99F9E-98FB-4E50-AB68-F5C115850C33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

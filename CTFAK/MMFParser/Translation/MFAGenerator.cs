@@ -31,7 +31,6 @@ namespace DotNetCTFDumper.MMFParser.Translation
             Pame2Mfa.Message("Writing is finished!");
             return template;
 
-            Logger.Log("MFA Done", true, ConsoleColor.Yellow);
         }
 
         public static void ReadTestMFA()
