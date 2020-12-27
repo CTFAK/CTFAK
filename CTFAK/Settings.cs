@@ -32,6 +32,6 @@ namespace DotNetCTFDumper
         public static bool DoMFA;
         public static bool UseGUI;
 
-        public static string DumperVersion = true ? "CTFAK 0.2-b Alpha" : "CTFAK 0.2.1-a Debug";
+        public static string DumperVersion = true ? "CTFAK 0.2.5 Alpha" : "CTFAK 0.2.1-a Debug";
     }
 }
