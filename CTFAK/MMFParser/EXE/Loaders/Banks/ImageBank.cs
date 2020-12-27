@@ -4,18 +4,20 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using DotNetCTFDumper.GUI;
 using DotNetCTFDumper.Utils;
+using Joveler.Compression.ZLib;
 using static DotNetCTFDumper.MMFParser.EXE.ChunkList;
 
 namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
 {
     public class ImageBank : ChunkLoader
     {
-        public bool SaveImages = false;
+        public bool SaveImages = true;
         public Dictionary<int, ImageItem> Images = new Dictionary<int, ImageItem>();
         public uint NumberOfItems;
-        public bool PreloadOnly=true;
+        public bool PreloadOnly=false;
 
         public ImageBank(ByteReader reader) : base(reader)
         {
@@ -153,7 +155,9 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
         {
             Handle = Reader.ReadInt32() - 1;
             Position = (int) Reader.Tell();
+            Logger.Log("ImageFound: "+Handle);
             if (load) Load();
+            
             else Preload();
 
         }
@@ -178,6 +182,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
             _bitmap = null;
             Reader.Seek(Position);
             ByteReader imageReader;
+            Console.WriteLine("Preloading Image");
             if (Settings.twofiveplus)
             {
 
@@ -185,7 +190,13 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
                 
             }
             // imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
+            
             imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
+            
+            //Directory.CreateDirectory("DUMP\\DEBUG");
+            //File.WriteAllBytes($"DUMP\\DEBUG\\Img-{Handle}.imgb",imageReader.ReadBytes((int) imageReader.Size()));
+            
+            
             long start = imageReader.Tell();
 
             _checksum = imageReader.ReadInt32();
@@ -201,15 +212,17 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
             _bitmap = null;
             Reader.Seek(Position);
             ByteReader imageReader;
-             
-            // imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
-            imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
+            if (!Settings.twofiveplus)
+                imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
+            else imageReader = Reader;           
             long start = imageReader.Tell();
-
+            
+            
+            //return;
+            if(Settings.twofiveplus) imageReader.Skip(4);
             _checksum = imageReader.ReadInt32();
             _references = imageReader.ReadInt32();
             Size = (int) imageReader.ReadUInt32();
-
             if (Debug)
             {
                 imageReader = new ByteReader(imageReader.ReadBytes(Size + 20));
@@ -218,6 +231,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
             _width = imageReader.ReadInt16();
             _height = imageReader.ReadInt16();
             _graphicMode = imageReader.ReadByte(); //Graphic mode is always 4 for SL
+            
             Flags.flag = imageReader.ReadByte();
 
             imageReader.Skip(2);
@@ -226,10 +240,12 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
             ActionX = imageReader.ReadInt16();
             ActionY = imageReader.ReadInt16();
             _transparent = imageReader.ReadBytes(4);
-            //Logger.Log($"Loading image {Handle.ToString(),4} Size: {_width,4}x{_height,4}");
+            Logger.Log($"Loading image {Handle.ToString(),4} Size: {_width,4}x{_height,4}");
             byte[] imageData;
+            Flags["LZX"] = false;
             if (Flags["LZX"])
             {
+                
                 uint decompressedSize = imageReader.ReadUInt32();
                 imageData = Decompressor.decompress_block(imageReader, (int) (imageReader.Size() - imageReader.Tell()),
                     (int) decompressedSize);
@@ -242,11 +258,14 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
 
             int bytesRead = 0;
             rawImg = imageData;
+            
             if (Flags["RLE"] || Flags["RLEW"] || Flags["RLET"])
             {
+                
             }
             else
             {
+                
                 switch (_graphicMode)
                 {
                     case 4:
@@ -264,6 +283,11 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
                         (_colorArray, bytesRead) = ImageHelper.ReadSixteen(imageData, _width, _height);
                         break;
                     }
+                    default:
+                    {
+                        break;
+                    }
+                        
                 }
             }
 
@@ -281,18 +305,22 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
                     }
                 }
             }
+            
 
             return;
         }
 
         public void Save(string filename)
         {
+           
             try
             {
+                Logger.Log("Trying to save image");
                 Bitmap.Save(filename);
             }
             catch 
             {
+                Logger.Log("RIP");
                 using (var bmp = new Bitmap(_width, _height, PixelFormat.Format32bppArgb))
                 {
                     BitmapData bmpData = bmp.LockBits(new Rectangle(0, 0,
@@ -306,6 +334,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
 
                     bmp.UnlockBits(bmpData);
                     bmp.Save(filename);
+                    Logger.Log("Trying again");
                 }
             } 
             
@@ -338,20 +367,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
             }
         }
 
-        // private byte[] GenerateImage()
-        // {
-        //     Int32 pad = ImageHelper.GetPadding(_width, 3);
-        //     byte[] points = new byte[(_width * _height + pad * _height)*3];
-        //     for (UInt32 y = 0; y < _height; y++)
-        //     {
-        //         for (UInt32 x = 0; x < _height; x++)
-        //         {
-        //             
-        //         }
-        //     }
-        //
-        //     return points;
-        // }
+        
 
 
         public void Write(ByteWriter writer)

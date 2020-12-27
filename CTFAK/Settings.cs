@@ -10,7 +10,7 @@ namespace DotNetCTFDumper
         public static bool SaveChunks;
         public static bool Verbose;
         public static bool Old;
-        public static bool twofiveplus;
+        public static bool twofiveplus=true;
         
         public static string GamePath;
         public static string GameName => Path.GetFileNameWithoutExtension(GamePath);
@@ -21,8 +21,7 @@ namespace DotNetCTFDumper
 
         public static string ChunkPath=>$"{DumpPath}\\Chunks";
         public static string ExtensionPath=>$"{DumpPath}\\Extensions";
-        
-        
+              
         public static string AppName;
         public static string Copyright;
         public static string ProjectPath;

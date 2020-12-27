@@ -10,6 +10,7 @@ namespace DotNetCTFDumper.Utils
         static StreamWriter _writer;
         public static void Log(string text, bool logToScreen = true,ConsoleColor color = ConsoleColor.White, bool logToConsole=true)
         {
+
             if (_writer == null)
             {
                 File.Delete("NewLog.log");

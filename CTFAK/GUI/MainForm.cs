@@ -33,7 +33,7 @@ namespace DotNetCTFDumper.GUI
         public static bool BreakMusics;
         public static bool Loaded;
         public static Color ColorTheme = Color.FromArgb(223, 114, 38);
-
+ 
         public delegate void SaveHandler(int index, int all);
 
         public delegate void IncrementSortedProgressBar(int all);
@@ -105,6 +105,7 @@ namespace DotNetCTFDumper.GUI
             };
             KeyPreview = true;
             tabControl1.Selecting += tabControl1_Selecting;
+            tabControl1.TabPages.Remove(mfaTab);
             
             
         }
@@ -116,7 +117,7 @@ namespace DotNetCTFDumper.GUI
                 if (e.TabPage != mainTab)
                     e.Cancel = true;
             }
-            _soundPlayer.Stop();
+           //_soundPlayer.Stop();
 
         }
 

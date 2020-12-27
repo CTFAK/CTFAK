@@ -86,6 +86,7 @@ namespace DotNetCTFDumper.MMFParser.EXE
                         ChunkData = exeReader.ReadBytes(Size);
                         break;
                 }
+                Save();
 
 
             }

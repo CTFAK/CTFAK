@@ -30,29 +30,21 @@ namespace DotNetCTFDumper
             var verbose = false;
             var dumpImages = true;
             var dumpSounds = true;
-            AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
+            /*AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
             {
                 Logger.Log("ERROR: ");
                 Logger.Log(eventArgs.Exception.ToString());
-                /*ErrorLogBox error = null;
-                try
-                {
-                    error = new ErrorLogBox(eventArgs.Exception);
-                }
-                finally
-                {
-                    Application.Run(error);
-                }*/
-                 
-                
-                
-            };
+            };*/
             
             Settings.UseGUI = true;
             
             if (args.Length > 0)
             {
                 MyForm = new MainForm(Color.FromName(args[0]));
+            }
+            if (args.Length > 1)
+            {
+                ReadFile(args[1],true,true,true);
             }
             else if(args.Length==0)
             {
