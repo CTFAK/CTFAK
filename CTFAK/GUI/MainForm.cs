@@ -640,6 +640,7 @@ namespace DotNetCTFDumper.GUI
 
         public void InitImages()
         {
+            if (Settings.twofiveplus) return;
             var bank = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
             var items = bank.Images.ToList();
             var filtered = items.OrderBy(x => x.Value.Handle);
@@ -851,6 +852,7 @@ namespace DotNetCTFDumper.GUI
         public void InitSounds()
         {
             var bank = Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>();
+            if (bank == null) return;
             foreach (SoundItem soundItem in bank.Items)
             {
                 soundList.Nodes.Add(new ChunkNode(soundItem.Name,soundItem));

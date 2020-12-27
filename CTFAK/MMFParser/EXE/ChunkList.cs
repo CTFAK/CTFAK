@@ -25,6 +25,8 @@ namespace DotNetCTFDumper.MMFParser.EXE
                 chunk.Loader = LoadChunk(chunk);
                 Chunks.Add(chunk);
                 if (chunk.Id == 8750) chunk.BuildKey();
+                if (chunk.Id == 8788) Settings.twofiveplus = true;
+
                 if (reader.Tell() >= reader.Size()) break;
                 if (chunk.Id == 32639) break; //LAST chunkID
             }

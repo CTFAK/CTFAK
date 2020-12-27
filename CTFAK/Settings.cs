@@ -10,7 +10,7 @@ namespace DotNetCTFDumper
         public static bool SaveChunks;
         public static bool Verbose;
         public static bool Old;
-        public static bool twofiveplus=true;
+        public static bool twofiveplus = false;
         
         public static string GamePath;
         public static string GameName => Path.GetFileNameWithoutExtension(GamePath);

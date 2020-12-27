@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace DotNetCTFDumper.Utils
 {
@@ -56,6 +57,34 @@ namespace DotNetCTFDumper.Utils
             }
 
             return (colorArray, position);
+        }
+        public static (byte[], int) Read32(byte[] data, int width, int height)
+        {
+            byte[] colorArray = new byte[width * height * 4];
+            int stride = width * 4;
+            int pad = GetPadding(width, 3);
+            int position = 0;
+            try
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        position += 3;
+                    }
+                    position += pad * 3;
+                }
+            }
+            catch
+            {
+                return (Array.Empty<byte>(), position);
+            }
+
+
+            return (Array.Empty<byte>(), position);
+
+
+
         }
 
         public static (byte[], int) ReadFifteen(byte[] data, int width, int height)

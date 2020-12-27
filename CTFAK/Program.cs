@@ -30,11 +30,11 @@ namespace DotNetCTFDumper
             var verbose = false;
             var dumpImages = true;
             var dumpSounds = true;
-            /*AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
+            AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
             {
                 Logger.Log("ERROR: ");
                 Logger.Log(eventArgs.Exception.ToString());
-            };*/
+            };
             
             Settings.UseGUI = true;
             
@@ -44,7 +44,7 @@ namespace DotNetCTFDumper
             }
             if (args.Length > 1)
             {
-                ReadFile(args[1],true,true,true);
+                ReadFile(args[1],true,false,false);
             }
             else if(args.Length==0)
             {

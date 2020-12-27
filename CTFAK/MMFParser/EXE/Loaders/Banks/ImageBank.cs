@@ -14,7 +14,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
 {
     public class ImageBank : ChunkLoader
     {
-        public bool SaveImages = true;
+        public bool SaveImages = false;
         public Dictionary<int, ImageItem> Images = new Dictionary<int, ImageItem>();
         public uint NumberOfItems;
         public bool PreloadOnly=false;
@@ -155,9 +155,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
         {
             Handle = Reader.ReadInt32() - 1;
             Position = (int) Reader.Tell();
-            Logger.Log("ImageFound: "+Handle);
             if (load) Load();
-            
             else Preload();
 
         }
@@ -182,23 +180,14 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
             _bitmap = null;
             Reader.Seek(Position);
             ByteReader imageReader;
-            Console.WriteLine("Preloading Image");
-            if (Settings.twofiveplus)
-            {
-
-                //Do 2.5+ decryption
-                
-            }
-            // imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
-            
-            imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
-            
-            //Directory.CreateDirectory("DUMP\\DEBUG");
-            //File.WriteAllBytes($"DUMP\\DEBUG\\Img-{Handle}.imgb",imageReader.ReadBytes((int) imageReader.Size()));
-            
-            
+            if (!Settings.twofiveplus)
+                imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
+            else imageReader = Reader;           
             long start = imageReader.Tell();
-
+            
+            
+            //return;
+            if(Settings.twofiveplus) imageReader.Skip(4);
             _checksum = imageReader.ReadInt32();
             _references = imageReader.ReadInt32();
             Size = (int) imageReader.ReadUInt32();
@@ -230,7 +219,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
 
             _width = imageReader.ReadInt16();
             _height = imageReader.ReadInt16();
-            _graphicMode = imageReader.ReadByte(); //Graphic mode is always 4 for SL
+            _graphicMode = imageReader.ReadByte();
             
             Flags.flag = imageReader.ReadByte();
 
@@ -282,6 +271,13 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
                     {
                         (_colorArray, bytesRead) = ImageHelper.ReadSixteen(imageData, _width, _height);
                         break;
+                    }
+                    case 8:
+                    {
+                        //imageReader.Seek(start+Size);
+                        return;
+                        (_colorArray, bytesRead) = ImageHelper.Read32(imageData, _width, _height);
+                        break; 
                     }
                     default:
                     {
