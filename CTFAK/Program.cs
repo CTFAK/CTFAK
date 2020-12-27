@@ -32,8 +32,20 @@ namespace DotNetCTFDumper
             var dumpSounds = true;
             AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
             {
-                var error = new ErrorLogBox(eventArgs.Exception);
-                Application.Run(error);
+                Logger.Log("ERROR: ");
+                Logger.Log(eventArgs.Exception.ToString());
+                /*ErrorLogBox error = null;
+                try
+                {
+                    error = new ErrorLogBox(eventArgs.Exception);
+                }
+                finally
+                {
+                    Application.Run(error);
+                }*/
+                 
+                
+                
             };
             
             Settings.UseGUI = true;
@@ -42,7 +54,7 @@ namespace DotNetCTFDumper
             {
                 MyForm = new MainForm(Color.FromName(args[0]));
             }
-            else
+            else if(args.Length==0)
             {
                 MyForm = new MainForm(Color.FromArgb(223, 114, 38));
             }
@@ -52,7 +64,7 @@ namespace DotNetCTFDumper
             
 
 
-            if (args.Length > 0 && (args[0] == "-h" || args[0] == "-help"))
+            /*if (args.Length > 0 && (args[0] == "-h" || args[0] == "-help"))
             {
                 Logger.Log("DotNetCTFDumper: 0.0.5", true, ConsoleColor.Green);
                 Logger.Log("Lauch Args:", true, ConsoleColor.Green);
@@ -68,7 +80,7 @@ namespace DotNetCTFDumper
                 Environment.Exit(0);
             }
 
-            if (args.Length > 1) ReadFile(path, verbose, dumpImages, dumpSounds);
+            if (args.Length > 1) ReadFile(path, verbose, dumpImages, dumpSounds);*/
         }
 
         public static void ReadFile(string path, bool verbose = false, bool dumpImages = false, bool dumpSounds = true)

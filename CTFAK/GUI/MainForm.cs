@@ -125,7 +125,13 @@ namespace DotNetCTFDumper.GUI
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
             var worker = new BackgroundWorker();
-            worker.DoWork += (workSender, workE) => StartReading();
+            worker.DoWork += (workSender, workE) =>
+            {
+                if(File.Exists(openFileDialog1.FileName)) StartReading();
+                else throw new NotImplementedException("File not found");
+                
+                
+            };
             worker.RunWorkerCompleted += (workSender, workE) =>
             {
                 

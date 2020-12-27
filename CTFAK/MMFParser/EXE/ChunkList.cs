@@ -250,7 +250,7 @@ namespace DotNetCTFDumper.MMFParser.EXE
                 
             }
 
-            if (loader != null) loader.Read();
+            loader?.Read();
             return loader;
         }
 

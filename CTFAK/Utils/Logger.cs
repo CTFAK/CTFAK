@@ -12,8 +12,8 @@ namespace DotNetCTFDumper.Utils
         {
             if (_writer == null)
             {
-                File.Delete("Dump.log");
-                _writer = new StreamWriter("Dump.log", true);
+                File.Delete("NewLog.log");
+                _writer = new StreamWriter("NewLog.log", true);
                 _writer.AutoFlush = true;
 
             }
