@@ -347,6 +347,7 @@ namespace DotNetCTFDumper.MMFParser.Translation
         public static void Message(string msg)
         {
             OnMessage?.Invoke(msg);
+            Logger.Log(msg);
         }
 
         

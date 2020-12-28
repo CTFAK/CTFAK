@@ -105,7 +105,7 @@ namespace DotNetCTFDumper.GUI
             };
             KeyPreview = true;
             tabControl1.Selecting += tabControl1_Selecting;
-            tabControl1.TabPages.Remove(mfaTab);
+            //tabControl1.TabPages.Remove(mfaTab);
             
             
         }

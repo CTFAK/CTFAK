@@ -52,10 +52,10 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders
         });
         
         public int CountOfObjs;
-        int _top;
-        int _bottom;
-        int _left;
-        int _right;
+        // int _top;
+        // int _bottom;
+        // int _left;
+        // int _right;
         public ChunkList Chunks;
         public FrameHeader Header;
         public ObjectInstances Objects;

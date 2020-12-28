@@ -1,5 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.IO.Pipes;
+using System.Net;
+using System.Windows.Forms;
 using DotNetCTFDumper.MMFParser.EXE;
 using DotNetCTFDumper.Utils;
 
@@ -8,12 +11,34 @@ namespace DotNetCTFDumper.MMFParser.Translation
     public static class MFAGenerator
     {
         
-        public static readonly string TemplatePath = @"template.mfa";
+        public const string TemplatePath = @"template.mfa";
+        public const string TemplateLink = @"https://github.com/CTFAK/CTFAK/raw/master/Dependencies/template.mfa";
+
 
         public static MFA.MFA BuildMFA()
         {
+            ByteReader mfaReader;
+            if (!File.Exists(TemplatePath))
+            {
+                var dlg = MessageBox.Show("Template MFA not found\nUse github version?", "Error",MessageBoxButtons.YesNo);
+                if (dlg == DialogResult.No)
+                {
+                    Logger.Log("MFA Generation Error");
+                    return null;
+                }
+                else if (dlg == DialogResult.Yes)
+                {
+                    using (var wc = new WebClient())
+                    {
+                        Logger.Log("Donwloading MFA from "+TemplateLink);
+                        mfaReader=new ByteReader(wc.DownloadData(TemplateLink));
+                    }
+                }
+                else return null;
+            } 
+            else mfaReader = new ByteReader(TemplatePath, FileMode.Open);
             Settings.DoMFA = true;
-            var mfaReader = new ByteReader(TemplatePath, FileMode.Open);
+            
             var template = new MFA.MFA(mfaReader);
             Pame2Mfa.Message("Loading Template");
             template.Read(); //Loading template

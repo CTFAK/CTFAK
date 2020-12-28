@@ -87,7 +87,7 @@ namespace DotNetCTFDumper.MMFParser.EXE
                     case ChunkFlags.Encrypted:                       
                         ChunkData = Decryption.DecodeChunk(exeReader.ReadBytes(Size),Size);
                         break;
-                    case ChunkFlags.CompressedAndEncrypyed:
+                    case ChunkFlags.CompressedAndEncrypted:
                         ChunkData = Decryption.DecodeMode3(exeReader.ReadBytes(Size), Size,Id,out DecompressedSize);
                         break;
                     case ChunkFlags.Compressed:
@@ -159,7 +159,7 @@ namespace DotNetCTFDumper.MMFParser.EXE
             NotCompressed = 0,
             Compressed = 1,
             Encrypted = 2,
-            CompressedAndEncrypyed = 3
+            CompressedAndEncrypted = 3
         }
 
         public ChunkLoader LoadChunk(Chunk chunk)

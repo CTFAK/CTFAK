@@ -257,7 +257,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
             _transparent = imageReader.ReadBytes(4);
              if(Settings.twofiveplus)Logger.Log($"Loading image {Handle.ToString(),4} Size: {_width,4}x{_height,4}");
             byte[] imageData;
-            Flags["LZX"] = false;
+            if(Settings.twofiveplus) Flags["LZX"] = false;
             if (Flags["LZX"])
             {
                 
@@ -301,12 +301,12 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
                     case 8:
                     {
                         imageReader.Seek(start+Size);
-                        return;
                         (_colorArray, bytesRead) = ImageHelper.Read32(imageData, _width, _height);
                         break; 
                     }
                     default:
                     {
+                        Logger.Log("Unknown Color Mode");
                         break;
                     }
                         

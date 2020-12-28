@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Forms;
 using DotNetCTFDumper.GUI;
 using DotNetCTFDumper.MMFParser.EXE;
@@ -26,12 +27,10 @@ namespace DotNetCTFDumper
             // MFAGenerator.ReadTestMFA();
             // Environment.Exit(0);
 
-            var path = "";
-            var verbose = false;
-            var dumpImages = true;
-            var dumpSounds = true;
             AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
             {
+                if (eventArgs.Exception is ThreadAbortException) return;
+                
                 Logger.Log("ERROR: ");
                 Logger.Log(eventArgs.Exception.ToString());
             };
