@@ -17,7 +17,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
         public bool SaveImages = false;
         public Dictionary<int, ImageItem> Images = new Dictionary<int, ImageItem>();
         public uint NumberOfItems;
-        public bool PreloadOnly=false;
+        public bool PreloadOnly=true;
 
         public ImageBank(ByteReader reader) : base(reader)
         {
@@ -70,6 +70,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
 
         public override void Read()
         {
+            
             if (!Settings.DoMFA) Reader.Seek(0); //Reset the reader to avoid bugs when dumping more than once
             var tempImages = new Dictionary<int, ImageItem>();
 
@@ -184,14 +185,39 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
                 imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
             else imageReader = Reader;           
             long start = imageReader.Tell();
+
+
+            if (Settings.twofiveplus)
+            {
+                var unk = imageReader.ReadBytes(4);
+                if (unk.GetHex(4) != "FF FF FF FF ")
+                {
+                    Logger.Log(Reader.Tell().ToString());
+                    Size = (int) BitConverter.ToUInt32(unk,0);
+                    _references = imageReader.ReadInt32();
+                    _checksum = (int) imageReader.ReadUInt32();
+                }
+                else
+                {
+                    Size = (int) imageReader.ReadInt32();
+                    _references = imageReader.ReadInt32();
+                    _checksum = (int) imageReader.ReadUInt32();
+                }
+                
+                Logger.Log("Size: "+Size);
+                Logger.Log("References: "+_references);
+                Logger.Log("Checksum: "+_checksum);
+
+            }
+            else
+            {
+                _checksum = imageReader.ReadInt32();
+                _references = imageReader.ReadInt32();
+                Size = (int) imageReader.ReadUInt32();  
+            }
+
             
-            
-            //return;
-            if(Settings.twofiveplus) imageReader.Skip(4);
-            _checksum = imageReader.ReadInt32();
-            _references = imageReader.ReadInt32();
-            Size = (int) imageReader.ReadUInt32();
-            imageReader.Seek(start+Size);
+            imageReader.Seek(start+ _checksum);//to prevent bugs
             
         }
         
@@ -229,7 +255,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
             ActionX = imageReader.ReadInt16();
             ActionY = imageReader.ReadInt16();
             _transparent = imageReader.ReadBytes(4);
-            Logger.Log($"Loading image {Handle.ToString(),4} Size: {_width,4}x{_height,4}");
+             if(Settings.twofiveplus)Logger.Log($"Loading image {Handle.ToString(),4} Size: {_width,4}x{_height,4}");
             byte[] imageData;
             Flags["LZX"] = false;
             if (Flags["LZX"])
@@ -274,7 +300,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
                     }
                     case 8:
                     {
-                        //imageReader.Seek(start+Size);
+                        imageReader.Seek(start+Size);
                         return;
                         (_colorArray, bytesRead) = ImageHelper.Read32(imageData, _width, _height);
                         break; 
@@ -311,7 +337,7 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
            
             try
             {
-                Logger.Log("Trying to save image");
+               if(Settings.twofiveplus) Logger.Log("Trying to save image");
                 Bitmap.Save(filename);
             }
             catch 
