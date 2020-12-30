@@ -3,7 +3,7 @@ using System.Drawing;
 using System.IO;
 using System.Text;
 
-namespace DotNetCTFDumper.Utils
+namespace CTFAK.Utils
 {
     public class ByteReader : BinaryReader
     {

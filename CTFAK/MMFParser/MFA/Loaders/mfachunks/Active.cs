@@ -1,6 +1,6 @@
-﻿using DotNetCTFDumper.Utils;
+﻿using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
+namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
 {
     public class Active : AnimationObject
     {

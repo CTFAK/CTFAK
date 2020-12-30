@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using DotNetCTFDumper.MMFParser.EXE;
-using DotNetCTFDumper.MMFParser.EXE.Loaders;
-using DotNetCTFDumper.MMFParser.MFA;
-using DotNetCTFDumper.MMFParser.MFA.Loaders;
-using Frame = DotNetCTFDumper.MMFParser.MFA.Loaders.Frame;
-using Layer = DotNetCTFDumper.MMFParser.MFA.Loaders.Layer;
+using CTFAK.MMFParser.EXE;
 
-namespace DotNetCTFDumper.PluginAPI
+namespace CTFAK.PluginAPI
 {
     public static class PluginAPI
     {

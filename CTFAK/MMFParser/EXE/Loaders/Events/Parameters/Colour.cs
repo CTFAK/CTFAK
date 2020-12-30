@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
-using DotNetCTFDumper.Utils;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Events.Parameters
+namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
 {
     class Colour : ParameterCommon
     {

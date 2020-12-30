@@ -1,12 +1,8 @@
 ﻿using System;
-using System.IO;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Forms;
-using DotNetCTFDumper.Utils;
 
-namespace DotNetCTFDumper.GUI
+namespace CTFAK.GUI
 {
     public partial class MainConsole : Form
     {

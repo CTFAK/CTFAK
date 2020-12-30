@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.NetworkInformation;
-using DotNetCTFDumper.MMFParser.EXE;
-using DotNetCTFDumper.Utils;
+using CTFAK.MMFParser.EXE;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks
+namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
 {
     public class Movements : DataLoader
     {

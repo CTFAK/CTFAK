@@ -1,9 +1,8 @@
-﻿using System;
-using System.Drawing;
-using DotNetCTFDumper.MMFParser.EXE;
-using DotNetCTFDumper.Utils;
+﻿using System.Drawing;
+using CTFAK.MMFParser.EXE;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.MFA.Loaders
+namespace CTFAK.MMFParser.MFA.Loaders
 {
     public class Transition:DataLoader
     {

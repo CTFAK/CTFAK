@@ -2,10 +2,9 @@
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using DotNetCTFDumper.Utils;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.GUI
+namespace CTFAK.GUI
 {
     public partial class ErrorLogBox : Form
     {

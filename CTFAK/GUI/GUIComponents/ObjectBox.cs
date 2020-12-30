@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
-using DotNetCTFDumper.MMFParser.EXE.Loaders;
+using CTFAK.MMFParser.EXE.Loaders;
 
-namespace DotNetCTFDumper.GUI
+namespace CTFAK.GUI.GUIComponents
 {
     public class ObjectBox:PictureBox
     {

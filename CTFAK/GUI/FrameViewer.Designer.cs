@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
-using System.Windows.Forms;
 
-namespace DotNetCTFDumper.GUI
+namespace CTFAK.GUI
 {
     partial class FrameViewer
     {

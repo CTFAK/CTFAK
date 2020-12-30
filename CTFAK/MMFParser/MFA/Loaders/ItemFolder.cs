@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using DotNetCTFDumper.MMFParser.EXE;
-using DotNetCTFDumper.Utils;
+﻿using System.Collections.Generic;
+using CTFAK.MMFParser.EXE;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.MFA.Loaders
+namespace CTFAK.MMFParser.MFA.Loaders
 {
     public class ItemFolder:DataLoader
     {

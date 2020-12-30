@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using DotNetCTFDumper.Utils;
-using static DotNetCTFDumper.MMFParser.EXE.ChunkList;
+using CTFAK.Utils;
+using static CTFAK.MMFParser.EXE.ChunkList;
 
-namespace DotNetCTFDumper.MMFParser.EXE.Loaders
+namespace CTFAK.MMFParser.EXE.Loaders
 {
     public class AppIcon : ChunkLoader
     {

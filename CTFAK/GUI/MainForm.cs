@@ -9,19 +9,18 @@ using System.Media;
 using System.Threading;
 using System.Windows.Forms;
 using Be.Windows.Forms;
-using DotNetCTFDumper.MMFParser;
-using DotNetCTFDumper.MMFParser.EXE;
-using DotNetCTFDumper.MMFParser.EXE.Loaders;
-using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
-using DotNetCTFDumper.MMFParser.EXE.Loaders.Objects;
-using DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks;
-using DotNetCTFDumper.MMFParser.Translation;
-using DotNetCTFDumper.Utils;
-using Animation = DotNetCTFDumper.MMFParser.EXE.Loaders.Objects.Animation;
-using AnimationDirection = DotNetCTFDumper.MMFParser.EXE.Loaders.Objects.AnimationDirection;
-using Keys = System.Windows.Forms.Keys;
+using CTFAK.GUI.GUIComponents;
+using CTFAK.MMFParser;
+using CTFAK.MMFParser.EXE;
+using CTFAK.MMFParser.EXE.Loaders;
+using CTFAK.MMFParser.EXE.Loaders.Banks;
+using CTFAK.MMFParser.EXE.Loaders.Objects;
+using CTFAK.MMFParser.Translation;
+using CTFAK.Utils;
+using Animation = CTFAK.MMFParser.EXE.Loaders.Objects.Animation;
+using AnimationDirection = CTFAK.MMFParser.EXE.Loaders.Objects.AnimationDirection;
 
-namespace DotNetCTFDumper.GUI
+namespace CTFAK.GUI
 {
     public partial class MainForm : Form
     {
@@ -153,9 +152,10 @@ namespace DotNetCTFDumper.GUI
             listBox1.Items.Clear();
             var console = new MainConsole();
             this.Location= new Point(0,0);
-            this.Size= new Size(this.Size.Width-100,this.Size.Height);
+            this.Size= new Size(this.Size.Width-100,Screen.PrimaryScreen.Bounds.Height-120);
             console.Show();
             console.Location = new Point(this.Location.X+this.Size.Width-15,0);
+            console.Size=new Size(console.Size.Width,this.Size.Height);
             
         }
 
@@ -352,30 +352,28 @@ namespace DotNetCTFDumper.GUI
         }
 
 
-
-
-        public void UpdateImageBar(int index, int all)
+        private void UpdateImageBar(int index, int all)
         {
             all -= 1;
             imageBar.Value = (int) (index / (float) all * 100);
-            imageLabel.Text = $"{index}/{all}";
+            imageLabel.Text = $@"{index}/{all}";
         }
 
-        public void UpdateSoundBar(int index, int all)
+        private void UpdateSoundBar(int index, int all)
         {
             all -= 1;
             soundBar.Value = (int) (index / (float) all * 100);
-            soundLabel.Text = $"{index}/{all}";
+            soundLabel.Text = $@"{index}/{all}";
         }
 
-        public void UpdateMusicBar(int index, int all)
+        private void UpdateMusicBar(int index, int all)
         {
             all -= 1;
             musicBar.Value = (int) (index / (float) all * 100);
-            musicLabel.Text = $"{index}/{all}";
+            musicLabel.Text = $@"{index}/{all}";
         }
 
-        public void IncrementSortedBar(int all)
+        private void IncrementSortedBar(int all)
         {
             SortedProgressBar.Visible = true;
             SortedProgressBar.Maximum = all;

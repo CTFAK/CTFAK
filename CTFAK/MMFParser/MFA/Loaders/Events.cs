@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Security.AccessControl;
-using System.Text;
-using DotNetCTFDumper.MMFParser.EXE;
-using DotNetCTFDumper.MMFParser.EXE.Loaders.Events;
-using DotNetCTFDumper.Utils;
+using CTFAK.MMFParser.EXE;
+using CTFAK.MMFParser.EXE.Loaders.Events;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.MFA.Loaders
+namespace CTFAK.MMFParser.MFA.Loaders
 {
     public class Events:DataLoader
     {

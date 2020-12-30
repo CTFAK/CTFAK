@@ -1,7 +1,7 @@
-﻿using DotNetCTFDumper.Utils;
-using static DotNetCTFDumper.MMFParser.EXE.ChunkList;
+﻿using CTFAK.Utils;
+using static CTFAK.MMFParser.EXE.ChunkList;
 
-namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
+namespace CTFAK.MMFParser.EXE.Loaders.Banks
 {
     public class FontBank : ChunkLoader
     {

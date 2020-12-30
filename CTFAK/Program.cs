@@ -5,13 +5,12 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
-using DotNetCTFDumper.GUI;
-using DotNetCTFDumper.MMFParser.EXE;
-using DotNetCTFDumper.MMFParser.Translation;
-using DotNetCTFDumper.Utils;
+using CTFAK.GUI;
+using CTFAK.MMFParser.EXE;
+using CTFAK.Utils;
 using Joveler.Compression.ZLib;
 
-namespace DotNetCTFDumper
+namespace CTFAK
 {
     public class Program
     {
@@ -58,7 +57,7 @@ namespace DotNetCTFDumper
             /*if (args.Length > 0 && (args[0] == "-h" || args[0] == "-help"))
             {
                 Logger.Log("DotNetCTFDumper: 0.0.5", true, ConsoleColor.Green);
-                Logger.Log("Lauch Args:", true, ConsoleColor.Green);
+                Logger.Log("Launch Args:", true, ConsoleColor.Green);
                 Logger.Log("   Filename - path to your exe or mfa", true, ConsoleColor.Green);
                 Logger.Log("   Info - Dump debug info to console(default:true)", true, ConsoleColor.Green);
                 Logger.Log("   DumpImages - Dump images to 'DUMP\\[your game]\\ImageBank'(default:false)", true,

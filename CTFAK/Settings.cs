@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace DotNetCTFDumper
+namespace CTFAK
 {
     public static class Settings
     {

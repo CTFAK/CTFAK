@@ -1,7 +1,7 @@
 ﻿using System;
-using DotNetCTFDumper.Utils;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Events.Expressions
+namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
 {
     class Expression : DataLoader
     {

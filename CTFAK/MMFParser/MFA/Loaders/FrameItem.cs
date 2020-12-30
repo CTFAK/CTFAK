@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
-using DotNetCTFDumper.MMFParser.EXE;
-using DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks;
-using DotNetCTFDumper.Utils;
+using CTFAK.MMFParser.EXE;
+using CTFAK.MMFParser.MFA.Loaders.mfachunks;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.MFA.Loaders
+namespace CTFAK.MMFParser.MFA.Loaders
 {
     public class FrameItem : DataLoader
     {

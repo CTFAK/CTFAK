@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using DotNetCTFDumper.MMFParser.EXE;
-using DotNetCTFDumper.Utils;
+using CTFAK.MMFParser.EXE;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.MFA.Loaders
+namespace CTFAK.MMFParser.MFA.Loaders
 {
     public class ChunkList : DataLoader//This is used for MFA reading/writing
     {

@@ -1,8 +1,8 @@
 ﻿using System;
-using DotNetCTFDumper.Utils;
-using static DotNetCTFDumper.MMFParser.EXE.ChunkList;
+using CTFAK.Utils;
+using static CTFAK.MMFParser.EXE.ChunkList;
 
-namespace DotNetCTFDumper.MMFParser.EXE.Loaders
+namespace CTFAK.MMFParser.EXE.Loaders
 {
     class ObjectNames : ChunkLoader//2.5+ trash
     {

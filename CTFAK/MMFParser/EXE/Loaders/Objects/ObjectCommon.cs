@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Drawing;
-using DotNetCTFDumper.Utils;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
+namespace CTFAK.MMFParser.EXE.Loaders.Objects
 {
     public class ObjectCommon : ChunkLoader
     {

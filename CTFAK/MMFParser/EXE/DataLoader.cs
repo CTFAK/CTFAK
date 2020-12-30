@@ -1,7 +1,7 @@
-﻿using DotNetCTFDumper.Utils;
-using static DotNetCTFDumper.MMFParser.EXE.ChunkList;
+﻿using CTFAK.Utils;
+using static CTFAK.MMFParser.EXE.ChunkList;
 
-namespace DotNetCTFDumper.MMFParser.EXE
+namespace CTFAK.MMFParser.EXE
 {
     public abstract class DataLoader
     {

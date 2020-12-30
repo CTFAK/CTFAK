@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using DotNetCTFDumper.Utils;
+﻿using System.Collections.Generic;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
+namespace CTFAK.MMFParser.EXE.Loaders.Objects
 {
     public class Animations:ChunkLoader
     {

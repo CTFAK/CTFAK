@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using DotNetCTFDumper.MMFParser.EXE;
-using DotNetCTFDumper.MMFParser.EXE.Loaders;
-using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
-using DotNetCTFDumper.MMFParser.MFA.Loaders;
-using DotNetCTFDumper.MMFParser.Translation;
-using DotNetCTFDumper.Utils;
-using ChunkList = DotNetCTFDumper.MMFParser.MFA.Loaders.ChunkList;
-using Controls = DotNetCTFDumper.MMFParser.MFA.Loaders.Controls;
-using Frame = DotNetCTFDumper.MMFParser.MFA.Loaders.Frame;
+using CTFAK.MMFParser.EXE;
+using CTFAK.MMFParser.EXE.Loaders;
+using CTFAK.MMFParser.EXE.Loaders.Banks;
+using CTFAK.MMFParser.MFA.Loaders;
+using CTFAK.MMFParser.Translation;
+using CTFAK.Utils;
+using ChunkList = CTFAK.MMFParser.MFA.Loaders.ChunkList;
+using Controls = CTFAK.MMFParser.MFA.Loaders.Controls;
+using Frame = CTFAK.MMFParser.MFA.Loaders.Frame;
 
-namespace DotNetCTFDumper.MMFParser.MFA
+namespace CTFAK.MMFParser.MFA
 {
     public class MFA : DataLoader
     {

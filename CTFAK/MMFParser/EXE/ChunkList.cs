@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using DotNetCTFDumper.MMFParser.EXE.Loaders;
-using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
-using DotNetCTFDumper.MMFParser.EXE.Loaders.Events;
-using DotNetCTFDumper.Utils;
+using CTFAK.MMFParser.EXE.Loaders;
+using CTFAK.MMFParser.EXE.Loaders.Banks;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.EXE
+namespace CTFAK.MMFParser.EXE
 {
     public class ChunkList
     {

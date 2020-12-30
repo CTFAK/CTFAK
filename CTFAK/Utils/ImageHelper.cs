@@ -1,7 +1,6 @@
 ﻿using System;
-using System.IO;
 
-namespace DotNetCTFDumper.Utils
+namespace CTFAK.Utils
 {
     public static class ImageHelper
     {

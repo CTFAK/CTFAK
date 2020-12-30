@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Web.UI.WebControls;
-using DotNetCTFDumper.GUI;
+using CTFAK.GUI;
 
-namespace DotNetCTFDumper.Utils
+namespace CTFAK.Utils
 {
     public static class Logger
     {

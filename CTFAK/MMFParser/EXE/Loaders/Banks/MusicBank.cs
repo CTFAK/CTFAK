@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using DotNetCTFDumper.GUI;
-using DotNetCTFDumper.Utils;
-using static DotNetCTFDumper.MMFParser.EXE.ChunkList;
+using CTFAK.GUI;
+using CTFAK.Utils;
+using static CTFAK.MMFParser.EXE.ChunkList;
 
-namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
+namespace CTFAK.MMFParser.EXE.Loaders.Banks
 {
     public class MusicBank : ChunkLoader
     {

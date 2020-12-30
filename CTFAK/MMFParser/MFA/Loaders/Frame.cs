@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using DotNetCTFDumper.MMFParser.EXE;
-using DotNetCTFDumper.Utils;
+using CTFAK.MMFParser.EXE;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.MFA.Loaders
+namespace CTFAK.MMFParser.MFA.Loaders
 {
     public class Frame : DataLoader
     {

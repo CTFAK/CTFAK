@@ -1,4 +1,4 @@
-﻿namespace DotNetCTFDumper.GUI
+﻿namespace CTFAK.GUI
 {
     partial class MainForm
     {

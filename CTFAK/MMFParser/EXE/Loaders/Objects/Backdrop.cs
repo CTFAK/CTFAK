@@ -1,6 +1,6 @@
-﻿using DotNetCTFDumper.Utils;
+﻿using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
+namespace CTFAK.MMFParser.EXE.Loaders.Objects
 {
     public enum Obstacle
     {

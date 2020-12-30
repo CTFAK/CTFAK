@@ -2,7 +2,7 @@
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace DotNetCTFDumper.Utils
+namespace CTFAK.Utils
 {
     static class Decryption
     {

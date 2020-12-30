@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using DotNetCTFDumper.Utils;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Objects
+namespace CTFAK.MMFParser.EXE.Loaders.Objects
 {
     public class Movements:ChunkLoader
     {

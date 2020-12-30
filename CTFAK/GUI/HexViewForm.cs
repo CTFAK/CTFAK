@@ -1,11 +1,10 @@
 ﻿using System;
-using System.ComponentModel.Design;
 using System.Drawing;
 using System.Windows.Forms;
 using Be.Windows.Forms;
-using DotNetCTFDumper.Utils;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.GUI
+namespace CTFAK.GUI
 {
     public partial class HexViewForm : Form
     {

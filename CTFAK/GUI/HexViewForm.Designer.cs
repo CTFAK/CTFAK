@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace DotNetCTFDumper.GUI
+namespace CTFAK.GUI
 {
     partial class HexViewForm
     {

@@ -1,4 +1,4 @@
-﻿namespace DotNetCTFDumper.PluginAPI
+﻿namespace CTFAK.PluginAPI
 {
     public interface IPlugin
     {

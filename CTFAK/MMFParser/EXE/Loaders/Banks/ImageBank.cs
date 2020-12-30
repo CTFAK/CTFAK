@@ -4,13 +4,11 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
-using DotNetCTFDumper.GUI;
-using DotNetCTFDumper.Utils;
-using Joveler.Compression.ZLib;
-using static DotNetCTFDumper.MMFParser.EXE.ChunkList;
+using CTFAK.GUI;
+using CTFAK.Utils;
+using static CTFAK.MMFParser.EXE.ChunkList;
 
-namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
+namespace CTFAK.MMFParser.EXE.Loaders.Banks
 {
     public class ImageBank : ChunkLoader
     {
@@ -154,7 +152,8 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
 
         public void Read(bool load)
         {
-            Handle = Reader.ReadInt32() - 1;
+            Handle = Reader.ReadInt32();
+            if (Exe.Instance.GameData.ProductVersion != Constants.Products.MMF15) Handle -= 1;
             Position = (int) Reader.Tell();
             if (load) Load();
             else Preload();
@@ -162,7 +161,8 @@ namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Banks
         }
         public override void Read()
         {
-            Handle = Reader.ReadInt32() - 1;
+            Handle = Reader.ReadInt32();
+            if (Exe.Instance.GameData.ProductVersion != Constants.Products.MMF15) Handle -= 1;
             Position = (int) Reader.Tell();
             Load();
         }

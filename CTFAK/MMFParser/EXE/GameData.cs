@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using DotNetCTFDumper.GUI;
-using DotNetCTFDumper.MMFParser.EXE.Loaders;
-using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
-using DotNetCTFDumper.Utils;
+using CTFAK.MMFParser.EXE.Loaders;
+using CTFAK.MMFParser.EXE.Loaders.Banks;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.EXE
+namespace CTFAK.MMFParser.EXE
 {
     public class GameData
     {

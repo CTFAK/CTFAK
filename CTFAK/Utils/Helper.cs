@@ -7,13 +7,12 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using DotNetCTFDumper.GUI;
-using DotNetCTFDumper.MMFParser;
-using DotNetCTFDumper.MMFParser.EXE;
-using DotNetCTFDumper.MMFParser.EXE.Loaders.Events.Parameters;
-using DotNetCTFDumper.MMFParser.EXE.Loaders.Objects;
+using CTFAK.GUI.GUIComponents;
+using CTFAK.MMFParser.EXE;
+using CTFAK.MMFParser.EXE.Loaders.Events.Parameters;
+using CTFAK.MMFParser.EXE.Loaders.Objects;
 
-namespace DotNetCTFDumper.Utils
+namespace CTFAK.Utils
 {
     static class Helper
     {
@@ -127,28 +126,10 @@ namespace DotNetCTFDumper.Utils
                 temp += data[i].ToString("X2");
                 temp += " ";
             }
-
             return temp;
         }
 
-        public static void PrintHex(this byte[] data)
-        {
-            var blockSize = 16;
-            var blocks = data.Split<byte>(blockSize);
-            foreach (var block in blocks)
-            {
-                string charAcc = "";
-                foreach (var b in block)
-                {
-                    if (b < 128 && b > 32) charAcc += Convert.ToChar(b);
-                    else charAcc += '.';
-                }
-
-                var bLen = block.Count();
-                //var accLen=
-            }
-        }
-
+        
         public static byte[] GetContents(this ByteWriter wrt)
         {
             var buff = new byte[wrt.BaseStream.Length];

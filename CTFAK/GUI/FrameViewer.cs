@@ -1,14 +1,14 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using DotNetCTFDumper.MMFParser.EXE;
-using DotNetCTFDumper.MMFParser.EXE.Loaders;
-using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
-using Frame = DotNetCTFDumper.MMFParser.EXE.Loaders.Frame;
+using CTFAK.GUI.GUIComponents;
+using CTFAK.MMFParser.EXE;
+using CTFAK.MMFParser.EXE.Loaders;
+using CTFAK.MMFParser.EXE.Loaders.Banks;
+using Frame = CTFAK.MMFParser.EXE.Loaders.Frame;
 
-namespace DotNetCTFDumper.GUI
+namespace CTFAK.GUI
 {
     public partial class FrameViewer : Form
     {

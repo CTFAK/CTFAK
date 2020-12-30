@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing;
 using System.IO;
-using DotNetCTFDumper.Utils;
-using static DotNetCTFDumper.MMFParser.EXE.ChunkList;
+using CTFAK.Utils;
+using static CTFAK.MMFParser.EXE.ChunkList;
 
-namespace DotNetCTFDumper.MMFParser.EXE.Loaders
+namespace CTFAK.MMFParser.EXE.Loaders
 {
     public class AppMenu : ChunkLoader
     {

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using Joveler.Compression.ZLib;
 
-namespace DotNetCTFDumper.Utils
+namespace CTFAK.Utils
 {
     public static class Decompressor
     {

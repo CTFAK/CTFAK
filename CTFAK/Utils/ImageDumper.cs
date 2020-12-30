@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using DotNetCTFDumper.GUI;
-using DotNetCTFDumper.MMFParser.EXE;
-using DotNetCTFDumper.MMFParser.EXE.Loaders;
-using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
-using DotNetCTFDumper.MMFParser.EXE.Loaders.Objects;
+using CTFAK.GUI;
+using CTFAK.GUI.GUIComponents;
+using CTFAK.MMFParser.EXE;
+using CTFAK.MMFParser.EXE.Loaders;
+using CTFAK.MMFParser.EXE.Loaders.Banks;
+using CTFAK.MMFParser.EXE.Loaders.Objects;
 
-namespace DotNetCTFDumper.Utils
+namespace CTFAK.Utils
 {
     public static class ImageDumper
     {

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using DotNetCTFDumper.GUI;
-using DotNetCTFDumper.Utils;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.EXE
+namespace CTFAK.MMFParser.EXE
 {
     public class PackData
     {

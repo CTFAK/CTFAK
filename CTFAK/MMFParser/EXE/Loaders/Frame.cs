@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Imaging;
-using DotNetCTFDumper.GUI;
-using DotNetCTFDumper.Utils;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.EXE.Loaders
+namespace CTFAK.MMFParser.EXE.Loaders
 {
     class FrameName : StringChunk
     {

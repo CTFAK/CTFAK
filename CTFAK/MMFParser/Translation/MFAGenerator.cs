@@ -1,12 +1,10 @@
-﻿using System;
-using System.IO;
-using System.IO.Pipes;
+﻿using System.IO;
 using System.Net;
 using System.Windows.Forms;
-using DotNetCTFDumper.MMFParser.EXE;
-using DotNetCTFDumper.Utils;
+using CTFAK.MMFParser.EXE;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.Translation
+namespace CTFAK.MMFParser.Translation
 {
     public static class MFAGenerator
     {
@@ -26,6 +24,7 @@ namespace DotNetCTFDumper.MMFParser.Translation
                     Logger.Log("MFA Generation Error");
                     return null;
                 }
+                
                 else if (dlg == DialogResult.Yes)
                 {
                     using (var wc = new WebClient())

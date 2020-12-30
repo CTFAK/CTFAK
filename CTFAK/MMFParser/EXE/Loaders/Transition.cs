@@ -1,8 +1,7 @@
-﻿using System;
-using System.Drawing;
-using DotNetCTFDumper.Utils;
+﻿using System.Drawing;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.EXE.Loaders
+namespace CTFAK.MMFParser.EXE.Loaders
 {
     public class Transition:ChunkLoader
     {

@@ -1,7 +1,7 @@
 ﻿using System;
-using static DotNetCTFDumper.MMFParser.EXE.ChunkList;
+using static CTFAK.MMFParser.EXE.ChunkList;
 
-namespace DotNetCTFDumper.MMFParser.EXE.Loaders
+namespace CTFAK.MMFParser.EXE.Loaders
 {
     class ExtData : ChunkLoader
     {

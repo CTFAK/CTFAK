@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
-using DotNetCTFDumper.GUI;
-using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
-using static DotNetCTFDumper.MMFParser.EXE.Exe;
+using CTFAK.GUI;
+using CTFAK.MMFParser.EXE.Loaders.Banks;
+using static CTFAK.MMFParser.EXE.Exe;
 
-namespace DotNetCTFDumper.Utils
+namespace CTFAK.Utils
 {
     public static class Backend
     {

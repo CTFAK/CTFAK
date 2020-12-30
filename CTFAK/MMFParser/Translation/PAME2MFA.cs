@@ -2,22 +2,19 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Web.UI.WebControls.Expressions;
-using System.Xml.Schema;
-using DotNetCTFDumper.MMFParser.EXE;
-using DotNetCTFDumper.MMFParser.EXE.Loaders;
-using DotNetCTFDumper.MMFParser.EXE.Loaders.Objects;
-using DotNetCTFDumper.MMFParser.MFA.Loaders;
-using DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks;
-using DotNetCTFDumper.Utils;
-using Animation = DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks.Animation;
-using AnimationDirection = DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks.AnimationDirection;
-using ChunkList = DotNetCTFDumper.MMFParser.MFA.Loaders.ChunkList;
-using Frame = DotNetCTFDumper.MMFParser.EXE.Loaders.Frame;
-using Layer = DotNetCTFDumper.MMFParser.MFA.Loaders.Layer;
-using Movement = DotNetCTFDumper.MMFParser.MFA.Loaders.mfachunks.Movement;
+using CTFAK.MMFParser.EXE;
+using CTFAK.MMFParser.EXE.Loaders.Objects;
+using CTFAK.MMFParser.MFA.Loaders;
+using CTFAK.MMFParser.MFA.Loaders.mfachunks;
+using CTFAK.Utils;
+using Animation = CTFAK.MMFParser.MFA.Loaders.mfachunks.Animation;
+using AnimationDirection = CTFAK.MMFParser.MFA.Loaders.mfachunks.AnimationDirection;
+using ChunkList = CTFAK.MMFParser.MFA.Loaders.ChunkList;
+using Frame = CTFAK.MMFParser.EXE.Loaders.Frame;
+using Layer = CTFAK.MMFParser.MFA.Loaders.Layer;
+using Movement = CTFAK.MMFParser.MFA.Loaders.mfachunks.Movement;
 
-namespace DotNetCTFDumper.MMFParser.Translation
+namespace CTFAK.MMFParser.Translation
 {
     public static class Pame2Mfa
     {

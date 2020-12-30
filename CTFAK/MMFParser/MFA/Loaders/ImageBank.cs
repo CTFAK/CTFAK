@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using DotNetCTFDumper.MMFParser.EXE;
-using DotNetCTFDumper.MMFParser.EXE.Loaders.Banks;
-using DotNetCTFDumper.Utils;
-using static DotNetCTFDumper.MMFParser.EXE.ChunkList;
+using CTFAK.MMFParser.EXE;
+using CTFAK.MMFParser.EXE.Loaders.Banks;
+using CTFAK.Utils;
+using static CTFAK.MMFParser.EXE.ChunkList;
 
-namespace DotNetCTFDumper.MMFParser.MFA.Loaders
+namespace CTFAK.MMFParser.MFA.Loaders
 {
     public class AGMIBank : DataLoader
     {

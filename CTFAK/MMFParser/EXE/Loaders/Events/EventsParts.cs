@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using DotNetCTFDumper.Utils;
+using CTFAK.Utils;
 
-namespace DotNetCTFDumper.MMFParser.EXE.Loaders.Events
+namespace CTFAK.MMFParser.EXE.Loaders.Events
 {
     public class Condition : DataLoader
     {

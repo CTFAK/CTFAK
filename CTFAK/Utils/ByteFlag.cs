@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DotNetCTFDumper.Utils
+namespace CTFAK.Utils
 {
     public static class ByteFlag
     {
