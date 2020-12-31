@@ -69,6 +69,7 @@
             this.imageViewPictureBox = new System.Windows.Forms.PictureBox();
             this.imagesTreeView = new System.Windows.Forms.TreeView();
             this.soundViewTab = new System.Windows.Forms.TabPage();
+            this.stopSoundBtn = new System.Windows.Forms.Button();
             this.soundList = new System.Windows.Forms.TreeView();
             this.playSoundBtn = new System.Windows.Forms.Button();
             this.cryptKeyTab = new System.Windows.Forms.TabPage();
@@ -77,7 +78,6 @@
             this.hexBox1 = new Be.Windows.Forms.HexBox();
             this.charBox = new System.Windows.Forms.TextBox();
             this.pluginTab = new System.Windows.Forms.TabPage();
-            this.pluginLogBox = new System.Windows.Forms.TextBox();
             this.activatePluginBtn = new System.Windows.Forms.Button();
             this.pluginsList = new System.Windows.Forms.ListBox();
             this.packDataDialog = new System.Windows.Forms.SaveFileDialog();
@@ -441,6 +441,7 @@
             this.mfaTab.Controls.Add(this.mfaLogBox);
             this.mfaTab.Location = new System.Drawing.Point(4, 24);
             this.mfaTab.Name = "mfaTab";
+            this.mfaTab.Padding = new System.Windows.Forms.Padding(3);
             this.mfaTab.Size = new System.Drawing.Size(935, 479);
             this.mfaTab.TabIndex = 2;
             this.mfaTab.Text = "MFA Dump";
@@ -462,13 +463,13 @@
             // 
             this.mfaLogBox.Dock = System.Windows.Forms.DockStyle.Left;
             this.mfaLogBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.mfaLogBox.Location = new System.Drawing.Point(0, 0);
+            this.mfaLogBox.Location = new System.Drawing.Point(3, 3);
             this.mfaLogBox.MaxLength = 999999999;
             this.mfaLogBox.Multiline = true;
             this.mfaLogBox.Name = "mfaLogBox";
             this.mfaLogBox.ReadOnly = true;
             this.mfaLogBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.mfaLogBox.Size = new System.Drawing.Size(405, 479);
+            this.mfaLogBox.Size = new System.Drawing.Size(405, 473);
             this.mfaLogBox.TabIndex = 0;
             this.mfaLogBox.Text = "MFA Generation is currently unstable\r\nUSE AT YOUR OWN RISK";
             // 
@@ -481,6 +482,7 @@
             this.packDataTab.Controls.Add(this.packDataListBox);
             this.packDataTab.Location = new System.Drawing.Point(4, 24);
             this.packDataTab.Name = "packDataTab";
+            this.packDataTab.Padding = new System.Windows.Forms.Padding(3);
             this.packDataTab.Size = new System.Drawing.Size(935, 479);
             this.packDataTab.TabIndex = 4;
             this.packDataTab.Text = "Pack Data";
@@ -526,21 +528,22 @@
             // packDataListBox
             // 
             this.packDataListBox.BackColor = System.Drawing.SystemColors.WindowText;
+            this.packDataListBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.packDataListBox.Dock = System.Windows.Forms.DockStyle.Left;
             this.packDataListBox.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.packDataListBox.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
             this.packDataListBox.FormattingEnabled = true;
             this.packDataListBox.ItemHeight = 15;
             this.packDataListBox.Items.AddRange(new object[] {"PackFile1", "PackFile2", "PackFile3", "PackFile4", "PackFile5", "PackFile6"});
-            this.packDataListBox.Location = new System.Drawing.Point(0, 0);
+            this.packDataListBox.Location = new System.Drawing.Point(3, 3);
             this.packDataListBox.Name = "packDataListBox";
-            this.packDataListBox.Size = new System.Drawing.Size(198, 479);
+            this.packDataListBox.Size = new System.Drawing.Size(198, 473);
             this.packDataListBox.TabIndex = 4;
             this.packDataListBox.SelectedIndexChanged += new System.EventHandler(this.packDataListBox_SelectedIndexChanged);
             // 
             // imgViewerTab
             // 
-            this.imgViewerTab.BackColor = System.Drawing.Color.DimGray;
+            this.imgViewerTab.BackColor = System.Drawing.Color.Black;
             this.imgViewerTab.Controls.Add(this.imageViewerInfo);
             this.imgViewerTab.Controls.Add(this.imageViewerPlayAnim);
             this.imgViewerTab.Controls.Add(this.imageViewPictureBox);
@@ -566,9 +569,9 @@
             // imageViewerPlayAnim
             // 
             this.imageViewerPlayAnim.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.imageViewerPlayAnim.Location = new System.Drawing.Point(203, 441);
+            this.imageViewerPlayAnim.Location = new System.Drawing.Point(201, 441);
             this.imageViewerPlayAnim.Name = "imageViewerPlayAnim";
-            this.imageViewerPlayAnim.Size = new System.Drawing.Size(729, 35);
+            this.imageViewerPlayAnim.Size = new System.Drawing.Size(731, 35);
             this.imageViewerPlayAnim.TabIndex = 2;
             this.imageViewerPlayAnim.Text = "Play Animation";
             this.imageViewerPlayAnim.UseVisualStyleBackColor = true;
@@ -578,39 +581,53 @@
             // 
             this.imageViewPictureBox.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
             this.imageViewPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.imageViewPictureBox.Location = new System.Drawing.Point(203, 3);
+            this.imageViewPictureBox.Location = new System.Drawing.Point(201, 3);
             this.imageViewPictureBox.Name = "imageViewPictureBox";
-            this.imageViewPictureBox.Size = new System.Drawing.Size(729, 473);
+            this.imageViewPictureBox.Size = new System.Drawing.Size(731, 473);
             this.imageViewPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.imageViewPictureBox.TabIndex = 1;
             this.imageViewPictureBox.TabStop = false;
             // 
             // imagesTreeView
             // 
+            this.imagesTreeView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.imagesTreeView.Dock = System.Windows.Forms.DockStyle.Left;
             this.imagesTreeView.Location = new System.Drawing.Point(3, 3);
             this.imagesTreeView.Name = "imagesTreeView";
-            this.imagesTreeView.Size = new System.Drawing.Size(200, 473);
-            this.imagesTreeView.TabIndex = 0;
+            this.imagesTreeView.Size = new System.Drawing.Size(198, 473);
+            this.imagesTreeView.TabIndex = 1;
             this.imagesTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.advancedTreeView_AfterSelect);
             // 
             // soundViewTab
             // 
             this.soundViewTab.BackColor = System.Drawing.Color.Black;
+            this.soundViewTab.Controls.Add(this.stopSoundBtn);
             this.soundViewTab.Controls.Add(this.soundList);
             this.soundViewTab.Controls.Add(this.playSoundBtn);
             this.soundViewTab.Location = new System.Drawing.Point(4, 24);
             this.soundViewTab.Name = "soundViewTab";
+            this.soundViewTab.Padding = new System.Windows.Forms.Padding(3);
             this.soundViewTab.Size = new System.Drawing.Size(935, 479);
             this.soundViewTab.TabIndex = 6;
             this.soundViewTab.Text = "Sounds";
             // 
+            // stopSoundBtn
+            // 
+            this.stopSoundBtn.Location = new System.Drawing.Point(328, 3);
+            this.stopSoundBtn.Name = "stopSoundBtn";
+            this.stopSoundBtn.Size = new System.Drawing.Size(113, 50);
+            this.stopSoundBtn.TabIndex = 2;
+            this.stopSoundBtn.Text = "Stop Sound";
+            this.stopSoundBtn.UseVisualStyleBackColor = true;
+            this.stopSoundBtn.Click += new System.EventHandler(this.stopSoundBtn_Click);
+            // 
             // soundList
             // 
+            this.soundList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.soundList.Dock = System.Windows.Forms.DockStyle.Left;
-            this.soundList.Location = new System.Drawing.Point(0, 0);
+            this.soundList.Location = new System.Drawing.Point(3, 3);
             this.soundList.Name = "soundList";
-            this.soundList.Size = new System.Drawing.Size(200, 479);
+            this.soundList.Size = new System.Drawing.Size(198, 473);
             this.soundList.TabIndex = 1;
             this.soundList.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.soundList_AfterSelect);
             // 
@@ -633,6 +650,7 @@
             this.cryptKeyTab.Controls.Add(this.charBox);
             this.cryptKeyTab.Location = new System.Drawing.Point(4, 24);
             this.cryptKeyTab.Name = "cryptKeyTab";
+            this.cryptKeyTab.Padding = new System.Windows.Forms.Padding(3);
             this.cryptKeyTab.Size = new System.Drawing.Size(935, 479);
             this.cryptKeyTab.TabIndex = 3;
             this.cryptKeyTab.Text = "CryptoKey";
@@ -640,9 +658,9 @@
             // minusCharButton
             // 
             this.minusCharButton.Dock = System.Windows.Forms.DockStyle.Left;
-            this.minusCharButton.Location = new System.Drawing.Point(0, 21);
+            this.minusCharButton.Location = new System.Drawing.Point(3, 24);
             this.minusCharButton.Name = "minusCharButton";
-            this.minusCharButton.Size = new System.Drawing.Size(20, 458);
+            this.minusCharButton.Size = new System.Drawing.Size(20, 452);
             this.minusCharButton.TabIndex = 3;
             this.minusCharButton.Text = "-";
             this.minusCharButton.UseVisualStyleBackColor = true;
@@ -651,9 +669,9 @@
             // plusCharBtn
             // 
             this.plusCharBtn.Dock = System.Windows.Forms.DockStyle.Right;
-            this.plusCharBtn.Location = new System.Drawing.Point(915, 21);
+            this.plusCharBtn.Location = new System.Drawing.Point(912, 24);
             this.plusCharBtn.Name = "plusCharBtn";
-            this.plusCharBtn.Size = new System.Drawing.Size(20, 458);
+            this.plusCharBtn.Size = new System.Drawing.Size(20, 452);
             this.plusCharBtn.TabIndex = 2;
             this.plusCharBtn.Text = "+";
             this.plusCharBtn.UseVisualStyleBackColor = true;
@@ -665,19 +683,19 @@
             this.hexBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hexBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.hexBox1.LineInfoVisible = true;
-            this.hexBox1.Location = new System.Drawing.Point(0, 21);
+            this.hexBox1.Location = new System.Drawing.Point(3, 24);
             this.hexBox1.Name = "hexBox1";
             this.hexBox1.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int) (((byte) (100)))), ((int) (((byte) (60)))), ((int) (((byte) (188)))), ((int) (((byte) (255)))));
-            this.hexBox1.Size = new System.Drawing.Size(935, 458);
+            this.hexBox1.Size = new System.Drawing.Size(929, 452);
             this.hexBox1.StringViewVisible = true;
             this.hexBox1.TabIndex = 1;
             // 
             // charBox
             // 
             this.charBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.charBox.Location = new System.Drawing.Point(0, 0);
+            this.charBox.Location = new System.Drawing.Point(3, 3);
             this.charBox.Name = "charBox";
-            this.charBox.Size = new System.Drawing.Size(935, 21);
+            this.charBox.Size = new System.Drawing.Size(929, 21);
             this.charBox.TabIndex = 0;
             this.charBox.Text = "54";
             this.charBox.TextChanged += new System.EventHandler(this.charBox_TextChanged);
@@ -685,36 +703,25 @@
             // pluginTab
             // 
             this.pluginTab.BackColor = System.Drawing.Color.Black;
-            this.pluginTab.Controls.Add(this.pluginLogBox);
             this.pluginTab.Controls.Add(this.activatePluginBtn);
             this.pluginTab.Controls.Add(this.pluginsList);
             this.pluginTab.Location = new System.Drawing.Point(4, 24);
             this.pluginTab.Name = "pluginTab";
+            this.pluginTab.Padding = new System.Windows.Forms.Padding(3);
             this.pluginTab.Size = new System.Drawing.Size(935, 479);
             this.pluginTab.TabIndex = 5;
             this.pluginTab.Text = "Plugins";
-            // 
-            // pluginLogBox
-            // 
-            this.pluginLogBox.Dock = System.Windows.Forms.DockStyle.Right;
-            this.pluginLogBox.Location = new System.Drawing.Point(530, 0);
-            this.pluginLogBox.Multiline = true;
-            this.pluginLogBox.Name = "pluginLogBox";
-            this.pluginLogBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.pluginLogBox.Size = new System.Drawing.Size(405, 448);
-            this.pluginLogBox.TabIndex = 2;
             // 
             // activatePluginBtn
             // 
             this.activatePluginBtn.AutoSize = true;
             this.activatePluginBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.activatePluginBtn.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.activatePluginBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.activatePluginBtn.Font = new System.Drawing.Font("Feast of Flesh BB", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte) (77)));
+            this.activatePluginBtn.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.activatePluginBtn.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.activatePluginBtn.Location = new System.Drawing.Point(252, 448);
+            this.activatePluginBtn.Location = new System.Drawing.Point(207, 6);
             this.activatePluginBtn.Name = "activatePluginBtn";
-            this.activatePluginBtn.Size = new System.Drawing.Size(683, 31);
+            this.activatePluginBtn.Size = new System.Drawing.Size(101, 31);
             this.activatePluginBtn.TabIndex = 1;
             this.activatePluginBtn.Text = "Activate";
             this.activatePluginBtn.UseVisualStyleBackColor = true;
@@ -722,12 +729,13 @@
             // 
             // pluginsList
             // 
+            this.pluginsList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pluginsList.Dock = System.Windows.Forms.DockStyle.Left;
             this.pluginsList.FormattingEnabled = true;
             this.pluginsList.ItemHeight = 15;
-            this.pluginsList.Location = new System.Drawing.Point(0, 0);
+            this.pluginsList.Location = new System.Drawing.Point(3, 3);
             this.pluginsList.Name = "pluginsList";
-            this.pluginsList.Size = new System.Drawing.Size(252, 479);
+            this.pluginsList.Size = new System.Drawing.Size(198, 473);
             this.pluginsList.TabIndex = 0;
             // 
             // packDataDialog
@@ -763,6 +771,8 @@
             this.ResumeLayout(false);
         }
 
+        private System.Windows.Forms.Button stopSoundBtn;
+
         private System.Windows.Forms.TreeView soundList;
 
         private System.Windows.Forms.Button playSoundBtn;
@@ -775,8 +785,6 @@
         private System.Windows.Forms.TabPage imgViewerTab;
 
         private System.Windows.Forms.Label imageViewerInfo;
-
-        public System.Windows.Forms.TextBox pluginLogBox;
 
         private System.Windows.Forms.Button activatePluginBtn;
         private System.Windows.Forms.ListBox pluginsList;

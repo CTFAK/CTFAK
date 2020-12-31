@@ -269,6 +269,16 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Dependencies\Decrypter-x64.dll">
+      <Link>x64\Decrypter-x64.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Dependencies\Decrypter-x86.dll">
+      <Link>x86\Decrypter-x86.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Joveler.ZLibWrapper.1.3.1\build\net45\Joveler.ZLibWrapper.targets" Condition="Exists('..\packages\Joveler.ZLibWrapper.1.3.1\build\net45\Joveler.ZLibWrapper.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -282,9 +292,12 @@
   <PropertyGroup>
     <PostBuildEvent>md  $(SolutionDir)\Build\
 md  $(SolutionDir)\Build\x64\
+md  $(SolutionDir)\Build\x86\
 copy $(TargetPath)  $(SolutionDir)Build\CTFAK.exe
-copy $(SolutionDir)Dependencies\Decrypter-x64.dll $(SolutionDir)Build\Decrypter-x64.dll
-copy $(TargetDir)\x64\zlibwapi.dll $(SolutionDir)Build\x64\zlibwapi.dll
+copy $(TargetDir)x64\Decrypter-x64.dll $(SolutionDir)Build\x64\Decrypter-x64.dll 
+copy $(TargetDir)x86\Decrypter-x86.dll $(SolutionDir)Build\x86\Decrypter-x86.dll     
+copy $(TargetDir)x64\zlibwapi.dll $(SolutionDir)Build\x64\zlibwapi.dll
+copy $(TargetDir)x86\zlibwapi.dll $(SolutionDir)Build\x86\zlibwapi.dll
 copy $(TargetDir)CTFAK.pdb $(SolutionDir)Build\CTFAK.pdb
 copy $(TargetDir)Be.Windows.Forms.HexBox.dll $(SolutionDir)Build\Be.Windows.Forms.HexBox.dll
 copy $(TargetDir)Joveler.Compression.ZLib.dll $(SolutionDir)Build\Joveler.Compression.ZLib.dll

@@ -84,7 +84,7 @@ namespace CTFAK.Utils
             return decodedChunk;
         }
 
-        private const string _dllPath = "Decrypter-x64.dll";
+        private const string _dllPath = "x64\\Decrypter-x64.dll";
         [DllImport(_dllPath, EntryPoint = "decode_chunk", CharSet = CharSet.Auto)]
         public static extern IntPtr decode_chunk(IntPtr chunkData, int chunkSize, byte magicChar, IntPtr wrapperKey);
 

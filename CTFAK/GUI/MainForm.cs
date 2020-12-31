@@ -859,17 +859,12 @@ namespace CTFAK.GUI
 
         }
 
-       
 
+        private bool _isAudioPlaying;
         private void playSoundBtn_Click(object sender, EventArgs e)
         {
             _soundPlayer.Stream = new MemoryStream(Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>().Items[soundList.SelectedNode.Index].Data);
             _soundPlayer.Play();
-            
-            
-            
-            
-            
         }
 
         private void soundList_AfterSelect(object sender, TreeViewEventArgs e)
@@ -891,6 +886,11 @@ namespace CTFAK.GUI
 
                 }
             }
+        }
+
+        private void stopSoundBtn_Click(object sender, EventArgs e)
+        {
+            _soundPlayer.Stop();
         }
     }
 }

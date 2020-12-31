@@ -62,14 +62,7 @@ namespace CTFAK.PluginAPI
             throw new NotImplementedException("Critical error ");
         }
 
-        public static void Message(string msg, bool showTime = true)
-        {
-            var date = DateTime.Now;
-            if (showTime)
-                Program.MyForm.pluginLogBox.AppendText(
-                    $"[{date.Hour,2}:{date.Minute,2}:{date.Second,2}:{date.Millisecond,3}] " + msg + "\r\n");
-            else Program.MyForm.pluginLogBox.AppendText(msg + "\r\n");
-        }
+       
 
     }
 
