@@ -167,6 +167,12 @@ namespace CTFAK.Utils
 
             return colors;
         }
+        public static bool ContainsUnicodeCharacter(string input)
+        {
+            const int MaxAnsiCode = 255;
+
+            return input.Any(c => c > MaxAnsiCode);
+        }
 
         public static void CheckPattern(object source, object pattern)
         {

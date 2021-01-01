@@ -17,13 +17,15 @@ using CTFAK.MMFParser.EXE.Loaders.Banks;
 using CTFAK.MMFParser.EXE.Loaders.Objects;
 using CTFAK.MMFParser.Translation;
 using CTFAK.Utils;
-using Animation = CTFAK.MMFParser.EXE.Loaders.Objects.Animation;
-using AnimationDirection = CTFAK.MMFParser.EXE.Loaders.Objects.AnimationDirection;
 
 namespace CTFAK.GUI
 {
     public partial class MainForm : Form
     {
+        public delegate void IncrementSortedProgressBar(int all);
+
+        public delegate void SaveHandler(int index, int all);
+
         public static bool IsDumpingImages;
         public static bool IsDumpingSounds;
         public static bool IsDumpingMusics;
@@ -32,11 +34,13 @@ namespace CTFAK.GUI
         public static bool BreakMusics;
         public static bool Loaded;
         public static Color ColorTheme = Color.FromArgb(223, 114, 38);
- 
-        public delegate void SaveHandler(int index, int all);
 
-        public delegate void IncrementSortedProgressBar(int all);
+        private bool _breakAnim;
+        private bool _isAnimRunning;
 
+
+        private bool _isAudioPlaying;
+        private SoundPlayer _soundPlayer;
 
 
         public MainForm(Color color)
@@ -52,27 +56,20 @@ namespace CTFAK.GUI
                 if (item is Button) item.BackColor = Color.FromArgb(30, 30, 30);
 
                 if (item is Label)
-                {
                     //item.BackColor = Color.Transparent;
                     item.Refresh();
-                }
             }
 
             foreach (TabPage tabPage in tabControl1.TabPages)
+            foreach (Control item in tabPage.Controls)
             {
-                foreach (Control item in tabPage.Controls)
-                {
-                    item.ForeColor = ColorTheme;
-                    if (!(item is PictureBox) && !(item is TabPage)&&!(item is Label)) item.BackColor = Color.Black;
-                    if (item is Button) item.BackColor = Color.FromArgb(30, 30, 30);
+                item.ForeColor = ColorTheme;
+                if (!(item is PictureBox) && !(item is TabPage) && !(item is Label)) item.BackColor = Color.Black;
+                if (item is Button) item.BackColor = Color.FromArgb(30, 30, 30);
 
-                    if (item is Label)
-                    {
-                        //item.BackColor = Color.Transparent;
-                        item.Refresh();
-                    }
-
-                }
+                if (item is Label)
+                    //item.BackColor = Color.Transparent;
+                    item.Refresh();
             }
 
             foreach (var item in ChunkCombo.Items)
@@ -87,16 +84,17 @@ namespace CTFAK.GUI
             hexBox1.SelectionBackColor = Color.FromArgb(ColorTheme.R / 4, ColorTheme.G / 4, ColorTheme.B / 4);
             hexBox1.ShadowSelectionColor = Color.FromArgb(150, ColorTheme.R / 4, ColorTheme.G / 4, ColorTheme.B / 4);
             label1.Text = Settings.DumperVersion;
+            Text = Settings.DumperVersion;
 
-            Pame2Mfa.OnMessage += (obj) =>
+            Pame2Mfa.OnMessage += obj =>
             {
                 var date = DateTime.Now;
-                string msg = (string) obj;
+                var msg = (string) obj;
                 mfaLogBox.AppendText(msg.Length > 0
                     ? $"[{date.Hour,2}:{date.Minute,2}:{date.Second,2}:{date.Millisecond,3}] {msg}\r\n"
                     : "\r\n");
             };
-            this.Closing += (a, e) =>
+            Closing += (a, e) =>
             {
                 var dlg = MessageBox.Show("Are you sure you want to exit?", "Exiting", MessageBoxButtons.YesNo);
                 if (dlg == DialogResult.Yes) Environment.Exit(0);
@@ -104,22 +102,15 @@ namespace CTFAK.GUI
             };
             KeyPreview = true;
             tabControl1.Selecting += tabControl1_Selecting;
-            //tabControl1.TabPages.Remove(mfaTab);
-            
-            
         }
 
         private void tabControl1_Selecting(object sender, TabControlCancelEventArgs e)
         {
             if (!Loaded)
-            {
                 if (e.TabPage != mainTab)
                     e.Cancel = true;
-            }
-           //_soundPlayer.Stop();
-
+            //_soundPlayer.Stop();
         }
-
 
 
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
@@ -127,17 +118,11 @@ namespace CTFAK.GUI
             var worker = new BackgroundWorker();
             worker.DoWork += (workSender, workE) =>
             {
-                if(File.Exists(openFileDialog1.FileName)) StartReading();
+                if (File.Exists(openFileDialog1.FileName)) StartReading();
                 else throw new NotImplementedException("File not found");
-                
-                
             };
-            worker.RunWorkerCompleted += (workSender, workE) =>
-            {
-                
-                AfterLoad();
-            };
-            
+            worker.RunWorkerCompleted += (workSender, workE) => { AfterLoad(); };
+
             worker.RunWorkerAsync();
         }
 
@@ -151,12 +136,11 @@ namespace CTFAK.GUI
             loadingLabel.Visible = false;
             listBox1.Items.Clear();
             var console = new MainConsole();
-            this.Location= new Point(0,0);
-            this.Size= new Size(this.Size.Width-100,Screen.PrimaryScreen.Bounds.Height-120);
+            Location = new Point(0, 0);
+            Size = new Size(Size.Width - 100, Screen.PrimaryScreen.Bounds.Height - 120);
             console.Show();
-            console.Location = new Point(this.Location.X+this.Size.Width-15,0);
-            console.Size=new Size(console.Size.Width,this.Size.Height);
-            
+            console.Location = new Point(Location.X + Size.Width - 15, 0);
+            console.Size = new Size(console.Size.Width, Size.Height);
         }
 
 
@@ -178,24 +162,16 @@ namespace CTFAK.GUI
             musicsButton.Visible = false;
             dumpSortedBtn.Visible = false;
             Loaded = false;
-
-
-
         }
 
         private void treeView1_AfterDblClick(object sender, EventArgs e)
         {
             ChunkCombo.Show(Cursor.Position);
-
         }
 
         private void treeView1_RightClick(object sender, MouseEventArgs e)
         {
-            if ((e.Button & MouseButtons.Right) != 0)
-            {
-                ChunkCombo.Show(Cursor.Position);
-            }
-
+            if ((e.Button & MouseButtons.Right) != 0) ChunkCombo.Show(Cursor.Position);
         }
 
         private void ChunkCombo_ItemSelected(object sender, ToolStripItemClickedEventArgs e)
@@ -204,11 +180,7 @@ namespace CTFAK.GUI
             {
                 case "saveChunkBtn":
                     var chunk = ((ChunkNode) treeView1.SelectedNode).chunk;
-                    if (chunk != null)
-                    {
-                        chunk.Save();
-                    }
-
+                    chunk?.Save();
                     break;
                 case "viewHexBtn":
                     ShowHex();
@@ -233,7 +205,6 @@ namespace CTFAK.GUI
             listBox1.Items.Clear();
             if (nodeChunk != null)
             {
-
                 listBox1.Items.Add($"Name: {nodeChunk.Name}");
                 listBox1.Items.Add($"Id: {nodeChunk.Id} - 0x{nodeChunk.Id:X4}");
                 listBox1.Items.Add($"Flag: {nodeChunk.Flag}");
@@ -265,7 +236,6 @@ namespace CTFAK.GUI
 
         public void AfterLoad()
         {
-            
             Logger.Log("Loading GUI");
             //GameData gameData = null;
             var exe = Exe.Instance;
@@ -275,13 +245,11 @@ namespace CTFAK.GUI
             treeView1.Nodes.Clear();
             foreach (var item in gameData.GameChunks.Chunks)
             {
-
-                string ActualName = item.Name;
+                var ActualName = item.Name;
                 if (item.Loader is Frame frm) ActualName = ActualName + " " + frm.Name;
-                ChunkNode newNode = Helper.GetChunkNode(item, ActualName);
+                var newNode = Helper.GetChunkNode(item, ActualName);
                 treeView1.Nodes.Add(newNode);
                 if (item.Loader is Frame frame)
-                {
                     foreach (var frmChunk in frame.Chunks.Chunks)
                     {
                         var frameNode = Helper.GetChunkNode(frmChunk);
@@ -290,27 +258,21 @@ namespace CTFAK.GUI
                         {
                             var objs = frame.Chunks.GetChunk<ObjectInstances>();
                             if (objs != null)
-                            {
                                 foreach (var frmitem in objs.Items)
                                 {
                                     var objNode = new ChunkNode(frmitem.Name, frmitem);
                                     frameNode.Nodes.Add(objNode);
                                 }
-                            }
                         }
                     }
-                }
                 else if (item.Loader is FrameItems items)
-                {
                     foreach (var key in items.ItemDict.Keys)
                     {
                         var frameItem = items.ItemDict[key];
                         var objNode = new ChunkNode($"{(Constants.ObjectType) frameItem.ObjectType} - {frameItem.Name}",
                             frameItem);
                         newNode.Nodes.Add(objNode);
-
                     }
-                }
             }
 
             FolderBTN.Visible = true;
@@ -378,10 +340,7 @@ namespace CTFAK.GUI
             SortedProgressBar.Visible = true;
             SortedProgressBar.Maximum = all;
             SortedProgressBar.Value += 1;
-            if (SortedProgressBar.Value >= SortedProgressBar.Maximum)
-            {
-                SortedProgressBar.Visible = false;
-            }
+            if (SortedProgressBar.Value >= SortedProgressBar.Maximum) SortedProgressBar.Visible = false;
         }
 
 
@@ -389,7 +348,6 @@ namespace CTFAK.GUI
         {
             Process.Start($"{Settings.DumpPath}");
         }
-
 
 
         private void soundsButton_Click(object sender, EventArgs e)
@@ -400,7 +358,6 @@ namespace CTFAK.GUI
                 SetSoundElements(true);
                 IsDumpingSounds = true;
                 Backend.DumpSounds(this, true, true);
-
             }
             else
             {
@@ -418,8 +375,6 @@ namespace CTFAK.GUI
                 SetImageElements(true);
                 IsDumpingImages = true;
                 Backend.DumpImages(this, true, true);
-
-
             }
             else
             {
@@ -444,7 +399,6 @@ namespace CTFAK.GUI
                 IsDumpingMusics = false;
                 SetMusicElements(false);
             }
-
         }
 
 
@@ -476,7 +430,7 @@ namespace CTFAK.GUI
         {
             if ((ChunkNode) treeView1.SelectedNode != null)
             {
-                var node = ((ChunkNode) treeView1.SelectedNode);
+                var node = (ChunkNode) treeView1.SelectedNode;
                 HexViewForm hexform = null;
 
                 hexform = new HexViewForm(node.chunk.ChunkData, node.chunk.RawData, ColorTheme,
@@ -484,9 +438,7 @@ namespace CTFAK.GUI
 
                 hexform.Show();
             }
-
         }
-
 
 
         private void dumpSortedBtn_Click(object sender, EventArgs e)
@@ -500,7 +452,6 @@ namespace CTFAK.GUI
                 var bank = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
                 bank.SaveImages = false;
                 bank.Read();
-
             };
             worker.RunWorkerCompleted += (senderA, eA) =>
             {
@@ -512,11 +463,6 @@ namespace CTFAK.GUI
         }
 
 
-
-
-
-
-
         private void dumpMFAButton_Click(object sender, EventArgs e)
         {
             var worker = new BackgroundWorker();
@@ -526,17 +472,13 @@ namespace CTFAK.GUI
                 Logger.Log("MFA Done", true, ConsoleColor.Yellow);
                 var res = MessageBox.Show("Dump Extensions?", "Finished", MessageBoxButtons.YesNo);
                 if (res == DialogResult.Yes)
-                {
                     foreach (var item in Exe.Instance.PackData.Items)
                     {
                         item.Dump();
                         Pame2Mfa.Message("Dumping " + item.PackFilename);
                     }
 
-                }
-
                 Process.Start($"{Settings.DumpPath}");
-
             };
 
             worker.RunWorkerAsync();
@@ -561,9 +503,8 @@ namespace CTFAK.GUI
 
             try
             {
-                var previewKey = Decryption.MakeKeyFromComb(rawData, (byte) int.Parse((charBox.Text)));
+                var previewKey = Decryption.MakeKeyFromComb(rawData, (byte) int.Parse(charBox.Text));
                 hexBox1.ByteProvider = new DynamicByteProvider(previewKey);
-
             }
             catch
             {
@@ -574,10 +515,7 @@ namespace CTFAK.GUI
         public void InitPackDataTab()
         {
             packDataListBox.Items.Clear();
-            foreach (var item in Exe.Instance.PackData.Items)
-            {
-                packDataListBox.Items.Add(item.PackFilename);
-            }
+            foreach (var item in Exe.Instance.PackData.Items) packDataListBox.Items.Add(item.PackFilename);
 
             UpdatePackInfo(0);
         }
@@ -603,10 +541,7 @@ namespace CTFAK.GUI
 
         private void dumpAllPackButton_Click(object sender, EventArgs e)
         {
-            foreach (var item in Exe.Instance.PackData.Items)
-            {
-                item.Dump();
-            }
+            foreach (var item in Exe.Instance.PackData.Items) item.Dump();
         }
 
         private void packDataDialog_FileOk(object sender, CancelEventArgs e)
@@ -615,8 +550,10 @@ namespace CTFAK.GUI
             item.Dump(packDataDialog.FileName);
         }
 
-        private void packDataListBox_SelectedIndexChanged(object sender, EventArgs e) =>
+        private void packDataListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
             UpdatePackInfo(packDataListBox.SelectedIndex);
+        }
 
         private void plusCharBtn_Click(object sender, EventArgs e)
         {
@@ -631,9 +568,10 @@ namespace CTFAK.GUI
             InitKeyTab();
         }
 
-        private void charBox_TextChanged(object sender, EventArgs e) => InitKeyTab();
-
-
+        private void charBox_TextChanged(object sender, EventArgs e)
+        {
+            InitKeyTab();
+        }
 
 
         public void InitImages()
@@ -642,13 +580,12 @@ namespace CTFAK.GUI
             var bank = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
             var items = bank.Images.ToList();
             var filtered = items.OrderBy(x => x.Value.Handle);
-            foreach (Frame frame in Exe.Instance.GameData.Frames)
+            foreach (var frame in Exe.Instance.GameData.Frames)
             {
                 var frameNode = new ChunkNode(frame.Name, frame);
                 imagesTreeView.Nodes.Add(frameNode);
                 if (frame.Objects != null)
-                {
-                    foreach (ObjectInstance objInst in frame.Objects.Items)
+                    foreach (var objInst in frame.Objects.Items)
                     {
                         var objInstNode = new ChunkNode(objInst.FrameItem.Name, objInst);
                         frameNode.Nodes.Add(objInstNode);
@@ -656,20 +593,19 @@ namespace CTFAK.GUI
                         if (loader is ObjectCommon common)
                         {
                             if (common.Animations != null)
-                            {
                                 foreach (var pair in common.Animations.AnimationDict)
                                 {
                                     var animNode = new ChunkNode($"Animation {pair.Key}", pair.Value);
                                     objInstNode.Nodes.Add(animNode);
                                     foreach (var dir in pair.Value.DirectionDict)
-                                    {
                                         if (pair.Value.DirectionDict.Count > 1)
                                         {
-                                            var dirNode = new ChunkNode($"Direction {pair.Value.DirectionDict.ToList().IndexOf(dir)}",dir.Value);
+                                            var dirNode = new ChunkNode(
+                                                $"Direction {pair.Value.DirectionDict.ToList().IndexOf(dir)}",
+                                                dir.Value);
                                             animNode.Nodes.Add(dirNode);
-                                            for (int a = 0; a < dir.Value.Frames.Count; a++)
+                                            for (var a = 0; a < dir.Value.Frames.Count; a++)
                                             {
-                                            
                                                 var animFrame = dir.Value.Frames[a];
                                                 bank.Images.TryGetValue(animFrame, out var img);
                                                 if (img != null)
@@ -677,14 +613,12 @@ namespace CTFAK.GUI
                                                     var animFrameNode = new ChunkNode(a.ToString(), img);
                                                     dirNode.Nodes.Add(animFrameNode);
                                                 }
-                                            
                                             }
                                         }
                                         else
                                         {
-                                            for (int a = 0; a < dir.Value.Frames.Count; a++)
+                                            for (var a = 0; a < dir.Value.Frames.Count; a++)
                                             {
-                                            
                                                 var animFrame = dir.Value.Frames[a];
                                                 bank.Images.TryGetValue(animFrame, out var img);
                                                 if (img != null)
@@ -692,17 +626,13 @@ namespace CTFAK.GUI
                                                     var animFrameNode = new ChunkNode(a.ToString(), img);
                                                     animNode.Nodes.Add(animFrameNode);
                                                 }
-                                            
                                             }
                                         }
-                                        
-                                    }
                                 }
-                            }
                         }
                         else if (loader is Backdrop backdrop)
                         {
-                            bank.Images.TryGetValue(backdrop.Image,out var img);
+                            bank.Images.TryGetValue(backdrop.Image, out var img);
                             if (img != null)
                             {
                                 var backdropNode = new ChunkNode("Image", img);
@@ -710,13 +640,8 @@ namespace CTFAK.GUI
                             }
                         }
                     }
-                }
             }
         }
-
-        private bool _breakAnim;
-        private bool _isAnimRunning;
-        private SoundPlayer _soundPlayer;
 
         private void advancedPlayAnimation_Click(object sender, EventArgs e)
         {
@@ -730,17 +655,15 @@ namespace CTFAK.GUI
                 {
                     _isAnimRunning = true;
                     var animThread = new Thread(PlayAnimation);
-                    List<Bitmap> frames = new List<Bitmap>();
+                    var frames = new List<Bitmap>();
                     foreach (var dir in anim.DirectionDict)
                     {
                         foreach (var frame in dir.Value.Frames)
-                        {
                             frames.Add(Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().Images[frame].Bitmap);
-                        }
-                        animThread.Start(new Tuple<List<Bitmap>,AnimationDirection>(frames,dir.Value));
+                        animThread.Start(new Tuple<List<Bitmap>, AnimationDirection>(frames, dir.Value));
                         break;
                     }
-                }      
+                }
             }
             else if (((ChunkNode) imagesTreeView.SelectedNode).loader is AnimationDirection dir)
             {
@@ -752,41 +675,41 @@ namespace CTFAK.GUI
                 {
                     _isAnimRunning = true;
                     var animThread = new Thread(PlayAnimation);
-                    List<Bitmap> frames = new List<Bitmap>();
+                    var frames = new List<Bitmap>();
                     foreach (var frame in dir.Frames)
                     {
-                        
-                            frames.Add(Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().Images[frame].Bitmap);
-                        
-                        animThread.Start(new Tuple<List<Bitmap>,AnimationDirection>(frames,dir));
+                        frames.Add(Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().Images[frame].Bitmap);
+
+                        animThread.Start(new Tuple<List<Bitmap>, AnimationDirection>(frames, dir));
                         break;
                     }
                 }
-
-                
-
-                
             }
-
         }
+
         public void PlayAnimation(object o)
         {
-            var (frames,anim) = (Tuple<List<Bitmap>,AnimationDirection>) o;
-            var fps = (float)anim.MaxSpeed;
-            float delay = 1f/fps;
-            int i = 0;
-            if (anim.Repeat > 0&& anim.Frames.Count>1)
+            var (frames, anim) = (Tuple<List<Bitmap>, AnimationDirection>) o;
+            var fps = (float) anim.MaxSpeed;
+            var delay = 1f / fps;
+            var i = 0;
+            if (anim.Repeat > 0 && anim.Frames.Count > 1)
             {
-                foreach (Bitmap frame in frames)
+                foreach (var frame in frames)
                 {
                     imageViewPictureBox.Image = frame;
                     imageViewerInfo.Text = $"Current frame: {frames.IndexOf(frame)}\nAnimation Speed: {fps}";
-                    Thread.Sleep((int) (delay*1500));
+                    Thread.Sleep((int) (delay * 1500));
                 }
+
                 _isAnimRunning = false;
-                try {Thread.CurrentThread.Abort();}
-                catch {}
-                
+                try
+                {
+                    Thread.CurrentThread.Abort();
+                }
+                catch
+                {
+                }
             }
             else
             {
@@ -795,25 +718,18 @@ namespace CTFAK.GUI
                     var frame = frames[i];
                     imageViewPictureBox.Image = frame;
                     imageViewerInfo.Text = $"Current frame: {i.ToString()}\nAnimation Speed: {fps}";
-                    Thread.Sleep((int) (delay*1500));
+                    Thread.Sleep((int) (delay * 1500));
                     i++;
                     if (i == frames.Count) i = 0;
                     if (_breakAnim)
                     {
                         _isAnimRunning = false;
                         _breakAnim = false;
-                        if(Thread.CurrentThread.IsAlive) Thread.CurrentThread.Abort();
+                        if (Thread.CurrentThread.IsAlive) Thread.CurrentThread.Abort();
                         break;
-                    
                     }
-
-
                 }
             }
-            
-            
-            
-
         }
 
         private void advancedTreeView_AfterSelect(object sender, TreeViewEventArgs e)
@@ -821,23 +737,16 @@ namespace CTFAK.GUI
             var node = e.Node;
             if (((ChunkNode) node).loader is ImageItem)
             {
-                var img = ((ImageItem) ((ChunkNode) node).loader);
+                var img = (ImageItem) ((ChunkNode) node).loader;
                 imageViewPictureBox.Image = img.Bitmap;
             }
-            
         }
 
-        
 
         public void InitPlugins()
         {
             PluginAPI.PluginAPI.InitializePlugins();
-            foreach (var plugin in PluginAPI.PluginAPI.Plugins)
-            {
-                pluginsList.Items.Add(plugin.Name);
-
-            }
-
+            foreach (var plugin in PluginAPI.PluginAPI.Plugins) pluginsList.Items.Add(plugin.Name);
         }
 
         private void activatePluginBtn_Click(object sender, EventArgs e)
@@ -845,47 +754,39 @@ namespace CTFAK.GUI
             PluginAPI.PluginAPI.ActivatePlugin(PluginAPI.PluginAPI.Plugins[pluginsList.SelectedIndex]);
         }
 
-       
 
         public void InitSounds()
         {
             var bank = Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>();
             if (bank == null) return;
-            foreach (SoundItem soundItem in bank.Items)
-            {
-                soundList.Nodes.Add(new ChunkNode(soundItem.Name,soundItem));
-            }
-            _soundPlayer = new SoundPlayer(new MemoryStream(Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>().Items[0].Data));
-
+            foreach (var soundItem in bank.Items) soundList.Nodes.Add(new ChunkNode(soundItem.Name, soundItem));
+            _soundPlayer =
+                new SoundPlayer(new MemoryStream(Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>().Items[0].Data));
         }
 
-
-        private bool _isAudioPlaying;
         private void playSoundBtn_Click(object sender, EventArgs e)
         {
-            _soundPlayer.Stream = new MemoryStream(Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>().Items[soundList.SelectedNode.Index].Data);
+            _soundPlayer.Stream = new MemoryStream(Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>()
+                .Items[soundList.SelectedNode.Index].Data);
             _soundPlayer.Play();
         }
 
         private void soundList_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            
         }
-        
+
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
             if (tabControl1.SelectedTab == imgViewerTab)
-            {
                 if (e.Control)
                 {
-                    var node = (ChunkNode)imagesTreeView.SelectedNode;
-                    var path = $"{Settings.ImagePath}\\{Helper.GetTreePath(imagesTreeView,(ChunkNode) imagesTreeView.SelectedNode)}";
+                    var node = (ChunkNode) imagesTreeView.SelectedNode;
+                    var path =
+                        $"{Settings.ImagePath}\\{Helper.GetTreePath(imagesTreeView, (ChunkNode) imagesTreeView.SelectedNode)}";
                     if (node == null) return;
                     ImageDumper.SaveFromNode(node);
-
                 }
-            }
         }
 
         private void stopSoundBtn_Click(object sender, EventArgs e)
@@ -894,8 +795,3 @@ namespace CTFAK.GUI
         }
     }
 }
-    
-
-
-
-

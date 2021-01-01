@@ -752,7 +752,7 @@
             this.Icon = ((System.Drawing.Icon) (resources.GetObject("$this.Icon")));
             this.Location = new System.Drawing.Point(15, 15);
             this.Name = "MainForm";
-            this.Text = "DotNetCTFDumper";
+            this.Text = "CTFAK";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.ChunkCombo.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
