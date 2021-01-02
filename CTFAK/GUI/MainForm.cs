@@ -282,7 +282,7 @@ namespace CTFAK.GUI
             dumpSortedBtn.Visible = true;
             GameInfo.Visible = true;
             loadingLabel.Visible = false;
-            Loaded = true;
+            
             InitPackDataTab();
             InitImages();
             InitSounds();
@@ -311,6 +311,7 @@ namespace CTFAK.GUI
 
 
             GameInfo.Text = toLog;
+            Loaded = true;
         }
 
 
