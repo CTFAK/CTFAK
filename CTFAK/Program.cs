@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Web.Caching;
 using System.Windows.Forms;
 using CTFAK.GUI;
 using CTFAK.MMFParser.EXE;
@@ -22,6 +23,9 @@ namespace CTFAK
         private static void Main(string[] args)
         {
             InitNativeLibrary();
+            
+            LoadableSettings.FromFile("settings.sav");
+            //
             
             // MFAGenerator.ReadTestMFA();
             // Environment.Exit(0);
@@ -46,7 +50,15 @@ namespace CTFAK
             }
             else if(args.Length==0)
             {
-                MyForm = new MainForm(Color.FromArgb(223, 114, 38));
+                if (!File.Exists("settings.sav"))
+                {
+                    MyForm = new MainForm(Color.FromArgb(223, 114, 38));
+                }
+                else
+                {
+                    MyForm = new MainForm(LoadableSettings.instance.ToActual<Color>(LoadableSettings.instance["mainColor"]));
+                }
+                
             }
             Application.Run(MyForm);
             

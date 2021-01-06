@@ -80,6 +80,10 @@
             this.pluginTab = new System.Windows.Forms.TabPage();
             this.activatePluginBtn = new System.Windows.Forms.Button();
             this.pluginsList = new System.Windows.Forms.ListBox();
+            this.settingsTab = new System.Windows.Forms.TabPage();
+            this.colorLabel = new System.Windows.Forms.Label();
+            this.updateSettings = new System.Windows.Forms.Button();
+            this.colorBox = new System.Windows.Forms.TextBox();
             this.packDataDialog = new System.Windows.Forms.SaveFileDialog();
             this.ChunkCombo.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -91,6 +95,7 @@
             this.soundViewTab.SuspendLayout();
             this.cryptKeyTab.SuspendLayout();
             this.pluginTab.SuspendLayout();
+            this.settingsTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
@@ -394,6 +399,7 @@
             this.tabControl1.Controls.Add(this.soundViewTab);
             this.tabControl1.Controls.Add(this.cryptKeyTab);
             this.tabControl1.Controls.Add(this.pluginTab);
+            this.tabControl1.Controls.Add(this.settingsTab);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.tabControl1.HotTrack = true;
@@ -738,6 +744,47 @@
             this.pluginsList.Size = new System.Drawing.Size(198, 473);
             this.pluginsList.TabIndex = 0;
             // 
+            // settingsTab
+            // 
+            this.settingsTab.BackColor = System.Drawing.Color.Black;
+            this.settingsTab.Controls.Add(this.colorLabel);
+            this.settingsTab.Controls.Add(this.updateSettings);
+            this.settingsTab.Controls.Add(this.colorBox);
+            this.settingsTab.Location = new System.Drawing.Point(4, 24);
+            this.settingsTab.Name = "settingsTab";
+            this.settingsTab.Size = new System.Drawing.Size(935, 479);
+            this.settingsTab.TabIndex = 7;
+            this.settingsTab.Text = "Settings";
+            // 
+            // colorLabel
+            // 
+            this.colorLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.colorLabel.Location = new System.Drawing.Point(8, 8);
+            this.colorLabel.Name = "colorLabel";
+            this.colorLabel.Size = new System.Drawing.Size(56, 15);
+            this.colorLabel.TabIndex = 2;
+            this.colorLabel.Text = "Color:";
+            // 
+            // updateSettings
+            // 
+            this.updateSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.updateSettings.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.updateSettings.Location = new System.Drawing.Point(8, 399);
+            this.updateSettings.Name = "updateSettings";
+            this.updateSettings.Size = new System.Drawing.Size(131, 72);
+            this.updateSettings.TabIndex = 1;
+            this.updateSettings.Text = "Update";
+            this.updateSettings.UseVisualStyleBackColor = true;
+            this.updateSettings.Click += new System.EventHandler(this.updateSettings_Click);
+            // 
+            // colorBox
+            // 
+            this.colorBox.Location = new System.Drawing.Point(70, 5);
+            this.colorBox.Name = "colorBox";
+            this.colorBox.Size = new System.Drawing.Size(109, 21);
+            this.colorBox.TabIndex = 0;
+            this.colorBox.TextChanged += new System.EventHandler(this.colorBox_TextChanged);
+            // 
             // packDataDialog
             // 
             this.packDataDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.packDataDialog_FileOk);
@@ -768,8 +815,16 @@
             this.cryptKeyTab.PerformLayout();
             this.pluginTab.ResumeLayout(false);
             this.pluginTab.PerformLayout();
+            this.settingsTab.ResumeLayout(false);
+            this.settingsTab.PerformLayout();
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.TextBox colorBox;
+        private System.Windows.Forms.Label colorLabel;
+        private System.Windows.Forms.Button updateSettings;
+
+        private System.Windows.Forms.TabPage settingsTab;
 
         private System.Windows.Forms.Button stopSoundBtn;
 

@@ -107,8 +107,15 @@ namespace CTFAK.GUI
         private void tabControl1_Selecting(object sender, TabControlCancelEventArgs e)
         {
             if (!Loaded)
-                if (e.TabPage != mainTab)
+                if (e.TabPage == settingsTab || e.TabPage == mainTab)
+                {
+                    e.Cancel = false;
+                }
+                else
+                {
                     e.Cancel = true;
+                }
+                   
             //_soundPlayer.Stop();
         }
 
@@ -793,6 +800,17 @@ namespace CTFAK.GUI
         private void stopSoundBtn_Click(object sender, EventArgs e)
         {
             _soundPlayer.Stop();
+        }
+
+
+        private void colorBox_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void updateSettings_Click(object sender, EventArgs e)
+        {
+            LoadableSettings.instance["mainColor"] = colorBox.Text;
         }
     }
 }
