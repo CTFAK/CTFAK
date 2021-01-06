@@ -85,7 +85,15 @@ namespace CTFAK.GUI
             hexBox1.ShadowSelectionColor = Color.FromArgb(150, ColorTheme.R / 4, ColorTheme.G / 4, ColorTheme.B / 4);
             label1.Text = Settings.DumperVersion;
             Text = Settings.DumperVersion;
+            //Locale
+            button1.Text = Properties.GlobalStrings.selectFile;
+            loadingLabel.Text = Properties.GlobalStrings.loading;
+            imagesButton.Text = Properties.GlobalStrings.dumpImages;
+            soundsButton.Text = Properties.GlobalStrings.dumpSounds;
+            musicsButton.Text = Properties.GlobalStrings.dumpMusics;
+            FolderBTN.Text=Properties.GlobalStrings.openFolder;
 
+            
             Pame2Mfa.OnMessage += obj =>
             {
                 var date = DateTime.Now;

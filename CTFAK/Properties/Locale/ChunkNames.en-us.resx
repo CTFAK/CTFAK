@@ -1,0 +1,50 @@
+﻿<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="about" xml:space="preserve">
+        <value>About</value>
+    </data>
+    <data name="additionalExts" xml:space="preserve">
+        <value>Additional Extensions</value>
+    </data>
+    <data name="additionalFrameItem" xml:space="preserve">
+        <value>Additinal Frame Item</value>
+    </data>
+    <data name="author" xml:space="preserve">
+        <value>Author</value>
+    </data>
+    <data name="copyright" xml:space="preserve">
+        <value>Copyright</value>
+    </data>
+    <data name="frameName" xml:space="preserve">
+        <value>Frame Name</value>
+    </data>
+    <data name="frame" xml:space="preserve">
+        <value>Frame</value>
+    </data>
+    <data name="title" xml:space="preserve">
+        <value>Title</value>
+    </data>
+    <data name="appHeader" xml:space="preserve">
+        <value>Header</value>
+    </data>
+    <data name="extensions" xml:space="preserve">
+        <value>Extensions</value>
+    </data>
+    <data name="frameEvents" xml:space="preserve">
+        <value>Frame Events</value>
+    </data>
+    <data name="frameEffects" xml:space="preserve">
+        <value>Frame Effects</value>
+    </data>
+</root>

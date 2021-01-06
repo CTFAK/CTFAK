@@ -1,0 +1,47 @@
+﻿<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="dumpImages" xml:space="preserve">
+        <value>Сохранить Картинки</value>
+    </data>
+    <data name="dumpMfa" xml:space="preserve">
+        <value>Сохранить MFA</value>
+    </data>
+    <data name="dumpMusics" xml:space="preserve">
+        <value>Сохранить Музыку</value>
+    </data>
+    <data name="dumpSorted" xml:space="preserve">
+        <value>Сохранение с сортировкой</value>
+    </data>
+    <data name="dumpSounds" xml:space="preserve">
+        <value>Сохранить звуки</value>
+    </data>
+    <data name="loading" xml:space="preserve">
+        <value>Загрузка...</value>
+    </data>
+    <data name="openFolder" xml:space="preserve">
+        <value>Открыть Папку</value>
+    </data>
+    <data name="selectFile" xml:space="preserve">
+        <value>Выбрать Файл</value>
+    </data>
+    <data name="gameTitle" xml:space="preserve">
+        <value>Название</value>
+    </data>
+    <data name="gameCopyright" xml:space="preserve">
+        <value>Копирайт</value>
+    </data>
+    <data name="readingFrame" xml:space="preserve">
+        <value>Чтение сцены:</value>
+    </data>
+</root>

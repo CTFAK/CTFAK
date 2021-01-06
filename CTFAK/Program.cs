@@ -23,13 +23,15 @@ namespace CTFAK
         private static void Main(string[] args)
         {
             InitNativeLibrary();
-            
+            if (!File.Exists("settings.sav"))
+            {
+                File.Create("settings.sav");
+            }
             LoadableSettings.FromFile("settings.sav");
             //
             
             // MFAGenerator.ReadTestMFA();
             // Environment.Exit(0);
-
             AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
             {
                 if (eventArgs.Exception is ThreadAbortException) return;
@@ -50,15 +52,11 @@ namespace CTFAK
             }
             else if(args.Length==0)
             {
-                if (!File.Exists("settings.sav"))
-                {
-                    MyForm = new MainForm(Color.FromArgb(223, 114, 38));
-                }
-                else
-                {
-                    MyForm = new MainForm(LoadableSettings.instance.ToActual<Color>(LoadableSettings.instance["mainColor"]));
-                }
-                
+                if (LoadableSettings.instance["mainColor"] == null)
+                        MyForm = new MainForm(Color.FromArgb(223, 114, 38));
+                    else
+                        MyForm = new MainForm(
+                            LoadableSettings.instance.ToActual<Color>(LoadableSettings.instance["mainColor"]));
             }
             Application.Run(MyForm);
             

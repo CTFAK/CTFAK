@@ -96,7 +96,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             if (name != null) //Just to be sure
             {
                 this.Name = name.Value;
-                Logger.Log("Reading Frame: "+Name,true,ConsoleColor.Green);
+                Logger.Log(Properties.GlobalStrings.readingFrame+" "+Name,true,ConsoleColor.Green);
             }
             var password = Chunks.GetChunk<FramePassword>();
             if (password != null) //Just to be sure

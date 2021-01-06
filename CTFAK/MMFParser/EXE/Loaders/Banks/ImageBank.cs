@@ -8,6 +8,7 @@ using CTFAK.GUI;
 using CTFAK.Utils;
 using static CTFAK.MMFParser.EXE.ChunkList;
 
+
 namespace CTFAK.MMFParser.EXE.Loaders.Banks
 {
     public class ImageBank : ChunkLoader
@@ -138,7 +139,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public int Size;
 
         //tranparent,add later
-        byte[] _transparent;
+        Color _transparent;
         byte[] _colorArray;
         int _indexed;
 
@@ -254,7 +255,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             YHotspot = imageReader.ReadInt16();
             ActionX = imageReader.ReadInt16();
             ActionY = imageReader.ReadInt16();
-            _transparent = imageReader.ReadBytes(4);
+            _transparent = imageReader.ReadColor();
              if(Settings.twofiveplus)Logger.Log($"Loading image {Handle.ToString(),4} Size: {_width,4}x{_height,4}");
             byte[] imageData;
             if(Settings.twofiveplus) Flags["LZX"] = false;
@@ -327,7 +328,16 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                     }
                 }
             }
-            
+            else if (_transparent != null)
+            {
+                for (int i = 0; i < (_height * _width * 4)-3; i++)
+                {
+                    if (_colorArray[i+1]==_transparent.R&&_colorArray[i+2]==_transparent.G&&_colorArray[i+3]==_transparent.B)
+                    {
+                        _colorArray[i] = _transparent.A;
+                    }
+                }
+            }
 
             return;
         }
@@ -418,7 +428,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             chunk.WriteInt16((short) YHotspot);
             chunk.WriteInt16((short) ActionX);
             chunk.WriteInt16((short) ActionY);
-            chunk.WriteBytes(_transparent);
+            chunk.WriteColor(_transparent);
             if (Flags["LZX"])
             {
                 chunk.WriteInt32(rawImg.Length);

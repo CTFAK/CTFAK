@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="appHeader" xml:space="preserve">
+        <value>Header</value>
+    </data>
+    <data name="miniHeader" xml:space="preserve">
+        <value>Mini Header</value>
+    </data>
+    <data name="title" xml:space="preserve">
+        <value>Title</value>
+    </data>
+    <data name="author" xml:space="preserve">
+        <value>Author</value>
+    </data>
+    <data name="menu" xml:space="preserve">
+        <value>Menu</value>
+    </data>
+    <data name="extraPath" xml:space="preserve">
+        <value />
+    </data>
+    <data name="extensions" xml:space="preserve">
+        <value>Extensions</value>
+    </data>
+    <data name="objectBank" xml:space="preserve">
+        <value />
+    </data>
+    <data name="globalEvents" xml:space="preserve">
+        <value>Global Events</value>
+    </data>
+    <data name="frameHandles" xml:space="preserve">
+        <value>Frame Handles</value>
+    </data>
+    <data name="extraData" xml:space="preserve">
+        <value />
+    </data>
+    <data name="additionalExts" xml:space="preserve">
+        <value>Additional Extensions</value>
+    </data>
+    <data name="projectPath" xml:space="preserve">
+        <value />
+    </data>
+    <data name="outputPath" xml:space="preserve">
+        <value />
+    </data>
+    <data name="appDoc" xml:space="preserve">
+        <value />
+    </data>
+    <data name="otherExts" xml:space="preserve">
+        <value />
+    </data>
+    <data name="globalValues" xml:space="preserve">
+        <value>Global Values</value>
+    </data>
+    <data name="globalStrings" xml:space="preserve">
+        <value>Global Strings</value>
+    </data>
+    <data name="extList" xml:space="preserve">
+        <value />
+    </data>
+    <data name="icon" xml:space="preserve">
+        <value>Icon</value>
+    </data>
+    <data name="demoVersion" xml:space="preserve">
+        <value />
+    </data>
+    <data name="secNum" xml:space="preserve">
+        <value />
+    </data>
+    <data name="binaryFiles" xml:space="preserve">
+        <value />
+    </data>
+    <data name="menuImages" xml:space="preserve">
+        <value>Menu Images</value>
+    </data>
+    <data name="about" xml:space="preserve">
+        <value>About</value>
+    </data>
+    <data name="copyright" xml:space="preserve">
+        <value>Copyright</value>
+    </data>
+    <data name="globalValueNames" xml:space="preserve">
+        <value>Global Value Names</value>
+    </data>
+    <data name="globalStringNames" xml:space="preserve">
+        <value>Global String Names</value>
+    </data>
+    <data name="objectBank2" xml:space="preserve">
+        <value />
+    </data>
+    <data name="exeOnly" xml:space="preserve">
+        <value />
+    </data>
+    <data name="protection" xml:space="preserve">
+        <value />
+    </data>
+    <data name="shaders" xml:space="preserve">
+        <value />
+    </data>
+    <data name="extHeader" xml:space="preserve">
+        <value />
+    </data>
+    <data name="frame" xml:space="preserve">
+        <value>Frame</value>
+    </data>
+    <data name="frameHeader" xml:space="preserve">
+        <value>Frame Header</value>
+    </data>
+    <data name="frameName" xml:space="preserve">
+        <value>Frame Name</value>
+    </data>
+    <data name="framePassword" xml:space="preserve">
+        <value>Frame Password</value>
+    </data>
+    <data name="framePalette" xml:space="preserve">
+        <value>Frame Palette</value>
+    </data>
+    <data name="frameObjects" xml:space="preserve">
+        <value>Frame Objects</value>
+    </data>
+    <data name="frameFadeInFrame" xml:space="preserve">
+        <value>Frame Fade In Frame</value>
+    </data>
+    <data name="frameFadeOutFrame" xml:space="preserve">
+        <value>Frame Fade Out Frame</value>
+    </data>
+    <data name="FrameFadeIn" xml:space="preserve">
+        <value>Frame Fade In</value>
+    </data>
+    <data name="frameFadeOut" xml:space="preserve">
+        <value>Frame Fade Out</value>
+    </data>
+    <data name="frameEvents" xml:space="preserve">
+        <value>Frame Events</value>
+    </data>
+    <data name="framePlayHeader" xml:space="preserve">
+        <value>Frame Play Header</value>
+    </data>
+    <data name="additionalFrameItem" xml:space="preserve">
+        <value>Additinal Frame Item</value>
+    </data>
+    <data name="additionalObjectInstance" xml:space="preserve">
+        <value />
+    </data>
+    <data name="frameLayers" xml:space="preserve">
+        <value>Frame Layers</value>
+    </data>
+    <data name="frameVirtualRect" xml:space="preserve">
+        <value>Frame Virtual Rect</value>
+    </data>
+    <data name="demoFilePath" xml:space="preserve">
+        <value />
+    </data>
+    <data name="randomSeed" xml:space="preserve">
+        <value />
+    </data>
+    <data name="frameLayerEffects" xml:space="preserve">
+        <value>Frame Layer Effects</value>
+    </data>
+    <data name="blurayOptions" xml:space="preserve">
+        <value />
+    </data>
+    <data name="mvTimerBase" xml:space="preserve">
+        <value />
+    </data>
+    <data name="mosaicImageTable" xml:space="preserve">
+        <value>Mosaic Image Table</value>
+    </data>
+    <data name="frameEffects" xml:space="preserve">
+        <value>Frame Effects</value>
+    </data>
+    <data name="frameIphoneOptions" xml:space="preserve">
+        <value>Frame IPhone Options</value>
+    </data>
+    <data name="objectHeader" xml:space="preserve">
+        <value />
+    </data>
+    <data name="objectName" xml:space="preserve">
+        <value />
+    </data>
+    <data name="objectCommon" xml:space="preserve">
+        <value />
+    </data>
+    <data name="objectUnknown" xml:space="preserve">
+        <value />
+    </data>
+    <data name="objectEffects" xml:space="preserve">
+        <value />
+    </data>
+    <data name="imagesOffsets" xml:space="preserve">
+        <value>Image Offsets</value>
+    </data>
+    <data name="fontOffsets" xml:space="preserve">
+        <value />
+    </data>
+    <data name="soundOffsets" xml:space="preserve">
+        <value />
+    </data>
+    <data name="musicOffsets" xml:space="preserve">
+        <value />
+    </data>
+    <data name="imageBank" xml:space="preserve">
+        <value>Image Bank</value>
+    </data>
+    <data name="fontBank" xml:space="preserve">
+        <value />
+    </data>
+    <data name="soundBank" xml:space="preserve">
+        <value />
+    </data>
+    <data name="musicBank" xml:space="preserve">
+        <value />
+    </data>
+    <data name="last" xml:space="preserve">
+        <value>Last</value>
+    </data>
+    <data name="unknown" xml:space="preserve">
+        <value />
+    </data>
+</root>
