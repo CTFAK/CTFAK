@@ -6,16 +6,16 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 {
     public class ObjectCommon : ChunkLoader
     {
-        private short _valuesOffset;
-        private short _stringsOffset;
+        private ushort _valuesOffset;
+        private ushort _stringsOffset;
         private byte[] Identifier;
-        private int _fadeinOffset;
-        private int _fadeoutOffset;
+        private ushort _fadeinOffset;
+        private ushort _fadeoutOffset;
         private ushort _movementsOffset;
-        private short _animationsOffset;
-        private short _systemObjectOffset;
-        public short CounterOffset;
-        public short ExtensionOffset;
+        private ushort _animationsOffset;
+        private ushort _systemObjectOffset;
+        public ushort _counterOffset;
+        public ushort _extensionOffset;
         public Animations Animations;
         private long _end;
 
@@ -99,46 +99,49 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
-            if (Parent.ObjectType != 2) return;
-            long currentPosition = Reader.Tell();
-            int size = Reader.ReadInt32();
-            bool newobj = Settings.Build >= 284;
-            if (newobj)
+            //if(Parent.ObjectType!=2)return;
+            var currentPosition = Reader.Tell();
+            var size = Reader.ReadInt32();
+            if (Settings.Build >= 284)
             {
-                _animationsOffset = (short) Reader.ReadUInt16();
+                _animationsOffset = Reader.ReadUInt16();
                 _movementsOffset = Reader.ReadUInt16();
+                var version = Reader.ReadUInt16();
+                Reader.Skip(2); //TODO: Find out
+                _counterOffset = Reader.ReadUInt16();
+                _systemObjectOffset = Reader.ReadUInt16();
             }
             else
             {
                 _movementsOffset = Reader.ReadUInt16();
-                _animationsOffset = Reader.ReadInt16();
+                _animationsOffset = Reader.ReadUInt16();
+                var version = Reader.ReadUInt16();
+                _counterOffset = Reader.ReadUInt16();
+                _systemObjectOffset = Reader.ReadUInt16();  
             }
-            short version = Reader.ReadInt16();
-            CounterOffset = (short) Reader.ReadUInt16();
-            _systemObjectOffset = (short) Reader.ReadUInt16();
 
             Flags.flag = Reader.ReadUInt32();
             var end = Reader.Tell() + 16;
+            //Ignoring qualifiers
             Reader.Seek(end);
-            if (newobj)
+            if (Settings.Build == 284)
             {
-                _systemObjectOffset = Reader.ReadInt16();
-    
+                _systemObjectOffset = Reader.ReadUInt16();
             }
             else
             {
-                ExtensionOffset = Reader.ReadInt16();
+                _extensionOffset = Reader.PeekUInt16();
             }
-            
-            _valuesOffset = Reader.ReadInt16();
-            _stringsOffset = Reader.ReadInt16();
-            NewFlags.flag = Reader.ReadUInt16();
-            preferences.flag = Reader.ReadUInt16();
-            byte[] identifier = Reader.ReadFourCc();
-            BackColor = Reader.ReadColor();
-            _fadeinOffset = Reader.ReadInt32();
-            _fadeoutOffset = Reader.ReadInt32();
 
+            _valuesOffset = Reader.ReadUInt16();
+            _stringsOffset = Reader.ReadUInt16();
+            NewFlags.flag = Reader.ReadUInt32();
+            preferences.flag = Reader.ReadUInt32();
+            Identifier = Reader.ReadBytes(4);
+            BackColor = Reader.ReadColor();
+            _fadeinOffset = (ushort) Reader.ReadUInt32();
+            _fadeoutOffset = (ushort) Reader.ReadUInt32();
+            
             if (_movementsOffset != 0)
             {
                 Reader.Seek(currentPosition+_movementsOffset);
@@ -194,9 +197,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
             }*/
 
-            if (_systemObjectOffset > 0)
+            if (_systemObjectOffset != 0)
             {
-                Console.WriteLine("Reading System Object");
+                Logger.Log("Reading System Object: "+_systemObjectOffset);
                 Reader.Seek(currentPosition+_systemObjectOffset);
                 if (Parent.ObjectType == ((int) Constants.ObjectType.Text) ||
                     Parent.ObjectType == ((int) Constants.ObjectType.Question))
@@ -207,15 +210,20 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     Parent.ObjectType == ((int) Constants.ObjectType.Lives)||
                     Parent.ObjectType == ((int) Constants.ObjectType.Counter))
                 {
+                    Logger.Log("Counter: "+Parent.Name);
                     Counters = new Counters(Reader);
                     Counters.Read();
                 }
                 
             }
-            
-            
-            // Console.WriteLine("SysObjOff: " + _systemObjectOffset);
-            // Console.WriteLine("ExtOff: " + _extensionOffset);
+            // Logger.Log("anims: "+_animationsOffset);
+            // Logger.Log("fadeIn: "+_fadeinOffset);
+            // Logger.Log("fadeOut: "+_fadeoutOffset);
+            // Logger.Log("movements: "+_movementsOffset);
+            // Logger.Log("strings: "+_stringsOffset);
+            // Logger.Log("values: "+_valuesOffset);
+            // Logger.Log("sysObj: "+_systemObjectOffset);
+
         }
 
         public override void Print(bool ext)

@@ -18,6 +18,7 @@ using CTFAK.MMFParser.EXE.Loaders.Objects;
 using CTFAK.MMFParser.Translation;
 using CTFAK.Utils;
 
+
 namespace CTFAK.GUI
 {
     public partial class MainForm : Form
@@ -91,6 +92,7 @@ namespace CTFAK.GUI
             imagesButton.Text = Properties.GlobalStrings.dumpImages;
             soundsButton.Text = Properties.GlobalStrings.dumpSounds;
             musicsButton.Text = Properties.GlobalStrings.dumpMusics;
+            dumpSortedBtn.Text = Properties.GlobalStrings.dumpSorted;
             FolderBTN.Text=Properties.GlobalStrings.openFolder;
 
             
@@ -304,17 +306,17 @@ namespace CTFAK.GUI
             InitKeyTab();
             InitPlugins();
             var toLog = "";
-            toLog += $"Title:{Exe.Instance.GameData.Name}\n";
-            toLog += $"Copyright:{Exe.Instance.GameData.Copyright}\n";
+            toLog += $"{Properties.Locale.ChunkNames.title}: {Exe.Instance.GameData.Name}\n";
+            toLog += $"{Properties.Locale.ChunkNames.copyright}: {Exe.Instance.GameData.Copyright}\n";
             //toLog += $"Editor Filename: {Exe.Instance.GameData.EditorFilename}\n";
             toLog += $"Product Version: {Exe.Instance.GameData.ProductVersion}\n";
             toLog += $"Build: {Exe.Instance.GameData.Build}\n";
             toLog += $"Runtime Version: {Exe.Instance.GameData.RuntimeVersion}\n";
-            toLog += $"Number Of Images: {Exe.Instance.GameData.Images?.NumberOfItems ?? 0}\n";
-            toLog += $"Number Of Sounds: {Exe.Instance.GameData.Sounds?.NumOfItems ?? 0}\n";
-            toLog += $"Number Of Musics: {Exe.Instance.GameData.Music?.NumOfItems ?? 0}\n";
-            toLog += $"Unique FrameItems: {Exe.Instance.GameData.Frameitems?.NumberOfItems}\n";
-            toLog += $"Frame Count: {Exe.Instance.GameData.Frames.Count}\n";
+            toLog += $"{Properties.GlobalStrings.imageCount}: {Exe.Instance.GameData.Images?.NumberOfItems ?? 0}\n";
+            toLog += $"{Properties.GlobalStrings.soundCount}: {Exe.Instance.GameData.Sounds?.NumOfItems ?? 0}\n";
+            toLog += $"{Properties.GlobalStrings.musicCount}: {Exe.Instance.GameData.Music?.NumOfItems ?? 0}\n";
+            toLog += $"{Properties.GlobalStrings.frameitemCount}: {Exe.Instance.GameData.Frameitems?.NumberOfItems}\n";
+            toLog += $"{Properties.GlobalStrings.frameCount}: {Exe.Instance.GameData.Frames.Count}\n";
             toLog += $"Chunks Count: {Exe.Instance.GameData.GameChunks.Chunks.Count}\n";
             if (Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>() != null)
                 Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().OnImageSaved += UpdateImageBar;
@@ -608,43 +610,62 @@ namespace CTFAK.GUI
                         var loader = objInst.FrameItem.Properties.Loader;
                         if (loader is ObjectCommon common)
                         {
-                            if (common.Animations != null)
-                                foreach (var pair in common.Animations.AnimationDict)
+                            if (common.Parent.ObjectType == 2) //Active
+                            {
+                                if (common.Animations != null)
+                                    foreach (var pair in common.Animations.AnimationDict)
+                                    {
+                                        var animNode = new ChunkNode($"Animation {pair.Key}", pair.Value);
+                                        objInstNode.Nodes.Add(animNode);
+                                        foreach (var dir in pair.Value.DirectionDict)
+                                            if (pair.Value.DirectionDict.Count > 1)
+                                            {
+                                                var dirNode = new ChunkNode(
+                                                    $"Direction {pair.Value.DirectionDict.ToList().IndexOf(dir)}",
+                                                    dir.Value);
+                                                animNode.Nodes.Add(dirNode);
+                                                for (var a = 0; a < dir.Value.Frames.Count; a++)
+                                                {
+                                                    var animFrame = dir.Value.Frames[a];
+                                                    bank.Images.TryGetValue(animFrame, out var img);
+                                                    if (img != null)
+                                                    {
+                                                        var animFrameNode = new ChunkNode(a.ToString(), img);
+                                                        dirNode.Nodes.Add(animFrameNode);
+                                                    }
+                                                }
+                                            }
+                                            else
+                                            {
+                                                for (var a = 0; a < dir.Value.Frames.Count; a++)
+                                                {
+                                                    var animFrame = dir.Value.Frames[a];
+                                                    bank.Images.TryGetValue(animFrame, out var img);
+                                                    if (img != null)
+                                                    {
+                                                        var animFrameNode = new ChunkNode(a.ToString(), img);
+                                                        animNode.Nodes.Add(animFrameNode);
+                                                    }
+                                                }
+                                            }
+                                    }
+                            }
+                            else if(common.Parent.ObjectType==7)//Counter
+                            {
+                                for (var a = 0; a < common.Counters?.Frames?.Count; a++)
                                 {
-                                    var animNode = new ChunkNode($"Animation {pair.Key}", pair.Value);
-                                    objInstNode.Nodes.Add(animNode);
-                                    foreach (var dir in pair.Value.DirectionDict)
-                                        if (pair.Value.DirectionDict.Count > 1)
-                                        {
-                                            var dirNode = new ChunkNode(
-                                                $"Direction {pair.Value.DirectionDict.ToList().IndexOf(dir)}",
-                                                dir.Value);
-                                            animNode.Nodes.Add(dirNode);
-                                            for (var a = 0; a < dir.Value.Frames.Count; a++)
-                                            {
-                                                var animFrame = dir.Value.Frames[a];
-                                                bank.Images.TryGetValue(animFrame, out var img);
-                                                if (img != null)
-                                                {
-                                                    var animFrameNode = new ChunkNode(a.ToString(), img);
-                                                    dirNode.Nodes.Add(animFrameNode);
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            for (var a = 0; a < dir.Value.Frames.Count; a++)
-                                            {
-                                                var animFrame = dir.Value.Frames[a];
-                                                bank.Images.TryGetValue(animFrame, out var img);
-                                                if (img != null)
-                                                {
-                                                    var animFrameNode = new ChunkNode(a.ToString(), img);
-                                                    animNode.Nodes.Add(animFrameNode);
-                                                }
-                                            }
-                                        }
+                                    var animFrame = common.Counters.Frames[a];
+                                    bank.Images.TryGetValue(animFrame, out var img);
+                                    if (img != null)
+                                    {
+                                        var animFrameNode = new ChunkNode(a.ToString(), img);
+                                        objInstNode.Nodes.Add(animFrameNode);
+                                    }
                                 }
+                                
+
+                            }
+                        
                         }
                         else if (loader is Backdrop backdrop)
                         {

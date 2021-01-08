@@ -79,7 +79,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Additinal Frame Item.
+        ///   Looks up a localized string similar to Additional Frame Item.
         /// </summary>
         internal static string additionalFrameItem {
             get {
@@ -88,7 +88,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Additional Object Inst.
         /// </summary>
         internal static string additionalObjectInstance {
             get {
@@ -97,7 +97,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to App Doc.
         /// </summary>
         internal static string appDoc {
             get {
@@ -124,7 +124,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Binary Files.
         /// </summary>
         internal static string binaryFiles {
             get {
@@ -133,7 +133,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Bluray Options.
         /// </summary>
         internal static string blurayOptions {
             get {
@@ -151,7 +151,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Demo File Path.
         /// </summary>
         internal static string demoFilePath {
             get {
@@ -160,7 +160,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Demo Version.
         /// </summary>
         internal static string demoVersion {
             get {
@@ -169,7 +169,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to EXE Only.
         /// </summary>
         internal static string exeOnly {
             get {
@@ -187,7 +187,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Extented Header.
         /// </summary>
         internal static string extHeader {
             get {
@@ -196,7 +196,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Extension List.
         /// </summary>
         internal static string extList {
             get {
@@ -205,7 +205,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Extra Data.
         /// </summary>
         internal static string extraData {
             get {
@@ -214,7 +214,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Extra Path.
         /// </summary>
         internal static string extraPath {
             get {
@@ -223,7 +223,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Font Bank.
         /// </summary>
         internal static string fontBank {
             get {
@@ -232,7 +232,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Font Offsets.
         /// </summary>
         internal static string fontOffsets {
             get {
@@ -520,7 +520,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Music Bank.
         /// </summary>
         internal static string musicBank {
             get {
@@ -529,7 +529,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Music Offsets.
         /// </summary>
         internal static string musicOffsets {
             get {
@@ -538,7 +538,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to MV Timer Base.
         /// </summary>
         internal static string mvTimerBase {
             get {
@@ -547,7 +547,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Object Bank.
         /// </summary>
         internal static string objectBank {
             get {
@@ -556,7 +556,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Object Bank 2.
         /// </summary>
         internal static string objectBank2 {
             get {
@@ -565,7 +565,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Object Common.
         /// </summary>
         internal static string objectCommon {
             get {
@@ -574,7 +574,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Object Effects.
         /// </summary>
         internal static string objectEffects {
             get {
@@ -583,7 +583,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Object Header.
         /// </summary>
         internal static string objectHeader {
             get {
@@ -592,7 +592,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Object Name.
         /// </summary>
         internal static string objectName {
             get {
@@ -601,7 +601,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Object Unknown.
         /// </summary>
         internal static string objectUnknown {
             get {
@@ -610,7 +610,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Other Extensions.
         /// </summary>
         internal static string otherExts {
             get {
@@ -619,7 +619,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Output Path.
         /// </summary>
         internal static string outputPath {
             get {
@@ -628,7 +628,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Project Path.
         /// </summary>
         internal static string projectPath {
             get {
@@ -637,7 +637,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Protection.
         /// </summary>
         internal static string protection {
             get {
@@ -646,7 +646,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Random Seed.
         /// </summary>
         internal static string randomSeed {
             get {
@@ -655,7 +655,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Security Number.
         /// </summary>
         internal static string secNum {
             get {
@@ -664,7 +664,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Shaders.
         /// </summary>
         internal static string shaders {
             get {
@@ -673,7 +673,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Sound Bank.
         /// </summary>
         internal static string soundBank {
             get {
@@ -682,7 +682,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Sound Offsets.
         /// </summary>
         internal static string soundOffsets {
             get {
@@ -700,7 +700,7 @@ namespace CTFAK.Properties.Locale {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Unknown-.
         /// </summary>
         internal static string unknown {
             get {

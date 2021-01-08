@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -34,10 +35,11 @@ namespace CTFAK
             // Environment.Exit(0);
             AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
             {
-                if (eventArgs.Exception is ThreadAbortException) return;
                 
+                if (eventArgs.Exception is ThreadAbortException) return;
+                var ex = (Exception) eventArgs.Exception;
                 Logger.Log("ERROR: ");
-                Logger.Log(eventArgs.Exception.ToString());
+                Logger.Log(ex.ToString());
             };
             
             Settings.UseGUI = true;

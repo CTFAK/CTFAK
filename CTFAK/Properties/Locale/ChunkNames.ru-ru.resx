@@ -24,7 +24,7 @@
         <value>Автор</value>
     </data>
     <data name="copyright" xml:space="preserve">
-        <value>Copyright</value>
+        <value>Копирайт</value>
     </data>
     <data name="frameName" xml:space="preserve">
         <value>Название Сцены</value>
@@ -43,5 +43,188 @@
     </data>
     <data name="frameEvents" xml:space="preserve">
         <value>События Сцены</value>
+    </data>
+    <data name="unknown" xml:space="preserve">
+        <value>Неизвестный-</value>
+    </data>
+    <data name="soundOffsets" xml:space="preserve">
+        <value>Смещения звуков</value>
+    </data>
+    <data name="additionalObjectInstance" xml:space="preserve">
+        <value>Дополнительный  инстанс сцены помогите</value>
+    </data>
+    <data name="appDoc" xml:space="preserve">
+        <value>Документация</value>
+    </data>
+    <data name="binaryFiles" xml:space="preserve">
+        <value>Бинарные файлы</value>
+    </data>
+    <data name="blurayOptions" xml:space="preserve">
+        <value>Настройки Bluray</value>
+    </data>
+    <data name="demoFilePath" xml:space="preserve">
+        <value>Путь к демо-файлу</value>
+    </data>
+    <data name="demoVersion" xml:space="preserve">
+        <value>Демо</value>
+    </data>
+    <data name="exeOnly" xml:space="preserve">
+        <value>Только для exe</value>
+    </data>
+    <data name="extHeader" xml:space="preserve">
+        <value>Расширенный заголовок</value>
+    </data>
+    <data name="extList" xml:space="preserve">
+        <value>Список расширений</value>
+    </data>
+    <data name="extraData" xml:space="preserve">
+        <value>Дополнительные данные</value>
+    </data>
+    <data name="extraPath" xml:space="preserve">
+        <value>Дополнительный путь</value>
+    </data>
+    <data name="fontBank" xml:space="preserve">
+        <value>Шрифты</value>
+    </data>
+    <data name="fontOffsets" xml:space="preserve">
+        <value>Смещения шрифтов</value>
+    </data>
+    <data name="frameEffects" xml:space="preserve">
+        <value>Эффекты Сцены</value>
+    </data>
+    <data name="FrameFadeIn" xml:space="preserve">
+        <value>Вход Сцены</value>
+    </data>
+    <data name="frameFadeInFrame" xml:space="preserve">
+        <value>Кадр Входа Сцены</value>
+    </data>
+    <data name="frameFadeOut" xml:space="preserve">
+        <value>Выход Сцены</value>
+    </data>
+    <data name="frameFadeOutFrame" xml:space="preserve">
+        <value>Кадр Выхода Сцены</value>
+    </data>
+    <data name="frameHandles" xml:space="preserve">
+        <value>Идентификаторы Сцен</value>
+    </data>
+    <data name="frameHeader" xml:space="preserve">
+        <value>Заголовок Сцены</value>
+    </data>
+    <data name="frameIphoneOptions" xml:space="preserve">
+        <value>Настройки айфона?</value>
+    </data>
+    <data name="frameLayerEffects" xml:space="preserve">
+        <value>Эффекты слоев сцены</value>
+    </data>
+    <data name="frameLayers" xml:space="preserve">
+        <value>Слои Сцены</value>
+    </data>
+    <data name="frameObjects" xml:space="preserve">
+        <value>Объекты Сцены</value>
+    </data>
+    <data name="framePalette" xml:space="preserve">
+        <value>Палитра Сцены</value>
+    </data>
+    <data name="framePassword" xml:space="preserve">
+        <value>Пароль Сцены</value>
+    </data>
+    <data name="framePlayHeader" xml:space="preserve">
+        <value>Заголовок воспроизведения</value>
+    </data>
+    <data name="frameVirtualRect" xml:space="preserve">
+        <value>Виртуальный член сцены</value>
+    </data>
+    <data name="globalEvents" xml:space="preserve">
+        <value>Глобальные события</value>
+    </data>
+    <data name="globalStringNames" xml:space="preserve">
+        <value>Названия глобальных строк</value>
+    </data>
+    <data name="globalStrings" xml:space="preserve">
+        <value>Глобальные строки</value>
+    </data>
+    <data name="globalValueNames" xml:space="preserve">
+        <value>Названия глобальных чисел</value>
+    </data>
+    <data name="globalValues" xml:space="preserve">
+        <value>Глобальные числа</value>
+    </data>
+    <data name="icon" xml:space="preserve">
+        <value>Иконка</value>
+    </data>
+    <data name="imageBank" xml:space="preserve">
+        <value>Изображения</value>
+    </data>
+    <data name="imagesOffsets" xml:space="preserve">
+        <value>Смещения изображений</value>
+    </data>
+    <data name="last" xml:space="preserve">
+        <value>Последний чанк</value>
+    </data>
+    <data name="menu" xml:space="preserve">
+        <value>Меню</value>
+    </data>
+    <data name="menuImages" xml:space="preserve">
+        <value>Изображения меню</value>
+    </data>
+    <data name="miniHeader" xml:space="preserve">
+        <value>Мини заголовок</value>
+    </data>
+    <data name="mosaicImageTable" xml:space="preserve">
+        <value>мозайка какая-то</value>
+    </data>
+    <data name="musicBank" xml:space="preserve">
+        <value>Музыка</value>
+    </data>
+    <data name="musicOffsets" xml:space="preserve">
+        <value>Смещения музыки</value>
+    </data>
+    <data name="mvTimerBase" xml:space="preserve">
+        <value>База таймера</value>
+    </data>
+    <data name="objectBank" xml:space="preserve">
+        <value>Объекты</value>
+    </data>
+    <data name="objectBank2" xml:space="preserve">
+        <value>Объекты 2</value>
+    </data>
+    <data name="objectCommon" xml:space="preserve">
+        <value>Данные Объекта</value>
+    </data>
+    <data name="objectEffects" xml:space="preserve">
+        <value>Эффекты Объекта</value>
+    </data>
+    <data name="objectHeader" xml:space="preserve">
+        <value>Заголовок Объекта</value>
+    </data>
+    <data name="objectName" xml:space="preserve">
+        <value>Название Объекта</value>
+    </data>
+    <data name="objectUnknown" xml:space="preserve">
+        <value>Неизвестная часть объекта</value>
+    </data>
+    <data name="otherExts" xml:space="preserve">
+        <value>Дополнительные Расширения</value>
+    </data>
+    <data name="outputPath" xml:space="preserve">
+        <value>Выходной путь</value>
+    </data>
+    <data name="projectPath" xml:space="preserve">
+        <value>Путь проекта</value>
+    </data>
+    <data name="protection" xml:space="preserve">
+        <value>Защита</value>
+    </data>
+    <data name="randomSeed" xml:space="preserve">
+        <value>Рандомное семя</value>
+    </data>
+    <data name="secNum" xml:space="preserve">
+        <value>Защитное число</value>
+    </data>
+    <data name="shaders" xml:space="preserve">
+        <value>Шейдеры</value>
+    </data>
+    <data name="soundBank" xml:space="preserve">
+        <value>Звуки</value>
     </data>
 </root>

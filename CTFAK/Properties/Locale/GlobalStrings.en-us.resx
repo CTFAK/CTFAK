@@ -44,4 +44,19 @@
     <data name="readingFrame" xml:space="preserve">
         <value>Reading Frame:</value>
     </data>
+    <data name="imageCount" xml:space="preserve">
+        <value>Number of Images</value>
+    </data>
+    <data name="musicCount" xml:space="preserve">
+        <value>Number of Musics</value>
+    </data>
+    <data name="soundCount" xml:space="preserve">
+        <value>Number of Sounds</value>
+    </data>
+    <data name="frameCount" xml:space="preserve">
+        <value>Frame Count</value>
+    </data>
+    <data name="frameitemCount" xml:space="preserve">
+        <value>Unique FrameItems</value>
+    </data>
 </root>

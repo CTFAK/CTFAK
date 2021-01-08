@@ -137,19 +137,12 @@ namespace CTFAK.MMFParser.EXE
             }
             public void BuildKey()
             {
-                
-                
-                
                 Settings.AppName=_chunkList.GetChunk<AppName>()?.Value??"";
                 Settings.Copyright = _chunkList.GetChunk<Copyright>()?.Value??"";
                 Settings.ProjectPath = _chunkList.GetChunk<EditorFilename>()?.Value??"";
-               
 
                 if (Exe.Instance.GameData.ProductBuild > 284)Decryption.MakeKey(Settings.AppName,Settings.Copyright,Settings.ProjectPath);
                 else Decryption.MakeKey(Settings.ProjectPath, Settings.AppName, Settings.Copyright);
-
-
-
             }
         }
 
@@ -257,22 +250,18 @@ namespace CTFAK.MMFParser.EXE
                 case 13117:
                     // loader = new Events(chunk);//NOT WORKING
                     break;
-                
-                
             }
 
             loader?.Read();
             return loader;
         }
-
-
         public T GetChunk<T>() where T : ChunkLoader
         {
             foreach (Chunk chunk in Chunks)
             {
                 if (chunk.Loader != null)
                 {
-                    if (chunk.Loader.GetType().Name == typeof(T).Name)
+                    if (chunk.Loader.GetType() == typeof(T))
                     {
                         return (T) chunk.Loader;
                     }
@@ -288,13 +277,11 @@ namespace CTFAK.MMFParser.EXE
                 var chunk = Chunks[i];
                 if (chunk.Loader != null)
                 {
-                    if (chunk.Loader.GetType().Name == typeof(T).Name)
+                    if (chunk.Loader.GetType() == typeof(T))
                     {
                         Chunks.Remove(chunk);
                         return (T) chunk.Loader;
                     }
-
-                    
                 }
             }
             return null;  

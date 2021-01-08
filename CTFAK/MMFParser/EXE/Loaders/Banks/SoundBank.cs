@@ -100,6 +100,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
         public override void Read()
         {
+            
         }
 
         public SoundBase(ByteReader reader) : base(reader)
@@ -122,6 +123,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         
         public override void Read()
         {
+            base.Read();
             var start = Reader.Tell();
             
             Handle = (int) Reader.ReadUInt32();
@@ -153,6 +155,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
 
             this.Data = soundData.ReadBytes((int) soundData.Size());
+            //Logger.Log("SoundHeader: "+Data.GetHex(4));
             if (Settings.DumpSounds)
             {
                 Name = Helper.CleanInput(Name);

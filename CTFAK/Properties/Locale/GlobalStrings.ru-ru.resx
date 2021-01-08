@@ -21,7 +21,7 @@
         <value>Сохранить Музыку</value>
     </data>
     <data name="dumpSorted" xml:space="preserve">
-        <value>Сохранение с сортировкой</value>
+        <value>Сохранить Картинки с сортировкой</value>
     </data>
     <data name="dumpSounds" xml:space="preserve">
         <value>Сохранить звуки</value>
@@ -43,5 +43,20 @@
     </data>
     <data name="readingFrame" xml:space="preserve">
         <value>Чтение сцены:</value>
+    </data>
+    <data name="imageCount" xml:space="preserve">
+        <value>Количество Картинок</value>
+    </data>
+    <data name="musicCount" xml:space="preserve">
+        <value>Количество Музыки</value>
+    </data>
+    <data name="soundCount" xml:space="preserve">
+        <value>Количество Звуков</value>
+    </data>
+    <data name="frameCount" xml:space="preserve">
+        <value>Количество Сцен</value>
+    </data>
+    <data name="frameitemCount" xml:space="preserve">
+        <value>Уникальных Объектов</value>
     </data>
 </root>

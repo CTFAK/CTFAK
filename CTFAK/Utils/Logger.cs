@@ -7,6 +7,13 @@ namespace CTFAK.Utils
     public static class Logger
     {
         static StreamWriter _writer;
+
+        public static void Log(object text, bool logToScreen = true, ConsoleColor color = ConsoleColor.White,
+            bool logToConsole = true)
+        {
+            Log(text.ToString(), logToScreen, color, logToConsole);
+
+        }
         public static void Log(string text, bool logToScreen = true,ConsoleColor color = ConsoleColor.White, bool logToConsole=true)
         {
 

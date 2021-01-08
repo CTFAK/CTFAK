@@ -106,6 +106,24 @@ namespace CTFAK.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Frame Count.
+        /// </summary>
+        internal static string frameCount {
+            get {
+                return ResourceManager.GetString("frameCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unique FrameItems.
+        /// </summary>
+        internal static string frameitemCount {
+            get {
+                return ResourceManager.GetString("frameitemCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copyright.
         /// </summary>
         internal static string gameCopyright {
@@ -124,11 +142,29 @@ namespace CTFAK.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number of Images.
+        /// </summary>
+        internal static string imageCount {
+            get {
+                return ResourceManager.GetString("imageCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading.
         /// </summary>
         internal static string loading {
             get {
                 return ResourceManager.GetString("loading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of Musics.
+        /// </summary>
+        internal static string musicCount {
+            get {
+                return ResourceManager.GetString("musicCount", resourceCulture);
             }
         }
         
@@ -156,6 +192,15 @@ namespace CTFAK.Properties {
         internal static string selectFile {
             get {
                 return ResourceManager.GetString("selectFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of Sounds.
+        /// </summary>
+        internal static string soundCount {
+            get {
+                return ResourceManager.GetString("soundCount", resourceCulture);
             }
         }
     }
