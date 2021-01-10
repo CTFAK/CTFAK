@@ -42,6 +42,7 @@ namespace CTFAK.GUI
 
         private bool _isAudioPlaying;
         private SoundPlayer _soundPlayer;
+        public Label ObjectViewerLabel;
 
 
         public MainForm(Color color)
@@ -110,6 +111,12 @@ namespace CTFAK.GUI
                 if (dlg == DialogResult.Yes) Environment.Exit(0);
                 else e.Cancel = true;
             };
+            imageViewerInfo.Parent = imageViewPictureBox;
+            imageViewerInfo.BackColor=Color.Transparent;
+            imageViewerInfo.Dock = DockStyle.Right;
+            
+            
+               
             KeyPreview = true;
             tabControl1.Selecting += tabControl1_Selecting;
         }
@@ -158,6 +165,9 @@ namespace CTFAK.GUI
             console.Show();
             console.Location = new Point(Location.X + Size.Width - 15, 0);
             console.Size = new Size(console.Size.Width, Size.Height);
+            
+            
+
         }
 
 
@@ -652,15 +662,20 @@ namespace CTFAK.GUI
                             }
                             else if(common.Parent.ObjectType==7)//Counter
                             {
-                                for (var a = 0; a < common.Counters?.Frames?.Count; a++)
+                                
+                                var count = common.Counters?.Frames?.Count??0;
+
+                                for (var a = 0; a < count; a++)
                                 {
                                     var animFrame = common.Counters.Frames[a];
                                     bank.Images.TryGetValue(animFrame, out var img);
-                                    if (img != null)
+                                    if (img == null)
                                     {
-                                        var animFrameNode = new ChunkNode(a.ToString(), img);
-                                        objInstNode.Nodes.Add(animFrameNode);
+                                        
+                                        continue;
                                     }
+                                    var animFrameNode = new ChunkNode(a.ToString(), img);
+                                    objInstNode.Nodes.Add(animFrameNode);
                                 }
                                 
 
@@ -771,12 +786,57 @@ namespace CTFAK.GUI
 
         private void advancedTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            ObjectViewerLabel?.Dispose();
             var node = e.Node;
-            if (((ChunkNode) node).loader is ImageItem)
+            var loader = ((ChunkNode) node).loader;
+            string text=String.Empty;
+            imageViewPictureBox.Image = null;
+            if (loader is ImageItem img)
             {
-                var img = (ImageItem) ((ChunkNode) node).loader;
+                text += $"Size: {img.Bitmap.Width}x{img.Bitmap.Height}\r\n";
+                text += $"Action Point: {img.ActionX}x{img.ActionY}\r\n";
+                text += $"Hotspot: {img.XHotspot}x{img.YHotspot}\r\n";
                 imageViewPictureBox.Image = img.Bitmap;
             }
+            else if (loader is ObjectInstance instance)
+            {
+                
+                text += $"Name: {instance.FrameItem.Name}\r\n";
+                text += $"Type: {(Constants.ObjectType)instance.FrameItem.ObjectType}\r\n";
+                text += $"Position: {instance?.X}x{instance?.Y}\r\n";
+                text += $"Size: {instance.FrameItem.GetPreview()?.Bitmap.Width}x{instance.FrameItem.GetPreview()?.Bitmap.Width}\r\n";
+                if (instance.FrameItem.Properties.IsCommon)
+                {
+                    var common = ((ObjectCommon) instance.FrameItem.Properties.Loader);
+                    switch (instance.FrameItem.ObjectType)
+                    {
+                        case 3:
+                            ObjectViewerLabel = new Label();
+                            var content = string.Empty;
+                            foreach (var par in common.Text.Items)
+                            {
+                                content += $"{par.Value}\r\n";
+                                content += $"\r\n\r\n\r\n";
+                            }
+                            ObjectViewerLabel.Text = content;
+                            ObjectViewerLabel.Parent = imageViewPictureBox;
+                            ObjectViewerLabel.Dock = DockStyle.Fill;
+                            ObjectViewerLabel.TextAlign = ContentAlignment.MiddleCenter;
+
+                            imageViewPictureBox.Controls.Add(ObjectViewerLabel);
+                            break;
+                        default:
+                            text += "No additional info";
+                            break;
+                    
+                    }
+                }
+                
+                
+
+                
+            }
+            imageViewerInfo.Text = text;
         }
 
 

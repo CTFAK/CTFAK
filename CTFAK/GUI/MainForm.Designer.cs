@@ -566,9 +566,11 @@
             // 
             this.imageViewerInfo.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.imageViewerInfo.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
-            this.imageViewerInfo.Location = new System.Drawing.Point(777, 3);
+            this.imageViewerInfo.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.imageViewerInfo.Location = new System.Drawing.Point(696, 3);
             this.imageViewerInfo.Name = "imageViewerInfo";
-            this.imageViewerInfo.Size = new System.Drawing.Size(155, 63);
+            this.imageViewerInfo.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.imageViewerInfo.Size = new System.Drawing.Size(236, 63);
             this.imageViewerInfo.TabIndex = 3;
             this.imageViewerInfo.Text = "DEBUG";
             // 

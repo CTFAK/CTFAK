@@ -24,6 +24,7 @@ namespace CTFAK.MMFParser.EXE
                 if (chunk.Id == 26214)
                 {
                     if(!Settings.twofiveplus) chunk.Loader = LoadChunk(chunk); 
+                    //LoadChunk(chunk); 
                 }
                 else
                 {

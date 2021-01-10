@@ -60,6 +60,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+            
             var size = Reader.ReadUInt32();
             var width = Reader.ReadUInt32();
             var height = Reader.ReadUInt32();
@@ -77,8 +78,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             var inverse = ByteFlag.GetFlag(flags, 8);
             var font = Reader.ReadUInt16();
             if (displayType == 0) return;
-            else if (displayType == 1 || displayType == 4)
+            else if (displayType == 1 || displayType == 4|| displayType==50)
             {
+                
                 Frames = new List<int>();
                 var count = Reader.ReadInt16();
                 for (int i = 0; i < count; i++)
@@ -89,7 +91,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             else if (displayType == 2 || displayType == 3 || displayType == 5)
             {
                 //TODO: Shapes
-                throw new NotImplementedException();
+                Logger.Log("Ignoring unsupported counter type");
             }
 
         }

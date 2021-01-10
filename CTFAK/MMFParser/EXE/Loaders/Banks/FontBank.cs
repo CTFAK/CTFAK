@@ -34,5 +34,30 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
         }
     }
+    public class FontItem:ChunkLoader
+    {
+        public FontItem(ByteReader reader) : base(reader)
+        {
+        }
 
+        public FontItem(Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+            var handle = Reader.ReadUInt32();
+
+        }
+
+        public override void Print(bool ext)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override string[] GetReadableData()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
 }

@@ -20,6 +20,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             var currentPosition = Reader.Tell();
             var size = Reader.ReadInt16();
             var count = Reader.ReadInt16();
+
             var offsets = new List<short>();
             for (int i = 0; i < count; i++)
             {
@@ -33,6 +34,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 {
                     Reader.Seek(currentPosition+offset);
                     var anim = new Animation(Reader);
+                    
                     anim.Read();
                     AnimationDict.Add(i,anim);
                     

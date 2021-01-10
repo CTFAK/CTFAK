@@ -19,12 +19,15 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         public override void Read()
         {
             Items = new List<int>();
-
+            Reader.ReadUInt16();
             var count = Reader.ReadUInt16();
+            Logger.Log("Alterable value count "+count);
             Console.WriteLine(count);
             for (int i = 0; i < count; i++)
             {
+                
                 var item = Reader.ReadInt32();
+                Logger.Log($"{i} - {item}");
                 
                 Items.Add(item);
 
@@ -58,6 +61,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             Items = new List<string>();
 
             var count = Reader.ReadUInt16();
+            Logger.Log("Alterable string count "+count);
 
             for (int i = 0; i < count; i++)
             {

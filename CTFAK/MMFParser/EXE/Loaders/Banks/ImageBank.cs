@@ -301,7 +301,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                     }
                     case 8:
                     {
-                        imageReader.Seek(start+Size);
+                        Logger.Log("Reading 32-bit color");
                         (_colorArray, bytesRead) = ImageHelper.Read32(imageData, _width, _height);
                         break; 
                     }

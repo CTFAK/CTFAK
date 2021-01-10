@@ -126,6 +126,21 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
             return bmp;
         }
+
+        public List<ObjectInstance> GetInstances()
+        {
+            var list = new List<ObjectInstance>();
+            var frames = Exe.Instance.GameData.Frames;
+            foreach (var frame in frames)
+            {
+                foreach (ObjectInstance instance in frame.Objects.Items)
+                {
+                    if(instance.ObjectInfo==this.Handle)list.Add(instance);
+                }
+            }
+
+            return list;
+        }
     }
 
     public class ObjectName : StringChunk
@@ -165,7 +180,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             {
                 Loader = new Backdrop(Reader);
             }
-            else if(ObjectType==2|| ObjectType==7)
+            else
             {
                 IsCommon = true;
                 Loader = new ObjectCommon(Reader,parent);

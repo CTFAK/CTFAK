@@ -159,6 +159,7 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MMFParser\EXE\Loaders\Objects\Movements.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Objects\Text.cs" />
     <Compile Include="MMFParser\Translation\MFAGenerator.cs" />
     <Compile Include="MMFParser\Translation\PAME2MFA.cs" />
     <Compile Include="MMFParser\EXE\ChunkList.cs" />
