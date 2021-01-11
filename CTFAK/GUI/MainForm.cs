@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Media;
@@ -49,6 +50,8 @@ namespace CTFAK.GUI
         {
             //Buttons
             InitializeComponent();
+            Thread.CurrentThread.CurrentUICulture=new CultureInfo(LoadableSettings.instance["lang"].ToString());
+            
             ColorTheme = color;
             foreach (Control item in Controls)
             {
@@ -93,7 +96,6 @@ namespace CTFAK.GUI
             imagesButton.Text = Properties.GlobalStrings.dumpImages;
             soundsButton.Text = Properties.GlobalStrings.dumpSounds;
             musicsButton.Text = Properties.GlobalStrings.dumpMusics;
-            dumpSortedBtn.Text = Properties.GlobalStrings.dumpSorted;
             FolderBTN.Text=Properties.GlobalStrings.openFolder;
 
             
@@ -111,9 +113,9 @@ namespace CTFAK.GUI
                 if (dlg == DialogResult.Yes) Environment.Exit(0);
                 else e.Cancel = true;
             };
-            imageViewerInfo.Parent = imageViewPictureBox;
-            imageViewerInfo.BackColor=Color.Transparent;
-            imageViewerInfo.Dock = DockStyle.Right;
+            objViewerInfo.Parent = imageViewPictureBox;
+            objViewerInfo.BackColor=Color.Transparent;
+            objViewerInfo.Dock = DockStyle.Right;
             
             
                
@@ -142,7 +144,12 @@ namespace CTFAK.GUI
             var worker = new BackgroundWorker();
             worker.DoWork += (workSender, workE) =>
             {
-                if (File.Exists(openFileDialog1.FileName)) StartReading();
+                if (File.Exists(openFileDialog1.FileName))
+                {
+                    objTreeView.Nodes.Clear();
+                    
+                    StartReading();
+                }
                 else throw new NotImplementedException("File not found");
             };
             worker.RunWorkerCompleted += (workSender, workE) => { AfterLoad(); };
@@ -174,7 +181,8 @@ namespace CTFAK.GUI
         private void StartReading()
         {
             var path = openFileDialog1.FileName;
-            //loadingLabel.Visible = true;
+            Loaded = false;
+            loadingLabel.Visible = true;
             Program.ReadFile(path, Settings.Verbose, Settings.DumpImages, Settings.DumpSounds);
 
             imageBar.Value = 0;
@@ -187,8 +195,6 @@ namespace CTFAK.GUI
             imagesButton.Visible = false;
             soundsButton.Visible = false;
             musicsButton.Visible = false;
-            dumpSortedBtn.Visible = false;
-            Loaded = false;
         }
 
         private void treeView1_AfterDblClick(object sender, EventArgs e)
@@ -306,7 +312,6 @@ namespace CTFAK.GUI
             imagesButton.Visible = true;
             soundsButton.Visible = true;
             musicsButton.Visible = true;
-            dumpSortedBtn.Visible = true;
             GameInfo.Visible = true;
             loadingLabel.Visible = false;
             
@@ -334,7 +339,6 @@ namespace CTFAK.GUI
                 Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>().OnSoundSaved += UpdateSoundBar;
             if (Exe.Instance.GameData.GameChunks.GetChunk<MusicBank>() != null)
                 Exe.Instance.GameData.GameChunks.GetChunk<MusicBank>().OnMusicSaved += UpdateMusicBar;
-            ImageDumper.SortedImageSaved += IncrementSortedBar;
 
 
             GameInfo.Text = toLog;
@@ -363,13 +367,7 @@ namespace CTFAK.GUI
             musicLabel.Text = $@"{index}/{all}";
         }
 
-        private void IncrementSortedBar(int all)
-        {
-            SortedProgressBar.Visible = true;
-            SortedProgressBar.Maximum = all;
-            SortedProgressBar.Value += 1;
-            if (SortedProgressBar.Value >= SortedProgressBar.Maximum) SortedProgressBar.Visible = false;
-        }
+        
 
 
         private void FolderBTN_Click(object sender, EventArgs e)
@@ -611,7 +609,7 @@ namespace CTFAK.GUI
             foreach (var frame in Exe.Instance.GameData.Frames)
             {
                 var frameNode = new ChunkNode(frame.Name, frame);
-                imagesTreeView.Nodes.Add(frameNode);
+                objTreeView.Nodes.Add(frameNode);
                 if (frame.Objects != null)
                     foreach (var objInst in frame.Objects.Items)
                     {
@@ -697,7 +695,7 @@ namespace CTFAK.GUI
 
         private void advancedPlayAnimation_Click(object sender, EventArgs e)
         {
-            if (((ChunkNode) imagesTreeView.SelectedNode).loader is Animation anim)
+            if (((ChunkNode) objTreeView.SelectedNode).loader is Animation anim)
             {
                 if (_isAnimRunning)
                 {
@@ -717,7 +715,7 @@ namespace CTFAK.GUI
                     }
                 }
             }
-            else if (((ChunkNode) imagesTreeView.SelectedNode).loader is AnimationDirection dir)
+            else if (((ChunkNode) objTreeView.SelectedNode).loader is AnimationDirection dir)
             {
                 if (_isAnimRunning)
                 {
@@ -750,7 +748,7 @@ namespace CTFAK.GUI
                 foreach (var frame in frames)
                 {
                     imageViewPictureBox.Image = frame;
-                    imageViewerInfo.Text = $"Current frame: {frames.IndexOf(frame)}\nAnimation Speed: {fps}";
+                    objViewerInfo.Text = $"Current frame: {frames.IndexOf(frame)}\nAnimation Speed: {fps}";
                     Thread.Sleep((int) (delay * 1500));
                 }
 
@@ -769,7 +767,7 @@ namespace CTFAK.GUI
                 {
                     var frame = frames[i];
                     imageViewPictureBox.Image = frame;
-                    imageViewerInfo.Text = $"Current frame: {i.ToString()}\nAnimation Speed: {fps}";
+                    objViewerInfo.Text = $"Current frame: {i.ToString()}\nAnimation Speed: {fps}";
                     Thread.Sleep((int) (delay * 1500));
                     i++;
                     if (i == frames.Count) i = 0;
@@ -798,6 +796,31 @@ namespace CTFAK.GUI
                 text += $"Hotspot: {img.XHotspot}x{img.YHotspot}\r\n";
                 imageViewPictureBox.Image = img.Bitmap;
             }
+            else if (loader is Animation anim)
+            {
+                text += $"Current frame: 0";
+                text+=$"\r\nAnimation Speed: {anim.DirectionDict.FirstOrDefault().Value.MaxSpeed}";
+
+                imageViewPictureBox.Image = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>()
+                    .FromHandle(anim.DirectionDict.FirstOrDefault().Value.Frames[0]).Bitmap;
+
+            }
+            else if (loader is Frame frame)
+            {
+                text += $"Name: {frame.Name}\r\n";
+                text += $"Size: {frame.Width}x{frame.Height}\r\n";
+                text += $"Objects: {frame.Objects.Items.Count}\r\n";
+                text += $"Layers: {frame.Layers.Items.Count}\r\n";
+                text += $"Flags:\r\n";
+                foreach (var part in frame.Flags.ToString().Split(';'))
+                {
+                    text += part+"\r\n";
+
+                }
+
+
+                
+            }
             else if (loader is ObjectInstance instance)
             {
                 
@@ -810,6 +833,12 @@ namespace CTFAK.GUI
                     var common = ((ObjectCommon) instance.FrameItem.Properties.Loader);
                     switch (instance.FrameItem.ObjectType)
                     {
+                        case 2:
+                            text += $"Animations: {common.Animations?.AnimationDict.Count}";
+                            imageViewPictureBox.Image = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>()
+                                .FromHandle(common.Animations.AnimationDict.FirstOrDefault().Value.DirectionDict
+                                    .FirstOrDefault().Value.Frames.FirstOrDefault()).Bitmap;
+                            break;
                         case 3:
                             ObjectViewerLabel = new Label();
                             var content = string.Empty;
@@ -825,18 +854,35 @@ namespace CTFAK.GUI
 
                             imageViewPictureBox.Controls.Add(ObjectViewerLabel);
                             break;
+                        case 7:
+                            var handle = common.Counters?.Frames.FirstOrDefault();
+                            if (handle == null) imageViewPictureBox.Image = imageViewPictureBox.ErrorImage;
+                            else
+                            {
+                                imageViewPictureBox.Image = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>()
+                                .FromHandle((int) handle).Bitmap;
+                            }
+                            
+                            //text += $"Add 0's to the left: {common?.Counters?.AddNulls}";
+                            //text += $"Fixed number of digits: {(common.Counters.UseDecimals ? common?.Counters?.FloatDigits : common?.Counters?.IntegerDigits)}";
+                            break;
+
                         default:
                             text += "No additional info";
                             break;
-                    
                     }
+                }
+                else
+                {
+                    if (instance.FrameItem.ObjectType == 1)
+                        imageViewPictureBox.Image = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().FromHandle(((Backdrop)instance.FrameItem.Properties.Loader).Image).Bitmap;
                 }
                 
                 
 
                 
             }
-            imageViewerInfo.Text = text;
+            objViewerInfo.Text = text;
         }
 
 
@@ -875,12 +921,12 @@ namespace CTFAK.GUI
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (tabControl1.SelectedTab == imgViewerTab)
+            if (tabControl1.SelectedTab == objViewerTab)
                 if (e.Control)
                 {
-                    var node = (ChunkNode) imagesTreeView.SelectedNode;
+                    var node = (ChunkNode) objTreeView.SelectedNode;
                     var path =
-                        $"{Settings.ImagePath}\\{Helper.GetTreePath(imagesTreeView, (ChunkNode) imagesTreeView.SelectedNode)}";
+                        $"{Settings.ImagePath}\\{Helper.GetTreePath(objTreeView, (ChunkNode) objTreeView.SelectedNode)}";
                     if (node == null) return;
                     ImageDumper.SaveFromNode(node);
                 }
@@ -900,6 +946,11 @@ namespace CTFAK.GUI
         private void updateSettings_Click(object sender, EventArgs e)
         {
             LoadableSettings.instance["mainColor"] = colorBox.Text;
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadableSettings.instance["lang"] = langComboBox.SelectedItem;
         }
     }
 }

@@ -34,7 +34,10 @@ namespace CTFAK.Utils
                 SaveAnimation(anim,bank,fullPath);
             }
             
-            else if(node.loader is ObjectInstance) Console.WriteLine("Dumping Common");
+            else if (node.loader is ObjectInstance instance)
+            {
+                SaveInstance(instance,bank,fullPath);
+            }
             else if(node.loader is Backdrop) Console.WriteLine("Dumping Backdrop");
             else if(node.loader is Frame) Console.WriteLine("Dumping Frame");
             
@@ -55,7 +58,32 @@ namespace CTFAK.Utils
                 bank.Images[frame].Save($"{fullPath}\\{i}.png");
             }
         }
-
+        public static void SaveInstance(ObjectInstance inst, ImageBank bank,string fullPath)
+        {
+            if (inst.FrameItem.Properties.IsCommon)
+            {
+                var common = ((ObjectCommon)inst.FrameItem.Properties.Loader);
+                switch (common.Parent.ObjectType)
+                {
+                    case 2:
+                        foreach (var pair in common.Animations.AnimationDict.ToArray())
+                        {
+                            SaveAnimation(pair.Value,bank,fullPath+"\\Animation "+pair.Key); 
+                        }
+                        break;
+                    case 7:
+                        foreach (int frame in common.Counters.Frames)
+                        {
+                            var img = bank.FromHandle(frame);
+                            img.Save(fullPath+$"\\{frame}.png");
+                        }
+                        break;
+                        
+                }
+                
+            }
+            
+        }
         public static void SaveAnimation(Animation anim, ImageBank bank, string fullPath)
         {
             if (anim.DirectionDict.ToArray().Length > 1)
@@ -65,6 +93,7 @@ namespace CTFAK.Utils
                     Directory.CreateDirectory($"{fullPath}\\Direction {anim.DirectionDict.ToList().IndexOf(dirpair)}");
                     for (int i = 0; i < anim.DirectionDict[0].Frames.Count; i++)
                     {
+                        
                         var frame = dirpair.Value.Frames[i];
                         bank.Images[frame].Save($"{fullPath}\\Direction {anim.DirectionDict.ToList().IndexOf(dirpair)}\\{i}.png");
                     } 
@@ -74,6 +103,7 @@ namespace CTFAK.Utils
             {
                 for (int i = 0; i < anim.DirectionDict[0].Frames.Count; i++)
                 {
+                    Directory.CreateDirectory(fullPath);
                     var frame = anim.DirectionDict[0].Frames[i];
                     bank.Images[frame].Save($"{fullPath}\\{i}.png");
                 } 

@@ -44,7 +44,6 @@
             this.soundsButton = new System.Windows.Forms.Button();
             this.imagesButton = new System.Windows.Forms.Button();
             this.loadingLabel = new System.Windows.Forms.Label();
-            this.dumpSortedBtn = new System.Windows.Forms.Button();
             this.ChunkCombo = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.saveChunkBtn = new System.Windows.Forms.ToolStripMenuItem();
             this.viewHexBtn = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,7 +51,6 @@
             this.musicsButton = new System.Windows.Forms.Button();
             this.musicBar = new System.Windows.Forms.ProgressBar();
             this.musicLabel = new System.Windows.Forms.Label();
-            this.SortedProgressBar = new System.Windows.Forms.ProgressBar();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.mainTab = new System.Windows.Forms.TabPage();
             this.mfaTab = new System.Windows.Forms.TabPage();
@@ -63,11 +61,11 @@
             this.dumpAllPackButton = new System.Windows.Forms.Button();
             this.dumpPackButton = new System.Windows.Forms.Button();
             this.packDataListBox = new System.Windows.Forms.ListBox();
-            this.imgViewerTab = new System.Windows.Forms.TabPage();
-            this.imageViewerInfo = new System.Windows.Forms.Label();
+            this.objViewerTab = new System.Windows.Forms.TabPage();
+            this.objViewerInfo = new System.Windows.Forms.Label();
             this.imageViewerPlayAnim = new System.Windows.Forms.Button();
             this.imageViewPictureBox = new System.Windows.Forms.PictureBox();
-            this.imagesTreeView = new System.Windows.Forms.TreeView();
+            this.objTreeView = new System.Windows.Forms.TreeView();
             this.soundViewTab = new System.Windows.Forms.TabPage();
             this.stopSoundBtn = new System.Windows.Forms.Button();
             this.soundList = new System.Windows.Forms.TreeView();
@@ -81,6 +79,8 @@
             this.activatePluginBtn = new System.Windows.Forms.Button();
             this.pluginsList = new System.Windows.Forms.ListBox();
             this.settingsTab = new System.Windows.Forms.TabPage();
+            this.langComboBox = new System.Windows.Forms.ComboBox();
+            this.langLabel = new System.Windows.Forms.Label();
             this.colorLabel = new System.Windows.Forms.Label();
             this.updateSettings = new System.Windows.Forms.Button();
             this.colorBox = new System.Windows.Forms.TextBox();
@@ -90,7 +90,7 @@
             this.mainTab.SuspendLayout();
             this.mfaTab.SuspendLayout();
             this.packDataTab.SuspendLayout();
-            this.imgViewerTab.SuspendLayout();
+            this.objViewerTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.imageViewPictureBox)).BeginInit();
             this.soundViewTab.SuspendLayout();
             this.cryptKeyTab.SuspendLayout();
@@ -121,16 +121,16 @@
             // 
             // treeView1
             // 
-            this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles) (((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Right)));
             this.treeView1.BackColor = System.Drawing.Color.Black;
             this.treeView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.treeView1.Dock = System.Windows.Forms.DockStyle.Right;
             this.treeView1.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.treeView1.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.treeView1.Location = new System.Drawing.Point(649, 8);
+            this.treeView1.Location = new System.Drawing.Point(646, 3);
             this.treeView1.Margin = new System.Windows.Forms.Padding(0);
             this.treeView1.MaximumSize = new System.Drawing.Size(500, 900);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(286, 460);
+            this.treeView1.Size = new System.Drawing.Size(286, 473);
             this.treeView1.TabIndex = 1;
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             this.treeView1.DoubleClick += new System.EventHandler(this.treeView1_AfterDblClick);
@@ -138,20 +138,20 @@
             // 
             // listBox1
             // 
-            this.listBox1.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.listBox1.BackColor = System.Drawing.Color.Black;
             this.listBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listBox1.Dock = System.Windows.Forms.DockStyle.Right;
             this.listBox1.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.listBox1.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
             this.listBox1.FormattingEnabled = true;
             this.listBox1.IntegralHeight = false;
             this.listBox1.ItemHeight = 17;
-            this.listBox1.Location = new System.Drawing.Point(349, 8);
+            this.listBox1.Location = new System.Drawing.Point(346, 3);
             this.listBox1.Margin = new System.Windows.Forms.Padding(0);
             this.listBox1.MaximumSize = new System.Drawing.Size(300, 50000);
             this.listBox1.MinimumSize = new System.Drawing.Size(180, 234);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(300, 277);
+            this.listBox1.Size = new System.Drawing.Size(300, 473);
             this.listBox1.TabIndex = 5;
             // 
             // GameInfo
@@ -295,22 +295,6 @@
             this.loadingLabel.TabIndex = 16;
             this.loadingLabel.Text = "Loading...";
             // 
-            // dumpSortedBtn
-            // 
-            this.dumpSortedBtn.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.dumpSortedBtn.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
-            this.dumpSortedBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.dumpSortedBtn.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.dumpSortedBtn.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.dumpSortedBtn.Location = new System.Drawing.Point(8, 406);
-            this.dumpSortedBtn.Name = "dumpSortedBtn";
-            this.dumpSortedBtn.Size = new System.Drawing.Size(83, 42);
-            this.dumpSortedBtn.TabIndex = 19;
-            this.dumpSortedBtn.Text = "Dump Sorted";
-            this.dumpSortedBtn.UseVisualStyleBackColor = false;
-            this.dumpSortedBtn.Visible = false;
-            this.dumpSortedBtn.Click += new System.EventHandler(this.dumpSortedBtn_Click);
-            // 
             // ChunkCombo
             // 
             this.ChunkCombo.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {this.saveChunkBtn, this.viewHexBtn, this.previewFrameBtn});
@@ -380,22 +364,13 @@
             this.musicLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.musicLabel.Visible = false;
             // 
-            // SortedProgressBar
-            // 
-            this.SortedProgressBar.Location = new System.Drawing.Point(97, 407);
-            this.SortedProgressBar.Name = "SortedProgressBar";
-            this.SortedProgressBar.Size = new System.Drawing.Size(209, 41);
-            this.SortedProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
-            this.SortedProgressBar.TabIndex = 24;
-            this.SortedProgressBar.Visible = false;
-            // 
             // tabControl1
             // 
             this.tabControl1.AllowDrop = true;
             this.tabControl1.Controls.Add(this.mainTab);
             this.tabControl1.Controls.Add(this.mfaTab);
             this.tabControl1.Controls.Add(this.packDataTab);
-            this.tabControl1.Controls.Add(this.imgViewerTab);
+            this.tabControl1.Controls.Add(this.objViewerTab);
             this.tabControl1.Controls.Add(this.soundViewTab);
             this.tabControl1.Controls.Add(this.cryptKeyTab);
             this.tabControl1.Controls.Add(this.pluginTab);
@@ -420,7 +395,6 @@
             this.mainTab.Controls.Add(this.label1);
             this.mainTab.Controls.Add(this.loadingLabel);
             this.mainTab.Controls.Add(this.button1);
-            this.mainTab.Controls.Add(this.SortedProgressBar);
             this.mainTab.Controls.Add(this.imageBar);
             this.mainTab.Controls.Add(this.treeView1);
             this.mainTab.Controls.Add(this.musicLabel);
@@ -431,7 +405,6 @@
             this.mainTab.Controls.Add(this.musicsButton);
             this.mainTab.Controls.Add(this.soundLabel);
             this.mainTab.Controls.Add(this.FolderBTN);
-            this.mainTab.Controls.Add(this.dumpSortedBtn);
             this.mainTab.Controls.Add(this.soundsButton);
             this.mainTab.Location = new System.Drawing.Point(4, 24);
             this.mainTab.Name = "mainTab";
@@ -547,32 +520,32 @@
             this.packDataListBox.TabIndex = 4;
             this.packDataListBox.SelectedIndexChanged += new System.EventHandler(this.packDataListBox_SelectedIndexChanged);
             // 
-            // imgViewerTab
+            // objViewerTab
             // 
-            this.imgViewerTab.BackColor = System.Drawing.Color.Black;
-            this.imgViewerTab.Controls.Add(this.imageViewerInfo);
-            this.imgViewerTab.Controls.Add(this.imageViewerPlayAnim);
-            this.imgViewerTab.Controls.Add(this.imageViewPictureBox);
-            this.imgViewerTab.Controls.Add(this.imagesTreeView);
-            this.imgViewerTab.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.imgViewerTab.Location = new System.Drawing.Point(4, 24);
-            this.imgViewerTab.Name = "imgViewerTab";
-            this.imgViewerTab.Padding = new System.Windows.Forms.Padding(3);
-            this.imgViewerTab.Size = new System.Drawing.Size(935, 479);
-            this.imgViewerTab.TabIndex = 1;
-            this.imgViewerTab.Text = "Images";
+            this.objViewerTab.BackColor = System.Drawing.Color.Black;
+            this.objViewerTab.Controls.Add(this.objViewerInfo);
+            this.objViewerTab.Controls.Add(this.imageViewerPlayAnim);
+            this.objViewerTab.Controls.Add(this.imageViewPictureBox);
+            this.objViewerTab.Controls.Add(this.objTreeView);
+            this.objViewerTab.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.objViewerTab.Location = new System.Drawing.Point(4, 24);
+            this.objViewerTab.Name = "objViewerTab";
+            this.objViewerTab.Padding = new System.Windows.Forms.Padding(3);
+            this.objViewerTab.Size = new System.Drawing.Size(935, 479);
+            this.objViewerTab.TabIndex = 1;
+            this.objViewerTab.Text = "Objects";
             // 
-            // imageViewerInfo
+            // objViewerInfo
             // 
-            this.imageViewerInfo.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.imageViewerInfo.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
-            this.imageViewerInfo.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
-            this.imageViewerInfo.Location = new System.Drawing.Point(696, 3);
-            this.imageViewerInfo.Name = "imageViewerInfo";
-            this.imageViewerInfo.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.imageViewerInfo.Size = new System.Drawing.Size(236, 63);
-            this.imageViewerInfo.TabIndex = 3;
-            this.imageViewerInfo.Text = "DEBUG";
+            this.objViewerInfo.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.objViewerInfo.BackColor = System.Drawing.Color.FromArgb(((int) (((byte) (64)))), ((int) (((byte) (64)))), ((int) (((byte) (64)))));
+            this.objViewerInfo.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.objViewerInfo.Location = new System.Drawing.Point(623, 3);
+            this.objViewerInfo.Name = "objViewerInfo";
+            this.objViewerInfo.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.objViewerInfo.Size = new System.Drawing.Size(309, 63);
+            this.objViewerInfo.TabIndex = 3;
+            this.objViewerInfo.Text = "DEBUG";
             // 
             // imageViewerPlayAnim
             // 
@@ -596,15 +569,15 @@
             this.imageViewPictureBox.TabIndex = 1;
             this.imageViewPictureBox.TabStop = false;
             // 
-            // imagesTreeView
+            // objTreeView
             // 
-            this.imagesTreeView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.imagesTreeView.Dock = System.Windows.Forms.DockStyle.Left;
-            this.imagesTreeView.Location = new System.Drawing.Point(3, 3);
-            this.imagesTreeView.Name = "imagesTreeView";
-            this.imagesTreeView.Size = new System.Drawing.Size(198, 473);
-            this.imagesTreeView.TabIndex = 1;
-            this.imagesTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.advancedTreeView_AfterSelect);
+            this.objTreeView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.objTreeView.Dock = System.Windows.Forms.DockStyle.Left;
+            this.objTreeView.Location = new System.Drawing.Point(3, 3);
+            this.objTreeView.Name = "objTreeView";
+            this.objTreeView.Size = new System.Drawing.Size(198, 473);
+            this.objTreeView.TabIndex = 1;
+            this.objTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.advancedTreeView_AfterSelect);
             // 
             // soundViewTab
             // 
@@ -749,6 +722,8 @@
             // settingsTab
             // 
             this.settingsTab.BackColor = System.Drawing.Color.Black;
+            this.settingsTab.Controls.Add(this.langComboBox);
+            this.settingsTab.Controls.Add(this.langLabel);
             this.settingsTab.Controls.Add(this.colorLabel);
             this.settingsTab.Controls.Add(this.updateSettings);
             this.settingsTab.Controls.Add(this.colorBox);
@@ -757,6 +732,25 @@
             this.settingsTab.Size = new System.Drawing.Size(935, 479);
             this.settingsTab.TabIndex = 7;
             this.settingsTab.Text = "Settings";
+            // 
+            // langComboBox
+            // 
+            this.langComboBox.FormattingEnabled = true;
+            this.langComboBox.Items.AddRange(new object[] {"en-US", "ru-RU"});
+            this.langComboBox.Location = new System.Drawing.Point(70, 31);
+            this.langComboBox.Name = "langComboBox";
+            this.langComboBox.Size = new System.Drawing.Size(109, 23);
+            this.langComboBox.TabIndex = 4;
+            this.langComboBox.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // langLabel
+            // 
+            this.langLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.langLabel.Location = new System.Drawing.Point(8, 34);
+            this.langLabel.Name = "langLabel";
+            this.langLabel.Size = new System.Drawing.Size(56, 15);
+            this.langLabel.TabIndex = 3;
+            this.langLabel.Text = "Lang:";
             // 
             // colorLabel
             // 
@@ -810,7 +804,7 @@
             this.mfaTab.ResumeLayout(false);
             this.mfaTab.PerformLayout();
             this.packDataTab.ResumeLayout(false);
-            this.imgViewerTab.ResumeLayout(false);
+            this.objViewerTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize) (this.imageViewPictureBox)).EndInit();
             this.soundViewTab.ResumeLayout(false);
             this.cryptKeyTab.ResumeLayout(false);
@@ -821,6 +815,16 @@
             this.settingsTab.PerformLayout();
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.ComboBox langComboBox;
+
+        private System.Windows.Forms.Label langLabel;
+
+        private System.Windows.Forms.TreeView objTreeView;
+
+        private System.Windows.Forms.Label objViewerInfo;
+
+        private System.Windows.Forms.TabPage objViewerTab;
 
         private System.Windows.Forms.TextBox colorBox;
         private System.Windows.Forms.Label colorLabel;
@@ -836,12 +840,8 @@
 
         private System.Windows.Forms.TabPage soundViewTab;
 
-        private System.Windows.Forms.TreeView imagesTreeView;
         private System.Windows.Forms.Button imageViewerPlayAnim;
         private System.Windows.Forms.PictureBox imageViewPictureBox;
-        private System.Windows.Forms.TabPage imgViewerTab;
-
-        private System.Windows.Forms.Label imageViewerInfo;
 
         private System.Windows.Forms.Button activatePluginBtn;
         private System.Windows.Forms.ListBox pluginsList;
@@ -875,11 +875,8 @@
 
         private System.Windows.Forms.TabControl tabControl1;
 
-        private System.Windows.Forms.ProgressBar SortedProgressBar;
-
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ContextMenuStrip ChunkCombo;
-        private System.Windows.Forms.Button dumpSortedBtn;
         private System.Windows.Forms.Button FolderBTN;
         private System.Windows.Forms.Label GameInfo;
         private System.Windows.Forms.ProgressBar imageBar;

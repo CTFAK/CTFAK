@@ -50,6 +50,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public ImageItem FromHandle(int handle)
         {
             Images.TryGetValue(handle, out var img);
+            if (handle == -1) return Images[Images.Count-1];
             if (img == null) return null;
             else return img;
         }
@@ -57,6 +58,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
         public void LoadByHandle(int handle)
         {
+            
             Images[handle].Load();
         }
 

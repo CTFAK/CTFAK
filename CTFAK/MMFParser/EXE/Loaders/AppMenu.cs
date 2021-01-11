@@ -27,7 +27,13 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override string[] GetReadableData()
         {
-            throw new NotImplementedException();
+            List<string> list = new List<string>();
+            foreach (AppMenuItem item in Items)
+            {
+                list.Add(item.Name);
+            }
+
+            return list.ToArray();
         }
 
         public override void Read()

@@ -24,6 +24,7 @@ namespace CTFAK
         private static void Main(string[] args)
         {
             InitNativeLibrary();
+            
             if (!File.Exists("settings.sav"))
             {
                 File.Create("settings.sav");
@@ -33,14 +34,14 @@ namespace CTFAK
             
             // MFAGenerator.ReadTestMFA();
             // Environment.Exit(0);
-            AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
+            /*AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
             {
                 
                 if (eventArgs.Exception is ThreadAbortException) return;
                 var ex = (Exception) eventArgs.Exception;
                 Logger.Log("ERROR: ");
                 Logger.Log(ex.ToString());
-            };
+            };*/
             
             Settings.UseGUI = true;
             

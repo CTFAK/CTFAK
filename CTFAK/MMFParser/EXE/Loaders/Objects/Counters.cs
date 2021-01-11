@@ -49,6 +49,16 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         int _floatDecimalsShift = 12;
         int _floatPad = 0x0800;
         public List<int> Frames;
+        public uint Width;
+        public uint Height;
+        public int IntegerDigits;
+        public bool FormatFloat;
+        public int FloatDigits;
+        public bool UseDecimals;
+        public int Decimals;
+        public ushort Font;
+        public bool Inverse;
+        public bool AddNulls;
 
         public Counters(ByteReader reader) : base(reader)
         {
@@ -62,21 +72,21 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         {
             
             var size = Reader.ReadUInt32();
-            var width = Reader.ReadUInt32();
-            var height = Reader.ReadUInt32();
+            Width = Reader.ReadUInt32();
+            Height = Reader.ReadUInt32();
             var player = Reader.ReadUInt16();
             var displayType = Reader.ReadUInt16();
             var flags = Reader.ReadUInt16();
 
-            var integerDigits = flags & _intDigitsMask;
-            var formatFloat = (flags & _formatFloat) != 0;
-            var floatDigits = (flags & _floatDigitsMask) >> _floatDigitsShift + 1;
-            var useDecimals = (flags & _useDecimals) != 0;
-            var decimals = (flags & _floatDecimalsMask) >> _floatDecimalsShift;
-            var addNulls = (flags & _floatPad) != 0;
+            IntegerDigits = flags & _intDigitsMask;
+            FormatFloat = (flags & _formatFloat) != 0;
+            FloatDigits = (flags & _floatDigitsMask) >> _floatDigitsShift + 1;
+            UseDecimals = (flags & _useDecimals) != 0;
+            Decimals = (flags & _floatDecimalsMask) >> _floatDecimalsShift;
+            AddNulls = (flags & _floatPad) != 0;
 
-            var inverse = ByteFlag.GetFlag(flags, 8);
-            var font = Reader.ReadUInt16();
+            Inverse = ByteFlag.GetFlag(flags, 8);
+            Font = Reader.ReadUInt16();
             if (displayType == 0) return;
             else if (displayType == 1 || displayType == 4|| displayType==50)
             {

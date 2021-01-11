@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace CTFAK
 {
@@ -37,7 +38,7 @@ namespace CTFAK
         
         
 
-        public static string DumperVersion = true ? "CTFAK 0.3 Alpha" : "CTFAK 0.2.1-a Debug";
+        public static string DumperVersion = true ? "CTFAK 0.3.5 Alpha" : "CTFAK 0.2.1-a Debug";
     }
 
     public class LoadableSettings
@@ -49,17 +50,19 @@ namespace CTFAK
 
         public static LoadableSettings FromFile(string path)
         {
-            
             if (!File.Exists(path))  File.Create(path);
+            Thread.Sleep(1500);
             var settings = new LoadableSettings();
             settings.path = path;
             var rawData = File.ReadAllLines(path);
-            foreach (string rawLine in rawData)
+            if (rawData.Length > 0)
             {
-                var split = rawLine.Split('=');
-                settings._data.Add(split[0],split[1]);
+                foreach (string rawLine in rawData)
+                {
+                    var split = rawLine.Split('=');
+                    settings._data.Add(split[0],split[1]);
+                }  
             }
-
             instance = settings;
 
             return settings;

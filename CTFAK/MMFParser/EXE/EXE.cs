@@ -62,8 +62,7 @@ namespace CTFAK.MMFParser.EXE
             exeReader.Seek(possition);
             var firstShort = exeReader.PeekUInt16();
             Logger.Log("First Short: " + firstShort.ToString("X2"), true, ConsoleColor.Yellow);
-            if (firstShort == 0x7777) Settings.Old = false;
-            else Settings.Old = true;
+            if (firstShort != 0x7777) Settings.Old = true;
             if (!Settings.Old)
             {
                 PackData = new PackData();
@@ -75,6 +74,7 @@ namespace CTFAK.MMFParser.EXE
             }
             else
             {
+                Logger.Log("Game is too old");
                 var oldData = new ChunkList();
                 oldData.Read(exeReader);
                 GameData = new GameData();

@@ -169,6 +169,9 @@ namespace CTFAK.MMFParser.EXE
                 case 8741:
                     loader = new AppAuthor(chunk);
                     break;
+                case 8742:
+                    loader = new AppMenu(chunk);
+                    break;
                 case 8743:
                     loader = new ExtPath(chunk);
                     break;
@@ -327,6 +330,7 @@ namespace CTFAK.MMFParser.EXE
                 case 8770: return Properties.Locale.ChunkNames.protection;//"Protection";
                 case 8771: return Properties.Locale.ChunkNames.shaders;//"Shaders";
                 case 8773: return Properties.Locale.ChunkNames.extHeader;//"Extended Header";
+                case 8774: return "Spacer";//"Spacer";
                 case 13107:return Properties.Locale.ChunkNames.frame;//"Frame";
                 case 13108:return Properties.Locale.ChunkNames.frameHeader;//"Frame Header";
                 case 13109:return Properties.Locale.ChunkNames.frameName;//"Frame Name";
