@@ -9,20 +9,9 @@ namespace CTFAK.Utils
     static class Decryption
     {
         private static byte[] _decryptionKey;
-        public static byte MagicChar = 0;
+        public static byte MagicChar = 54;
 
-        public static byte[] FixString(byte[] bytes)
-        {
-            List<byte> newBytes = new List<byte>();
-            foreach (byte b in bytes)
-            {
-                if(b!=0) newBytes.Add(b);
-            }
-
-            return bytes; //newBytes.ToArray();
-
-        }
-
+        
         public static void MakeKey(string data1, string data2, string data3)
         {
             
@@ -95,9 +84,14 @@ namespace CTFAK.Utils
 
             return decodedChunk;
         }
+        
 
+        #if WIN64
         private const string _dllPath = "x64\\Decrypter-x64.dll";
-        //private const string _dllPath = "x86\\Decrypter-x86.dll";
+        #else
+        private const string _dllPath = "x86\\Decrypter-x86.dll";
+        #endif
+        
         [DllImport(_dllPath, EntryPoint = "decode_chunk", CharSet = CharSet.Auto)]
         public static extern IntPtr decode_chunk(IntPtr chunkData, int chunkSize, byte magicChar, IntPtr wrapperKey);
 

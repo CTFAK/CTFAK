@@ -142,8 +142,17 @@ namespace CTFAK.MMFParser.EXE
                 Settings.Copyright = _chunkList.GetChunk<Copyright>()?.Value??"";
                 Settings.ProjectPath = _chunkList.GetChunk<EditorFilename>()?.Value??"";
 
-                if (Exe.Instance.GameData.ProductBuild > 284)Decryption.MakeKey(Settings.AppName,Settings.Copyright,Settings.ProjectPath);
-                else Decryption.MakeKey(Settings.ProjectPath, Settings.AppName, Settings.Copyright);
+                if (Settings.Build > 284)
+                {
+                    Logger.Log("Using New Key");
+                    Decryption.MakeKey(Settings.AppName,Settings.Copyright,Settings.ProjectPath);
+                }
+                else
+                {
+                    Logger.Log("Using Old Key");
+                    Decryption.MakeKey(Settings.ProjectPath, Settings.AppName, Settings.Copyright);
+                }
+                // Decryption.MakeKey(Settings.ProjectPath, Settings.AppName, Settings.Copyright);
             }
         }
 

@@ -26,23 +26,23 @@ namespace CTFAK.MMFParser.Translation
             Message("Running Pame2MFA");
             Message("Original MFA Build: "+mfa.BuildVersion);
             Message("");
-            //mfa.MfaBuild = 4;
-            //mfa.Product = (int) game.ProductVersion;
-            //mfa.BuildVersion = 283;
+            // mfa.MfaBuild = 4;
+            // mfa.Product = (int) game.ProductVersion;
+            // mfa.BuildVersion = 283;
             mfa.Name = game.Name;
             mfa.LangId = 8192;
             mfa.Description = "";
             mfa.Path = game.EditorFilename;
             
             //mfa.Stamp = wtf;
-            if (game.Fonts != null) mfa.Fonts = game.Fonts;
+            //if (game.Fonts != null) mfa.Fonts = game.Fonts;
             
             //mfa.Sounds = game.Sounds;
             //foreach (var item in mfa.Sounds.Items)
             //{
             //    item.IsCompressed = false;
             //}
-            mfa.Music = game.Music;
+            //mfa.Music = game.Music;
             mfa.Images.Items = game.Images.Images;
             foreach (var key in mfa.Images.Items.Keys)
             {
@@ -73,6 +73,7 @@ namespace CTFAK.MMFParser.Translation
             mfa.Aboutbox = game.AboutText?.Length > 0
                 ? game?.AboutText
                 : "";
+            //TODO: Controls
             
             //Object Section
             FrameItems = new Dictionary<int,FrameItem>();
@@ -83,14 +84,14 @@ namespace CTFAK.MMFParser.Translation
                 if (item.ObjectType != 2) continue;
                 var newItem = new FrameItem(null);
                 newItem.Name = item.Name;
-                newItem.ObjectType = item.ObjectType;
+                newItem.ObjectType = 2;//item.ObjectType;
                 newItem.Handle = item.Handle;
                 newItem.Transparent = item.Transparent ? 1:0;
                 newItem.InkEffect = item.InkEffect;
                 newItem.InkEffectParameter = item.InkEffectValue;
                 newItem.AntiAliasing = item.Antialias ? 1 : 0;
                 newItem.Flags = (int) item.Flags; //32 TODO:Fix this 
-                newItem.IconHandle = 12;
+                newItem.IconHandle = 10;
                 newItem.Chunks = new ChunkList(null);
                 var itemLoader = (ObjectCommon)item.Properties.Loader;
                 //Only actives

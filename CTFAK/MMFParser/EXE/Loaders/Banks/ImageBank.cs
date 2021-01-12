@@ -101,8 +101,8 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
 
 
-                if (Settings.Build >= 284)
-                    item.Handle -= 1;
+                //if (Settings.Build >= 284)
+                //    item.Handle -= 1;
 
                 //images[item.handle] = item;
             }
@@ -156,7 +156,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public void Read(bool load)
         {
             Handle = Reader.ReadInt32();
-            if (Exe.Instance.GameData.ProductVersion != Constants.Products.MMF15) Handle -= 1;
+            if (Exe.Instance.GameData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
             Position = (int) Reader.Tell();
             if (load) Load();
             else Preload();
@@ -165,7 +165,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public override void Read()
         {
             Handle = Reader.ReadInt32();
-            if (Exe.Instance.GameData.ProductVersion != Constants.Products.MMF15) Handle -= 1;
+            if (Exe.Instance.GameData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
             Position = (int) Reader.Tell();
             Load();
         }

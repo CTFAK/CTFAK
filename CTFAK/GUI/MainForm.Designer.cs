@@ -85,6 +85,7 @@
             this.updateSettings = new System.Windows.Forms.Button();
             this.colorBox = new System.Windows.Forms.TextBox();
             this.packDataDialog = new System.Windows.Forms.SaveFileDialog();
+            this.dumpSelectedBtn = new System.Windows.Forms.Button();
             this.ChunkCombo.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.mainTab.SuspendLayout();
@@ -114,9 +115,7 @@
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.FileName = "fnaf3.exe";
             this.openFileDialog1.Filter = "CTF Executable|*.exe";
-            this.openFileDialog1.InitialDirectory = "E:\\";
             this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
             // 
             // treeView1
@@ -523,6 +522,7 @@
             // objViewerTab
             // 
             this.objViewerTab.BackColor = System.Drawing.Color.Black;
+            this.objViewerTab.Controls.Add(this.dumpSelectedBtn);
             this.objViewerTab.Controls.Add(this.objViewerInfo);
             this.objViewerTab.Controls.Add(this.imageViewerPlayAnim);
             this.objViewerTab.Controls.Add(this.imageViewPictureBox);
@@ -550,9 +550,10 @@
             // imageViewerPlayAnim
             // 
             this.imageViewerPlayAnim.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.imageViewerPlayAnim.Location = new System.Drawing.Point(201, 441);
+            this.imageViewerPlayAnim.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.imageViewerPlayAnim.Location = new System.Drawing.Point(201, 451);
             this.imageViewerPlayAnim.Name = "imageViewerPlayAnim";
-            this.imageViewerPlayAnim.Size = new System.Drawing.Size(731, 35);
+            this.imageViewerPlayAnim.Size = new System.Drawing.Size(731, 25);
             this.imageViewerPlayAnim.TabIndex = 2;
             this.imageViewerPlayAnim.Text = "Play Animation";
             this.imageViewerPlayAnim.UseVisualStyleBackColor = true;
@@ -785,6 +786,18 @@
             // 
             this.packDataDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.packDataDialog_FileOk);
             // 
+            // dumpSelectedBtn
+            // 
+            this.dumpSelectedBtn.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dumpSelectedBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.dumpSelectedBtn.Location = new System.Drawing.Point(201, 426);
+            this.dumpSelectedBtn.Name = "dumpSelectedBtn";
+            this.dumpSelectedBtn.Size = new System.Drawing.Size(731, 25);
+            this.dumpSelectedBtn.TabIndex = 4;
+            this.dumpSelectedBtn.Text = "Dump Selected";
+            this.dumpSelectedBtn.UseVisualStyleBackColor = true;
+            this.dumpSelectedBtn.MouseClick += dumpSelectedBtn_Click;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -815,6 +828,8 @@
             this.settingsTab.PerformLayout();
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Button dumpSelectedBtn;
 
         private System.Windows.Forms.ComboBox langComboBox;
 

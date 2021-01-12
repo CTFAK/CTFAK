@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using CTFAK.GUI;
@@ -16,6 +17,8 @@ namespace CTFAK.Utils
     {
         public static void SaveFromNode(ChunkNode node)
         {
+            var timer = new Stopwatch();
+            timer.Start();
             var bank = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
             var fullPath = $"{Settings.ImagePath}\\Sorted\\{node.FullPath}";
             if (fullPath == null) return;
@@ -39,14 +42,25 @@ namespace CTFAK.Utils
                 SaveInstance(instance,bank,fullPath);
             }
             else if(node.loader is Backdrop) Console.WriteLine("Dumping Backdrop");
-            else if(node.loader is Frame) Console.WriteLine("Dumping Frame");
+            else if(node.loader is Frame frame)
+            {
+                SaveFrame(frame,bank,fullPath);
+            }
             
-            
-            
-            
-            
-
             else Console.WriteLine("Unknown: "+node.loader.GetType().Name);
+            timer.Stop();
+            Logger.Log("Done in "+timer.Elapsed.ToString("g"));
+            
+        }
+
+        public static void SaveFrame(Frame frame, ImageBank bank, string fullPath)
+        {
+            foreach (var inst in frame.Objects.Items)
+            {
+                var path = $"{fullPath}\\{Helper.CleanInput(inst.FrameItem.Name)}";
+                Logger.Log("Saving Object to "+path);
+                SaveInstance(inst,bank,path);
+            }
             
         }
 
@@ -63,6 +77,7 @@ namespace CTFAK.Utils
             if (inst.FrameItem.Properties.IsCommon)
             {
                 var common = ((ObjectCommon)inst.FrameItem.Properties.Loader);
+                Directory.CreateDirectory(fullPath);
                 switch (common.Parent.ObjectType)
                 {
                     case 2:
@@ -72,7 +87,9 @@ namespace CTFAK.Utils
                         }
                         break;
                     case 7:
-                        foreach (int frame in common.Counters.Frames)
+                        if (common?.Counters?.Frames.Count == 0) return;
+                        if (common?.Counters?.Frames == null) return;
+                        foreach (int frame in common?.Counters?.Frames)
                         {
                             var img = bank.FromHandle(frame);
                             img.Save(fullPath+$"\\{frame}.png");
@@ -101,12 +118,20 @@ namespace CTFAK.Utils
             }
             else
             {
-                for (int i = 0; i < anim.DirectionDict[0].Frames.Count; i++)
+                foreach (var dir in anim.DirectionDict.Values)
                 {
-                    Directory.CreateDirectory(fullPath);
-                    var frame = anim.DirectionDict[0].Frames[i];
-                    bank.Images[frame].Save($"{fullPath}\\{i}.png");
-                } 
+                    for (int i = 0; i < dir.Frames.Count; i++)
+                    {
+                        Directory.CreateDirectory(fullPath);
+                        var frame = dir.Frames[i];
+                        bank.Images.TryGetValue(frame, out var img);
+                        img?.Save($"{fullPath}\\{i}.png");
+                    }
+
+                    break;
+                }
+                
+                
             }
             
         }

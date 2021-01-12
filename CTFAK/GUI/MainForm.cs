@@ -44,13 +44,17 @@ namespace CTFAK.GUI
         private bool _isAudioPlaying;
         private SoundPlayer _soundPlayer;
         public Label ObjectViewerLabel;
+        public TreeNode LastSelected;
 
 
         public MainForm(Color color)
         {
             //Buttons
             InitializeComponent();
-            Thread.CurrentThread.CurrentUICulture=new CultureInfo(LoadableSettings.instance["lang"].ToString());
+            if (LoadableSettings.instance["lang"]?.ToString()?.Length > 0)
+            {
+                Thread.CurrentThread.CurrentUICulture=new CultureInfo(LoadableSettings.instance["lang"].ToString());
+            }
             
             ColorTheme = color;
             foreach (Control item in Controls)
@@ -785,6 +789,7 @@ namespace CTFAK.GUI
         private void advancedTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
             ObjectViewerLabel?.Dispose();
+            LastSelected = objTreeView.SelectedNode;
             var node = e.Node;
             var loader = ((ChunkNode) node).loader;
             string text=String.Empty;
@@ -951,6 +956,18 @@ namespace CTFAK.GUI
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             LoadableSettings.instance["lang"] = langComboBox.SelectedItem;
+        }
+
+        
+
+        private void dumpSelectedBtn_Click(object sender, EventArgs e)
+        {
+            Logger.Log("Dumping");
+            var node = (ChunkNode) LastSelected;
+            var path =
+                $"{Settings.ImagePath}\\{Helper.GetTreePath(objTreeView, (ChunkNode) objTreeView.SelectedNode)}";
+            if (node == null) return;
+            ImageDumper.SaveFromNode(node);
         }
     }
 }

@@ -34,14 +34,14 @@ namespace CTFAK
             
             // MFAGenerator.ReadTestMFA();
             // Environment.Exit(0);
-            /*AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
+            AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
             {
                 
                 if (eventArgs.Exception is ThreadAbortException) return;
                 var ex = (Exception) eventArgs.Exception;
                 Logger.Log("ERROR: ");
                 Logger.Log(ex.ToString());
-            };*/
+            };
             
             Settings.UseGUI = true;
             

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using CTFAK.Utils;
 
@@ -8,7 +10,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
     {
         private ushort _valuesOffset;
         private ushort _stringsOffset;
-        private int Identifier;
         private uint _fadeinOffset;
         private uint _fadeoutOffset;
         private ushort _movementsOffset;
@@ -16,6 +17,8 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         private ushort _systemObjectOffset;
         public ushort _counterOffset;
         public ushort _extensionOffset;
+        private int Identifier;
+        
         public Animations Animations;
         private long _end;
 
@@ -83,7 +86,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         public AlterableValues Values;
         public AlterableStrings Strings;
         public Movements Movements;
-        private ushort _unk;
+        private ushort _zeroUnk;
         public Text Text;
 
 
@@ -101,58 +104,46 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
-            //if(Parent.ObjectType!=2)return;
             var currentPosition = Reader.Tell();
             var size = Reader.ReadInt32();
             if (Settings.Build >= 284)
             {
                 _animationsOffset = Reader.ReadUInt16();
                 _movementsOffset = Reader.ReadUInt16();
-                var version = Reader.ReadUInt16();
-                _unk = Reader.ReadUInt16();
-                _extensionOffset = Reader.ReadUInt16();
-                _counterOffset = Reader.ReadUInt16();
-                Flags.flag = Reader.ReadUInt16();
-                _end = Reader.Tell() + (8+1) * 2;
-                
-                Reader.Seek(_end);
-                _systemObjectOffset = Reader.ReadUInt16();
-                
-
-                _valuesOffset = Reader.ReadUInt16();
-                _stringsOffset = Reader.ReadUInt16();
-                NewFlags.flag = Reader.ReadUInt16();
-                preferences.flag = Reader.ReadUInt16();
-                Identifier = Reader.ReadInt32();
-                BackColor = Reader.ReadColor();
-                _fadeinOffset = Reader.ReadUInt32();
-                _fadeoutOffset = Reader.ReadUInt32();
             }
             else
             {
                 _movementsOffset = Reader.ReadUInt16();
                 _animationsOffset = Reader.ReadUInt16();
-                var version = Reader.ReadUInt16();
-                //_unk = Reader.ReadUInt16();
-                _extensionOffset = Reader.ReadUInt16();
-                _counterOffset = Reader.ReadUInt16();
-                Flags.flag = Reader.ReadUInt16();
-                _end = Reader.Tell() + (8+1) * 2;
-                
-                Reader.Seek(_end);
-                _systemObjectOffset = Reader.ReadUInt16();
-                
-
-                _valuesOffset = Reader.ReadUInt16();
-                _stringsOffset = Reader.ReadUInt16();
-                NewFlags.flag = Reader.ReadUInt16();
-                preferences.flag = Reader.ReadUInt16();
-                Identifier = Reader.ReadInt32();
-                BackColor = Reader.ReadColor();
-                _fadeinOffset = Reader.ReadUInt32();
-                _fadeoutOffset = Reader.ReadUInt32();
             }
+            _zeroUnk = Reader.ReadUInt16();
+            
+            if(_zeroUnk!=0) throw new NotImplementedException("Unknown value is not zero");
+            var version = Reader.ReadUInt16();
 
+            _extensionOffset = Reader.ReadUInt16();
+            _counterOffset = Reader.ReadUInt16();
+            Flags.flag = Reader.ReadUInt16();
+            var end = Reader.Tell()+(8+1)*2;
+            List<Int16> qualifiers = new List<Int16>();
+            while(true)
+            {
+                // break;
+                var value = Reader.ReadInt16();
+                if(value!=-1) qualifiers.Add(value);
+                else break;
+            }
+            Reader.Seek(end);
+            _systemObjectOffset = Reader.ReadUInt16();
+            
+            _valuesOffset = Reader.ReadUInt16();
+            _stringsOffset = Reader.ReadUInt16();
+            NewFlags.flag = Reader.ReadUInt16();
+            preferences.flag = Reader.ReadUInt16();
+            Identifier = Reader.ReadInt32();
+            BackColor = Reader.ReadColor();
+            _fadeinOffset = Reader.ReadUInt32();
+            _fadeoutOffset = Reader.ReadUInt32();
             if (_animationsOffset > 0)
             {
                 Reader.Seek(currentPosition+_animationsOffset);
@@ -160,23 +151,45 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 Animations.Read();
             }
             
+            if (_movementsOffset > 0)
+            {
+                Reader.Seek(currentPosition+_movementsOffset);
+                Movements=new Movements(Reader);
+                Movements.Read();
+            }
+            
             if (_systemObjectOffset > 0)
             {
                 Reader.Seek(currentPosition+_systemObjectOffset);
-                if (Parent.ObjectType == 7) //Counter
+                switch (Parent.ObjectType)
                 {
-          
-                    Counters=new Counters(Reader);
-                    Counters.Read();
-                }
-                else if(Parent.ObjectType==3)//Text
-                {
-        
-                    Text = new Text(Reader);
-                    Text.Read();
+                    //Text
+                    case 3:
+                        Text = new Text(Reader);
+                        Text.Read();
+                        break;
+                    //Counter
+                    case 7:
+                        Counters=new Counters(Reader);
+                        Counters.Read();
+                        break;
                     
                 }
-                
+            }
+
+            if (_extensionOffset > 0)
+            {
+                Reader.Seek(currentPosition + _extensionOffset);
+
+                var dataSize = Reader.ReadInt32() - 20;
+                Reader.Skip(4); //maxSize;
+                ExtensionVersion = Reader.ReadInt32();
+                ExtensionId = Reader.ReadInt32();
+                ExtensionPrivate = Reader.ReadInt32();
+                if (dataSize != 0)
+                {
+                    ExtensionData = Reader.ReadBytes(dataSize);
+                }
             }
 
             // Logger.Log("anims: "+_animationsOffset);
