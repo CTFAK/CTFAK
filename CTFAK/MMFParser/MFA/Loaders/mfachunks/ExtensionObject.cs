@@ -13,6 +13,7 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
         public int ExtensionId;
         public int ExtensionPrivate;
         public byte[] ExtensionData;
+        private byte[] _unk;
 
         public ExtensionObject(ByteReader reader) : base(reader)
         {
@@ -32,7 +33,7 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
 
             var newReader = new ByteReader(Reader.ReadBytes((int) Reader.ReadUInt32()));
             var dataSize = newReader.ReadInt32() - 20;
-            newReader.Skip(4);
+            _unk = newReader.ReadBytes(4);
             ExtensionVersion = newReader.ReadInt32();
             ExtensionId = newReader.ReadInt32();
             ExtensionPrivate = newReader.ReadInt32();
@@ -42,6 +43,7 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
 
         public override void Write(ByteWriter Writer)
         {
+            _isExt = true;
             base.Write(Writer);
             if (ExtensionType == -1)
             {
@@ -52,7 +54,7 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
             }
             Writer.WriteInt32(ExtensionData.Length+20);
             Writer.WriteInt32(ExtensionData.Length+20);
-            Writer.WriteInt32(0);
+            Writer.WriteInt32(-1);
             Writer.WriteInt32(ExtensionVersion);
             Writer.WriteInt32(ExtensionId);
             Writer.WriteInt32(ExtensionPrivate);

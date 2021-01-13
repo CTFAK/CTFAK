@@ -8,6 +8,8 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
     public class AnimationObject:ObjectLoader
     {
         public Dictionary<int,Animation> Items = new Dictionary<int,Animation>();
+        public bool _isExt;
+
         public override void Read()
         {
             base.Read();
@@ -24,15 +26,29 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
             }
         }
 
+        public void Write(ByteWriter Writer,bool ext)
+        {
+            _isExt = ext;
+            Write(Writer);
+        }
         public override void Write(ByteWriter Writer)
         {
             base.Write(Writer);
-            Writer.WriteInt8(1);
-            Writer.WriteUInt32((uint) Items.Count);
-            foreach (Animation animation in Items.Values)
+            if (_isExt)
             {
-                animation.Write(Writer);
+                Writer.WriteInt8(0);
+                Writer.WriteInt32(-1);  
             }
+            else
+            {
+                Writer.WriteInt8(1);
+                Writer.WriteUInt32((uint) Items.Count);
+                foreach (Animation animation in Items.Values)
+                {
+                    animation.Write(Writer);
+                }  
+            }
+            
         }
 
 

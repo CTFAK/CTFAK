@@ -111,7 +111,7 @@ namespace CTFAK.MMFParser.MFA
         private int QualCount;
         public Controls Controls;
         public List<int> IconImages;
-        public List<Tuple<int, string, string, int, byte[]>> Extensions;
+        public List<Tuple<int, string, string, int, string>> Extensions;
         public List<Tuple<string, int>> CustomQuals;
         public List<Frame> Frames;
         public ChunkList Chunks;
@@ -237,10 +237,14 @@ namespace CTFAK.MMFParser.MFA
             foreach(var extension in Extensions)
             {
                 Writer.WriteInt32(extension.Item1);
-                Writer.WriteUnicode(extension.Item2);
-                Writer.WriteUnicode(extension.Item3);
+                Writer.AutoWriteUnicode(extension.Item2);
+                Writer.AutoWriteUnicode(extension.Item3);
                 Writer.WriteInt32(extension.Item4);
-                Writer.WriteBytes(extension.Item5);
+                Writer.WriteInt16((short) (extension.Item5.Length-1));
+                Writer.Skip(1);
+                Writer.WriteInt8(0x80);
+                Writer.Skip(2);
+                Writer.WriteUnicode(extension.Item5, false);
 
             }
             
@@ -376,15 +380,15 @@ namespace CTFAK.MMFParser.MFA
             }
 
             var extCount = Reader.ReadInt32();
-            Extensions = new List<Tuple<int, string, string, int, byte[]>>();
+            Extensions = new List<Tuple<int, string, string, int, string>>();
             for (int i = 0; i < extCount; i++) //extensions
             {
                 var handle = Reader.ReadInt32();
                 var filename = Helper.AutoReadUnicode(Reader);
                 var name = Helper.AutoReadUnicode(Reader);
                 var magic = Reader.ReadInt32();
-                var data = Reader.ReadBytes(Reader.ReadInt32());
-                var tuple = new Tuple<int, string, string, int, byte[]>(handle, filename, name, magic, data);
+                var subType = Reader.ReadWideString(Reader.ReadInt32());
+                var tuple = new Tuple<int, string, string, int, string>(handle, filename, name, magic, subType);
                 Extensions.Add(tuple);
             }
 

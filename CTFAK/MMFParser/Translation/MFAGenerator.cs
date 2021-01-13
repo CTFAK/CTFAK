@@ -59,8 +59,8 @@ namespace CTFAK.MMFParser.Translation
 
         public static void ReadTestMFA()
         {
-            var outputPath = Path.Combine(Path.GetDirectoryName(@"C:\Users\ivani\Desktop\CTFResearch\284final.mfa"), "decompiled.mfa");
-            var mfaReader = new ByteReader(@"C:\Users\ivani\Desktop\CTFResearch\284final.mfa", FileMode.Open);
+            var outputPath = Path.Combine(Path.GetDirectoryName(TemplatePath), "decompiled.mfa");
+            var mfaReader = new ByteReader(TemplatePath, FileMode.Open);
             var template = new MFA.MFA(mfaReader);
             Settings.DoMFA = true;
             template.Read();

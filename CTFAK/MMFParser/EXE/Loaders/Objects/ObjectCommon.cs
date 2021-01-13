@@ -191,6 +191,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 {
                     ExtensionData = Reader.ReadBytes(dataSize);
                 }
+                Logger.Log($"{Parent.Name} - {ExtensionId}");
             }
 
             if (_counterOffset > 0)

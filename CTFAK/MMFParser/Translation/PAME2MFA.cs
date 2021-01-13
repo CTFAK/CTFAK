@@ -113,10 +113,11 @@ namespace CTFAK.MMFParser.Translation
                 else
                 {
                     var itemLoader = (ObjectCommon) item.Properties.Loader;
+                    Logger.Log("Translating Object: "+itemLoader.Parent.Name);
                     //CommonSection
                     var newObject = new ObjectLoader(null);
-                    newObject.ObjectFlags =  (int) itemLoader.Flags.flag;
-                    newObject.NewObjectFlags =(int) itemLoader.NewFlags.flag;
+                    newObject.ObjectFlags =  (int) (itemLoader?.Flags?.flag ?? 820);
+                    newObject.NewObjectFlags =(int) (itemLoader?.NewFlags?.flag ?? 8);
                     newObject.BackgroundColor = Color.FromArgb(0x0, 0xff, 0xff, 0xff);
                     //newLoader.Qualifiers;
                     newObject.Strings = ConvertStrings(itemLoader.Strings);
@@ -215,10 +216,10 @@ namespace CTFAK.MMFParser.Translation
                         Extension ext = null;
                         foreach (var testExt in exts.Items)
                         {
-                            if (testExt.Handle == 1) ext = testExt;
+                            if (testExt.Handle==item.ObjectType-32) ext = testExt;
                         }
                         newExt.ExtensionType = -1;
-                        newExt.ExtensionName = ext.Name;
+                        newExt.ExtensionName = "";
                         newExt.Filename = $"{ext.Name}.mfx";
                         newExt.Magic = (uint) ext.MagicNumber;
                         newExt.SubType = ext.SubType;
@@ -315,7 +316,7 @@ namespace CTFAK.MMFParser.Translation
             mfa.Frames.Clear();
             foreach (Frame frame in game.Frames)
             {
-                if (frame.Name != "title") continue;
+                // if (frame.Name != "title") continue;
                 var newFrame = new MFA.Loaders.Frame(null);
                 //FrameInfo
                 newFrame.Handle = game.Frames.IndexOf(frame);
@@ -377,8 +378,8 @@ namespace CTFAK.MMFParser.Translation
                         {
                             frameItem = FrameItems[instance.ObjectInfo];
 
-
-                            newFrameItems.Add(frameItem);
+                            // if (frameItem.ObjectType >= 32) break;
+                            if(!newFrameItems.Contains(frameItem)) newFrameItems.Add(frameItem);
                             var newInstance = new FrameInstance((ByteReader) null);
                             newInstance.X = instance.X;
                             newInstance.Y = instance.Y;
@@ -389,7 +390,8 @@ namespace CTFAK.MMFParser.Translation
                             newInstance.ParentHandle = 0xffffffff;
                             newInstance.Layer = (uint) instance.Layer;
                             newInstances.Add(newInstance);
-                            // if(i==34) break;
+                            Logger.Log($"{instance.FrameItem.Name} - {i}");
+                            // if(i==52) break;
 
                         }
                     }

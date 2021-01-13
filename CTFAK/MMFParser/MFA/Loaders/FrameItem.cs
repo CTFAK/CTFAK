@@ -77,15 +77,16 @@ namespace CTFAK.MMFParser.MFA.Loaders
             if (MFA.defaultObjChunks == null) MFA.defaultObjChunks = Chunks;
             if(ObjectType>=32)//extension base
             {
-               //TODO: Nonactives
+               Loader = new ExtensionObject(Reader);
+               
 
             }
             else if(ObjectType==2)
             {
                 Loader = new Active(Reader);
-                Loader.Read();
+                
             }
-           
+            Loader?.Read();
             
 
 
