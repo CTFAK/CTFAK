@@ -7,7 +7,7 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
 {
     public class AnimationObject:ObjectLoader
     {
-        public List<Animation> Items = new List<Animation>();
+        public Dictionary<int,Animation> Items = new Dictionary<int,Animation>();
         public override void Read()
         {
             base.Read();
@@ -19,7 +19,7 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
                 {
                     var item = new Animation(Reader);
                     item.Read();
-                    Items.Add(item);
+                    Items.Add(i,item);
                 }
             }
         }
@@ -29,7 +29,7 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
             base.Write(Writer);
             Writer.WriteInt8(1);
             Writer.WriteUInt32((uint) Items.Count);
-            foreach (Animation animation in Items)
+            foreach (Animation animation in Items.Values)
             {
                 animation.Write(Writer);
             }

@@ -72,7 +72,7 @@ namespace CTFAK.MMFParser.EXE
             _bingo = exeReader.ReadInt32();
             Data = exeReader.ReadBytes(exeReader.ReadInt32());
             
-            //Dump();
+            Dump();
         }
         public void Dump(string path = "[DEFAULT-PATH]")
         {

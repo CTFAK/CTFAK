@@ -26,7 +26,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
 
         public override void Write(ByteWriter Writer)
         {
-            Writer.AutoWriteUnicode("");
+            Writer.AutoWriteUnicode(Name);
             Writer.WriteInt32((int) Flags.flag);
             Writer.WriteSingle(XCoefficient);
             Writer.WriteSingle(YCoefficient);

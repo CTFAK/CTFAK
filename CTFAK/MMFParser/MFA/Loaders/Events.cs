@@ -183,6 +183,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
 
         public override void Write(ByteWriter Writer)
         {
+            
             Writer.WriteUInt16(Version);
             Writer.WriteUInt16(FrameType);
 
@@ -362,6 +363,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             else if (ObjectType == 2)//ShortcutItemType
             {
                 Code = Reader.ReadAscii(4);
+                Logger.Log("Code: "+Code);
                 if (Code == "OIC2")//IconBufferCode
                 {
                     IconBuffer = Reader.AutoReadUnicode();
@@ -389,11 +391,11 @@ namespace CTFAK.MMFParser.MFA.Loaders
             }
             else if (ObjectType == 2)
             {
-                Writer.WriteAscii(Code);
-                if (Code == "OIC2")
-                {
-                    Writer.AutoWriteUnicode(IconBuffer);
-                }
+                // Writer.WriteAscii(Code);
+                // if (Code == "OIC2")
+                // {
+                    // Writer.AutoWriteUnicode(IconBuffer);
+                // }
             }
             if (ObjectType == 3)
             {

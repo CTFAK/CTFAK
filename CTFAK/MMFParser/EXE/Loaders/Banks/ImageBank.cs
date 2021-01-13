@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -16,7 +17,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public bool SaveImages = false;
         public Dictionary<int, ImageItem> Images = new Dictionary<int, ImageItem>();
         public uint NumberOfItems;
-        public bool PreloadOnly=true;
+        public bool PreloadOnly=false;
 
         public ImageBank(ByteReader reader) : base(reader)
         {
@@ -95,7 +96,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 
                 item.Read(!PreloadOnly);
                 tempImages.Add(item.Handle, item);
-
                 if (SaveImages) item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
                 OnImageSaved?.Invoke(i,(int) NumberOfItems);
 
@@ -156,7 +156,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public void Read(bool load)
         {
             Handle = Reader.ReadInt32();
-            if (Exe.Instance.GameData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
+            if (!Debug)
+            {
+                if (Exe.Instance.GameData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
+            }
+            
             Position = (int) Reader.Tell();
             if (load) Load();
             else Preload();
@@ -165,7 +169,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public override void Read()
         {
             Handle = Reader.ReadInt32();
-            if (Exe.Instance.GameData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
+            if (!Debug)
+            {
+                if (Exe.Instance.GameData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
+
+            }
             Position = (int) Reader.Tell();
             Load();
         }
@@ -442,7 +450,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 chunk.WriteBytes(rawImg);
             }
 
-            writer.WriteInt32(Handle + 1);
+            writer.WriteInt32(Handle);
             writer.WriteWriter(chunk);
         }
 

@@ -145,21 +145,21 @@ namespace CTFAK.GUI
 
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
-            var worker = new BackgroundWorker();
-            worker.DoWork += (workSender, workE) =>
+            if (File.Exists(openFileDialog1.FileName))
             {
-                if (File.Exists(openFileDialog1.FileName))
-                {
-                    objTreeView.Nodes.Clear();
-                    
-                    StartReading();
-                }
-                else throw new NotImplementedException("File not found");
-            };
-            worker.RunWorkerCompleted += (workSender, workE) => { AfterLoad(); };
+                objTreeView.Nodes.Clear();
+                Loaded = false;
+                loadingLabel.Visible = true;
+                var worker = new BackgroundWorker();
+                worker.DoWork += (workSender, workE) => { StartReading(); };
+                worker.RunWorkerCompleted += (workSender, workE) => { AfterLoad(); };
 
-            worker.RunWorkerAsync();
+                worker.RunWorkerAsync();
+            }
+            else throw new NotImplementedException("File not found");
         }
+
+
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -185,8 +185,7 @@ namespace CTFAK.GUI
         private void StartReading()
         {
             var path = openFileDialog1.FileName;
-            Loaded = false;
-            loadingLabel.Visible = true;
+            
             Program.ReadFile(path, Settings.Verbose, Settings.DumpImages, Settings.DumpSounds);
 
             imageBar.Value = 0;

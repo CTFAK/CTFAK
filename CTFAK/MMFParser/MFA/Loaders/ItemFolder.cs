@@ -9,7 +9,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
         public List<uint> Items;
         public string Name;
         public uint UnkHeader;
-        public uint NonFolder;
+        public bool isRetard;
 
         public ItemFolder(ByteReader reader) : base(reader)
         {
@@ -24,6 +24,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             UnkHeader = Reader.ReadUInt32();
             if (UnkHeader == 0x70000004)
             {
+                isRetard = false;
                 Name = Reader.AutoReadUnicode();
                 Items = new List<uint>();
                 var count = Reader.ReadUInt32();
@@ -34,6 +35,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             }
             else
             {
+                isRetard = true;
                 Name = null;
                 Items = new List<uint>();
                 Items.Add(Reader.ReadUInt32());
@@ -42,14 +44,15 @@ namespace CTFAK.MMFParser.MFA.Loaders
 
         public override void Write(ByteWriter Writer)
         {
-            if (Name == null)
+            if(isRetard)
             {
                 Writer.WriteInt32(0x70000005);
-                Writer.WriteInt32(3);
+                Writer.WriteInt32((int) Items[0]);
             }
             else
             {
                 Writer.WriteInt32(0x70000004);
+                if (Name == null) Name = "";
                 Writer.AutoWriteUnicode(Name);
                 Writer.WriteInt32(Items.Count);
                 foreach (var item in Items)

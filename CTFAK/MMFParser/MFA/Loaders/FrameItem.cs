@@ -19,11 +19,11 @@ namespace CTFAK.MMFParser.MFA.Loaders
         public int IconType;
         public int IconHandle;
         public ChunkList Chunks;
-        public Active Loader;
+        public DataLoader Loader;
 
         public override void Write(ByteWriter Writer)
         {
-            Debug.Assert(ObjectType==2);
+            //Debug.Assert(ObjectType==2);
             Writer.WriteInt32(this.ObjectType);
             Writer.WriteInt32(Handle);
             Writer.AutoWriteUnicode(Name);
@@ -36,6 +36,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             Writer.WriteInt32(IconHandle);
             
             Chunks.Write(Writer);
+            Logger.Log("Writing "+this.ObjectType);
             Loader.Write(Writer);
 
 
@@ -65,6 +66,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             if(IconType==1)
             {
                 IconHandle = Reader.ReadInt32();
+                Logger.Log("IconHandle: "+IconHandle);
             }
             else
             {

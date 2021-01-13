@@ -8,7 +8,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{86D99F9E-98FB-4E50-AB68-F5C115850C33}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>CTFAK</RootNamespace>
     <AssemblyName>CTFAK</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -54,7 +54,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;WIN64</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
@@ -161,8 +161,13 @@
     <Compile Include="GUI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MMFParser\EXE\Loaders\Extensions.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Objects\Movements.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Objects\Text.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\mfachunks\Backdrop.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\mfachunks\Counter.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\mfachunks\ExtensionObject.cs" />
+    <Compile Include="MMFParser\MFA\Loaders\mfachunks\Text.cs" />
     <Compile Include="MMFParser\Translation\MFAGenerator.cs" />
     <Compile Include="MMFParser\Translation\PAME2MFA.cs" />
     <Compile Include="MMFParser\EXE\ChunkList.cs" />

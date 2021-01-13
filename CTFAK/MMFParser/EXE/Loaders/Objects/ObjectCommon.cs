@@ -88,6 +88,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         public Movements Movements;
         private ushort _zeroUnk;
         public Text Text;
+        public Counter Counter;
 
 
         public ObjectCommon(ByteReader reader) : base(reader)
@@ -190,6 +191,13 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 {
                     ExtensionData = Reader.ReadBytes(dataSize);
                 }
+            }
+
+            if (_counterOffset > 0)
+            {
+                Reader.Seek(currentPosition+_counterOffset);
+                Counter = new Counter(Reader);
+                Counter.Read();
             }
 
             // Logger.Log("anims: "+_animationsOffset);

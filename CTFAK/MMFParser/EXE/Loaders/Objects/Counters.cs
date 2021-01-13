@@ -59,6 +59,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         public ushort Font;
         public bool Inverse;
         public bool AddNulls;
+        public ushort DisplayType;
+        public ushort Flags;
+        public ushort Player;
 
         public Counters(ByteReader reader) : base(reader)
         {
@@ -74,21 +77,21 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             var size = Reader.ReadUInt32();
             Width = Reader.ReadUInt32();
             Height = Reader.ReadUInt32();
-            var player = Reader.ReadUInt16();
-            var displayType = Reader.ReadUInt16();
-            var flags = Reader.ReadUInt16();
+            Player = Reader.ReadUInt16();
+            DisplayType = Reader.ReadUInt16();
+            Flags = Reader.ReadUInt16();
 
-            IntegerDigits = flags & _intDigitsMask;
-            FormatFloat = (flags & _formatFloat) != 0;
-            FloatDigits = (flags & _floatDigitsMask) >> _floatDigitsShift + 1;
-            UseDecimals = (flags & _useDecimals) != 0;
-            Decimals = (flags & _floatDecimalsMask) >> _floatDecimalsShift;
-            AddNulls = (flags & _floatPad) != 0;
+            IntegerDigits = Flags & _intDigitsMask;
+            FormatFloat = (Flags & _formatFloat) != 0;
+            FloatDigits = (Flags & _floatDigitsMask) >> _floatDigitsShift + 1;
+            UseDecimals = (Flags & _useDecimals) != 0;
+            Decimals = (Flags & _floatDecimalsMask) >> _floatDecimalsShift;
+            AddNulls = (Flags & _floatPad) != 0;
 
-            Inverse = ByteFlag.GetFlag(flags, 8);
+            Inverse = ByteFlag.GetFlag(Flags, 8);
             Font = Reader.ReadUInt16();
-            if (displayType == 0) return;
-            else if (displayType == 1 || displayType == 4|| displayType==50)
+            if (DisplayType == 0) return;
+            else if (DisplayType == 1 || DisplayType == 4|| DisplayType==50)
             {
                 
                 Frames = new List<int>();
@@ -98,7 +101,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     Frames.Add(Reader.ReadUInt16());
                 }
             }
-            else if (displayType == 2 || displayType == 3 || displayType == 5)
+            else if (DisplayType == 2 || DisplayType == 3 || DisplayType == 5)
             {
                 //TODO: Shapes
                 Logger.Log("Ignoring unsupported counter type");

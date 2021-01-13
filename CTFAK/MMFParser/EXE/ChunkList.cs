@@ -97,7 +97,7 @@ namespace CTFAK.MMFParser.EXE
                         ChunkData = exeReader.ReadBytes(Size);
                         break;
                 }
-                Save();
+                //Save();
 
 
             }
@@ -192,6 +192,9 @@ namespace CTFAK.MMFParser.EXE
                     break;
                 case 8752:
                     loader = new AppDoc(chunk);
+                    break;
+                case 8756:
+                    loader = new Extensions(chunk);
                     break;
                 case 8745:
                     loader = new FrameItems(chunk);

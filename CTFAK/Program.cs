@@ -9,6 +9,7 @@ using System.Web.Caching;
 using System.Windows.Forms;
 using CTFAK.GUI;
 using CTFAK.MMFParser.EXE;
+using CTFAK.MMFParser.Translation;
 using CTFAK.Utils;
 using Joveler.Compression.ZLib;
 
@@ -52,6 +53,8 @@ namespace CTFAK
             if (args.Length > 1)
             {
                 ReadFile(args[1],true,false,false);
+                MFAGenerator.BuildMFA();
+                Environment.Exit(0);
             }
             else if(args.Length==0)
             {
