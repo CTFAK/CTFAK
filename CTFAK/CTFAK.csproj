@@ -163,8 +163,13 @@
     </Compile>
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Click.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\ExpressionParameter.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Group.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\GroupPointer.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\KeyParameter.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Shoot.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\StringParam.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\TwoShorts.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Zone.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Extensions.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Objects\Movements.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Objects\Text.cs" />

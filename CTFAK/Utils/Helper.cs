@@ -133,12 +133,51 @@ namespace CTFAK.Utils
                 item = new Create(reader);
             }
 
+            if (code == 13)
+            {
+                item = new Every(reader);
+            }
+
+            if (code == 24)
+            {
+                item = new Colour(reader);
+            }
+
+            if (code == 19)
+            {
+                item = new Zone(reader);
+            }
+
             if (code == 14 || code == 44)
             {
                 item = new KeyParameter(reader);
             }
-            
 
+            if (code == 38)
+            {
+                item = new CTFAK.MMFParser.EXE.Loaders.Events.Parameters.Group(reader);
+            }
+
+            if (code == 39)
+            {
+                item = new GroupPointer(reader);
+            }
+
+            if (code == 49)
+            {
+                item = new GlobalValue(reader);
+            }
+
+            if (code == 41 || code == 64)
+            {
+                item = new StringParam(reader);
+            }
+
+            if (code == 47 || code == 51)
+            {
+                item = new TwoShorts(reader);
+            }        
+    
             if (code == 6 || code == 7 || code == 35 || code == 36)
             {
                 item = new Sample(reader);
