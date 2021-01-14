@@ -71,7 +71,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                     {
                         var eg = new EventGroup(Reader);
                         eg.Read();
+                        if (Reader.Tell() >= endPosition) break;
                     }
+                    
                 }
                 else if (identifier == End) break;
             }
@@ -124,6 +126,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         public int Size;
         public byte NumberOfConditions;
         public byte NumberOfActions;
+        public bool isMFA=false;
 
         public EventGroup(Chunk chunk) : base(chunk)
         {
@@ -146,15 +149,25 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         public override void Read()
         {
             var currentPosition = Reader.Tell();
-            Size = Reader.ReadInt16() * -1;
+            Size = Reader.ReadInt16()*-1;
             NumberOfConditions = Reader.ReadByte();
             NumberOfActions = Reader.ReadByte();
             Flags = Reader.ReadUInt16();
             if (Settings.Build >= 284)
             {
-                var nop = Reader.ReadInt16();
-                IsRestricted = Reader.ReadInt32();
-                RestrictCpt = Reader.ReadInt32();
+                if(isMFA)
+                {
+                    IsRestricted = Reader.ReadInt16(); //For MFA
+                    RestrictCpt = Reader.ReadInt16();
+                    Identifier = Reader.ReadInt16();
+                    Undo = Reader.ReadInt16();
+                }
+                else
+                {
+                    var nop = Reader.ReadInt16();
+                    IsRestricted = Reader.ReadInt32();
+                    RestrictCpt = Reader.ReadInt32();
+                }
             }
             else
             {
@@ -177,7 +190,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                 item.Read();
                 Actions.Add(item);
             }
-
             Reader.Seek(currentPosition + Size);
             
         }
@@ -190,9 +202,19 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             newWriter.WriteUInt16(Flags);
             if (Settings.Build >= 284)
             {
-                newWriter.WriteInt16(0);
-                newWriter.WriteInt32(IsRestricted);
-                newWriter.WriteInt32(RestrictCpt);
+                if(isMFA)
+                {
+                    newWriter.WriteInt16((short) IsRestricted); //For MFA
+                    newWriter.WriteInt16((short) RestrictCpt);
+                    newWriter.WriteInt16((short) Identifier);
+                    newWriter.WriteInt16((short) Undo);
+                }
+                else
+                {
+                    newWriter.WriteInt16(0);
+                    newWriter.WriteInt32(IsRestricted);
+                    newWriter.WriteInt32(RestrictCpt);
+                }
             }
             else
             {

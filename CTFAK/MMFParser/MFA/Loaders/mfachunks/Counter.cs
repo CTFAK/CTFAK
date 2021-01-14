@@ -64,11 +64,15 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
             Writer.WriteInt32(CountType);
             Writer.WriteInt32(Width);
             Writer.WriteInt32(Height);
-            Writer.WriteInt32(Images.Count);
-            foreach (var item in Images)
+            Writer.WriteInt32(Images?.Count ?? 0);
+            if (Images != null)
             {
-                Writer.WriteUInt32((uint) item);
+                foreach (var item in Images)
+                {
+                    Writer.WriteUInt32((uint) item);
+                }  
             }
+            else Writer.WriteInt32(0);
             Writer.WriteUInt32(Font);
         }
     }

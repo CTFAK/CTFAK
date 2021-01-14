@@ -63,6 +63,7 @@ namespace CTFAK.MMFParser.Translation
             var graphicSettings = mfa.GraphicFlags;
             var flags = game.Header.Flags;
             var newFlags = game.Header.NewFlags;
+            mfa.Extensions.Clear();
             //TODO:Flags, no setter
             mfa.WindowX = game.Header.WindowWidth;
             mfa.WindowY = game.Header.WindowHeight;
@@ -228,9 +229,9 @@ namespace CTFAK.MMFParser.Translation
                         newExt.ExtensionPrivate = itemLoader.ExtensionPrivate;
                         newExt.ExtensionData = itemLoader.ExtensionData;
                         newItem.Loader = newExt;
-                        // var tuple = new Tuple<int, string, string, int, byte[]>(ext.Handle, ext.Name, "",
-                            // ext.MagicNumber, ext.SubType);
-                        // mfa.Extensions.Add();
+                        var tuple = new Tuple<int, string, string, int, string>(ext.Handle, ext.Name, "",
+                            ext.MagicNumber, ext.SubType);
+                        // mfa.Extensions.Add(tuple);
 
                     }
                     else if (item.ObjectType == 3)
@@ -280,13 +281,13 @@ namespace CTFAK.MMFParser.Translation
                         newCount.Value = itemLoader.Counter.Initial;
                         newCount.Maximum = itemLoader.Counter.Maximum;
                         newCount.Minimum = itemLoader.Counter.Minimum;
+                        newCount.Images=new List<int>(){0};
                         if (counter == null)
                         {
                             newCount.DisplayType = 0;
                             newCount.CountType = 0;
                             newCount.Width = 0;
                             newCount.Height = 0;
-                            newCount.Images=new List<int>(){0};
                             newCount.Font = 0;
                         }
                         else
@@ -413,14 +414,15 @@ namespace CTFAK.MMFParser.Translation
 
 
 
-
+                
                 newFrame.Events = MFA.MFA.emptyEvents;
+                newFrame.Events._ifMFA = true;
                 newFrame.Events.Version = 1028;
                 foreach (var item in newFrame.Items)
                 {
                     var newObject = new EventObject((ByteReader) null);
 
-                    newObject.Handle = (uint) item.Handle;
+                    newObject.Handle = (uint) newFrame.Items.IndexOf(item);//(uint) item.Handle;
                     newObject.Name = item.Name ?? "";
                     newObject.TypeName = "";
                     newObject.ItemType = (ushort) item.ObjectType;
@@ -428,7 +430,7 @@ namespace CTFAK.MMFParser.Translation
                     newObject.Flags = 0;
                     newObject.ItemHandle = (uint) item.Handle;
                     newObject.InstanceHandle = 0xFFFFFFFF;
-                    //newFrame.Events.Objects.Add(newObject);
+                    newFrame.Events.Objects.Add(newObject);
 
                 }
 

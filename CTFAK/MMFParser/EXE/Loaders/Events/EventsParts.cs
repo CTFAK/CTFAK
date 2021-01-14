@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using CTFAK.Utils;
 
@@ -65,6 +66,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                 item.Read();
                 Items.Add(item);
             }
+            Logger.Log(this);
             Reader.Seek(currentPosition + size);
             
 
@@ -72,7 +74,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         }
         public override string ToString()
         {
-            return $"Condition {ObjectType}-{Num}{(Items.Count > 0 ? "-"+Items[0].ToString() : " ")}";
+            return $"Condition {ObjectType}=={Num}{(Items.Count > 0 ? "-"+Items[0].ToString() : " ")}";
 
         }
     }
@@ -87,6 +89,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         public int ObjectInfo;
         public int ObjectInfoList;
         public List<Parameter> Items = new List<Parameter>();
+        public byte NumberOfParameters;
         public Action(ByteReader reader) : base(reader) { }
         public override void Write(ByteWriter Writer)
         {
@@ -124,14 +127,15 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             ObjectInfoList = Reader.ReadInt16();
             Flags = Reader.ReadSByte();
             OtherFlags = Reader.ReadSByte();
-            var numberOfParameters=Reader.ReadByte();
+            NumberOfParameters = Reader.ReadByte();
             DefType = Reader.ReadByte();
-            for (int i = 0; i < DefType; i++)
+            for (int i = 0; i < NumberOfParameters; i++)
             {
                 var item = new Parameter(Reader);
                 item.Read();
                 Items.Add(item);
             }
+            Logger.Log(this);
 
 
         }
@@ -204,7 +208,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         public override string ToString()
         {
             if (Loader != null) return Loader.ToString();
-            else return "UNK-PARAMETER";
+            else
+            {
+                throw new NotImplementedException($"Unkown Parameter: {Code} ");
+                return $"UNK-{Code}";
+            }
 
         }
     }

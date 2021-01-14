@@ -2,7 +2,7 @@
 
 namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
 {
-    class Position : ParameterCommon
+    public class Position : ParameterCommon
     {
         public int ObjectInfoParent;
         public int Flags;

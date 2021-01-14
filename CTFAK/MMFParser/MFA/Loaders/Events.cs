@@ -43,6 +43,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
         public uint EventDataLen;
         public uint CommentDataLen;
         private byte[] _cache;
+        public bool _ifMFA;
 
         public Events(ByteReader reader) : base(reader)
         {
@@ -71,6 +72,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
                     while (true)
                     {
                         EventGroup evGrp = new EventGroup(Reader);
+                        evGrp.isMFA = true;
                         evGrp.Read();
                         Items.Add(evGrp);
                         if (Reader.Tell() >= end) break;
@@ -391,7 +393,8 @@ namespace CTFAK.MMFParser.MFA.Loaders
             }
             else if (ObjectType == 2)
             {
-                // Writer.WriteAscii(Code);
+                Code = "OIC2";
+                Writer.WriteAscii(Code);
                 // if (Code == "OIC2")
                 // {
                     // Writer.AutoWriteUnicode(IconBuffer);

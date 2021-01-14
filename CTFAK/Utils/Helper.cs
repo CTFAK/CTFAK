@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Web.UI.Design.WebControls.WebParts;
 using System.Windows.Forms;
 using CTFAK.GUI.GUIComponents;
 using CTFAK.MMFParser.EXE;
@@ -107,10 +108,56 @@ namespace CTFAK.Utils
                 item = new Time(reader);
             }
 
+            if (code == 50)
+            {
+                item = new AlterableValue(reader);
+            }
+
+            if (code == 32)
+            {
+                item = new Click(reader);
+            }
+
+            if (code == 16)
+            {
+                item=new Position(reader);
+            }
+
+            if (code == 18)
+            {
+                item=new Shoot(reader);
+            }
+
+            if (code == 9 || code == 21)
+            {
+                item = new Create(reader);
+            }
+
+            if (code == 14 || code == 44)
+            {
+                item = new KeyParameter(reader);
+            }
+            
+
+            if (code == 6 || code == 7 || code == 35 || code == 36)
+            {
+                item = new Sample(reader);
+            }
+
             if (code == 3 || code == 10 || code == 11 || code == 12 || code == 17 || code == 26 || code == 31 ||
                 code == 43 || code == 57 || code == 58 || code == 60 || code == 61)
             {
                 item = new Short(reader);
+            }
+
+            if (code == 15||code == 22||code == 23||code == 27||code == 28||code == 45||code == 46||code == 59||code == 62)
+            {
+                item = new ExpressionParameter(reader);
+            }
+
+            if (code == 5 || code == 25 || code == 29 || code == 34 || code == 48 || code == 56)
+            {
+                item = new Int(reader);
             }
 
             return item;

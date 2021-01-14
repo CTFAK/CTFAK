@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using CTFAK.MMFParser.EXE.Loaders;
 using CTFAK.MMFParser.EXE.Loaders.Banks;
+using CTFAK.MMFParser.EXE.Loaders.Events;
 using CTFAK.Utils;
 
 namespace CTFAK.MMFParser.EXE
@@ -264,7 +265,7 @@ namespace CTFAK.MMFParser.EXE
                     loader = new GlobalStrings(chunk);
                     break;
                 case 13117:
-                    // loader = new Events(chunk);//NOT WORKING
+                    loader = new Events(chunk);//NOT WORKING
                     break;
             }
 
