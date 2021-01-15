@@ -65,8 +65,8 @@ namespace CTFAK.MMFParser.MFA.Loaders
             Writer.AutoWriteUnicode(UnkString);
             Writer.WriteInt32(LastViewedX);
             Writer.WriteInt32(LastViewedY);
-            //Writer.WriteInt32(Palette.Count);//WTF HELP 
-            Palette[0] = Color.FromArgb(0, 0, 1, 0);
+            // Writer.WriteInt32(Palette.Count);//WTF HELP 
+            
             foreach (var item in Palette)
             {
                 Writer.WriteColor(item);

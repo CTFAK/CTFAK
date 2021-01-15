@@ -9,15 +9,15 @@ namespace CTFAK.MMFParser.MFA.Loaders
 {
     public class Events:DataLoader
     {
-        public readonly string EventData = "Evts";
-        public readonly string CommentData = "Rems";
-        public readonly string ObjectData = "EvOb";
-        public readonly string EventEditorData = "EvCs";
-        public readonly string ObjectListData = "EvEd";
-        public readonly string TimeListData = "EvEd";
-        public readonly string EditorPositionData = "EvTs";
-        public readonly string EditorLineData = "EvLs";
-        public readonly string EventEnd ="!DNE";
+        public const string EventData = "Evts";
+        public const string CommentData = "Rems";
+        public const string ObjectData = "EvOb";
+        public const string EventEditorData = "EvCs";
+        public const string ObjectListData = "EvEd";
+        public const string TimeListData = "EvEd";
+        public const string EditorPositionData = "EvTs";
+        public const string EditorLineData = "EvLs";
+        public const string EventEnd ="!DNE";
         public List<EventGroup> Items;
         public ushort Version;
         public ushort FrameType;
@@ -188,23 +188,27 @@ namespace CTFAK.MMFParser.MFA.Loaders
             
             Writer.WriteUInt16(Version);
             Writer.WriteUInt16(FrameType);
-
             if (Items.Count>0)
             {
                 Console.WriteLine("Writing EventData");
                 Writer.WriteAscii(EventData);
 
                 ByteWriter newWriter = new ByteWriter(new MemoryStream());
-                Writer.WriteUInt32(EventDataLen);
-
+                //Writer.WriteUInt32(EventDataLen);
+                
                 foreach (EventGroup eventGroup in Items)
                 {
+                    eventGroup.isMFA = true;
                     eventGroup.Write(newWriter);
                 }
+                
 
+                Writer.WriteUInt32((uint) newWriter.BaseStream.Position);
                 Writer.WriteWriter(newWriter);
+                
             }
 
+            
             if (Objects.Count>0)
             {
                 Console.WriteLine("Writing EventObjects");
@@ -215,7 +219,6 @@ namespace CTFAK.MMFParser.MFA.Loaders
                     eventObject.Write(Writer);
                 }
             }
-
             if (ObjectTypes != null)
             {
                 Writer.WriteAscii(ObjectListData);
@@ -242,8 +245,12 @@ namespace CTFAK.MMFParser.MFA.Loaders
                     Writer.AutoWriteUnicode(folder);
                 }
             }
+            
+            
+            
+            
 
-            //if (X != 0)
+            // if (X != 0)
             {
                 Writer.WriteAscii(EditorPositionData);
                 Writer.WriteInt16(1);
@@ -253,7 +260,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 Writer.WriteUInt32(CaretX);
                 Writer.WriteUInt32(CaretY);
             }
-            //if (LineY != 0)
+            // if (LineY != 0)
             {
                 Writer.WriteAscii(EditorLineData);
                 Writer.WriteInt16(1);
@@ -263,6 +270,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 Writer.WriteUInt32(EventLineY);
             }
             Writer.WriteAscii(EventEditorData);
+            // Writer.Skip(4+2*2+4*3);
             Writer.WriteInt32(EditorDataUnk);
             Writer.WriteInt16((short) ConditionWidth);
             Writer.WriteInt16((short) ObjectHeight);
@@ -393,12 +401,12 @@ namespace CTFAK.MMFParser.MFA.Loaders
             }
             else if (ObjectType == 2)
             {
-                Code = "OIC2";
+                // Code = "OIC2";
                 Writer.WriteAscii(Code);
-                // if (Code == "OIC2")
-                // {
-                    // Writer.AutoWriteUnicode(IconBuffer);
-                // }
+                if (Code == "OIC2")
+                {
+                    Writer.AutoWriteUnicode(IconBuffer);
+                }
             }
             if (ObjectType == 3)
             {

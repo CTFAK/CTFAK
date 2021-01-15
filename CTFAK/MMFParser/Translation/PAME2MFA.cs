@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using CTFAK.MMFParser.EXE;
 using CTFAK.MMFParser.EXE.Loaders;
+using CTFAK.MMFParser.EXE.Loaders.Events;
 using CTFAK.MMFParser.EXE.Loaders.Objects;
 using CTFAK.MMFParser.MFA.Loaders;
 using CTFAK.MMFParser.MFA.Loaders.mfachunks;
@@ -119,7 +120,7 @@ namespace CTFAK.MMFParser.Translation
                     var newObject = new ObjectLoader(null);
                     newObject.ObjectFlags =  (int) (itemLoader?.Flags?.flag ?? 820);
                     newObject.NewObjectFlags =(int) (itemLoader?.NewFlags?.flag ?? 8);
-                    newObject.BackgroundColor = Color.FromArgb(0x0, 0xff, 0xff, 0xff);
+                    newObject.BackgroundColor = Color.Black;//itemLoader.BackColor;
                     //newLoader.Qualifiers;
                     newObject.Strings = ConvertStrings(itemLoader.Strings);
                     newObject.Values = ConvertValue(itemLoader.Values);
@@ -130,7 +131,8 @@ namespace CTFAK.MMFParser.Translation
                         var newMov = new Movement(null);
                         newMov.Name = $"Movement #{j}";
                         newMov.Extension = "";
-                        newMov.Identifier = (uint) mov.Type;
+                        newMov.Identifier = 0;//(uint) mov.Type;
+                        if(newMov.Identifier!=0)throw new Exception("Unknown Movement: "+newMov.Identifier);
                         newMov.Player = mov.Player;
                         newMov.MovingAtStart = mov.MovingAtStart;
                         newMov.DirectionAtStart = mov.DirectionAtStart;
@@ -352,7 +354,6 @@ namespace CTFAK.MMFParser.Translation
                 {
                     var newLayer = new Layer(null);
                     newLayer.Name = layer.Name;
-                    var layerFlags = layer.Flags;
                     newLayer.Flags["HideAtStart"] = originalFlags["ToHide"];
                     newLayer.Flags["Visible"] = true;
                     newLayer.Flags["NoBackground"] = originalFlags["DoNotSaveBackground"];
@@ -361,6 +362,8 @@ namespace CTFAK.MMFParser.Translation
                     newLayer.XCoefficient = layer.XCoeff;
                     newLayer.YCoefficient = layer.YCoeff;
                     newFrame.Layers.Add(newLayer);
+                    if(frame.Layers.Items.IndexOf(layer)==1)break;
+
                 }
 
                 Message("Translating frame: " + newFrame.Name);
@@ -378,8 +381,6 @@ namespace CTFAK.MMFParser.Translation
                         if (FrameItems.ContainsKey(instance.ObjectInfo))
                         {
                             frameItem = FrameItems[instance.ObjectInfo];
-
-                            // if (frameItem.ObjectType >= 32) break;
                             if(!newFrameItems.Contains(frameItem)) newFrameItems.Add(frameItem);
                             var newInstance = new FrameInstance((ByteReader) null);
                             newInstance.X = instance.X;
@@ -388,11 +389,10 @@ namespace CTFAK.MMFParser.Translation
                             newInstance.Flags = instance.FrameItem.Flags;
                             newInstance.ParentType = (uint) instance.ParentType;
                             newInstance.ItemHandle = (uint) (instance.ObjectInfo);
-                            newInstance.ParentHandle = 0xffffffff;
-                            newInstance.Layer = (uint) instance.Layer;
+                            newInstance.ParentHandle = (uint) instance.ParentHandle;
+                            newInstance.Layer = 0;//(uint) instance.Layer;
                             newInstances.Add(newInstance);
                             Logger.Log($"{instance.FrameItem.Name} - {i}");
-                            // if(i==52) break;
 
                         }
                     }
@@ -414,7 +414,7 @@ namespace CTFAK.MMFParser.Translation
 
 
 
-                
+                List<DataLoader> quailifers = new List<DataLoader>();
                 newFrame.Events = MFA.MFA.emptyEvents;
                 newFrame.Events._ifMFA = true;
                 newFrame.Events.Version = 1028;
@@ -422,11 +422,11 @@ namespace CTFAK.MMFParser.Translation
                 {
                     var newObject = new EventObject((ByteReader) null);
 
-                    newObject.Handle = (uint) newFrame.Items.IndexOf(item);//(uint) item.Handle;
+                    newObject.Handle = (uint) item.Handle;
                     newObject.Name = item.Name ?? "";
                     newObject.TypeName = "";
                     newObject.ItemType = (ushort) item.ObjectType;
-                    newObject.ObjectType = (ushort) item.ObjectType;
+                    newObject.ObjectType = 1;
                     newObject.Flags = 0;
                     newObject.ItemHandle = (uint) item.Handle;
                     newObject.InstanceHandle = 0xFFFFFFFF;
@@ -434,6 +434,30 @@ namespace CTFAK.MMFParser.Translation
 
                 }
 
+                for (int i = 0; i < frame.Events.Quailifers.Length; i++)
+                {
+                    var item = frame.Events.Quailifers[i];
+                    if (quailifers.Contains(item))
+                    {
+                    }
+                    else
+                    {
+                        var newObject = new EventObject((ByteReader) null);
+                        quailifers.Add(newObject);
+                        var newHandle = 0;
+                        while (true)
+                        {
+                            
+                        }
+                    }
+                }
+
+                
+                
+                
+                
+                
+                
                 newFrame.Chunks = new ChunkList(null);
                 mfa.Frames.Add(newFrame);
 

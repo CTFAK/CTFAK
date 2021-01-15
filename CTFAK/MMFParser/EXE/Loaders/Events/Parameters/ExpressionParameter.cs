@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using CTFAK.MMFParser.EXE.Loaders.Events.Expressions;
 using CTFAK.Utils;
 
@@ -7,6 +8,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
     public class ExpressionParameter:ParameterCommon
     {
         public List<Expression> Items;
+        public short Comparsion;
 
         public ExpressionParameter(ByteReader reader) : base(reader)
         {
@@ -15,14 +17,15 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
         public override void Read()
         {
             base.Read();
-            var comparsion = Reader.ReadInt16();
+            Comparsion = Reader.ReadInt16();
             Items = new List<Expression>();
             while (true)
             {
                 var expression = new Expression(Reader);
                 expression.Read();
-                if (expression.ObjectType == 0) break;
                 Items.Add(expression);
+                if (expression.ObjectType == 0) break;
+                
             }
             
         }
@@ -30,6 +33,13 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
         public override void Write(ByteWriter Writer)
         {
             base.Write(Writer);
+            
+            Writer.WriteInt16(Comparsion);
+            foreach (Expression item in Items)
+            {
+                item.Write(Writer);
+            }
+            
         }
 
         public override string ToString()

@@ -5,7 +5,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
     public class Position : ParameterCommon
     {
         public int ObjectInfoParent;
-        public int Flags;
+        public ushort Flags;
         public int X;
         public int Y;
         public int Slope;
@@ -28,9 +28,22 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
             TypeParent = Reader.ReadInt16();
             ObjectInfoList = Reader.ReadInt16();
             Layer = Reader.ReadInt16();
-            
-           
         }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt16((short) ObjectInfoParent);
+            Writer.WriteUInt16(Flags);
+            Writer.WriteInt16((short) X);
+            Writer.WriteInt16((short) Y);
+            Writer.WriteInt16((short) Slope);
+            Writer.WriteInt16((short) Angle);
+            Writer.WriteSingle(Direction);
+            Writer.WriteInt16((short) TypeParent);
+            Writer.WriteInt16((short) ObjectInfoList);
+            Writer.WriteInt16((short) Layer);
+        }
+
         public override string ToString()
         {
             return $"Object X:{X} Y:{Y} Angle:{Angle} Direction:{Direction} Parent:{ObjectInfoList}";

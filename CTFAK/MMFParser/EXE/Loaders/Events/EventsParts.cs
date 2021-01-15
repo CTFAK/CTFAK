@@ -107,7 +107,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             {
                 parameter.Write(newWriter);
             }
-            Writer.WriteInt16((short) (newWriter.BaseStream.Position+2));
+            Writer.WriteUInt16((ushort) (newWriter.BaseStream.Position+2));
             Writer.WriteWriter(newWriter);
             
         }
@@ -156,7 +156,13 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
 
         public override void Write(ByteWriter Writer)
         {
-            throw new NotImplementedException();
+            var newWriter = new ByteWriter(new MemoryStream());
+            newWriter.WriteInt16((short) Code);
+            Loader.Write(newWriter);
+            Writer.WriteUInt16((ushort) (newWriter.BaseStream.Position+2));
+            Writer.WriteWriter(newWriter);
+            
+            
         }
 
         public override void Print()
@@ -180,7 +186,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             }
             else
             {
-                //throw new Exception("Loader is null");
+                throw new Exception("Loader is null");
             }
             Reader.Seek(currentPosition+size);
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms.VisualStyles;
 using CTFAK.Utils;
 
@@ -15,7 +16,62 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
         public Expression(ByteReader reader) : base(reader) { }
         public override void Write(ByteWriter Writer)
         {
-            throw new NotImplementedException();
+            Writer.WriteInt16((short) ObjectType);
+            Writer.WriteInt16((short) Num);
+            if (ObjectType == 0 && Num == 0) return;
+            var dataWriter = new ByteWriter(new MemoryStream());
+            switch (ObjectType)
+            {
+                case Constants.ObjectType.System:
+                    switch (Num)
+                    {
+                        //Long
+                        case 0:
+                        {
+                            dataWriter.WriteInt32((int) value);
+                            break;
+                        }
+                        //String
+                        case 3:
+                        {
+                            dataWriter.WriteUnicode(((string) value),true);
+                            break;
+                        }
+                        //Double
+                        case 23:
+                        {
+                            dataWriter.WriteSingle((float) value);
+                            dataWriter.WriteSingle((float) value);
+                            break;
+                        }
+                        //GlobalString
+                        case 24:
+                            break;
+                        //GlobalValue
+                        case 50:
+                            break;
+                        default:
+                        {
+                            if ((int)ObjectType >= 2 || (int)ObjectType == 7)
+                            {
+                                dataWriter.WriteInt16((short) ObjectInfo);
+                                dataWriter.WriteInt16((short) ObjectInfoList);
+                                // if self.num in extensionLoaders:
+                                // loader = extensionLoaders[self.num]
+                                // self.loader = self.new(loader, reader)
+                            }
+
+                            break;
+                        }
+                            
+                    }
+                    break;
+            }
+
+       
+            Writer.WriteInt16((short) (dataWriter.Size()+6));
+            Writer.WriteWriter(dataWriter);
+
         }
 
         public override void Print()

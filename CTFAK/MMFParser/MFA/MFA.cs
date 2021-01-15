@@ -237,12 +237,13 @@ namespace CTFAK.MMFParser.MFA
             foreach(var extension in Extensions)
             {
                 Writer.WriteInt32(extension.Item1);
-                Writer.AutoWriteUnicode(extension.Item2);
                 Writer.AutoWriteUnicode(extension.Item3);
+                Writer.AutoWriteUnicode(extension.Item2);
                 Writer.WriteInt32(extension.Item4);
                 Writer.WriteInt16((short) (extension.Item5.Length-1));
                 Writer.Skip(1);
                 Writer.WriteInt8(0x80);
+                //Writer.WriteInt8(0x01);
                 Writer.Skip(2);
                 Writer.WriteUnicode(extension.Item5, false);
 
@@ -384,8 +385,8 @@ namespace CTFAK.MMFParser.MFA
             for (int i = 0; i < extCount; i++) //extensions
             {
                 var handle = Reader.ReadInt32();
-                var filename = Helper.AutoReadUnicode(Reader);
                 var name = Helper.AutoReadUnicode(Reader);
+                var filename = Helper.AutoReadUnicode(Reader);
                 var magic = Reader.ReadInt32();
                 var subType = Reader.ReadWideString(Reader.ReadInt32());
                 var tuple = new Tuple<int, string, string, int, string>(handle, filename, name, magic, subType);

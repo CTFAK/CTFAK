@@ -19,6 +19,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         public List<Quailifer> QualifiersList = new List<Quailifer>();
         public Quailifer[] Quailifers;
         public List<int> NumberOfConditions = new List<int>();
+        public List<EventGroup> Items = new List<EventGroup>();
 
 
         public Events(Chunk chunk) : base(chunk)
@@ -71,6 +72,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                     {
                         var eg = new EventGroup(Reader);
                         eg.Read();
+                        Items.Add(eg);
                         if (Reader.Tell() >= endPosition) break;
                     }
                     
@@ -80,7 +82,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         }
     }
 
-    public class Quailifer : ChunkLoader
+    public class Quailifer : DataLoader
     {
         public int ObjectInfo;
         public int Type;
@@ -95,21 +97,24 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         {
         }
 
-        public override void Print(bool ext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string[] GetReadableData()
-        {
-            throw new NotImplementedException();
-        }
+       
 
         public override void Read()
         {
             ObjectInfo = Reader.ReadUInt16();
             Type = Reader.ReadInt16();
             Qualifier = this;
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteUInt16((ushort) ObjectInfo);
+            Writer.WriteInt16((short) Type);
+        }
+
+        public override void Print()
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -197,7 +202,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         public void Write(ByteWriter Writer)
         {
             ByteWriter newWriter = new ByteWriter(new MemoryStream());
-            newWriter.WriteInt8(  NumberOfConditions);
+            newWriter.WriteInt8(NumberOfConditions);
             newWriter.WriteInt8(NumberOfActions);
             newWriter.WriteUInt16(Flags);
             if (Settings.Build >= 284)
@@ -223,15 +228,18 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                 newWriter.WriteInt16((short) Identifier);
                 newWriter.WriteInt16((short) Undo);
             }
+            
             foreach (Condition condition in Conditions)
             {
                 condition.Write(newWriter);
             }
+           
             foreach (Action action in Actions)
             {
                 action.Write(newWriter);
             }
             Writer.WriteInt16((short) ((newWriter.Size()+2)*-1));
+            
             Writer.WriteWriter(newWriter);
 
             
