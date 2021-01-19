@@ -257,6 +257,7 @@
     <Compile Include="Utils\BitDict.cs" />
     <Compile Include="Utils\ByteFlag.cs" />
     <Compile Include="Utils\ByteWriter.cs" />
+    <Compile Include="Utils\Checksum.cs" />
     <Compile Include="Utils\Helper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

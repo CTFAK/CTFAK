@@ -16,15 +16,18 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
 
         public override void Read()
         {
-            base.Read();
             Comparsion = Reader.ReadInt16();
             Items = new List<Expression>();
             while (true)
             {
                 var expression = new Expression(Reader);
                 expression.Read();
-                Items.Add(expression);
-                if (expression.ObjectType == 0) break;
+                if (expression.ObjectType == 0)
+                {
+                    break;
+                }
+                else Items.Add(expression);
+                Logger.Log("Expression: "+expression.Num);
                 
             }
             
@@ -32,12 +35,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
 
         public override void Write(ByteWriter Writer)
         {
-            base.Write(Writer);
-            
             Writer.WriteInt16(Comparsion);
             foreach (Expression item in Items)
             {
                 item.Write(Writer);
+                
             }
             
         }

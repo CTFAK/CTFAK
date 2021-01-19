@@ -14,6 +14,13 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
             Loops = Reader.ReadInt32();
             
         }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt32(Timer);
+            Writer.WriteInt32(Loops);
+        }
+
         public override string ToString()
         {
 

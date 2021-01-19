@@ -13,6 +13,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
         public int ObjectInfoList;
         public object value;
         public object floatValue;
+        public DataLoader Loader;
         public Expression(ByteReader reader) : base(reader) { }
         public override void Write(ByteWriter Writer)
         {
@@ -20,56 +21,30 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
             Writer.WriteInt16((short) Num);
             if (ObjectType == 0 && Num == 0) return;
             var dataWriter = new ByteWriter(new MemoryStream());
-            switch (ObjectType)
+            if(ObjectType==Constants.ObjectType.System)
             {
-                case Constants.ObjectType.System:
-                    switch (Num)
+                Logger.Log("WRITING  EXPRESSION "+Num);
+                    if (Loader != null)
                     {
-                        //Long
-                        case 0:
-                        {
-                            dataWriter.WriteInt32((int) value);
-                            break;
-                        }
-                        //String
-                        case 3:
-                        {
-                            dataWriter.WriteUnicode(((string) value),true);
-                            break;
-                        }
-                        //Double
-                        case 23:
-                        {
-                            dataWriter.WriteSingle((float) value);
-                            dataWriter.WriteSingle((float) value);
-                            break;
-                        }
-                        //GlobalString
-                        case 24:
-                            break;
-                        //GlobalValue
-                        case 50:
-                            break;
-                        default:
-                        {
-                            if ((int)ObjectType >= 2 || (int)ObjectType == 7)
-                            {
-                                dataWriter.WriteInt16((short) ObjectInfo);
-                                dataWriter.WriteInt16((short) ObjectInfoList);
-                                // if self.num in extensionLoaders:
-                                // loader = extensionLoaders[self.num]
-                                // self.loader = self.new(loader, reader)
-                            }
-
-                            break;
-                        }
-                            
+                        Loader.Write(dataWriter);  
+                        dataWriter.WriteInt32(0);
+                        dataWriter.WriteInt16(0);
+                        
                     }
-                    break;
+                    else if ((int) ObjectType >= 2 || (int) ObjectType == 7)
+                    {
+                        Writer.WriteInt16((short) ObjectInfo);
+                        Writer.WriteInt16((short) ObjectInfoList);
+                        if (Num == 16 || Num == 19)
+                        {
+                            Writer.WriteInt32((short) value);
+                        }
+                    }
             }
-
+            
+            
        
-            Writer.WriteInt16((short) (dataWriter.Size()+6));
+            Writer.WriteUInt16((ushort) (dataWriter.Size()));
             Writer.WriteWriter(dataWriter);
 
         }
@@ -86,21 +61,20 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
             Num = Reader.ReadInt16();
             if (ObjectType == 0 & Num == 0) return;
             var size = Reader.ReadUInt16();
-            switch (ObjectType)
+            if(ObjectType==Constants.ObjectType.System)
             {
-                case Constants.ObjectType.System:
-                    switch (Num)
+                switch (Num)
                     {
                         //Long
                         case 0:
                         {
-                            value = Reader.ReadInt32();
+                            Loader = new LongExp(Reader);
                             break;
                         }
                         //String
                         case 3:
                         {
-                            value = Reader.ReadWideString();
+                            Loader = new StringExp(Reader);
                             break;
                         }
                         //Double
@@ -116,31 +90,113 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
                         //GlobalValue
                         case 50:
                             break;
+                        case 16:
+                            // value = Reader.ReadInt16();
+                            break;
+                        case 19:
+                            // value = Reader.ReadInt16();
+                            break;
                         default:
                         {
                             if ((int)ObjectType >= 2 || (int)ObjectType == 7)
                             {
                                 ObjectInfo = Reader.ReadUInt16();
                                 ObjectInfoList = Reader.ReadUInt16();
-                                // if self.num in extensionLoaders:
-                                    // loader = extensionLoaders[self.num]
-                                    // self.loader = self.new(loader, reader)
+                                if (Num == 16 || Num == 19)
+                                {
+                                    value = Reader.ReadInt16();
+                                }
                             }
-
                             break;
                         }
-                            
                     }
-
-                    break;
+                    Logger.Log("Reading Expression: "+Num);
+                    Loader?.Read();
             }
-            Reader.Seek(currentPosition+size);
+            
+            // Reader.Seek(currentPosition+size);
 
         }
 
         public override string ToString()
         {
-            return $"Expression {ObjectType}=={Num}: {value}";
+            return $"Expression {ObjectType}=={Num}: {((ExpressionLoader)Loader)?.Value}";
+        }
+    }
+    public class ExpressionLoader:DataLoader
+    {
+        public object Value;
+        public ExpressionLoader(ByteReader reader) : base(reader)
+        {
+        }
+
+        public ExpressionLoader(ChunkList.Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void Print()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class StringExp:ExpressionLoader
+    {
+        
+
+        public StringExp(ByteReader reader) : base(reader)
+        {
+        }
+
+        public StringExp(ChunkList.Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+            Value = Reader.ReadWideString();
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteUnicode((string) Value,true);
+        }
+
+        public override void Print()
+        {
+            throw new NotImplementedException();
+        }
+    }
+    public class LongExp:ExpressionLoader
+    {
+        public int Val1;
+
+        public LongExp(ByteReader reader) : base(reader)
+        {
+        }
+
+        public LongExp(ChunkList.Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+            Value = Reader.ReadInt32();
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt32((int) Value);
         }
     }
 }

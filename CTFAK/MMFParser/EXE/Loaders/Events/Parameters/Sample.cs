@@ -15,6 +15,14 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
             Flags = Reader.ReadUInt16();
             Name = Reader.ReadWideString();
         }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt16((short) Handle);
+            Writer.WriteUInt16((ushort) Flags);
+            Writer.WriteUnicode(Name);
+        }
+
         public override string ToString()
         {
             return $"Sample '{Name}' handle: {Handle}";

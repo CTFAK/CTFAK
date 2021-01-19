@@ -42,7 +42,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
         public int EditorDataUnk;
         public uint EventDataLen;
         public uint CommentDataLen;
-        private byte[] _cache;
+        public byte[] _cache;
         public bool _ifMFA;
 
         public Events(ByteReader reader) : base(reader)

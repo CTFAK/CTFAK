@@ -10,6 +10,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
         public ParameterCommon(ByteReader reader) : base(reader) { }
         public override void Write(ByteWriter Writer)
         {
+            throw new NotImplementedException("Unexcepted parameter: "+this.GetType().Name);
            
         }
 

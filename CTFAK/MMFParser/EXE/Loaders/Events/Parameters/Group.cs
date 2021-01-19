@@ -1,4 +1,5 @@
-﻿using CTFAK.Utils;
+﻿using System;
+using CTFAK.Utils;
 
 namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
 {
@@ -16,20 +17,23 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
 
         public override void Read()
         {
-            base.Read();
             Offset = Reader.Tell() - 24;
             Flags = Reader.ReadUInt16();
             Id = Reader.ReadUInt16();
             Name = Reader.ReadWideString();
             Password = Reader.ReadInt32();
+            Logger.Log("Password: "+Password);
         }
 
         public override void Write(ByteWriter Writer)
         {
-            base.Write(Writer);
-            Writer.WriteUInt16(Flags);
+            Writer.WriteUInt16(0);
             Writer.WriteUInt16(Id);
-            Writer.WriteAscii(Name);
+            Writer.WriteUnicode(Name,true);
+            if(true)//decrypt password
+            {
+                Password = Checksum.MakeGroupChecksum("", Name);
+            }
             Writer.WriteInt32(Password);
         }
 

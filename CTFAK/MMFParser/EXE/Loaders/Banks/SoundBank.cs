@@ -175,8 +175,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             writer.WriteInt32(Flags);
             writer.WriteInt32(0);
             writer.WriteInt32(Name.Length+1);
-            if (IsCompressed) writer.WriteUnicode(Name);
-            else writer.WriteAscii(Name);
+            writer.WriteAscii(Name);
             writer.WriteBytes(Data);
 
 

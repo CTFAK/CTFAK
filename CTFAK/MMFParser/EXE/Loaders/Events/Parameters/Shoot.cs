@@ -15,7 +15,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
 
         public override void Read()
         {
-            base.Read();
             ShootPos = new Position(Reader);
             ShootPos.Read();
             ObjectInstance = Reader.ReadUInt16();
@@ -26,7 +25,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
 
         public override void Write(ByteWriter Writer)
         {
-            base.Write(Writer);
             ShootPos.Write(Writer);
             Writer.WriteUInt16(ObjectInstance);
             Writer.WriteUInt16(ObjectInfo);

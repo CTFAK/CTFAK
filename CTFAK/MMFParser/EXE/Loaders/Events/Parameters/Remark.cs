@@ -9,6 +9,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
         public Remark(ByteReader reader) : base(reader) { }
         public override void Read()
         {
+            base.Read();
             //TODO
             
         }

@@ -32,7 +32,7 @@ namespace CTFAK.Utils
                 Console.WriteLine(Helper.GetCurrentTime()+text);
                 Console.ForegroundColor = ConsoleColor.White;
             }
-            //if(logToConsole) MainConsole.Message(text);
+            if(logToConsole) MainConsole.Message(text);
                 
 
 

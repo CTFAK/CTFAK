@@ -5,15 +5,18 @@ using System.Linq;
 using CTFAK.MMFParser.EXE;
 using CTFAK.MMFParser.EXE.Loaders;
 using CTFAK.MMFParser.EXE.Loaders.Events;
+using CTFAK.MMFParser.EXE.Loaders.Events.Parameters;
 using CTFAK.MMFParser.EXE.Loaders.Objects;
 using CTFAK.MMFParser.MFA.Loaders;
 using CTFAK.MMFParser.MFA.Loaders.mfachunks;
 using CTFAK.Utils;
+using Action = CTFAK.MMFParser.EXE.Loaders.Events.Action;
 using Animation = CTFAK.MMFParser.MFA.Loaders.mfachunks.Animation;
 using AnimationDirection = CTFAK.MMFParser.MFA.Loaders.mfachunks.AnimationDirection;
 using Backdrop = CTFAK.MMFParser.MFA.Loaders.mfachunks.Backdrop;
 using ChunkList = CTFAK.MMFParser.MFA.Loaders.ChunkList;
 using Counter = CTFAK.MMFParser.MFA.Loaders.mfachunks.Counter;
+using Events = CTFAK.MMFParser.MFA.Loaders.Events;
 using Frame = CTFAK.MMFParser.EXE.Loaders.Frame;
 using Layer = CTFAK.MMFParser.MFA.Loaders.Layer;
 using Movement = CTFAK.MMFParser.MFA.Loaders.mfachunks.Movement;
@@ -43,12 +46,12 @@ namespace CTFAK.MMFParser.Translation
             //mfa.Stamp = wtf;
             //if (game.Fonts != null) mfa.Fonts = game.Fonts;
 
-            //mfa.Sounds = game.Sounds;
-            //foreach (var item in mfa.Sounds.Items)
-            //{
-            //    item.IsCompressed = false;
-            //}
-            //mfa.Music = game.Music;
+            // mfa.Sounds = game.Sounds;
+            // foreach (var item in mfa.Sounds.Items)
+            // {
+            // item.IsCompressed = false;
+            // }
+            // mfa.Music = game.Music;
             mfa.Images.Items = game.Images.Images;
             foreach (var key in mfa.Images.Items.Keys)
             {
@@ -319,7 +322,7 @@ namespace CTFAK.MMFParser.Translation
             mfa.Frames.Clear();
             foreach (Frame frame in game.Frames)
             {
-                // if (frame.Name != "title") continue;
+                
                 var newFrame = new MFA.Loaders.Frame(null);
                 //FrameInfo
                 newFrame.Handle = game.Frames.IndexOf(frame);
@@ -410,54 +413,67 @@ namespace CTFAK.MMFParser.Translation
                     newFolder.Items = new List<uint>() {(uint) newFrameItem.Handle};
                     newFrame.Folders.Add(newFolder);
                 }
-                //EventInfo
 
 
 
-                List<DataLoader> quailifers = new List<DataLoader>();
-                newFrame.Events = MFA.MFA.emptyEvents;
+                newFrame.Events = new Events((ByteReader) null);//MFA.MFA.emptyEvents;
+                newFrame.Events.Items = new List<EventGroup>();
+                newFrame.Events.Objects=new List<EventObject>();
+                newFrame.Events._cache = MFA.MFA.emptyEvents._cache;
                 newFrame.Events._ifMFA = true;
                 newFrame.Events.Version = 1028;
-                foreach (var item in newFrame.Items)
+                if (frame.Name == "Frame 1")
                 {
-                    var newObject = new EventObject((ByteReader) null);
-
-                    newObject.Handle = (uint) item.Handle;
-                    newObject.Name = item.Name ?? "";
-                    newObject.TypeName = "";
-                    newObject.ItemType = (ushort) item.ObjectType;
-                    newObject.ObjectType = 1;
-                    newObject.Flags = 0;
-                    newObject.ItemHandle = (uint) item.Handle;
-                    newObject.InstanceHandle = 0xFFFFFFFF;
-                    newFrame.Events.Objects.Add(newObject);
-
-                }
-
-                for (int i = 0; i < frame.Events.Quailifers.Length; i++)
-                {
-                    var item = frame.Events.Quailifers[i];
-                    if (quailifers.Contains(item))
-                    {
-                    }
-                    else
+                    foreach (var item in newFrame.Items)
                     {
                         var newObject = new EventObject((ByteReader) null);
-                        quailifers.Add(newObject);
-                        var newHandle = 0;
-                        while (true)
-                        {
-                            
-                        }
-                    }
-                }
 
-                
-                
-                
-                
-                
-                
+                        newObject.Handle = (uint) item.Handle;
+                        newObject.Name = item.Name ?? "";
+                        newObject.TypeName = "";
+                        newObject.ItemType = (ushort) item.ObjectType;
+                        newObject.ObjectType = 1;
+                        newObject.Flags = 0;
+                        newObject.ItemHandle = (uint) item.Handle;
+                        newObject.InstanceHandle = 0xFFFFFFFF;
+                        newFrame.Events.Objects.Add(newObject);
+                    }
+                    foreach (EventGroup item in frame.Events.Items)
+                    {
+                        foreach (Action itemAction in item.Actions)
+                        {
+                            for (int a=0;a<itemAction.Items.Count;a++)
+                            {
+                                if (itemAction.Items[a].Loader is ExpressionParameter exp)
+                                {
+                                    itemAction.Items.Remove(itemAction.Items[a]);
+                                    
+                                }
+                                else if (itemAction.Items[a].Loader is Sample)
+                                {
+                                    itemAction.Items.Remove(itemAction.Items[a]);
+                                }
+                            }
+                        }
+                        foreach (Condition itemAction in item.Conditions)
+                        {
+                            for (int a=0;a<itemAction.Items.Count;a++)
+                            {
+                                if (itemAction.Items[a].Loader is ExpressionParameter exp)
+                                {
+                                    itemAction.Items.Remove(itemAction.Items[a]);
+                                    
+                                }
+                                else if (itemAction.Items[a].Loader is Sample)
+                                {
+                                    itemAction.Items.Remove(itemAction.Items[a]);
+                                }
+                            }
+                        }
+                        newFrame.Events.Items.Add(item);
+                    }
+                    
+                }
                 newFrame.Chunks = new ChunkList(null);
                 mfa.Frames.Add(newFrame);
 

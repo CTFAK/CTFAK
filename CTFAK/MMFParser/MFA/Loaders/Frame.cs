@@ -65,7 +65,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             Writer.AutoWriteUnicode(UnkString);
             Writer.WriteInt32(LastViewedX);
             Writer.WriteInt32(LastViewedY);
-            // Writer.WriteInt32(Palette.Count);//WTF HELP 
+            Writer.WriteInt32(Palette.Count);//WTF HELP 
             
             foreach (var item in Palette)
             {
@@ -220,7 +220,8 @@ namespace CTFAK.MMFParser.MFA.Loaders
             Events.Read();
             Chunks = new ChunkList(Reader);
             Chunks.Read();
-            MFA.emptyEvents = Events;
+            if(Events.Items.Count==0)MFA.emptyEvents = Events;
+             
             MFA.emptyFrameChunks = Chunks;
         }
     }

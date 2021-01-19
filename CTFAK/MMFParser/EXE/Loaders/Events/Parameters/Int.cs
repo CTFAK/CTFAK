@@ -11,6 +11,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
         {
             Value = (short)Reader.ReadInt32();          
         }
-        
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt32(Value);
+        }
     }
 }

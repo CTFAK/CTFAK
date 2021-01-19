@@ -5,15 +5,25 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
 {
     class AlterableValue : Short
     {
+        public int Unk;
 
         public AlterableValue(ByteReader reader) : base(reader) { }
         public override void Read()
         {
-            base.Read();           
+            base.Read();
+
         }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Value = 5;
+            base.Write(Writer);
+
+        }
+
         public override string ToString()
         {
-            return $"AlterableValue{Convert.ToChar(Value).ToString().ToUpper()}";
+            return $"AlterableValue{Value.ToString().ToUpper()}";
         }
     }
 }

@@ -13,14 +13,12 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
 
         public override void Read()
         {
-            base.Read();
             Value1 = Reader.ReadInt16();
             Value2 = Reader.ReadInt16();
         }
 
         public override void Write(ByteWriter Writer)
         {
-            base.Write(Writer);
             Writer.WriteInt16(Value1);
             Writer.WriteInt16(Value2);
         }

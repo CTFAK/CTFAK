@@ -13,14 +13,12 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
 
         public override void Read()
         {
-            base.Read();
             Button = Reader.ReadByte();
             IsDouble = Reader.ReadByte();
         }
 
         public override void Write(ByteWriter Writer)
         {
-            base.Write(Writer);
             Writer.WriteInt8(Button);
             Writer.WriteInt8(IsDouble);
             
