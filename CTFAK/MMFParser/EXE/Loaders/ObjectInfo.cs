@@ -14,7 +14,21 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public string Name = "ERROR";
         public int Handle;
         public int ObjectType;
-        public UInt32 Flags;
+        public BitDict Flags = new BitDict(new string[]
+        {
+            "UNK1",
+            "UNK2",
+            "UNK3",
+            "UNK4",
+            "UNK5",
+            "UNK6",
+            "UNK7",
+            "UNK8",
+            "UNK9",
+            "UNK10",
+            "UNK11","UNK12","UNK13","UNK14",
+
+        });
         public bool Transparent;
         public bool Antialias;
         public int InkEffect;
@@ -70,7 +84,8 @@ namespace CTFAK.MMFParser.EXE.Loaders
                     var actualLoader = (ObjectHeader)(loader);
                     Handle = actualLoader.Handle;
                     ObjectType = actualLoader.ObjectType;
-                    Flags = actualLoader.Flags;
+                    Flags.flag = actualLoader.Flags;
+                    
                     UInt32 inkEffect = actualLoader.InkEffect;
                     Transparent = ByteFlag.GetFlag(inkEffect, 28);
                     Antialias = ByteFlag.GetFlag(inkEffect, 29);
@@ -87,6 +102,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             {
                 Properties.ReadNew(ObjectType,this);
             }
+            
         }
 
         public ImageItem GetPreview()
@@ -239,8 +255,8 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
             Handle = Reader.ReadInt16();
             ObjectType = Reader.ReadInt16();
-            Flags = Reader.ReadUInt16();
             Int16 reserved = Reader.ReadInt16();
+            Flags = Reader.ReadUInt16();
             InkEffect = Reader.ReadUInt32();
             InkEffectParameter = Reader.ReadUInt32();
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using CTFAK.Utils;
 using static CTFAK.MMFParser.EXE.ChunkList;
 
@@ -73,6 +74,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                         var eg = new EventGroup(Reader);
                         eg.Read();
                         Items.Add(eg);
+                        
                         if (Reader.Tell() >= endPosition) break;
                     }
                     

@@ -22,13 +22,14 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
             {
                 var expression = new Expression(Reader);
                 expression.Read();
-                if (expression.ObjectType == 0)
+                Logger.Log($"Found expression {expression.ObjectType}-{expression.Num}=={((ExpressionLoader)expression.Loader)?.Value}");
+                if (expression.ObjectType == 0&& expression.Num==0)
                 {
                     break;
                 }
                 else Items.Add(expression);
-                Logger.Log("Expression: "+expression.Num);
-                
+                // if(expression.Num==23||expression.Num==24||expression.Num==50||expression.Num==16||expression.Num==19)Logger.Log("CUMSHOT "+expression.Num);
+
             }
             
         }
@@ -36,10 +37,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
         public override void Write(ByteWriter Writer)
         {
             Writer.WriteInt16(Comparsion);
+            Logger.Log("ExpressionCount: "+Items.Count);
             foreach (Expression item in Items)
             {
+                Logger.Log("Writing expression: "+item.Num);
                 item.Write(Writer);
-                
             }
             
         }

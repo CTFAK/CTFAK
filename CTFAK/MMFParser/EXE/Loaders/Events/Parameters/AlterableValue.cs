@@ -16,7 +16,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
 
         public override void Write(ByteWriter Writer)
         {
-            Value = 5;
             base.Write(Writer);
 
         }

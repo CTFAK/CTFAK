@@ -100,7 +100,7 @@ namespace CTFAK.MMFParser.Translation
                 newItem.InkEffect = item.InkEffect;
                 newItem.InkEffectParameter = item.InkEffectValue;
                 newItem.AntiAliasing = item.Antialias ? 1 : 0;
-                newItem.Flags = (int) item.Flags; //32 TODO:Fix this 
+                newItem.Flags = (int) item.Flags.flag; //32 TODO:Fix this 
                 newItem.IconHandle = 12;
                 newItem.Chunks = new ChunkList(null);
                 
@@ -117,7 +117,8 @@ namespace CTFAK.MMFParser.Translation
                 }
                 else
                 {
-                    var itemLoader = (ObjectCommon) item.Properties.Loader;
+                    var itemLoader = (ObjectCommon) item?.Properties?.Loader;
+                    if (itemLoader == null) continue;
                     Logger.Log("Translating Object: "+itemLoader.Parent.Name);
                     //CommonSection
                     var newObject = new ObjectLoader(null);
@@ -389,7 +390,7 @@ namespace CTFAK.MMFParser.Translation
                             newInstance.X = instance.X;
                             newInstance.Y = instance.Y;
                             newInstance.Handle = instance.Handle;
-                            newInstance.Flags = instance.FrameItem.Flags;
+                            newInstance.Flags = instance.FrameItem.Flags.flag;
                             newInstance.ParentType = (uint) instance.ParentType;
                             newInstance.ItemHandle = (uint) (instance.ObjectInfo);
                             newInstance.ParentHandle = (uint) instance.ParentHandle;
@@ -422,7 +423,7 @@ namespace CTFAK.MMFParser.Translation
                 newFrame.Events._cache = MFA.MFA.emptyEvents._cache;
                 newFrame.Events._ifMFA = true;
                 newFrame.Events.Version = 1028;
-                if (frame.Name == "Frame 1")
+                // if (frame.Name == "anus")
                 {
                     foreach (var item in newFrame.Items)
                     {
@@ -440,13 +441,13 @@ namespace CTFAK.MMFParser.Translation
                     }
                     foreach (EventGroup item in frame.Events.Items)
                     {
-                        foreach (Action itemAction in item.Actions)
+                        /*foreach (Action itemAction in item.Actions)
                         {
                             for (int a=0;a<itemAction.Items.Count;a++)
                             {
                                 if (itemAction.Items[a].Loader is ExpressionParameter exp)
                                 {
-                                    itemAction.Items.Remove(itemAction.Items[a]);
+                                    // itemAction.Items.Remove(itemAction.Items[a]);
                                     
                                 }
                                 else if (itemAction.Items[a].Loader is Sample)
@@ -461,7 +462,7 @@ namespace CTFAK.MMFParser.Translation
                             {
                                 if (itemAction.Items[a].Loader is ExpressionParameter exp)
                                 {
-                                    itemAction.Items.Remove(itemAction.Items[a]);
+                                    // itemAction.Items.Remove(itemAction.Items[a]);
                                     
                                 }
                                 else if (itemAction.Items[a].Loader is Sample)
@@ -469,7 +470,7 @@ namespace CTFAK.MMFParser.Translation
                                     itemAction.Items.Remove(itemAction.Items[a]);
                                 }
                             }
-                        }
+                        }*/
                         newFrame.Events.Items.Add(item);
                     }
                     

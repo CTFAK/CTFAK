@@ -25,6 +25,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             ByteWriter newWriter = new ByteWriter(new MemoryStream());
             Logger.Log($"{ObjectType}-{Num}-{ObjectInfo}-{ObjectInfoList}-{Flags}-{OtherFlags}-{Items.Count}-{DefType}-{Identifier}");
             newWriter.WriteInt16((short) ObjectType);
+            if (Num == -42) Num = -27;
             newWriter.WriteInt16((short) Num);
             newWriter.WriteUInt16((ushort) ObjectInfo);
             newWriter.WriteInt16((short) ObjectInfoList);
@@ -65,7 +66,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             {
                 var item = new Parameter(Reader);
                 item.Read();
-                
                 Items.Add(item);
             }
             Logger.Log(this);
@@ -109,7 +109,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             {
                 parameter.Write(newWriter);
             }
-            Writer.WriteUInt16((ushort) (newWriter.BaseStream.Position));
+            Writer.WriteUInt16((ushort) (newWriter.BaseStream.Position+2));
             Writer.WriteWriter(newWriter);
             
         }
@@ -159,7 +159,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         {
             var newWriter = new ByteWriter(new MemoryStream());
             newWriter.WriteInt16((short) Code);
-            Logger.Log("Writing PARAMETER: " + Loader.GetType().Name);
             Loader.Write(newWriter);
             Writer.WriteUInt16((ushort) (newWriter.BaseStream.Position+2));
             Writer.WriteWriter(newWriter);
@@ -180,7 +179,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
 
 
             var actualLoader = Helper.LoadParameter(Code,Reader);
-            Logger.Log("Loading PARAMETER: "+actualLoader.GetType().Name);
             this.Loader = actualLoader;
             if (Loader!=null)
             {
