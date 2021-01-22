@@ -150,7 +150,7 @@ namespace CTFAK.MMFParser.Translation
                     newLayer.XCoefficient = layer.XCoeff;
                     newLayer.YCoefficient = layer.YCoeff;
                     newFrame.Layers.Add(newLayer);
-                    // break;
+                    break;
                     // 
 
                 }
@@ -209,7 +209,7 @@ namespace CTFAK.MMFParser.Translation
                     newFrame.Events._cache = MFA.MFA.emptyEvents._cache;
                     newFrame.Events._ifMFA = true;
                     newFrame.Events.Version = 1028;
-                    if (frame.Name == "jopajopaher")
+                    // if (frame.Name == "jopajopaher")
                     {
                         foreach (var item in newFrame.Items)
                         {

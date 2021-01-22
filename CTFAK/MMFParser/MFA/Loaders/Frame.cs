@@ -146,9 +146,9 @@ namespace CTFAK.MMFParser.MFA.Loaders
             LastViewedX = Reader.ReadInt32();
             LastViewedY = Reader.ReadInt32();
 
-            // PaletteSize = Reader.ReadInt32();
+            PaletteSize = Reader.ReadInt32();
             Palette = new List<Color>();
-            for (int i = 0; i < 257; i++)
+            for (int i = 0; i < 256; i++)
             {
                 Palette.Add(Reader.ReadColor());
             }
