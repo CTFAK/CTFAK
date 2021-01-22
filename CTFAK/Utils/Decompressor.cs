@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
 using Joveler.Compression.ZLib;
+using DeflateStream = System.IO.Compression.DeflateStream;
+using GZipStream = Joveler.Compression.ZLib.GZipStream;
 
 namespace CTFAK.Utils
 {
@@ -29,6 +32,19 @@ namespace CTFAK.Utils
             {
                 zs.CopyTo(decompressedStream);
             }
+
+            byte[] decompressedData = decompressedStream.GetBuffer();
+            // Trimming array to decompSize,
+            // because ZlibStream always pads to 0x100
+            Array.Resize<byte>(ref decompressedData, decompSize);
+            return decompressedData;
+        }
+
+        public static byte[] decompressOld(ByteReader reader, int size, int decompSize)
+        {
+            ZLibDecompressOptions decompOpts = new ZLibDecompressOptions();
+            MemoryStream compressedStream = new MemoryStream(reader.ReadBytes(size));
+            MemoryStream decompressedStream = new MemoryStream();
 
             byte[] decompressedData = decompressedStream.GetBuffer();
             // Trimming array to decompSize,

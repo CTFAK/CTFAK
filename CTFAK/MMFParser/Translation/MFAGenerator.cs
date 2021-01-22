@@ -1,8 +1,15 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 using CTFAK.MMFParser.EXE;
+using CTFAK.MMFParser.EXE.Loaders;
+using CTFAK.MMFParser.EXE.Loaders.Banks;
+using CTFAK.MMFParser.MFA.Loaders;
 using CTFAK.Utils;
+using ChunkList = CTFAK.MMFParser.MFA.Loaders.ChunkList;
+using Frame = CTFAK.MMFParser.MFA.Loaders.Frame;
+using Layer = CTFAK.MMFParser.MFA.Loaders.Layer;
 
 namespace CTFAK.MMFParser.Translation
 {
@@ -36,6 +43,9 @@ namespace CTFAK.MMFParser.Translation
                 else return null;
             } 
             else mfaReader = new ByteReader(TemplatePath, FileMode.Open);
+            Logger.Log("Loading images");
+            Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().PreloadOnly = false;
+            Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().Read(true,false);
             Settings.DoMFA = true;
             
             var template = new MFA.MFA(mfaReader);
@@ -46,7 +56,7 @@ namespace CTFAK.MMFParser.Translation
 
             var mfaWriter =
                 new ByteWriter(
-                    Settings.GameName.Length > 0 ? $"{Settings.DumpPath}\\{Exe.Instance.GameData.Name}-decompiled.mfa" : "out.mfa",
+                    Settings.GameName.Length > 0 ? $"{Settings.DumpPath}\\{Path.GetFileNameWithoutExtension(Exe.Instance.GameData.GameChunks.GetChunk<EditorFilename>().Value)}.mfa" : "out.mfa",
                     FileMode.Create); //New writer for new MFA
             Pame2Mfa.Message("");
             Pame2Mfa.Message("Writing MFA");
@@ -65,6 +75,37 @@ namespace CTFAK.MMFParser.Translation
             Settings.DoMFA = true;
             template.Read();
 
+            //Add modifications
+
+
+            var mfaWriter = new ByteWriter(outputPath, FileMode.Create);
+            template.Write(mfaWriter);
+        }public static void WriteTestMFA()
+        {
+            var outputPath = Path.Combine(Path.GetDirectoryName(TemplatePath), "patchNew.mfa");
+            var mfaReader = new ByteReader(TemplatePath, FileMode.Open);
+            var template = new MFA.MFA(mfaReader);
+            Settings.DoMFA = true;
+            template.Read();
+            var refer = template.Frames.FirstOrDefault();
+            // template.Frames.Clear();
+            
+            for (int i = 0; i < 25; i++)
+            {
+                var frame = refer;
+                frame.Handle = i;
+                frame.Name = "Frame " + i;
+
+                frame.Chunks = new ChunkList(null);
+                frame.Events = MFA.MFA.emptyEvents;
+                frame.Palette = refer.Palette;
+                // frame.Layers.Add(new Layer(null)
+                // {
+                    // Name="Layer"
+                // });
+                template.Frames.Add(frame);
+                
+            }  
             //Add modifications
 
 

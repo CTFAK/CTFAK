@@ -87,6 +87,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
                     Flags.flag = actualLoader.Flags;
                     
                     UInt32 inkEffect = actualLoader.InkEffect;
+                    InkEffectValue = (int) actualLoader.InkEffectParameter;
                     Transparent = ByteFlag.GetFlag(inkEffect, 28);
                     Antialias = ByteFlag.GetFlag(inkEffect, 29);
                 }
@@ -136,6 +137,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             }
             else if (ObjectType==0)//QuickBackdrop
             {
+                
             
             }
             
@@ -189,8 +191,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             //TODO: Fix shit
             if(ObjectType==0)//QuickBackdrop
             {
-                
-            
+                Loader=new Quickbackdrop(Reader);
             }
             else if (ObjectType == 1)//Backdrop
             {

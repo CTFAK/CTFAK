@@ -19,8 +19,6 @@ namespace CTFAK.MMFParser.MFA.Loaders
         public int LastViewedY;
         public List<ItemFolder> Folders = new List<ItemFolder>();
         public List<FrameInstance> Instances = new List<FrameInstance>();
-        public List<byte[]> UnkBlocks = new List<byte[]>();
-
         public BitDict Flags = new BitDict(new string[]
         {
             "GrabDesktop",
@@ -41,11 +39,12 @@ namespace CTFAK.MMFParser.MFA.Loaders
         public List<Color> Palette;
         public int StampHandle;
         public int ActiveLayer;
-        public List<Layer> Layers;
+        public List<Layer> Layers = new List<Layer>();
         public Events Events;
         public ChunkList Chunks;
         public Transition FadeIn;
         public Transition FadeOut;
+        public int PaletteSize;
 
         public Frame(ByteReader reader) : base(reader)
         {
@@ -94,12 +93,11 @@ namespace CTFAK.MMFParser.MFA.Loaders
             }
             else Writer.Skip(1);
             
+            
             Writer.WriteInt32(Items.Count);
             foreach (var item in Items)
             {
                 item.Write(Writer);
-                var bytes = new byte[] {0x01,0x01,0x00,0x00, 0x00,0x00,0x00,0x00, 0x80,0x01,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x32,0x00, 0x00,0x00,0x32,0x00, 0x00,0x00,0x01,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00,0x01,0x00, 0x00,0x00,0x00,0x00, 0x00,0x00};
-
             }
          
             Writer.WriteInt32(Folders.Count);
@@ -113,20 +111,16 @@ namespace CTFAK.MMFParser.MFA.Loaders
             {
                 item.Write(Writer);
             }
-            // Writer.WriteAscii("AI");
-
             
 
-            /*if (UnkBlocks != null)
-            {
-                Writer.WriteInt32(UnkBlocks.Count);
-                foreach (var item in UnkBlocks)
-                {
-                    Writer.WriteBytes(item);
-                }
-            }*/
-
             Events.Write(Writer);
+                // for (int i=0;i<Layers.Count;i++)
+                // {
+                    // Writer.WriteInt32(0);
+                    // Writer.WriteInt32(0);
+                    // Writer.WriteInt16(0);
+                // }  
+                // Writer.WriteInt32(0);
             
             Chunks.Write(Writer);
         }
@@ -152,7 +146,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             LastViewedX = Reader.ReadInt32();
             LastViewedY = Reader.ReadInt32();
 
-            //var paletteSize = Reader.ReadInt32();
+            // PaletteSize = Reader.ReadInt32();
             Palette = new List<Color>();
             for (int i = 0; i < 257; i++)
             {
@@ -162,7 +156,6 @@ namespace CTFAK.MMFParser.MFA.Loaders
             StampHandle = Reader.ReadInt32();
             ActiveLayer = Reader.ReadInt32();
             int layersCount = Reader.ReadInt32();
-            Layers = new List<Layer>();
             for (int i = 0; i < layersCount; i++)
             {
                 var layer = new Layer(Reader);
@@ -181,8 +174,6 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 FadeOut = new Transition(Reader);
                 FadeOut.Read();
             }
-
-            Items = new List<FrameItem>();
             var frameItemsCount = Reader.ReadInt32();
             for (int i = 0; i < frameItemsCount; i++)
             {
@@ -191,8 +182,6 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 
                 Items.Add(frameitem);
             }
-
-            Folders = new List<ItemFolder>();
             var folderCount = Reader.ReadInt32();
             for (int i = 0; i < folderCount; i++)
             {
@@ -200,8 +189,6 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 folder.Read();
                 Folders.Add(folder);
             }
-
-            Instances = new List<FrameInstance>();
             var instancesCount = Reader.ReadInt32();
             for (int i = 0; i < instancesCount; i++)
             {
@@ -210,14 +197,15 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 Instances.Add(inst);
             }
 
-            //var unkCount = Reader.ReadInt32();
-            //for (int i = 0; i < unkCount; i++)
-            //{
-            //    UnkBlocks.Add(Reader.ReadBytes(32));
-            //}
+            // var unkCount = Reader.ReadInt32();
+            // for (int i = 0; i < unkCount; i++)
+            // {
+            // UnkBlocks.Add(Reader.ReadBytes(32));
+            // }
 
             Events = new Events(Reader);
             Events.Read();
+            
             Chunks = new ChunkList(Reader);
             Chunks.Read();
             if(Events.Items.Count==0)MFA.emptyEvents = Events;

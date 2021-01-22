@@ -17,7 +17,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public bool SaveImages = false;
         public Dictionary<int, ImageItem> Images = new Dictionary<int, ImageItem>();
         public uint NumberOfItems;
-        public bool PreloadOnly=false;
+        public bool PreloadOnly=true;
 
         public ImageBank(ByteReader reader) : base(reader)
         {
@@ -451,6 +451,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             }
 
             writer.WriteInt32(Handle);
+            // writer.WriteInt32(Handle-1);//FNAC3 FIX
             writer.WriteWriter(chunk);
         }
 

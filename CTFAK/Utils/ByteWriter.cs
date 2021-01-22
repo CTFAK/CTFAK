@@ -71,6 +71,7 @@ namespace CTFAK.Utils
         public void WriteSingle(float value) => Write(value);
 
         public void WriteBytes(byte[] value) => Write(value);
+        public void WriteDouble(double value) => Write(value);
 
 
         public void WriteAscii(string value)

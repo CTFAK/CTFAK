@@ -64,7 +64,6 @@ namespace CTFAK.MMFParser.MFA.Loaders
             {
                 
                 string name = Reader.ReadAscii(4);
-                Console.WriteLine(name);
                 if (name == EventData)
                 {
                     EventDataLen = Reader.ReadUInt32();
@@ -158,7 +157,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 }
                 else if (name == EditorPositionData)
                 {
-                    if(Reader.ReadUInt16()!=1) throw new NotImplementedException("Invalid chunkversion");
+                    if(Reader.ReadUInt16()!=1)throw new NotImplementedException("Invalid chunkversion");
                     X = Reader.ReadUInt32();
                     Y = Reader.ReadUInt32();
                     CaretType = Reader.ReadUInt32();
@@ -167,7 +166,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 }
                 else if (name == EditorLineData)
                 {
-                    if(Reader.ReadUInt16()!=1) throw new NotImplementedException("Invalid chunkversion");
+                    if(Reader.ReadUInt16()!=1)throw new NotImplementedException("Invalid chunkversion");
                     LineY = Reader.ReadUInt32();
                     LineItemType = Reader.ReadUInt32();
                     EventLine = Reader.ReadUInt32();
@@ -176,6 +175,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 else if (name == EventEnd)
                 {
                     _cache = Reader.ReadBytes(122);
+                    
                     break;
                 }
                 else throw new NotImplementedException("Fuck Something is Broken");
@@ -209,7 +209,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             }
 
             
-            if (Objects.Count>0)
+            if (Objects?.Count>0)
             {
                 Console.WriteLine("Writing EventObjects");
                 Writer.WriteAscii(ObjectData);
@@ -278,9 +278,10 @@ namespace CTFAK.MMFParser.MFA.Loaders
 
 
             Writer.WriteAscii(EventEnd);
+            
             Writer.WriteBytes(_cache);
-            
-            
+
+
 
             //TODO: Fix commented part
             // 

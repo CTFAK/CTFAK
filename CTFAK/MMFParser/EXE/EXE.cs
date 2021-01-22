@@ -62,7 +62,8 @@ namespace CTFAK.MMFParser.EXE
             exeReader.Seek(possition);
             var firstShort = exeReader.PeekUInt16();
             Logger.Log("First Short: " + firstShort.ToString("X2"), true, ConsoleColor.Yellow);
-            if (firstShort != 0x7777) Settings.Old = true;
+            if (firstShort == 0x7777) Settings.Old = false;
+            else if (firstShort == 0x222c) Settings.Old = true;
             if (!Settings.Old)
             {
                 PackData = new PackData();
@@ -74,13 +75,12 @@ namespace CTFAK.MMFParser.EXE
             }
             else
             {
-                Logger.Log("Game is too old");
+                Logger.Log("Using old system");
                 var oldData = new ChunkList();
                 oldData.Read(exeReader);
                 GameData = new GameData();
                 GameData.Read(exeReader);
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Logger.Log("Failed to find PackData header!\n", true, ConsoleColor.Red);
             }
         }
     }

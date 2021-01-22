@@ -4,6 +4,7 @@ using System.IO;
 using CTFAK.MMFParser.EXE.Loaders;
 using CTFAK.MMFParser.EXE.Loaders.Banks;
 using CTFAK.MMFParser.EXE.Loaders.Events;
+using CTFAK.Properties.Locale;
 using CTFAK.Utils;
 
 namespace CTFAK.MMFParser.EXE
@@ -13,33 +14,50 @@ namespace CTFAK.MMFParser.EXE
         public List<Chunk> Chunks = new List<Chunk>();
         public bool Verbose = false;
         public List<Frame> Frames = new List<Frame>();
+        
 
         public void Read(ByteReader reader)
         {
             Chunks.Clear();
-            while (true)
+            if (!Settings.Old)
             {
-                Chunk chunk = new Chunk(Chunks.Count, this);
-                chunk.Verbose = Verbose;
-                chunk.Read(reader);
-                if (chunk.Id == 26214)
+                while (true)
                 {
-                    if(!Settings.twofiveplus) chunk.Loader = LoadChunk(chunk); 
-                    //LoadChunk(chunk); 
-                }
-                else
-                {
-                    chunk.Loader = LoadChunk(chunk); 
-                }
+                    Chunk chunk = new Chunk(Chunks.Count, this);
+                    chunk.Verbose = Verbose;
+                    chunk.Read(reader);
+                    if (chunk.Id == 26214)
+                    {
+                        if(!Settings.twofiveplus) chunk.Loader = LoadModern(chunk); 
+                        //LoadChunk(chunk); 
+                    }
+                    else
+                    {
+                        chunk.Loader = LoadModern(chunk); 
+                    }
 
-                Chunks.Add(chunk);
-                if (chunk.Id == 8750) chunk.BuildKey();
-                if (chunk.Id == 8788) Settings.twofiveplus = true;
+                    Chunks.Add(chunk);
+                    if (chunk.Id == 8750) chunk.BuildKey();
+                    if (chunk.Id == 8788) Settings.twofiveplus = true;
                 
 
-                if (reader.Tell() >= reader.Size()) break;
-                if (chunk.Id == 32639) break; //LAST chunkID
+                    if (reader.Tell() >= reader.Size()) break;
+                    if (chunk.Id == 32639) break; //LAST chunkID
+                }
             }
+            else
+            {
+                while (true)
+                {
+                    Chunk chunk = new Chunk(Chunks.Count, this);
+                    chunk.Verbose = Verbose;
+                    chunk.Read(reader);
+                    chunk.Loader = LoadOld(chunk);
+                    if (reader.Tell() >= reader.Size()) break;
+                    if (chunk.Id == 32639) break; //LAST chunkID
+                }
+            }
+            
         }
 
         public class Chunk
@@ -82,6 +100,7 @@ namespace CTFAK.MMFParser.EXE
                     exeReader.BaseStream.Position -= Size;
                     //Saving raw data cuz why not 
                 }
+                if(Settings.Old) Logger.Log("Reading old chunk"+(Constants.ChunkNames)Id);
 
                 switch (Flag)
                 {
@@ -92,7 +111,12 @@ namespace CTFAK.MMFParser.EXE
                         ChunkData = Decryption.DecodeMode3(exeReader.ReadBytes(Size), Size,Id,out DecompressedSize);
                         break;
                     case ChunkFlags.Compressed:
-                        ChunkData = Decompressor.Decompress(exeReader,out DecompressedSize);
+                        if (!Settings.Old) ChunkData = Decompressor.Decompress(exeReader, out DecompressedSize);
+                        else
+                        {
+                            Int32 decompSize = exeReader.ReadInt32();
+                            ChunkData = Decompressor.decompressOld(exeReader, Size, decompSize);
+                        }
                         break;
                     case ChunkFlags.NotCompressed:
                         ChunkData = exeReader.ReadBytes(Size);
@@ -165,7 +189,7 @@ namespace CTFAK.MMFParser.EXE
             CompressedAndEncrypted = 3
         }
 
-        public ChunkLoader LoadChunk(Chunk chunk)
+        public ChunkLoader LoadModern(Chunk chunk)
         {
             ChunkLoader loader = null;
             switch (chunk.Id)
@@ -272,6 +296,26 @@ namespace CTFAK.MMFParser.EXE
             loader?.Read();
             return loader;
         }
+
+        public ChunkLoader LoadOld(Chunk chunk)
+        {
+            ChunkLoader loader = null;
+            switch (chunk.Id)
+            {
+                case 8739:
+                    loader = new AppHeader(chunk);
+                    break;
+            }
+            loader?.Read();
+            return loader;
+
+        }
+        
+        
+        
+        
+        
+        
         public T GetChunk<T>() where T : ChunkLoader
         {
             foreach (Chunk chunk in Chunks)

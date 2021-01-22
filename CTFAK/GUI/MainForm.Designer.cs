@@ -62,6 +62,7 @@
             this.dumpPackButton = new System.Windows.Forms.Button();
             this.packDataListBox = new System.Windows.Forms.ListBox();
             this.objViewerTab = new System.Windows.Forms.TabPage();
+            this.dumpSelectedBtn = new System.Windows.Forms.Button();
             this.objViewerInfo = new System.Windows.Forms.Label();
             this.imageViewerPlayAnim = new System.Windows.Forms.Button();
             this.imageViewPictureBox = new System.Windows.Forms.PictureBox();
@@ -85,7 +86,6 @@
             this.updateSettings = new System.Windows.Forms.Button();
             this.colorBox = new System.Windows.Forms.TextBox();
             this.packDataDialog = new System.Windows.Forms.SaveFileDialog();
-            this.dumpSelectedBtn = new System.Windows.Forms.Button();
             this.ChunkCombo.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.mainTab.SuspendLayout();
@@ -184,7 +184,7 @@
             this.imageBar.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.imageBar.BackColor = System.Drawing.Color.Black;
             this.imageBar.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.imageBar.Location = new System.Drawing.Point(97, 272);
+            this.imageBar.Location = new System.Drawing.Point(97, 326);
             this.imageBar.Name = "imageBar";
             this.imageBar.Size = new System.Drawing.Size(126, 24);
             this.imageBar.Step = 2;
@@ -199,7 +199,7 @@
             this.imageLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.imageLabel.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.imageLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.imageLabel.Location = new System.Drawing.Point(229, 272);
+            this.imageLabel.Location = new System.Drawing.Point(229, 326);
             this.imageLabel.Name = "imageLabel";
             this.imageLabel.Size = new System.Drawing.Size(126, 24);
             this.imageLabel.TabIndex = 9;
@@ -214,7 +214,7 @@
             this.soundLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.soundLabel.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.soundLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.soundLabel.Location = new System.Drawing.Point(229, 320);
+            this.soundLabel.Location = new System.Drawing.Point(229, 374);
             this.soundLabel.Name = "soundLabel";
             this.soundLabel.Size = new System.Drawing.Size(126, 24);
             this.soundLabel.TabIndex = 11;
@@ -227,7 +227,7 @@
             this.soundBar.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.soundBar.BackColor = System.Drawing.Color.Black;
             this.soundBar.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.soundBar.Location = new System.Drawing.Point(97, 320);
+            this.soundBar.Location = new System.Drawing.Point(97, 374);
             this.soundBar.Name = "soundBar";
             this.soundBar.Size = new System.Drawing.Size(126, 23);
             this.soundBar.Step = 2;
@@ -242,7 +242,7 @@
             this.FolderBTN.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.FolderBTN.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.FolderBTN.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.FolderBTN.Location = new System.Drawing.Point(8, 214);
+            this.FolderBTN.Location = new System.Drawing.Point(8, 268);
             this.FolderBTN.Name = "FolderBTN";
             this.FolderBTN.Size = new System.Drawing.Size(83, 42);
             this.FolderBTN.TabIndex = 12;
@@ -258,7 +258,7 @@
             this.soundsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.soundsButton.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.soundsButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.soundsButton.Location = new System.Drawing.Point(8, 310);
+            this.soundsButton.Location = new System.Drawing.Point(8, 364);
             this.soundsButton.Name = "soundsButton";
             this.soundsButton.Size = new System.Drawing.Size(83, 42);
             this.soundsButton.TabIndex = 14;
@@ -274,7 +274,7 @@
             this.imagesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.imagesButton.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.imagesButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.imagesButton.Location = new System.Drawing.Point(8, 262);
+            this.imagesButton.Location = new System.Drawing.Point(8, 316);
             this.imagesButton.Name = "imagesButton";
             this.imagesButton.Size = new System.Drawing.Size(83, 42);
             this.imagesButton.TabIndex = 15;
@@ -326,7 +326,7 @@
             this.musicsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.musicsButton.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.musicsButton.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.musicsButton.Location = new System.Drawing.Point(8, 358);
+            this.musicsButton.Location = new System.Drawing.Point(8, 412);
             this.musicsButton.Name = "musicsButton";
             this.musicsButton.Size = new System.Drawing.Size(83, 42);
             this.musicsButton.TabIndex = 21;
@@ -340,7 +340,7 @@
             this.musicBar.Anchor = ((System.Windows.Forms.AnchorStyles) ((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.musicBar.BackColor = System.Drawing.Color.Black;
             this.musicBar.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.musicBar.Location = new System.Drawing.Point(97, 368);
+            this.musicBar.Location = new System.Drawing.Point(97, 422);
             this.musicBar.Name = "musicBar";
             this.musicBar.Size = new System.Drawing.Size(126, 23);
             this.musicBar.Step = 2;
@@ -355,7 +355,7 @@
             this.musicLabel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.musicLabel.Font = new System.Drawing.Font("Courier New", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.musicLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.musicLabel.Location = new System.Drawing.Point(229, 368);
+            this.musicLabel.Location = new System.Drawing.Point(229, 422);
             this.musicLabel.Name = "musicLabel";
             this.musicLabel.Size = new System.Drawing.Size(126, 24);
             this.musicLabel.TabIndex = 23;
@@ -534,6 +534,17 @@
             this.objViewerTab.Size = new System.Drawing.Size(935, 479);
             this.objViewerTab.TabIndex = 1;
             this.objViewerTab.Text = "Objects";
+            // 
+            // dumpSelectedBtn
+            // 
+            this.dumpSelectedBtn.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.dumpSelectedBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.dumpSelectedBtn.Location = new System.Drawing.Point(201, 426);
+            this.dumpSelectedBtn.Name = "dumpSelectedBtn";
+            this.dumpSelectedBtn.Size = new System.Drawing.Size(731, 25);
+            this.dumpSelectedBtn.TabIndex = 4;
+            this.dumpSelectedBtn.Text = "Dump Selected";
+            this.dumpSelectedBtn.UseVisualStyleBackColor = true;
             // 
             // objViewerInfo
             // 
@@ -785,18 +796,6 @@
             // packDataDialog
             // 
             this.packDataDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.packDataDialog_FileOk);
-            // 
-            // dumpSelectedBtn
-            // 
-            this.dumpSelectedBtn.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dumpSelectedBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.dumpSelectedBtn.Location = new System.Drawing.Point(201, 426);
-            this.dumpSelectedBtn.Name = "dumpSelectedBtn";
-            this.dumpSelectedBtn.Size = new System.Drawing.Size(731, 25);
-            this.dumpSelectedBtn.TabIndex = 4;
-            this.dumpSelectedBtn.Text = "Dump Selected";
-            this.dumpSelectedBtn.UseVisualStyleBackColor = true;
-            this.dumpSelectedBtn.MouseClick += dumpSelectedBtn_Click;
             // 
             // MainForm
             // 

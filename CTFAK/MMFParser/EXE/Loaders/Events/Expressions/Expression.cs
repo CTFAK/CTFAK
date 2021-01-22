@@ -27,6 +27,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
             if (ObjectType == Constants.ObjectType.System &&
                 (Num == 0 || Num == 3 || Num == 23 || Num == 24 || Num == 50))
             {
+                if(Loader==null) throw new NotImplementedException("Broken expression: "+Num);
                 Loader.Write(newWriter);
             }
             else if ((int) ObjectType >= 2 || (int) ObjectType == -7)
@@ -34,14 +35,12 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
                 newWriter.WriteInt16((short) ObjectInfo);
                 newWriter.WriteInt16((short) ObjectInfoList);
                 if(Num==16||Num==19)Loader.Write(newWriter);
-
             }
-
             newWriter.WriteInt32(0);
             newWriter.WriteUInt16(0);
+            
             Writer.WriteInt16((short) ((newWriter.Size())));
             Writer.WriteWriter(newWriter);
-
 
         }
 
@@ -64,8 +63,8 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
             {
                 if(Num==0) Loader=new LongExp(Reader);
                 else if(Num==3) Loader= new StringExp(Reader);
-                else if (Num == 23) Loader = null;
-                else if (Num == 24) Loader = null;
+                else if (Num == 23) Loader = new DoubleExp(Reader);
+                else if (Num == 24) Loader = new GlobalCommon(Reader);
                 else if (Num == 50) Loader = null;
                 else if((int)ObjectType>=2|| (int)ObjectType==-7)
                 {
@@ -194,6 +193,52 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
         public override void Write(ByteWriter Writer)
         {
            Writer.WriteInt16((short) Value);
+        }
+    }
+    public class DoubleExp:ExpressionLoader
+    {
+        public float FloatValue;
+
+        public DoubleExp(ByteReader reader) : base(reader)
+        {
+        }
+
+        public DoubleExp(ChunkList.Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+            Value = Reader.ReadDouble();
+            FloatValue = Reader.ReadSingle();
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteDouble((double) Value);
+            Writer.WriteSingle(FloatValue);
+        }
+    }
+    public class GlobalCommon:ExpressionLoader
+    {
+        public GlobalCommon(ByteReader reader) : base(reader)
+        {
+        }
+
+        public GlobalCommon(ChunkList.Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+            Reader.ReadInt32();
+            Value = Reader.ReadInt32();
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt32(0);
+            Writer.WriteInt32((int) Value);
         }
     }
 }

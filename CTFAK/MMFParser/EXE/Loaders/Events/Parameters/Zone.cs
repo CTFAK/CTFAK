@@ -15,7 +15,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
 
         public override void Read()
         {
-            base.Read();
             X1 = Reader.ReadInt16();
             Y1 = Reader.ReadInt16();
             X2 = Reader.ReadInt16();
@@ -24,7 +23,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
 
         public override void Write(ByteWriter Writer)
         {
-            base.Write(Writer);
             Writer.WriteInt16(X1);
             Writer.WriteInt16(Y1);
             Writer.WriteInt16(X2);

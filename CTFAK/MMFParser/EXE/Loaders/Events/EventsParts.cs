@@ -23,7 +23,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         public override void Write(ByteWriter Writer)
         {
             ByteWriter newWriter = new ByteWriter(new MemoryStream());
-            Logger.Log($"{ObjectType}-{Num}-{ObjectInfo}-{ObjectInfoList}-{Flags}-{OtherFlags}-{Items.Count}-{DefType}-{Identifier}");
+            // Logger.Log($"{ObjectType}-{Num}-{ObjectInfo}-{ObjectInfoList}-{Flags}-{OtherFlags}-{Items.Count}-{DefType}-{Identifier}");
             newWriter.WriteInt16((short) ObjectType);
             if (Num == -42) Num = -27;
             newWriter.WriteInt16((short) Num);
@@ -68,7 +68,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                 item.Read();
                 Items.Add(item);
             }
-            Logger.Log(this);
+            // Logger.Log(this);
             Reader.Seek(currentPosition + size);
             
 
@@ -137,7 +137,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                 item.Read();
                 Items.Add(item);
             }
-            Logger.Log(this);
+            // Logger.Log(this);
 
         }
         public override string ToString()

@@ -32,7 +32,7 @@ namespace CTFAK
             }
             LoadableSettings.FromFile("settings.sav");
             //
-            
+            // MFAGenerator.WriteTestMFA();
             // MFAGenerator.ReadTestMFA();
             // Environment.Exit(0);
             AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>

@@ -39,6 +39,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     AnimationDict.Add(i,anim);
                     
                 }
+                else
+                {
+                    AnimationDict.Add(i,new Animation((ByteReader) null));
+                }
 
             }
             
@@ -89,6 +93,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     dir.Read();
                     DirectionDict.Add(i,dir);
                 }
+                
             }
         }
 

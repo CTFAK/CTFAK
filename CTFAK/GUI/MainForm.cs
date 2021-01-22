@@ -494,6 +494,8 @@ namespace CTFAK.GUI
 
         private void dumpMFAButton_Click(object sender, EventArgs e)
         {
+            var msg = MessageBox.Show("By using CTFAK, you agree that you will only used the decompiled MFAs for personal use and educational purposes.\nYou also agree that unless you are the original creator or have been given permission, you will not recompile any games using this tool.","Warning",MessageBoxButtons.OKCancel);
+            if(msg != DialogResult.OK) Environment.Exit(0);
             var worker = new BackgroundWorker();
             worker.DoWork += (workSender, workE) => MFAGenerator.BuildMFA();
             worker.RunWorkerCompleted += (workSender, workE) =>
@@ -624,41 +626,45 @@ namespace CTFAK.GUI
                             if (common.Parent.ObjectType == 2) //Active
                             {
                                 if (common.Animations != null)
-                                    foreach (var pair in common.Animations.AnimationDict)
+                                    foreach (var pair in common.Animations?.AnimationDict)
                                     {
                                         var animNode = new ChunkNode($"Animation {pair.Key}", pair.Value);
                                         objInstNode.Nodes.Add(animNode);
-                                        foreach (var dir in pair.Value.DirectionDict)
-                                            if (pair.Value.DirectionDict.Count > 1)
-                                            {
-                                                var dirNode = new ChunkNode(
-                                                    $"Direction {pair.Value.DirectionDict.ToList().IndexOf(dir)}",
-                                                    dir.Value);
-                                                animNode.Nodes.Add(dirNode);
-                                                for (var a = 0; a < dir.Value.Frames.Count; a++)
+                                        if (pair.Value?.DirectionDict != null)
+                                        if (pair.Value?.DirectionDict != null)
+                                        {
+                                            foreach (var dir in pair.Value?.DirectionDict)
+                                                if (pair.Value.DirectionDict.Count > 1)
                                                 {
-                                                    var animFrame = dir.Value.Frames[a];
-                                                    bank.Images.TryGetValue(animFrame, out var img);
-                                                    if (img != null)
+                                                    var dirNode = new ChunkNode(
+                                                        $"Direction {pair.Value.DirectionDict.ToList().IndexOf(dir)}",
+                                                        dir.Value);
+                                                    animNode.Nodes.Add(dirNode);
+                                                    for (var a = 0; a < dir.Value.Frames.Count; a++)
                                                     {
-                                                        var animFrameNode = new ChunkNode(a.ToString(), img);
-                                                        dirNode.Nodes.Add(animFrameNode);
+                                                        var animFrame = dir.Value.Frames[a];
+                                                        bank.Images.TryGetValue(animFrame, out var img);
+                                                        if (img != null)
+                                                        {
+                                                            var animFrameNode = new ChunkNode(a.ToString(), img);
+                                                            dirNode.Nodes.Add(animFrameNode);
+                                                        }
                                                     }
                                                 }
-                                            }
-                                            else
-                                            {
-                                                for (var a = 0; a < dir.Value.Frames.Count; a++)
+                                                else
                                                 {
-                                                    var animFrame = dir.Value.Frames[a];
-                                                    bank.Images.TryGetValue(animFrame, out var img);
-                                                    if (img != null)
+                                                    for (var a = 0; a < dir.Value.Frames.Count; a++)
                                                     {
-                                                        var animFrameNode = new ChunkNode(a.ToString(), img);
-                                                        animNode.Nodes.Add(animFrameNode);
+                                                        var animFrame = dir.Value.Frames[a];
+                                                        bank.Images.TryGetValue(animFrame, out var img);
+                                                        if (img != null)
+                                                        {
+                                                            var animFrameNode = new ChunkNode(a.ToString(), img);
+                                                            animNode.Nodes.Add(animFrameNode);
+                                                        }
                                                     }
                                                 }
-                                            }
+                                        }
                                     }
                             }
                             else if(common.Parent.ObjectType==7)//Counter

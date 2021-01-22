@@ -395,6 +395,7 @@ namespace CTFAK.MMFParser.MFA
 
             List<int> frameOffsets = new List<int>();
             var offCount = Reader.ReadInt32();
+            Logger.Log("FRAME COUNT: "+offCount);
             for (int i = 0; i < offCount; i++)
             {
                 frameOffsets.Add(Reader.ReadInt32());

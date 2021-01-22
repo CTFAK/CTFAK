@@ -80,10 +80,13 @@ namespace CTFAK.MMFParser.MFA.Loaders
                
 
             }
+            else if(ObjectType==7)
+            {
+                Loader = new Counter(Reader);
+            }
             else if(ObjectType==2)
             {
                 Loader = new Active(Reader);
-                
             }
             Loader?.Read();
             
