@@ -16,10 +16,12 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
         public DataLoader Loader;
         public int Unk1;
         public ushort Unk2;
+        private int _unk;
         public Expression(ByteReader reader) : base(reader) { }
 
         public override void Write(ByteWriter Writer)
         {
+            bool temp = false;
             Writer.WriteInt16((short) ObjectType);
             Writer.WriteInt16((short) Num);
             if (ObjectType == 0 && Num == 0) return;
@@ -35,11 +37,26 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
                 newWriter.WriteInt16((short) ObjectInfo);
                 newWriter.WriteInt16((short) ObjectInfoList);
                 if(Num==16||Num==19)Loader.Write(newWriter);
+                else
+                {
+                    temp = true;
+                    newWriter.WriteInt32(_unk);
+                }
             }
-            newWriter.WriteInt32(0);
-            newWriter.WriteUInt16(0);
-            
-            Writer.WriteInt16((short) ((newWriter.Size())));
+            else
+            {
+                
+            }
+            // 
+            // newWriter.WriteUInt16(0);
+            if (temp)
+            {
+                Writer.WriteInt16((short) ((newWriter.Size()+2))); 
+            }
+            else
+            {
+                Writer.WriteInt16((short) ((newWriter.Size()+6))); 
+            }
             Writer.WriteWriter(newWriter);
 
         }
@@ -73,6 +90,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
                     if (Num == 16 || Num == 19)
                     {
                         Loader = new ExtensionExp(Reader);
+                    }
+                    else
+                    {
+                        _unk = Reader.ReadInt32();
                     }
                 }
             }
@@ -155,6 +176,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
     public class LongExp:ExpressionLoader
     {
         public int Val1;
+        private int _unk;
 
         public LongExp(ByteReader reader) : base(reader)
         {
@@ -166,13 +188,15 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
 
         public override void Read()
         {
+            // _unk = Reader.ReadInt32();
             Value = Reader.ReadInt32();
         }
 
         public override void Write(ByteWriter Writer)
         {
-           
+            // Writer.WriteInt32((int) _unk);
             Writer.WriteInt32((int) Value);
+            
         }
     }
     public class ExtensionExp:ExpressionLoader

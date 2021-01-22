@@ -43,6 +43,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
                 // Logger.Log("Writing expression: "+item.Num);
                 item.Write(Writer);
             }
+            Writer.WriteInt32(0);
             
         }
 

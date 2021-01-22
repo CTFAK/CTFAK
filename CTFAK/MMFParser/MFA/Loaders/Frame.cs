@@ -114,13 +114,13 @@ namespace CTFAK.MMFParser.MFA.Loaders
             
 
             Events.Write(Writer);
-                // for (int i=0;i<Layers.Count;i++)
-                // {
-                    // Writer.WriteInt32(0);
-                    // Writer.WriteInt32(0);
-                    // Writer.WriteInt16(0);
-                // }  
-                // Writer.WriteInt32(0);
+
+            for (int i = 0; i < Layers.Count-1; i++)
+            {
+                Writer.WriteColor(Layers[i].RGBCoeff);
+                Writer.WriteInt32(Layers[i].Unk1);
+                Writer.WriteInt32(Layers[i].Unk2);
+            }
             
             Chunks.Write(Writer);
         }
@@ -156,6 +156,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             StampHandle = Reader.ReadInt32();
             ActiveLayer = Reader.ReadInt32();
             int layersCount = Reader.ReadInt32();
+            Logger.Log("Layers: "+layersCount);
             for (int i = 0; i < layersCount; i++)
             {
                 var layer = new Layer(Reader);
@@ -205,6 +206,12 @@ namespace CTFAK.MMFParser.MFA.Loaders
 
             Events = new Events(Reader);
             Events.Read();
+            for (int i=0;i<Layers.Count-1;i++)
+            {
+                Layers[i].RGBCoeff= Reader.ReadColor();
+                Layers[i].Unk1=Reader.ReadInt32();
+                Layers[i].Unk2=Reader.ReadInt32();
+            } 
             
             Chunks = new ChunkList(Reader);
             Chunks.Read();

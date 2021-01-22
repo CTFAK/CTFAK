@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using CTFAK.MMFParser.EXE;
 using CTFAK.Utils;
 
@@ -22,6 +23,10 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 "PreviousEffect"
             }
         );
+
+        public Color RGBCoeff=Color.White;
+        public int Unk1=0;
+        public int Unk2=0;
 
 
         public override void Write(ByteWriter Writer)

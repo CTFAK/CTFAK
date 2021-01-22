@@ -20,7 +20,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             {
                 Writer.WriteInt8(0);
             }
-        }
+        } 
 
         public override void Print()
         {

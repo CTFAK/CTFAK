@@ -629,8 +629,8 @@ namespace CTFAK.GUI
                                     foreach (var pair in common.Animations?.AnimationDict)
                                     {
                                         var animNode = new ChunkNode($"Animation {pair.Key}", pair.Value);
+                                        if (pair.Value.Reader == null) continue;
                                         objInstNode.Nodes.Add(animNode);
-                                        if (pair.Value?.DirectionDict != null)
                                         if (pair.Value?.DirectionDict != null)
                                         {
                                             foreach (var dir in pair.Value?.DirectionDict)

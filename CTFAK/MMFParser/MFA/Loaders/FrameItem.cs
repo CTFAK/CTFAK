@@ -88,7 +88,8 @@ namespace CTFAK.MMFParser.MFA.Loaders
             {
                 Loader = new Active(Reader);
             }
-            Loader?.Read();
+            else throw new NotImplementedException("Unsupported object: "+ObjectType);
+            Loader.Read();
             
 
 
