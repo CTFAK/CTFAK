@@ -82,9 +82,7 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
             Writer.WriteUInt32(Flags);
         }
 
-        public override void Print()
-        {
-            throw new System.NotImplementedException();
-        }
+        public override void Print(){}
+        
     }
 }

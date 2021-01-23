@@ -150,8 +150,7 @@ namespace CTFAK.MMFParser.Translation
                     newLayer.XCoefficient = layer.XCoeff;
                     newLayer.YCoefficient = layer.YCoeff;
                     newLayer.RGBCoeff = Color.FromArgb(255,0,0,255);
-                    newLayer.Unk1 = 0;
-                    newLayer.Unk2 = 65535;
+        
                     newFrame.Layers.Add(newLayer);
                     break;
                     // 
@@ -338,7 +337,7 @@ namespace CTFAK.MMFParser.Translation
             newItem.Name = item.Name;
             newItem.ObjectType = (int)item.ObjectType;
             newItem.Handle = item.Handle;
-            newItem.Transparent = item.Transparent ? 1 : 0;
+            newItem.Transparent = 1;
             newItem.InkEffect = item.InkEffect;
             newItem.InkEffectParameter = item.InkEffectValue;
             newItem.AntiAliasing = item.Antialias ? 1 : 0;
@@ -380,9 +379,9 @@ namespace CTFAK.MMFParser.Translation
                 Logger.Log("Translating Object: " + itemLoader.Parent.Name);
                 //CommonSection
                 var newObject = new ObjectLoader(null);
-                newObject.ObjectFlags = (int) (itemLoader?.Flags?.flag ?? 820);
-                newObject.NewObjectFlags = (int) (itemLoader?.NewFlags?.flag ?? 8);
-                newObject.BackgroundColor = Color.Black; //itemLoader.BackColor;
+                newObject.ObjectFlags = (int) (itemLoader.Flags.flag);
+                newObject.NewObjectFlags = (int) (itemLoader.NewFlags.flag);
+                newObject.BackgroundColor = itemLoader.BackColor;
                 //newLoader.Qualifiers;
                 newObject.Strings = ConvertStrings(itemLoader.Strings);
                 newObject.Values = ConvertValue(itemLoader.Values);

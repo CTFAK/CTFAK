@@ -11,12 +11,9 @@ namespace CTFAK.MMFParser.MFA.Loaders
         public ValueList(ByteReader reader) : base(reader)
         {
         }
-
-
-        public override void Print()
-        {
-            throw new NotImplementedException();
-        }
+        
+        public override void Print(){}
+        
 
         public override void Read()
         {
@@ -32,11 +29,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
         public override void Write(ByteWriter Writer)
         {
             Writer.WriteInt32(Items.Count);
-            foreach (var item in Items)
-            {
-                item.Write(Writer);
-            }
-            
+            foreach (var item in Items) item.Write(Writer);
         }
     }
     public class ValueItem: DataLoader

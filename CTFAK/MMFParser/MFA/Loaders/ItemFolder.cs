@@ -11,14 +11,8 @@ namespace CTFAK.MMFParser.MFA.Loaders
         public uint UnkHeader;
         public bool isRetard;
 
-        public ItemFolder(ByteReader reader) : base(reader)
-        {
-        }
-
-        public ItemFolder(EXE.ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
-
+        public ItemFolder(ByteReader reader) : base(reader){}
+        public ItemFolder(EXE.ChunkList.Chunk chunk) : base(chunk){}
         public override void Read()
         {
             UnkHeader = Reader.ReadUInt32();
@@ -60,15 +54,8 @@ namespace CTFAK.MMFParser.MFA.Loaders
                     Writer.WriteUInt32(item);
                 }
             }
-
-            
-            
-            
         }
-
-        public override void Print()
-        {
-            throw new System.NotImplementedException();
-        }
+        public override void Print(){}
+        
     }
 }

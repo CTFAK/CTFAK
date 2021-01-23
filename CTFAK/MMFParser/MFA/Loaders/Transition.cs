@@ -49,9 +49,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             Writer.WriteBytes(ParameterData);
         }
 
-        public override void Print()
-        {
-            throw new System.NotImplementedException();
-        }
+        public override void Print(){}
+        
     }
 }

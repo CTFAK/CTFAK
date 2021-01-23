@@ -118,11 +118,8 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
             
         }
 
-        public override void Print()
-        {
-            throw new NotImplementedException();
-        }
-
+        public override void Print(){}
+        
         public override void Read()
         {
             Index = Reader.ReadInt32();

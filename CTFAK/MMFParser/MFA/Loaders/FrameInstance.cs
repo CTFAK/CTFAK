@@ -14,14 +14,8 @@ namespace CTFAK.MMFParser.MFA.Loaders
         public uint ParentHandle;
         public uint ItemHandle;
 
-        public FrameInstance(ByteReader reader) : base(reader)
-        {
-        }
-
-        public FrameInstance(EXE.ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
-
+        public FrameInstance(ByteReader reader) : base(reader){}
+        public FrameInstance(EXE.ChunkList.Chunk chunk) : base(chunk){}
         public override void Read()
         {
             X = Reader.ReadInt32();
@@ -44,12 +38,9 @@ namespace CTFAK.MMFParser.MFA.Loaders
             Writer.WriteUInt32(ParentType);
             Writer.WriteUInt32(ItemHandle);
             Writer.WriteInt32((int) ParentHandle);
-            
         }
 
-        public override void Print()
-        {
-            throw new System.NotImplementedException();
-        }
+        public override void Print(){}
+        
     }
 }

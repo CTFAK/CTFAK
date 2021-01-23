@@ -103,7 +103,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public string Name => _name.Value;
         public string Password => _password.Value;
         public Color Background => _header.Background;
-        public List<ObjectInstance> Objects => _objects.Items;
+        public List<ObjectInstance> Objects => _objects?.Items ?? null;
         public List<Color> Palette => _palette.Items;
         public Events.Events Events => _events;
         public List<Layer> Layers => _layers.Items;

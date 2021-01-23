@@ -133,7 +133,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
         }
         public override void Read(){}
         public override void Print(bool ext){}
-
         public override string[] GetReadableData() => null;
 
     }
@@ -155,10 +154,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
             Handle = Reader.ReadInt16();
             ObjectType = Reader.ReadInt16();
-            Flags = Reader.ReadUInt16();
             Int16 reserved = Reader.ReadInt16();
-            InkEffect = Reader.ReadUInt32();
-            InkEffectParameter = Reader.ReadUInt32();
+            Flags = Reader.ReadUInt16();
+            InkEffect = Reader.ReadByte();
+            InkEffectParameter = Reader.ReadByte(); 
+            Logger.Log("InkParam: "+InkEffectParameter);
         }
     }
 }

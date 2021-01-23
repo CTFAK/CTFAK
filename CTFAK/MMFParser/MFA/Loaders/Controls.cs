@@ -9,16 +9,8 @@ namespace CTFAK.MMFParser.MFA.Loaders
     {
         public List<PlayerControl> Items;
 
-        public Controls(ByteReader reader) : base(reader)
-        {
-        }
-
-        
-        public override void Print()
-        {
-            throw new NotImplementedException();
-        }
-
+        public Controls(ByteReader reader) : base(reader){}
+        public override void Print(){}
         public override void Read()
         {
             Items = new List<PlayerControl>();

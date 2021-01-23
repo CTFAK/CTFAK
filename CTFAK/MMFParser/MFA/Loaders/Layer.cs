@@ -25,8 +25,19 @@ namespace CTFAK.MMFParser.MFA.Loaders
         );
 
         public Color RGBCoeff=Color.White;
-        public int Unk1=0;
-        public int Unk2=0;
+        public uint Unk1;
+        public uint Unk2;
+        public uint Unk3;
+        public byte Unk4;
+        public byte Unk5;
+        public byte Unk6;
+        public byte Unk7;
+        public byte Unk8;
+        public byte Unk9;
+        public byte Unk10;
+        public byte Unk11;
+        public byte Unk12;
+        
 
 
         public override void Write(ByteWriter Writer)

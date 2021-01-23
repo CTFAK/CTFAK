@@ -9,6 +9,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
     {
         List<DataLoader> _items = new List<DataLoader>();
         public byte[] Saved;
+        public bool Log;
 
         public override void Write(ByteWriter Writer)
         {
@@ -33,6 +34,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             while(true)
             {
                 var id = Reader.ReadByte();
+                if(Log)Logger.Log("ChunkID: "+id);
                 if(id==0) break;
                 var data = new ByteReader(Reader.ReadBytes((int) Reader.ReadUInt32()));
                 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Web.UI.WebControls;
 using CTFAK.MMFParser.EXE;
 using CTFAK.MMFParser.MFA.Loaders.mfachunks;
 using CTFAK.Utils;
@@ -72,7 +73,9 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 throw new NotImplementedException("invalid icon");
             }
             Chunks = new ChunkList(Reader);
+            Chunks.Log = true;
             Chunks.Read();
+            
             if (MFA.defaultObjChunks == null) MFA.defaultObjChunks = Chunks;
             if(ObjectType>=32)//extension base
             {

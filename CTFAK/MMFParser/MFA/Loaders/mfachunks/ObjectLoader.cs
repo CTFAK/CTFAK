@@ -22,26 +22,16 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
             Writer.WriteInt32(NewObjectFlags);
             Writer.WriteColor(BackgroundColor);
 
-            /*for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 9; i++)
             {
-                try
-                {
-                    var value = _qualifiers[i];
-                    Writer.WriteInt16(-1);
-                    
-                }
-                catch
+                if(_qualifiers.Count<i) Writer.WriteInt16(_qualifiers[i]);
+                else
                 {
                     Writer.WriteInt16(-1);
                     break;
                 }
-            }*/
-
-            for (int i = 0; i < 9; i++)
-            {
-                Writer.WriteInt16(-1);//WTF HELP
             }
-            
+
             Values.Write(Writer);
             Strings.Write(Writer);
             Movements.Write(Writer);
