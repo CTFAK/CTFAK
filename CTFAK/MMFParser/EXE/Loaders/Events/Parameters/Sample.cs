@@ -21,6 +21,8 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
             Writer.WriteInt16((short) Handle);
             Writer.WriteUInt16((ushort) Flags);
             Writer.WriteUnicode(Name);
+            Writer.Skip(120);
+            Writer.WriteInt16(0);
         }
 
         public override string ToString()

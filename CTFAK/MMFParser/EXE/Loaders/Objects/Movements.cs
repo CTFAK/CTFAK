@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Web.UI.WebControls;
 using CTFAK.Utils;
 
 namespace CTFAK.MMFParser.EXE.Loaders.Objects
@@ -79,8 +82,18 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 case 1:
                     Loader = new Mouse(Reader);
                     break;
-                
+                case 3:
+                    Loader=new EightDirections(Reader);
+                    break;
+                case 5:
+                    Loader=new MovementPath(Reader);
+                    break;
+                case 4:
+                    Loader=new Ball(Reader);
+                    break;
+
             }
+            if(Loader==null&&Type!=0) throw new Exception("Unsupported movement: "+Type);
             Loader?.Read();
         }
 
@@ -125,6 +138,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         public short X2;
         public short Y1;
         public short Y2;
+        private short _unusedFlags;
 
         public Mouse(ByteReader reader) : base(reader)
         {
@@ -140,17 +154,195 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             X2 = Reader.ReadInt16();
             Y1 = Reader.ReadInt16();
             Y2 = Reader.ReadInt16();
-            var unusedFlags = Reader.ReadInt16();
+            _unusedFlags = Reader.ReadInt16();
         }
 
         public override void Write(ByteWriter Writer)
         {
+            Logger.Log("Writing mouse mov");
             Writer.WriteInt16(X1);
             Writer.WriteInt16(X2);
             Writer.WriteInt16(Y1);
             Writer.WriteInt16(Y2);
-            Writer.WriteInt16(0);
+            Writer.WriteInt16(_unusedFlags);
             
+        }
+    }
+    public class MovementPath:MovementLoader
+    {
+        public short MinimumSpeed;
+        public short MaximumSpeed;
+        public byte Loop;
+        public byte RepositionAtEnd;
+        public byte ReverseAtEnd;
+        public List<MovementStep> Steps;
+
+        public MovementPath(ByteReader reader) : base(reader)
+        {
+        }
+
+        public MovementPath(ChunkList.Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+            var count = Reader.ReadInt16();
+            MinimumSpeed = Reader.ReadInt16();
+            MaximumSpeed = Reader.ReadInt16();
+            Loop = Reader.ReadByte();
+            RepositionAtEnd = Reader.ReadByte();
+            ReverseAtEnd = Reader.ReadByte();
+            Reader.Skip(1);
+            Steps = new List<MovementStep>();
+            for (int i = 0; i < count; i++)
+            {
+                var currentPosition = Reader.Tell();
+
+                Reader.Skip(1);
+                var size = Reader.ReadByte();
+                var step =new MovementStep(Reader);
+                step.Read();
+                Steps.Add(step);
+                Reader.Seek(currentPosition + size);
+            }
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt16((short) Steps.Count);
+            Writer.WriteInt16(MinimumSpeed);
+            Writer.WriteInt16(MaximumSpeed);
+            Writer.WriteInt8(Loop);
+            Writer.WriteInt8(RepositionAtEnd);
+            Writer.WriteInt8(ReverseAtEnd);
+            Writer.WriteInt8(0);
+            foreach (MovementStep step in Steps)
+            {
+                Writer.WriteInt8(0);
+                var newWriter = new ByteWriter(new MemoryStream());
+                step.Write(newWriter);
+                Writer.WriteInt8((byte) (newWriter.Size()+2));
+                Writer.WriteWriter(newWriter);
+            }
+            
+        }
+    }
+    public class MovementStep:MovementLoader
+    {
+        public byte Speed;
+        public byte Direction;
+        public short DestinationX;
+        public short DestinationY;
+        public short Cosinus;
+        public short Sinus;
+        public short Length;
+        public short Pause;
+        public string Name;
+
+        public MovementStep(ByteReader reader) : base(reader)
+        {
+        }
+
+        public MovementStep(ChunkList.Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+            Speed = Reader.ReadByte();
+            Direction = Reader.ReadByte();
+            DestinationX = Reader.ReadInt16();
+            DestinationY = Reader.ReadInt16();
+            Cosinus = Reader.ReadInt16();
+            Sinus = Reader.ReadInt16();
+            Length = Reader.ReadInt16();
+            Pause = Reader.ReadInt16();
+            Name = Reader.ReadAscii();
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt8(Speed);
+            Writer.WriteInt8(Direction);
+            Writer.WriteInt16(DestinationX);
+            Writer.WriteInt16(DestinationY);
+            Writer.WriteInt16(Cosinus);
+            Writer.WriteInt16(Sinus);
+            Writer.WriteInt16(Length);
+            Writer.WriteInt16(Pause);
+            Writer.WriteAscii(Name);
+        }
+    }
+    public class Ball:MovementLoader
+    {
+        public short Speed;
+        public short Randomizer;
+        public short Angles;
+        public short Security;
+        public short Deceleration;
+
+        public Ball(ByteReader reader) : base(reader)
+        {
+        }
+
+        public Ball(ChunkList.Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+            Speed = Reader.ReadInt16();
+            Randomizer = Reader.ReadInt16();
+            Angles = Reader.ReadInt16();
+            Security = Reader.ReadInt16();
+            Deceleration = Reader.ReadInt16();
+            
+
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt16(Speed);
+            Writer.WriteInt16(Randomizer);
+            Writer.WriteInt16(Angles);
+            Writer.WriteInt16(Security);
+            Writer.WriteInt16(Deceleration);
+            
+        }
+    }
+    public class EightDirections:MovementLoader
+    {
+        public short Speed;
+        public short Acceleration;
+        public short Deceleration;
+        public short Directions;
+        public short BounceFactor;
+
+        public EightDirections(ByteReader reader) : base(reader)
+        {
+        }
+
+        public EightDirections(ChunkList.Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+            Speed = Reader.ReadInt16();
+            Acceleration = Reader.ReadInt16();
+            Deceleration = Reader.ReadInt16();
+            BounceFactor = Reader.ReadInt16();
+            Directions = Reader.ReadInt16();
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt16(Speed);
+            Writer.WriteInt16(Acceleration);
+            Writer.WriteInt16(Deceleration);
+            Writer.WriteInt16(BounceFactor);
+            Writer.WriteInt16(Directions);
         }
     }
 }

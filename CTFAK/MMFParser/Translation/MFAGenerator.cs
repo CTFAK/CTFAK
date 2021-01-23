@@ -46,6 +46,8 @@ namespace CTFAK.MMFParser.Translation
             Logger.Log("Loading images");
             Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().PreloadOnly = false;
             Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().Read(true,false);
+            // Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>().Read();
+            
             Settings.DoMFA = true;
             
             var template = new MFA.MFA(mfaReader);

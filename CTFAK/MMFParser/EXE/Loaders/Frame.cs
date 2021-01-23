@@ -29,11 +29,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
     public class Frame : ChunkLoader
     {
-        public string Name;
-        public string Password;
-        public int Width;
-        public int Height;
-        public Color Background;
         public BitDict Flags=new BitDict(new string[]
         {
            "XCoefficient",
@@ -48,28 +43,25 @@ namespace CTFAK.MMFParser.EXE.Loaders
            "ToHide",
            "ToShow"
         });
-        
-        public int CountOfObjs;
-        // int _top;
-        // int _bottom;
-        // int _left;
-        // int _right;
+
         public ChunkList Chunks;
-        public FrameHeader Header;
-        public ObjectInstances Objects;
-        public Layers Layers;
-        public Events.Events Events;
-        public FramePalette Palette;
-        public Transition FadeIn;
-        public Transition FadeOut;
+        private FrameHeader _header;
+        private FrameName _name;
+        private FramePassword _password;
+        private FramePalette _palette;
+        private Layers _layers;
+        private ObjectInstances _objects;
+        private Events.Events _events;
+        private Transition _fadeIn;
+        private Transition _fadeOut;
 
 
         public override void Print(bool ext)
         {
-            Logger.Log($"Frame: {Name}", true, ConsoleColor.Green);
-            Logger.Log($"   Password: {(Password!=null ? Password : "None")}", true, ConsoleColor.Green);
+            Logger.Log($"Frame: {_name}", true, ConsoleColor.Green);
+            Logger.Log($"   Password: {Password}", true, ConsoleColor.Green);
             Logger.Log($"   Size: {Width}x{Height}", true, ConsoleColor.Green);
-            Logger.Log($"   Objects: {CountOfObjs}", true, ConsoleColor.Green);
+            Logger.Log($"   Objects: {_objects.CountOfObjects}", true, ConsoleColor.Green);
             Logger.Log($"-------------------------", true, ConsoleColor.Green);
         }
 
@@ -77,88 +69,49 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
             return new string[]
             {
-                $"Name: {Name}",
+                $"Name: {_name}",
                 $"Size: {Width}x{Height}",
-                $"Objects: {CountOfObjs}"
+                $"Objects: {_objects.CountOfObjects}"
             
             };
         }
 
         public override void Read()
         {
-            
             var frameReader = new ByteReader(Chunk.ChunkData);
             Chunks = new ChunkList();
-            
-            
             Chunks.Read(frameReader);
-            var name = Chunks.GetChunk<FrameName>();
-            if (name != null) //Just to be sure
-            {
-                this.Name = name.Value;
-                Logger.Log(Properties.GlobalStrings.readingFrame+" "+Name,true,ConsoleColor.Green);
-            }
-            var password = Chunks.GetChunk<FramePassword>();
-            if (password != null) //Just to be sure
-            {
-                this.Password = password.Value;
-            }
 
-            var layers = Chunks.GetChunk<Layers>();
-            if (layers != null)
-            {
-                Layers = layers;
-            }
-            var events = Chunks.GetChunk<Events.Events>();
-            if (events != null)
-            {
-                Events = events;
-            }
-            var palette = Chunks.GetChunk<FramePalette>();
-            if (palette != null)
-            {
-                Palette = palette;
-            }
-            Header = Chunks.GetChunk<FrameHeader>();
-            Width = Header.Width;
-            Height = Header.Height;
-            Background = Header.Background;
-            Flags.flag = Header.Flags.flag;
-            Objects = Chunks.GetChunk<ObjectInstances>();
-            if(Objects!=null)
-            {
-                CountOfObjs = Objects.CountOfObjects;              
-            }
-
-            FadeIn = Chunks.PopChunk<Transition>();
-            FadeOut = Chunks.PopChunk<Transition>();
-
-
-
-
-
-
-
-            foreach (var item in Chunks.Chunks)
-            {
-                //Directory.CreateDirectory($"{Program.DumpPath}\\CHUNKS\\FRAMES\\{this.name}");
-                //string path = $"{Program.DumpPath}\\CHUNKS\\FRAMES\\{this.name}\\{chunk.name}.chunk";
-                //File.WriteAllBytes(path, item.chunk_data);
-
-            }
+            Logger.Log(Properties.GlobalStrings.readingFrame+" "+_name,true,ConsoleColor.Green);
             
+            _header = Chunks.GetChunk<FrameHeader>();
+            _name = Chunks.GetChunk<FrameName>();
+            _password = Chunks.GetChunk<FramePassword>();
+            _palette = Chunks.GetChunk<FramePalette>();
+            _layers = Chunks.GetChunk<Layers>();
+            _objects = Chunks.GetChunk<ObjectInstances>();
+            _events = Chunks.GetChunk<Events.Events>();
             
-
-
+            _fadeIn = Chunks.PopChunk<Transition>();
+            _fadeOut = Chunks.PopChunk<Transition>();
+            
+            Flags.flag = _header.Flags.flag;
         }
 
-        public Frame(ByteReader reader) : base(reader)
-        {
-        }
+        public int Width => _header.Width;
+        public int Height => _header.Height;
+        public string Name => _name.Value;
+        public string Password => _password.Value;
+        public Color Background => _header.Background;
+        public List<ObjectInstance> Objects => _objects.Items;
+        public List<Color> Palette => _palette.Items;
+        public Events.Events Events => _events;
+        public List<Layer> Layers => _layers.Items;
+        
 
-        public Frame(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+        public Frame(ByteReader reader) : base(reader){}
+        public Frame(ChunkList.Chunk chunk) : base(chunk){}
+        
     }
 
     public class FrameHeader : ChunkLoader

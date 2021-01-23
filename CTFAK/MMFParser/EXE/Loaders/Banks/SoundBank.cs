@@ -57,6 +57,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 var item = new SoundItem(Reader);
                 item.IsCompressed = IsCompressed;
                 item.Read();
+                if(!IsCompressed)Logger.Log(item.Name);
                 
                 OnSoundSaved?.Invoke(i,(int) NumOfItems);
                 Items.Add(item);
@@ -67,7 +68,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         }
         public void Write(ByteWriter writer)
         {
-            writer.WriteInt32(NumOfItems);
+            writer.WriteInt32(Items.Count);
             foreach (var item in Items)
             {
                 item.Write(writer);
@@ -145,23 +146,23 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             }
             if (IsCompressed)
             {
-                Name = soundData.ReadWideString(nameLenght);
+                Name = soundData.ReadAscii(nameLenght);
+                
             }
             else
             {
-                Name = soundData.ReadAscii(nameLenght);
-
+                Name = soundData.ReadWideString(nameLenght);
             }
 
 
             this.Data = soundData.ReadBytes((int) soundData.Size());
-            //Logger.Log("SoundHeader: "+Data.GetHex(4));
             if (Settings.DumpSounds)
             {
                 Name = Helper.CleanInput(Name);
                 File.WriteAllBytes($"{Settings.SoundPath}\\{Name}.wav", Data);
+                // File.WriteAllBytes($"{Name}.wav", Data);
             }
-            //Save($"{Settings.DumpPath}\\SoundBank\\{Name}.wav");
+            
             
         }
 
@@ -171,11 +172,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             writer.WriteUInt32((uint)Handle);
             writer.WriteInt32(Checksum);
             writer.WriteInt32(References);
-            writer.WriteInt32(Data.Length+Name.Length+1);
+            writer.WriteInt32(Data.Length+Name.Length+8);
             writer.WriteInt32(Flags);
             writer.WriteInt32(0);
-            writer.WriteInt32(Name.Length+1);
-            writer.WriteAscii(Name);
+            writer.WriteInt32(Name.Length);
+            writer.WriteUnicode(Name);
             writer.WriteBytes(Data);
 
 

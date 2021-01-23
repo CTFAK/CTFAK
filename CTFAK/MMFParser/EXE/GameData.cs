@@ -132,7 +132,7 @@ namespace CTFAK.MMFParser.EXE
                 Logger.Log("Frames: ", true, ConsoleColor.Cyan);
                 foreach (var item in Frames)
                 {
-                    Logger.Log($"       Frame: {item.Name,25}, Size: {item.Width,4}x{item.Height,4}, Number of objects: {item.CountOfObjs,5}", true, ConsoleColor.Cyan);
+                    Logger.Log($"       Frame: {item.Name,25}, Size: {item.Width,4}x{item.Height,4}, Number of objects: {item.Objects.Count,5}", true, ConsoleColor.Cyan);
                     var objects = item.Chunks.GetChunk<ObjectInstances>();
                     if (objects != null)
                     {

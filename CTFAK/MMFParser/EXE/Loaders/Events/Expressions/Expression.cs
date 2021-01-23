@@ -176,7 +176,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
     public class LongExp:ExpressionLoader
     {
         public int Val1;
-        private int _unk;
 
         public LongExp(ByteReader reader) : base(reader)
         {
@@ -188,15 +187,12 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
 
         public override void Read()
         {
-            // _unk = Reader.ReadInt32();
             Value = Reader.ReadInt32();
         }
 
         public override void Write(ByteWriter Writer)
         {
-            // Writer.WriteInt32((int) _unk);
             Writer.WriteInt32((int) Value);
-            
         }
     }
     public class ExtensionExp:ExpressionLoader

@@ -5,7 +5,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
 {
     class AlterableValue : Short
     {
-        public int Unk;
 
         public AlterableValue(ByteReader reader) : base(reader) { }
         public override void Read()

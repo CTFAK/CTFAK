@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Text;
+using System.Windows.Forms.VisualStyles;
 
 namespace CTFAK.Utils
 {
@@ -135,5 +136,10 @@ namespace CTFAK.Utils
 
         }
 
+        public override byte[] ReadBytes(int count=-1)
+        {
+            if (count == -1) return base.ReadBytes((int) this.Size());
+            return base.ReadBytes(count);
+        }
     }
 }

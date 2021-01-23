@@ -143,7 +143,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         //tranparent,add later
         Color _transparent;
         byte[] _colorArray;
-        int _indexed;
 
         public byte[] rawImg;
         public byte[] rawAlpha;

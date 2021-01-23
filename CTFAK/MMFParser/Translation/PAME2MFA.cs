@@ -44,12 +44,12 @@ namespace CTFAK.MMFParser.Translation
 
             //mfa.Stamp = wtf;
             //if (game.Fonts != null) mfa.Fonts = game.Fonts;
-
-            // mfa.Sounds = game.Sounds;
-            // foreach (var item in mfa.Sounds.Items)
+            mfa.Sounds.Items.Clear();
+            // foreach (var item in game.Sounds.Items)
             // {
-            // item.IsCompressed = false;
+                // mfa.Sounds.Items.Add(item);
             // }
+            
             // mfa.Music = game.Music;
             mfa.Images.Items = game.Images.Images;
             foreach (var key in mfa.Images.Items.Keys)
@@ -107,7 +107,7 @@ namespace CTFAK.MMFParser.Translation
                 if(frame.Palette==null|| frame.Events==null|| frame.Objects==null) continue;
 
                 var newFrame = new MFA.Loaders.Frame(null);
-                newFrame.Handle = game.Frames.IndexOf(frame)+1;
+                newFrame.Handle = game.Frames.IndexOf(frame);
                 newFrame.Name = frame.Name;
                 newFrame.SizeX = frame.Width;
                 newFrame.SizeY = frame.Height;
@@ -130,15 +130,15 @@ namespace CTFAK.MMFParser.Translation
                 newFrame.Password = "";
                 newFrame.LastViewedX = 320;
                 newFrame.LastViewedY = 240;
-                newFrame.Palette = frame.Palette.Items;
+                newFrame.Palette = frame.Palette;
                 newFrame.StampHandle = 13;
                 newFrame.ActiveLayer = 0;
                 //LayerInfo
-                var count = frame.Layers.Items.Count;
+                var count = frame.Layers.Count;
                 Logger.Log($"{newFrame.Name} - {count}");
                 for (int i=0;i<count;i++)
                 {
-                    var layer = frame.Layers.Items[i];
+                    var layer = frame.Layers[i];
                     var newLayer = new MFA.Loaders.Layer(null);
                     newLayer.Name = layer.Name;
                     newLayer.Flags["HideAtStart"] = layer.Flags["ToHide"];
@@ -164,10 +164,10 @@ namespace CTFAK.MMFParser.Translation
                 if (frame.Objects != null)
                 {
 
-                    for (int i = 0; i < frame.Objects.Items.Count; i++)
+                    for (int i = 0; i < frame.Objects.Count; i++)
                     {
 
-                        var instance = frame.Objects.Items[i];
+                        var instance = frame.Objects[i];
                         FrameItem frameItem;
 
                         if (FrameItems.ContainsKey(instance.ObjectInfo))
@@ -178,7 +178,7 @@ namespace CTFAK.MMFParser.Translation
                             newInstance.X = instance.X;
                             newInstance.Y = instance.Y;
                             newInstance.Handle = instance.Handle;
-                            newInstance.Flags = instance.FrameItem.Flags.flag;
+                            newInstance.Flags = (uint) instance.FrameItem.Flags;
                             newInstance.ParentType = (uint) instance.ParentType;
                             newInstance.ItemHandle = (uint) (instance.ObjectInfo);
                             newInstance.ParentHandle = (uint) instance.ParentHandle;
@@ -336,13 +336,13 @@ namespace CTFAK.MMFParser.Translation
         {
             var newItem = new FrameItem(null);
             newItem.Name = item.Name;
-            newItem.ObjectType = item.ObjectType;
+            newItem.ObjectType = (int)item.ObjectType;
             newItem.Handle = item.Handle;
             newItem.Transparent = item.Transparent ? 1 : 0;
             newItem.InkEffect = item.InkEffect;
             newItem.InkEffectParameter = item.InkEffectValue;
             newItem.AntiAliasing = item.Antialias ? 1 : 0;
-            newItem.Flags = (int) item.Flags.flag; //32 TODO:Fix this 
+            newItem.Flags = (int) item.Flags;
             newItem.IconHandle = 12;
             newItem.Chunks = new ChunkList(null);
 
@@ -360,11 +360,11 @@ namespace CTFAK.MMFParser.Translation
                 backdrop.Color1 = backdropLoader.Shape.Color1;
                 backdrop.Color2 = backdropLoader.Shape.Color2;
                 backdrop.Flags = backdropLoader.Shape.GradFlags;
-                backdrop.Image = backdropLoader.Image;
+                backdrop.Image = backdropLoader.Shape.Image;
                 newItem.Loader = backdrop;
 
             }
-            else if (item.ObjectType == 1)
+            else if (item.ObjectType == Constants.ObjectType.Backdrop)
             {
                 var backdropLoader = (EXE.Loaders.Objects.Backdrop) item.Properties.Loader;
                 var backdrop = new Backdrop((ByteReader) null);
@@ -393,8 +393,9 @@ namespace CTFAK.MMFParser.Translation
                     var newMov = new Movement(null);
                     newMov.Name = $"Movement #{j}";
                     newMov.Extension = "";
-                    newMov.Identifier = 0; //(uint) mov.Type;
-                    if (newMov.Identifier != 0) throw new Exception("Unknown Movement: " + newMov.Identifier);
+                    newMov.Type =  mov.Type;
+                    newMov.Identifier = (uint) mov.Type;
+                    newMov.Loader = mov.Loader;
                     newMov.Player = mov.Player;
                     newMov.MovingAtStart = mov.MovingAtStart;
                     newMov.DirectionAtStart = mov.DirectionAtStart;
@@ -403,7 +404,7 @@ namespace CTFAK.MMFParser.Translation
 
                 newObject.Behaviours = new Behaviours(null);
 
-                if (item.ObjectType == 2)
+                if (item.ObjectType == Constants.ObjectType.Active)
                 {
                     var active = new Active(null);
                     //Shit Section
@@ -474,7 +475,7 @@ namespace CTFAK.MMFParser.Translation
                     newItem.Loader = active;
                 }
 
-                if (item.ObjectType >= 32)
+                if ((int)item.ObjectType >= 32)
                 {
                     var newExt = new ExtensionObject(null);
                     {
@@ -490,7 +491,7 @@ namespace CTFAK.MMFParser.Translation
                     Extension ext = null;
                     foreach (var testExt in exts.Items)
                     {
-                        if (testExt.Handle == item.ObjectType - 32) ext = testExt;
+                        if (testExt.Handle == (int)item.ObjectType - 32) ext = testExt;
                     }
 
                     newExt.ExtensionType = -1;
@@ -508,7 +509,7 @@ namespace CTFAK.MMFParser.Translation
                     // mfa.Extensions.Add(tuple);
 
                 }
-                else if (item.ObjectType == 3)
+                else if (item.ObjectType == Constants.ObjectType.Text)
                 {
                     var text = itemLoader.Text;
                     var newText = new Text(null);
@@ -539,7 +540,7 @@ namespace CTFAK.MMFParser.Translation
 
                     newItem.Loader = newText;
                 }
-                else if (item.ObjectType == 6)
+                else if (item.ObjectType == Constants.ObjectType.Lives)
                 {
                     var counter = itemLoader.Counters;
                     var lives = new Lives(null);
@@ -562,7 +563,7 @@ namespace CTFAK.MMFParser.Translation
                     newItem.Loader = lives;
 
                 }
-                else if (item.ObjectType == 7)
+                else if (item.ObjectType == Constants.ObjectType.Counter)
                 {
                     var counter = itemLoader.Counters;
                     var newCount = new Counter(null);

@@ -20,7 +20,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         private int Identifier;
         
         public Animations Animations;
-        private long _end;
 
         private BitDict preferences = new BitDict(new string[]
             {
@@ -165,12 +164,12 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 switch (Parent.ObjectType)
                 {
                     //Text
-                    case 3:
+                    case Constants.ObjectType.Text:
                         Text = new Text(Reader);
                         Text.Read();
                         break;
                     //Counter
-                    case 7:
+                    case Constants.ObjectType.Counter:
                         Counters=new Counters(Reader);
                         Counters.Read();
                         break;

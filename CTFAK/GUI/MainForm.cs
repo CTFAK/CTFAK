@@ -41,7 +41,6 @@ namespace CTFAK.GUI
         private bool _isAnimRunning;
 
 
-        private bool _isAudioPlaying;
         private SoundPlayer _soundPlayer;
         public Label ObjectViewerLabel;
         public TreeNode LastSelected;
@@ -616,14 +615,14 @@ namespace CTFAK.GUI
                 var frameNode = new ChunkNode(frame.Name, frame);
                 objTreeView.Nodes.Add(frameNode);
                 if (frame.Objects != null)
-                    foreach (var objInst in frame.Objects.Items)
+                    foreach (var objInst in frame.Objects)
                     {
                         var objInstNode = new ChunkNode(objInst.FrameItem.Name, objInst);
                         frameNode.Nodes.Add(objInstNode);
                         var loader = objInst.FrameItem.Properties.Loader;
                         if (loader is ObjectCommon common)
                         {
-                            if (common.Parent.ObjectType == 2) //Active
+                            if (common.Parent.ObjectType == Constants.ObjectType.Active) //Active
                             {
                                 if (common.Animations != null)
                                     foreach (var pair in common.Animations?.AnimationDict)
@@ -667,7 +666,7 @@ namespace CTFAK.GUI
                                         }
                                     }
                             }
-                            else if(common.Parent.ObjectType==7)//Counter
+                            else if(common.Parent.ObjectType==Constants.ObjectType.Counter)//Counter
                             {
                                 
                                 var count = common.Counters?.Frames?.Count??0;
@@ -819,8 +818,8 @@ namespace CTFAK.GUI
             {
                 text += $"Name: {frame.Name}\r\n";
                 text += $"Size: {frame.Width}x{frame.Height}\r\n";
-                text += $"Objects: {frame.Objects.Items.Count}\r\n";
-                text += $"Layers: {frame.Layers.Items.Count}\r\n";
+                text += $"Objects: {frame.Objects.Count}\r\n";
+                text += $"Layers: {frame.Layers.Count}\r\n";
                 text += $"Flags:\r\n";
                 foreach (var part in frame.Flags.ToString().Split(';'))
                 {
@@ -843,13 +842,13 @@ namespace CTFAK.GUI
                     var common = ((ObjectCommon) instance.FrameItem.Properties.Loader);
                     switch (instance.FrameItem.ObjectType)
                     {
-                        case 2:
+                        case Constants.ObjectType.Active:
                             text += $"Animations: {common.Animations?.AnimationDict.Count}";
                             imageViewPictureBox.Image = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>()
                                 .FromHandle(common.Animations.AnimationDict.FirstOrDefault().Value.DirectionDict
                                     .FirstOrDefault().Value.Frames.FirstOrDefault()).Bitmap;
                             break;
-                        case 3:
+                        case Constants.ObjectType.Text:
                             ObjectViewerLabel = new Label();
                             var content = string.Empty;
                             foreach (var par in common.Text.Items)
@@ -864,7 +863,7 @@ namespace CTFAK.GUI
 
                             imageViewPictureBox.Controls.Add(ObjectViewerLabel);
                             break;
-                        case 7:
+                        case Constants.ObjectType.Counter:
                             var handle = common.Counters?.Frames.FirstOrDefault();
                             if (handle == null) imageViewPictureBox.Image = imageViewPictureBox.ErrorImage;
                             else
@@ -884,7 +883,7 @@ namespace CTFAK.GUI
                 }
                 else
                 {
-                    if (instance.FrameItem.ObjectType == 1)
+                    if (instance.FrameItem.ObjectType == Constants.ObjectType.Backdrop)
                         imageViewPictureBox.Image = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().FromHandle(((Backdrop)instance.FrameItem.Properties.Loader).Image).Bitmap;
                 }
                 

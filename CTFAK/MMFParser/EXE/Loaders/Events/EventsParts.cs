@@ -215,12 +215,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         public override string ToString()
         {
             if (Loader != null) return Loader.ToString();
-            else
-            {
-                throw new NotImplementedException($"Unkown Parameter: {Code} ");
-                return $"UNK-{Code}";
-            }
-
+            else throw new Exception($"Unkown Parameter: {Code} ");
         }
     }
 

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using CTFAK.GUI;
 using CTFAK.GUI.GUIComponents;
+using CTFAK.MMFParser;
 using CTFAK.MMFParser.EXE;
 using CTFAK.MMFParser.EXE.Loaders;
 using CTFAK.MMFParser.EXE.Loaders.Banks;
@@ -55,7 +56,7 @@ namespace CTFAK.Utils
 
         public static void SaveFrame(Frame frame, ImageBank bank, string fullPath)
         {
-            foreach (var inst in frame.Objects.Items)
+            foreach (var inst in frame.Objects)
             {
                 var path = $"{fullPath}\\{Helper.CleanInput(inst.FrameItem.Name)}";
                 Logger.Log("Saving Object to "+path);
@@ -80,13 +81,13 @@ namespace CTFAK.Utils
                 Directory.CreateDirectory(fullPath);
                 switch (common.Parent.ObjectType)
                 {
-                    case 2:
+                    case Constants.ObjectType.Active:
                         foreach (var pair in common.Animations.AnimationDict.ToArray())
                         {
                             SaveAnimation(pair.Value,bank,fullPath+"\\Animation "+pair.Key); 
                         }
                         break;
-                    case 7:
+                    case Constants.ObjectType.Counter:
                         if (common?.Counters?.Frames.Count == 0) return;
                         if (common?.Counters?.Frames == null) return;
                         foreach (int frame in common?.Counters?.Frames)
@@ -164,7 +165,7 @@ namespace CTFAK.Utils
                 {
                     var currentFramePath = rootFolder + "\\" + Helper.CleanInput(frame.Name);
 
-                    foreach (var item in frame.Objects.Items)
+                    foreach (var item in frame.Objects)
                     {
                         
                         var currentObjPath = currentFramePath + "\\" + Helper.CleanInput(item.Name);
@@ -206,7 +207,7 @@ namespace CTFAK.Utils
             int count = 0;
             foreach (var frame in Exe.Instance.GameData.Frames)
             {
-                foreach (ObjectInstance objectInstance in frame.Objects.Items)
+                foreach (ObjectInstance objectInstance in frame.Objects)
                 {
                     count += objectInstance.FrameItem.GetFrames().Count;
                 }
@@ -224,7 +225,7 @@ namespace CTFAK.Utils
             
             if (obj.Properties.Loader is ObjectCommon common)
             {
-                if (obj.ObjectType == 2)
+                if (obj.ObjectType == Constants.ObjectType.Active)
                 {
                     foreach (var animKey in common.Animations.AnimationDict.Keys)
                     {
@@ -264,7 +265,7 @@ namespace CTFAK.Utils
                         }
                     }
                 }
-                else if (obj.ObjectType == 7)
+                else if (obj.ObjectType == Constants.ObjectType.Counter)
                 {
                     var counters = common.Counters;
                     if (counters == null) return frames;

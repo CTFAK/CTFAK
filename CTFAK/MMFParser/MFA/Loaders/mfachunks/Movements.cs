@@ -60,19 +60,19 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
             Writer.AutoWriteUnicode(Extension);
             Writer.WriteUInt32(Identifier);
             var newWriter = new ByteWriter(new MemoryStream());
-            if (Extension.Length==0)
-            {
-                
+
                 newWriter.WriteInt16(Player);
                 newWriter.WriteInt16(Type);
                 newWriter.WriteInt8(MovingAtStart);
                 newWriter.Skip(3);
                 newWriter.WriteInt32(DirectionAtStart);
+                
                 // newWriter.WriteBytes(extData);
-            }
-            var new2 = new ByteWriter(new MemoryStream());
-            Loader?.Write(new2);
-            newWriter.WriteWriter(new2);
+                
+            
+            Loader?.Write(newWriter);
+            newWriter.Skip(12);
+            newWriter.WriteInt16(0);
             Writer.WriteInt32((int) newWriter.Size());
             Writer.WriteWriter(newWriter);
             
@@ -106,6 +106,12 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
                 {
                     case 1:
                         Loader = new Mouse(new ByteReader(extData));
+                        break;
+                    case 5:
+                        Loader = new MovementPath(new ByteReader(extData));
+                        break;
+                    case 4:
+                        Loader = new Ball(new ByteReader(extData));
                         break;
                 }
 

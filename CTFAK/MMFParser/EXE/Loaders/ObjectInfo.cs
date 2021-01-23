@@ -10,45 +10,14 @@ namespace CTFAK.MMFParser.EXE.Loaders
     public class ObjectInfo : ChunkLoader
     {
         public List<Chunk> Chunks = new List<Chunk>();
-        //public int Properties = 0;
-        public string Name = "ERROR";
-        public int Handle;
-        public int ObjectType;
-        public BitDict Flags = new BitDict(new string[]
-        {
-            "UNK1",
-            "UNK2",
-            "UNK3",
-            "UNK4",
-            "UNK5",
-            "UNK6",
-            "UNK7",
-            "UNK8",
-            "UNK9",
-            "UNK10",
-            "UNK11","UNK12","UNK13","UNK14",
-
-        });
-        public bool Transparent;
-        public bool Antialias;
-        public int InkEffect;
-        public int InkEffectValue;
         public int ShaderId;
         public int Items;
-        public ObjectProperties Properties;
-
-        public ObjectInfo(Chunk chunk) : base(chunk)
-        {
-        }
-
-        public ObjectInfo(ByteReader reader) : base(reader)
-        {
-        }
-
-        public override void Print(bool ext)
-        {
-        }
-
+        private ObjectHeader _header;
+        private ObjectName _name;
+        private ObjectProperties _properties;
+        public ObjectInfo(Chunk chunk) : base(chunk){}
+        public ObjectInfo(ByteReader reader) : base(reader){}
+        public override void Print(bool ext){}
         public override string[] GetReadableData()
         {
             return new string[]
@@ -65,52 +34,29 @@ namespace CTFAK.MMFParser.EXE.Loaders
             infoChunks.Verbose = false;
             infoChunks.Read(Reader);
 
-            foreach (var infoChunk in infoChunks.Chunks)
-            {
-
-                infoChunk.Verbose = false;
-                var loader = infoChunk.Loader;
-                
-                
-                if (loader is ObjectName)
-                {
-                    
-                    var actualLoader = (ObjectName)(loader);
-                    Name = actualLoader.Value;
-                }
-                else if (loader is ObjectHeader)
-                {
-                    
-                    var actualLoader = (ObjectHeader)(loader);
-                    Handle = actualLoader.Handle;
-                    ObjectType = actualLoader.ObjectType;
-                    Flags.flag = actualLoader.Flags;
-                    
-                    UInt32 inkEffect = actualLoader.InkEffect;
-                    InkEffectValue = (int) actualLoader.InkEffectParameter;
-                    Transparent = ByteFlag.GetFlag(inkEffect, 28);
-                    Antialias = ByteFlag.GetFlag(inkEffect, 29);
-                }
-                else if (loader is ObjectProperties)
-                {
-                    
-                    Properties = (ObjectProperties)loader;
-                }
-                
-            }
-
-            if (Properties != null)
-            {
-                Properties.ReadNew(ObjectType,this);
-            }
+            _header = infoChunks.GetChunk<ObjectHeader>();
+            _name = infoChunks.GetChunk<ObjectName>();
+            _properties = infoChunks.GetChunk<ObjectProperties>();
+            _properties.ReadNew((int) ObjectType,this);
             
         }
+
+        public int Handle => _header.Handle;
+        public string Name => _name.Value;
+        public ObjectProperties Properties => _properties;
+        public Constants.ObjectType ObjectType => (Constants.ObjectType) _header.ObjectType;
+        public int Flags => (int) _header.Flags;
+        public int InkEffect => (int) _header.InkEffect;
+        public int InkEffectValue => (int) _header.InkEffectParameter;
+        public bool Transparent => ByteFlag.GetFlag((uint) InkEffect, 28);
+        public bool Antialias => ByteFlag.GetFlag((uint) InkEffect, 29);
+        
 
         public ImageItem GetPreview()
         {
             ImageItem bmp=null;
             var images = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
-            if (ObjectType == 2)
+            if (ObjectType == Constants.ObjectType.Active)
             {
                     
                 var anims = ((ObjectCommon) (Properties.Loader)).Animations;
@@ -130,15 +76,15 @@ namespace CTFAK.MMFParser.EXE.Loaders
                     bmp = images.Images[firstFrameHandle];
                 }
             }
-            else if (ObjectType == 1)//Backdrop
+            else if (ObjectType == Constants.ObjectType.Backdrop)
             {
                 images.Images.TryGetValue(((Backdrop) Properties.Loader).Image, out var img);
                 bmp = img;
             }
-            else if (ObjectType==0)//QuickBackdrop
+            else if (ObjectType==Constants.ObjectType.QuickBackdrop)
             {
-                
-            
+                images.Images.TryGetValue(((Quickbackdrop) Properties.Loader).Image, out var img);
+                bmp = img;
             }
             
 
@@ -151,7 +97,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             var frames = Exe.Instance.GameData.Frames;
             foreach (var frame in frames)
             {
-                foreach (ObjectInstance instance in frame.Objects.Items)
+                foreach (ObjectInstance instance in frame.Objects)
                 {
                     if(instance.ObjectInfo==this.Handle)list.Add(instance);
                 }
@@ -163,13 +109,8 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
     public class ObjectName : StringChunk
     {
-        public ObjectName(ByteReader reader) : base(reader)
-        {
-        }
-
-        public ObjectName(Chunk chunk) : base(chunk)
-        {
-        }
+        public ObjectName(ByteReader reader) : base(reader){}
+        public ObjectName(Chunk chunk) : base(chunk){}
     }
 
     public class ObjectProperties : ChunkLoader
@@ -177,53 +118,24 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public bool IsCommon;
         public ChunkLoader Loader;
 
-        public ObjectProperties(ByteReader reader) : base(reader)
-        {
-        }
-
-        public ObjectProperties(Chunk chunk) : base(chunk)
-        {
-        }
-
+        public ObjectProperties(ByteReader reader) : base(reader){}
+        public ObjectProperties(Chunk chunk) : base(chunk){}
         public void ReadNew(int ObjectType,ObjectInfo parent)
         {
-            
-            //TODO: Fix shit
-            if(ObjectType==0)//QuickBackdrop
-            {
-                Loader=new Quickbackdrop(Reader);
-            }
-            else if (ObjectType == 1)//Backdrop
-            {
-                Loader = new Backdrop(Reader);
-            }
+            if(ObjectType==0) Loader=new Quickbackdrop(Reader);
+            else if (ObjectType == 1) Loader = new Backdrop(Reader);
             else
             {
                 IsCommon = true;
                 Loader = new ObjectCommon(Reader,parent);
             }
-
-            if (Loader != null)
-            {
-                Loader.Read();
-            }
+            Loader?.Read();
         }
+        public override void Read(){}
+        public override void Print(bool ext){}
 
-        public override void Read()
-        {
+        public override string[] GetReadableData() => null;
 
-        }
-
-
-        public override void Print(bool ext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string[] GetReadableData()
-        {
-            throw new NotImplementedException();
-        }
     }
 
     public class ObjectHeader : ChunkLoader
@@ -234,30 +146,17 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public UInt32 InkEffect;
         public UInt32 InkEffectParameter;
 
-        public ObjectHeader(ByteReader reader) : base(reader)
-        {
-        }
-
-        public ObjectHeader(Chunk chunk) : base(chunk)
-        {
-        }
-
-        public override void Print(bool ext)
-        {
-        }
-
-        public override string[] GetReadableData()
-        {
-            return null;
-
-        }
+        public ObjectHeader(ByteReader reader) : base(reader){}
+        public ObjectHeader(Chunk chunk) : base(chunk){}
+        public override void Print(bool ext){}
+        public override string[] GetReadableData() => null;
 
         public override void Read()
         {
             Handle = Reader.ReadInt16();
             ObjectType = Reader.ReadInt16();
-            Int16 reserved = Reader.ReadInt16();
             Flags = Reader.ReadUInt16();
+            Int16 reserved = Reader.ReadInt16();
             InkEffect = Reader.ReadUInt32();
             InkEffectParameter = Reader.ReadUInt32();
         }

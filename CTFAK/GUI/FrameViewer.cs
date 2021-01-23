@@ -70,7 +70,7 @@ namespace CTFAK.GUI
             var size = new Size(Exe.Instance.GameData.Header.WindowWidth,Exe.Instance.GameData.Header.WindowHeight);
             //scrollableControl1.Size = new Size(frame.Width,frame.Height);;
             ClientSize = size;
-            var list = frame.Objects.Items.OrderBy(x=>x.Handle);
+            var list = frame.Objects.OrderBy(x=>x.Handle);
             foreach (var obj in list)
             {
                 //TODO:Layers

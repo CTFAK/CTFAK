@@ -135,10 +135,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 Color2 = Reader.ReadColor();
                 GradFlags = Reader.ReadInt16();
             }
-            else if(FillType==3)
-            {
+            // else if(FillType==3)
+            // {
                 Image = Reader.ReadInt16();
-            }
+                Logger.Log("QuickbackdropIMG: "+Image);
+            // }
         }
 
         public override void Print(bool ext)
