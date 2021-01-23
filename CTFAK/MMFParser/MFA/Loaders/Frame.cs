@@ -117,9 +117,12 @@ namespace CTFAK.MMFParser.MFA.Loaders
 
             for (int i = 0; i < Layers.Count-1; i++)
             {
-                Writer.WriteColor(Layers[i].RGBCoeff);
+                var rgb = Layers[i].RGBCoeff;
                 Writer.WriteInt32(Layers[i].Unk1);
+                Writer.WriteColor(rgb);
                 Writer.WriteInt32(Layers[i].Unk2);
+                Logger.Log($"{rgb.R},{rgb.G},{rgb.B},{rgb.A} - {Layers[i].Unk1} - {Layers[i].Unk2} ");
+
             }
             
             Chunks.Write(Writer);
@@ -208,9 +211,10 @@ namespace CTFAK.MMFParser.MFA.Loaders
             Events.Read();
             for (int i=0;i<Layers.Count-1;i++)
             {
-                Layers[i].RGBCoeff= Reader.ReadColor();
                 Layers[i].Unk1=Reader.ReadInt32();
+                Layers[i].RGBCoeff= Reader.ReadColor();
                 Layers[i].Unk2=Reader.ReadInt32();
+                
             } 
             
             Chunks = new ChunkList(Reader);

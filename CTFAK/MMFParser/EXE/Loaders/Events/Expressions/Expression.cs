@@ -39,8 +39,8 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
                 if(Num==16||Num==19)Loader.Write(newWriter);
                 else
                 {
-                    temp = true;
-                    newWriter.WriteInt32(_unk);
+                    // temp = true;
+                    // newWriter.WriteInt32(_unk);
                 }
             }
             else

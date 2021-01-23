@@ -149,9 +149,9 @@ namespace CTFAK.MMFParser.Translation
                     // newLayer.Flags.flag = 0;
                     newLayer.XCoefficient = layer.XCoeff;
                     newLayer.YCoefficient = layer.YCoeff;
-                    newLayer.RGBCoeff=Color.Green;
+                    newLayer.RGBCoeff = Color.FromArgb(255,0,0,255);
                     newLayer.Unk1 = 0;
-                    newLayer.Unk2 = 0;
+                    newLayer.Unk2 = 65535;
                     newFrame.Layers.Add(newLayer);
                     break;
                     // 

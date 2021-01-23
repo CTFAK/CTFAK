@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using CTFAK.MMFParser.EXE;
+using CTFAK.MMFParser.EXE.Loaders.Objects;
 using CTFAK.Utils;
 
 namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
@@ -50,6 +52,8 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
         public int DirectionAtStart;
         public int DataSize;
         public byte[] extData=new byte[14];
+        public MovementLoader Loader;
+
         public override void Write(ByteWriter Writer)
         {    
             Writer.AutoWriteUnicode(Name);
@@ -64,9 +68,11 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
                 newWriter.WriteInt8(MovingAtStart);
                 newWriter.Skip(3);
                 newWriter.WriteInt32(DirectionAtStart);
-                newWriter.WriteBytes(extData);
+                // newWriter.WriteBytes(extData);
             }
-            //write loader
+            var new2 = new ByteWriter(new MemoryStream());
+            Loader?.Write(new2);
+            newWriter.WriteWriter(new2);
             Writer.WriteInt32((int) newWriter.Size());
             Writer.WriteWriter(newWriter);
             
@@ -96,9 +102,14 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
                 Reader.Skip(3);
                 DirectionAtStart = Reader.ReadInt32();
                 extData = Reader.ReadBytes(DataSize-12);
-                //ONLY STATIC MOVEMENT IS SUPPORTED RN
-                //TODO:Movement Types
-                //implement types, but i am tired, fuck this shit
+                switch (Type)
+                {
+                    case 1:
+                        Loader = new Mouse(new ByteReader(extData));
+                        break;
+                }
+
+                Loader?.Read();
             }
 
         }

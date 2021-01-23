@@ -52,6 +52,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         public short Type;
         public byte MovingAtStart;
         public int DirectionAtStart;
+        public MovementLoader Loader;
 
         public Movement(ByteReader reader) : base(reader)
         {
@@ -73,7 +74,14 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             MovingAtStart = Reader.ReadByte();
             Reader.Skip(3);
             DirectionAtStart = Reader.ReadInt32();
-            //TODO: Extension Stuff
+            switch (Type)
+            {
+                case 1:
+                    Loader = new Mouse(Reader);
+                    break;
+                
+            }
+            Loader?.Read();
         }
 
         public override void Print(bool ext)
@@ -84,6 +92,65 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         public override string[] GetReadableData()
         {
             throw new System.NotImplementedException();
+        }
+    }
+    public class MovementLoader:DataLoader
+    {
+        public MovementLoader(ByteReader reader) : base(reader)
+        {
+        }
+
+        public MovementLoader(ChunkList.Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Print()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+    public class Mouse:MovementLoader
+    {
+        public short X1;
+        public short X2;
+        public short Y1;
+        public short Y2;
+
+        public Mouse(ByteReader reader) : base(reader)
+        {
+        }
+
+        public Mouse(ChunkList.Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+            X1 = Reader.ReadInt16();
+            X2 = Reader.ReadInt16();
+            Y1 = Reader.ReadInt16();
+            Y2 = Reader.ReadInt16();
+            var unusedFlags = Reader.ReadInt16();
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt16(X1);
+            Writer.WriteInt16(X2);
+            Writer.WriteInt16(Y1);
+            Writer.WriteInt16(Y2);
+            Writer.WriteInt16(0);
+            
         }
     }
 }
