@@ -13,6 +13,37 @@ namespace CTFAK.MMFParser.MFA.Loaders
         public List<MFAChunk> Items = new List<MFAChunk>();
         public bool Log=false;
 
+        public T GetChunk<T>() where T : MFAChunkLoader
+        {
+            foreach (MFAChunk chunk in Items)
+            {
+                if (chunk.Loader.GetType() == typeof(T))
+                {
+                    return (T) chunk.Loader;
+                }
+            }
+            return null;
+        }
+
+        public bool ContainsChunk<T>() where T : MFAChunkLoader
+        {
+            foreach (MFAChunk chunk in Items)
+            {
+                if (chunk.Loader.GetType() == typeof(T))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public MFAChunk NewChunk<T>() where T : MFAChunkLoader, new()
+        {
+            var newChunk = new MFAChunk(null);
+                newChunk.Id = 33;
+                newChunk.Loader = new T();
+                return newChunk;
+        }
         public override void Write(ByteWriter Writer)
         {
             foreach (MFAChunk chunk in Items)
@@ -20,8 +51,6 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 chunk.Write(Writer);
             }
             Writer.WriteInt8(0);
-            return;
-            
         } 
         
 
@@ -32,10 +61,10 @@ namespace CTFAK.MMFParser.MFA.Loaders
 
         public override void Read()
         {
-            var start = Reader.Tell();
+            var start = base.Reader.Tell();
             while(true)
             {
-                var newChunk = new MFAChunk(Reader);
+                var newChunk = new MFAChunk(base.Reader);
                 newChunk.Read();
                 if(Log)Logger.Log("ChunkID: "+newChunk.Id);
                 if(newChunk.Id==0) break;
@@ -45,9 +74,9 @@ namespace CTFAK.MMFParser.MFA.Loaders
 
             }
 
-            var size = Reader.Tell() - start;
-            Reader.Seek(start);
-            Saved = Reader.ReadBytes((int) size);
+            var size = base.Reader.Tell() - start;
+            base.Reader.Seek(start);
+            Saved = base.Reader.ReadBytes((int) size);
 
 
         }
@@ -118,6 +147,9 @@ namespace CTFAK.MMFParser.MFA.Loaders
         public int Right;
         public int Bottom;
         public FrameVirtualRect(ByteReader reader) : base(reader){}
+
+        
+
         public override void Read()
         {
             Left = Reader.ReadInt32();
@@ -133,7 +165,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             Writer.WriteInt32(Top);
             Writer.WriteInt32(Right);
             Writer.WriteInt32(Bottom);
-     
+
         }
     }
 

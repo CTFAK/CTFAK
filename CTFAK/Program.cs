@@ -48,21 +48,18 @@ namespace CTFAK
             
             Settings.UseGUI = true;
             
+            
             if (args.Length > 0)
             {
-                MyForm = new MainForm(Color.FromName(args[0]));
-            }
-            if (args.Length > 1)
-            {
-                if (args[1].EndsWith(".exe"))
+                if (args[0].EndsWith(".exe"))
                 {
-                    ReadFile(args[1],true,false,true);
+                    ReadFile(args[0],true,false,true);
                     MFAGenerator.BuildMFA();
                     Environment.Exit(0);
                 }
                 else
                 {
-                    var reader = new ByteReader(new FileStream(args[1],FileMode.Open));
+                    var reader = new ByteReader(new FileStream(args[0],FileMode.Open));
                     CleanData = new GameData();
                     CleanData.Read(reader);
                 }

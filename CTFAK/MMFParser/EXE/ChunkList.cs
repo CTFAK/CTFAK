@@ -292,11 +292,13 @@ namespace CTFAK.MMFParser.EXE
                     loader = new GlobalStrings(chunk);
                     break;
                 case 13117:
-                    // loader = new Events(chunk);
+                    loader = new Events(chunk);
                     break;
             }
 
             loader?.Read();
+            chunk.ChunkData = null;
+            chunk.RawData = null;
             return loader;
         }
 

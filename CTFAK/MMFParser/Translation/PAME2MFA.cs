@@ -105,18 +105,26 @@ namespace CTFAK.MMFParser.Translation
             foreach (Frame frame in game.Frames)
             {
                 if(frame.Palette==null|| frame.Events==null|| frame.Objects==null) continue;
-
+                Message("Translating frame: " + frame.Name);
                 var newFrame = new MFA.Loaders.Frame(null);
+                newFrame.Chunks = new ChunkList(null);//MFA.MFA.emptyFrameChunks;
                 newFrame.Handle = game.Frames.IndexOf(frame);
                 newFrame.Name = frame.Name;
                 newFrame.SizeX = frame.Width;
                 newFrame.SizeY = frame.Height;
+
+                // var newRectLoader = newFrame.Chunks.GetChunk<FrameVirtualRect>();
+                // newRectLoader.Right = frame.Width;
+                // newRectLoader.Bottom = frame.Height;
+
+
                 newFrame.Background = frame.Background;
                 newFrame.FadeIn = null;
                 newFrame.FadeOut = null;
-                // newFrame.UnkString = "             ";
                 var mfaFlags = newFrame.Flags;
                 var originalFlags = frame.Flags;
+                
+                
 
                 mfaFlags["GrabDesktop"] = originalFlags["GrabDesktop"];
                 mfaFlags["KeepDisplay"] = originalFlags["KeepDisplay"];
@@ -152,12 +160,12 @@ namespace CTFAK.MMFParser.Translation
                     newLayer.RGBCoeff = Color.FromArgb(255,0,0,255);
         
                     newFrame.Layers.Add(newLayer);
-                    break;
+                    // break;
                     // 
 
                 }
 
-                Message("Translating frame: " + newFrame.Name);
+                
                 var newFrameItems = new List<FrameItem>();
                 var newInstances = new List<FrameInstance>();
                 if (frame.Objects != null)
@@ -181,7 +189,7 @@ namespace CTFAK.MMFParser.Translation
                             newInstance.ParentType = (uint) instance.ParentType;
                             newInstance.ItemHandle = (uint) (instance.ObjectInfo);
                             newInstance.ParentHandle = (uint) instance.ParentHandle;
-                            newInstance.Layer = 0;//(uint) (instance.Layer);
+                            newInstance.Layer = (uint) (instance.Layer);
                             newInstances.Add(newInstance);
                             // Logger.Log($"{instance.FrameItem.Name} - {i}");
 
@@ -202,8 +210,8 @@ namespace CTFAK.MMFParser.Translation
                     newFrame.Folders.Add(newFolder);
                 }
 
-
-                if (frame.Events != null)
+                
+                // if (frame.Events != null)
                 {
                     newFrame.Events = new Events((ByteReader) null); //MFA.MFA.emptyEvents;
                     newFrame.Events.Items = new List<EventGroup>();
@@ -261,12 +269,11 @@ namespace CTFAK.MMFParser.Translation
                                 }
                             }*/
                             newFrame.Events.Items.Add(item);
+                            
                         }
 
                     }
                 }
-
-                newFrame.Chunks = new ChunkList(null);
                 mfa.Frames.Add(newFrame);
                 
 
