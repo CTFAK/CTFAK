@@ -17,7 +17,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public bool SaveImages = false;
         public Dictionary<int, ImageItem> Images = new Dictionary<int, ImageItem>();
         public uint NumberOfItems;
-        public bool PreloadOnly=false;
+        public bool PreloadOnly = false;
 
         public ImageBank(ByteReader reader) : base(reader)
         {
@@ -51,64 +51,57 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public ImageItem FromHandle(int handle)
         {
             Images.TryGetValue(handle, out var img);
-            if (handle == -1) return Images[Images.Count-1];
+            if (handle == -1) return Images[Images.Count - 1];
             if (img == null) return null;
             else return img;
         }
-        
+
 
         public void LoadByHandle(int handle)
         {
-            
+
             Images[handle].Load();
         }
 
-        
-        
+
+
         public event MainForm.SaveHandler OnImageSaved;
-        
-        
+
+
 
 
         public override void Read()
         {
-            
+
             if (!Settings.DoMFA) Reader.Seek(0); //Reset the reader to avoid bugs when dumping more than once
             var tempImages = new Dictionary<int, ImageItem>();
 
             NumberOfItems = (uint) Reader.ReadInt32();
 
-            Logger.Log($"Found {NumberOfItems} images",true,ConsoleColor.Green);
-            
+            Logger.Log($"Found {NumberOfItems} images", true, ConsoleColor.Green);
+
 
             //if (!Settings.DumpImages) return;
-            Logger.Log("Reading Images",true,ConsoleColor.Green);
+            Logger.Log("Reading Images", true, ConsoleColor.Green);
             for (int i = 0; i < NumberOfItems; i++)
             {
-                if (MainForm.BreakImages)
+                if (MainForm.BreakImages) break;
                 {
-                    
-                    break;
+
+
+                    var item = new ImageItem(Reader);
+
+                    item.Read(!PreloadOnly);
+                    tempImages.Add(item.Handle, item);
+                    if (SaveImages) item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
+                    OnImageSaved?.Invoke(i, (int) NumberOfItems);
+
                 }
-
-                var item = new ImageItem(Reader);
                 
-                item.Read(!PreloadOnly);
-                tempImages.Add(item.Handle, item);
-                if (SaveImages) item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
-                OnImageSaved?.Invoke(i,(int) NumberOfItems);
-
-
-
-                //if (Settings.Build >= 284)
-                //    item.Handle -= 1;
-
-                //images[item.handle] = item;
             }
-            Logger.Log("Images success",true,ConsoleColor.Green);
+            Logger.Log("Images success", true, ConsoleColor.Green);
             if (!MainForm.BreakImages) Images = tempImages;
             MainForm.BreakImages = false;
-
         }
     }
 

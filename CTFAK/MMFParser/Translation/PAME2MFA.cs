@@ -57,6 +57,8 @@ namespace CTFAK.MMFParser.Translation
                 mfa.Images.Items[key].Debug = true;
             }
 
+            // game.Images.Images.Clear();
+
             mfa.Author = game.Author ?? "";
             mfa.Copyright = game.Copyright ?? "";
             mfa.Company = "";
@@ -102,29 +104,34 @@ namespace CTFAK.MMFParser.Translation
             // var reference = mfa.Frames.FirstOrDefault();
             mfa.Frames.Clear();
             
-            foreach (Frame frame in game.Frames)
+            Dictionary<int,int> indexHandles = new Dictionary<int, int>();
+            foreach (var pair in Program.CleanData.GameChunks.GetChunk<FrameHandles>().Items)
             {
-                if(frame.Palette==null|| frame.Events==null|| frame.Objects==null) continue;
-                Message("Translating frame: " + frame.Name);
+                var key = pair.Key;
+                var handle = pair.Value;
+                if (!indexHandles.ContainsKey(handle)) indexHandles.Add(handle, key);
+                else indexHandles[handle] = key;
+            }
+            
+            
+            for (int a=0;a<game.Frames.Count;a++)
+            {
+                var frame = game.Frames[a];
+                // if(frame.Palette==null|| frame.Events==null|| frame.Objects==null) continue;
+                
                 var newFrame = new MFA.Loaders.Frame(null);
                 newFrame.Chunks = new ChunkList(null);//MFA.MFA.emptyFrameChunks;
-                newFrame.Handle = game.Frames.IndexOf(frame);
+                newFrame.Handle = indexHandles[a];
+                Message($"Translating frame: {frame.Name} - {newFrame.Handle}" );
                 newFrame.Name = frame.Name;
                 newFrame.SizeX = frame.Width;
                 newFrame.SizeY = frame.Height;
-
-                // var newRectLoader = newFrame.Chunks.GetChunk<FrameVirtualRect>();
-                // newRectLoader.Right = frame.Width;
-                // newRectLoader.Bottom = frame.Height;
-
 
                 newFrame.Background = frame.Background;
                 newFrame.FadeIn = null;
                 newFrame.FadeOut = null;
                 var mfaFlags = newFrame.Flags;
                 var originalFlags = frame.Flags;
-                
-                
 
                 mfaFlags["GrabDesktop"] = originalFlags["GrabDesktop"];
                 mfaFlags["KeepDisplay"] = originalFlags["KeepDisplay"];
@@ -147,21 +154,17 @@ namespace CTFAK.MMFParser.Translation
                 for (int i=0;i<count;i++)
                 {
                     var layer = frame.Layers[i];
-                    var newLayer = new MFA.Loaders.Layer(null);
+                    var newLayer = new Layer(null);
                     newLayer.Name = layer.Name;
                     newLayer.Flags["HideAtStart"] = layer.Flags["ToHide"];
                     newLayer.Flags["Visible"] = true;
                     newLayer.Flags["NoBackground"] = layer.Flags["DoNotSaveBackground"];
                     newLayer.Flags["WrapHorizontally"] = layer.Flags["WrapHorizontally"];
-                    newLayer.Flags["WrapVertically"] = layer.Flags["WrapVertically"];
-                    // newLayer.Flags.flag = 0;
                     newLayer.XCoefficient = layer.XCoeff;
                     newLayer.YCoefficient = layer.YCoeff;
-                    newLayer.RGBCoeff = Color.FromArgb(255,0,0,255);
         
                     newFrame.Layers.Add(newLayer);
-                    // break;
-                    // 
+      
 
                 }
 
@@ -191,8 +194,6 @@ namespace CTFAK.MMFParser.Translation
                             newInstance.ParentHandle = (uint) instance.ParentHandle;
                             newInstance.Layer = (uint) (instance.Layer);
                             newInstances.Add(newInstance);
-                            // Logger.Log($"{instance.FrameItem.Name} - {i}");
-
                         }
                     }
                 }
@@ -211,15 +212,13 @@ namespace CTFAK.MMFParser.Translation
                 }
 
                 
-                // if (frame.Events != null)
+                if (frame.Events != null)
                 {
-                    newFrame.Events = new Events((ByteReader) null); //MFA.MFA.emptyEvents;
+                    newFrame.Events = new Events((ByteReader) null);
                     newFrame.Events.Items = new List<EventGroup>();
                     newFrame.Events.Objects = new List<EventObject>();
-                    newFrame.Events._cache = MFA.MFA.emptyEvents._cache;
                     newFrame.Events._ifMFA = true;
                     newFrame.Events.Version = 1028;
-                    // if (frame.Name == "jopajopaher")
                     {
                         foreach (var item in newFrame.Items)
                         {
@@ -235,43 +234,7 @@ namespace CTFAK.MMFParser.Translation
                             newObject.InstanceHandle = 0xFFFFFFFF;
                             newFrame.Events.Objects.Add(newObject);
                         }
-
-                        foreach (EventGroup item in frame.Events.Items)
-                        {
-                            /*foreach (Action itemAction in item.Actions)
-                            {
-                                for (int a=0;a<itemAction.Items.Count;a++)
-                                {
-                                    if (itemAction.Items[a].Loader is ExpressionParameter exp)
-                                    {
-                                        // itemAction.Items.Remove(itemAction.Items[a]);
-                                        
-                                    }
-                                    else if (itemAction.Items[a].Loader is Sample)
-                                    {
-                                        itemAction.Items.Remove(itemAction.Items[a]);
-                                    }
-                                }
-                            }
-                            foreach (Condition itemAction in item.Conditions)
-                            {
-                                for (int a=0;a<itemAction.Items.Count;a++)
-                                {
-                                    if (itemAction.Items[a].Loader is ExpressionParameter exp)
-                                    {
-                                        // itemAction.Items.Remove(itemAction.Items[a]);
-                                        
-                                    }
-                                    else if (itemAction.Items[a].Loader is Sample)
-                                    {
-                                        itemAction.Items.Remove(itemAction.Items[a]);
-                                    }
-                                }
-                            }*/
-                            newFrame.Events.Items.Add(item);
-                            
-                        }
-
+                        newFrame.Events.Items = frame.Events.Items;
                     }
                 }
                 mfa.Frames.Add(newFrame);
@@ -586,6 +549,17 @@ namespace CTFAK.MMFParser.Translation
                     newCount.Maximum = itemLoader.Counter.Maximum;
                     newCount.Minimum = itemLoader.Counter.Minimum;
                     newCount.Images = new List<int>() {0};
+                    var shape = counter?.Shape;
+
+
+                    if (counter != null)
+                    {
+                        if(counter.DisplayType==2||counter.DisplayType==3)
+                        {
+                            counter = null;
+                            shape = null;
+                        }
+                    }
                     if (counter == null)
                     {
                         newCount.DisplayType = 0;
@@ -596,6 +570,7 @@ namespace CTFAK.MMFParser.Translation
                     }
                     else
                     {
+                        
                         newCount.DisplayType = counter.DisplayType;
                         newCount.CountType = counter.Inverse ? 1 : 0;
                         newCount.Width = (int) counter.Width;
@@ -603,11 +578,22 @@ namespace CTFAK.MMFParser.Translation
                         newCount.Images = counter.Frames;
                         newCount.Font = counter.Font;
                     }
-
-                    newCount.Color1 = Color.White;
-                    newCount.Color2 = Color.White;
-                    newCount.Flags = 0;
-                    newCount.VerticalGradient = 0;
+                    
+                    if (shape == null)
+                    {
+                        newCount.Color1=Color.Black;
+                        newCount.Color2=Color.Black;
+                        newCount.VerticalGradient = 0;
+                        newCount.Flags = 0;
+                    }
+                    else
+                    {
+                        newCount.Color1 = Color.Green;
+                        newCount.Color2 = Color.Red;
+                        newCount.VerticalGradient = (uint) shape.GradFlags;
+                        newCount.Flags = (uint) shape.FillType;
+                        
+                    }
 
                     newItem.Loader = newCount;
                 }

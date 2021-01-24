@@ -24,7 +24,7 @@ namespace CTFAK.Utils
             }
 
             var v5 = 0;
-            foreach (char c in groupWords)
+            foreach (char c in pass)
             {
                 v4 += WrapSingleChar(groupWords[v5] + (c & 0xC3)) ^ 0xF3;
                 v5++;

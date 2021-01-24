@@ -88,12 +88,13 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 case 3:
                     Loader=new EightDirections(Reader);
                     break;
-                case 5:
-                    Loader=new MovementPath(Reader);
-                    break;
                 case 4:
                     Loader=new Ball(Reader);
                     break;
+                case 5:
+                    Loader=new MovementPath(Reader);
+                    break;
+                
 
             }
             if(Loader==null&&Type!=0) throw new Exception("Unsupported movement: "+Type);
@@ -386,6 +387,44 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             Writer.WriteInt16(BounceFactor);
             Writer.WriteInt16(Angles);
             Writer.WriteInt16(ReverseEnabled);
+        }
+    }
+    public class PlatformMovement:MovementLoader
+    {
+        public short Speed;
+        public short Acceleration;
+        public short Deceleration;
+        public short Control;
+        public short Gravity;
+        public short JumpStrength;
+
+        public PlatformMovement(ByteReader reader) : base(reader)
+        {
+        }
+
+        public PlatformMovement(ChunkList.Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+           Speed = Reader.ReadInt16();
+           Acceleration = Reader.ReadInt16();
+           Deceleration = Reader.ReadInt16();
+           Control = Reader.ReadInt16();
+           Gravity = Reader.ReadInt16();
+           JumpStrength = Reader.ReadInt16();
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt16(Speed);
+            Writer.WriteInt16(Acceleration);
+            Writer.WriteInt16(Deceleration);
+            Writer.WriteInt16(Control);
+            Writer.WriteInt16(Gravity);
+            Writer.WriteInt16(JumpStrength);
+            
         }
     }
 }

@@ -209,6 +209,9 @@ namespace CTFAK.MMFParser.EXE
                 case 8743:
                     loader = new ExtPath(chunk);
                     break;
+                case 8747:
+                    loader=new FrameHandles(chunk);
+                    break;
                 case 8750:
                     loader = new EditorFilename(chunk);
                     break;

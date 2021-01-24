@@ -27,10 +27,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
 
         public override void Write(ByteWriter Writer)
         {
-            Writer.WriteUInt16(0);
+            Writer.WriteUInt16(Flags);
             Writer.WriteUInt16(Id);
             Writer.WriteUnicode(Name,true);
-            if(true)//decrypt password
+            if(true)
             {
                 Password = Checksum.MakeGroupChecksum("", Name);
             }

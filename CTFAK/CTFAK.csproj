@@ -176,6 +176,7 @@
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\TwoShorts.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Zone.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Extensions.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\FrameHandles.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Objects\Movements.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Objects\Text.cs" />
     <Compile Include="MMFParser\MFA\Loaders\mfachunks\Backdrop.cs" />

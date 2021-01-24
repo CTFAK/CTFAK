@@ -62,6 +62,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         public ushort DisplayType;
         public ushort Flags;
         public ushort Player;
+        public Shape Shape;
 
         public Counters(ByteReader reader) : base(reader)
         {
@@ -103,8 +104,8 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             }
             else if (DisplayType == 2 || DisplayType == 3 || DisplayType == 5)
             {
-                //TODO: Shapes
-                Logger.Log("Ignoring unsupported counter type");
+                Shape = new Shape(Reader);
+                Shape.Read();
             }
 
         }
