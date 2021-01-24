@@ -50,6 +50,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
     public class Movement : ChunkLoader
     {
+        public static int DataSize;
         public int rootPos;
         public short Player;
         public short Type;
@@ -70,7 +71,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             var nameOffset = Reader.ReadInt32();
             var movementId = Reader.ReadInt32();
             var newOffset = Reader.ReadInt32();
-            var dataSize = Reader.ReadInt32();
+            DataSize = Reader.ReadInt32();
             Reader.Seek(rootPos+newOffset);
             Player = Reader.ReadInt16();
             Type = Reader.ReadInt16();
@@ -93,6 +94,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     break;
                 case 5:
                     Loader=new MovementPath(Reader);
+                    break;
+                case 14:
+                    Loader = new ExtensionsMovement(Reader);
                     break;
                 
 
@@ -425,6 +429,28 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             Writer.WriteInt16(Gravity);
             Writer.WriteInt16(JumpStrength);
             
+        }
+    }
+    public class ExtensionsMovement:MovementLoader
+    {
+        public byte[] Data;
+
+        public ExtensionsMovement(ByteReader reader) : base(reader)
+        {
+        }
+
+        public ExtensionsMovement(ChunkList.Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+            Data = Reader.ReadBytes(Movement.DataSize);
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteBytes(Data);
         }
     }
 }

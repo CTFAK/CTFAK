@@ -22,6 +22,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
             Id = Reader.ReadUInt16();
             Name = Reader.ReadWideString();
             Password = Reader.ReadInt32();
+            Password = Checksum.MakeGroupChecksum("", Name);
             Logger.Log("Password: "+Password);
         }
 
@@ -30,10 +31,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
             Writer.WriteUInt16(Flags);
             Writer.WriteUInt16(Id);
             Writer.WriteUnicode(Name,true);
-            if(true)
-            {
-                Password = Checksum.MakeGroupChecksum("", Name);
-            }
             Writer.WriteInt32(Password);
         }
 

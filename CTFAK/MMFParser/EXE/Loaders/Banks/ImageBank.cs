@@ -17,7 +17,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public bool SaveImages = false;
         public Dictionary<int, ImageItem> Images = new Dictionary<int, ImageItem>();
         public uint NumberOfItems;
-        public bool PreloadOnly = false;
+        public bool PreloadOnly = true;
 
         public ImageBank(ByteReader reader) : base(reader)
         {
@@ -149,7 +149,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             Handle = Reader.ReadInt32();
             if (!Debug)
             {
-                // if (Settings.Build>288) Handle -= 1;
+                if (Settings.Build>=290) Handle -= 1;
                 if (Program.CleanData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
             }
             
@@ -223,7 +223,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             imageReader.Seek(start+ _checksum);//to prevent bugs
             
         }
-        
+
 
         public void Load()
         {
@@ -232,12 +232,12 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             ByteReader imageReader;
             if (!Settings.twofiveplus)
                 imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
-            else imageReader = Reader;           
+            else imageReader = Reader;
             long start = imageReader.Tell();
-            
-            
+
+
             //return;
-            if(Settings.twofiveplus) imageReader.Skip(4);
+            if (Settings.twofiveplus) imageReader.Skip(4);
             _checksum = imageReader.ReadInt32();
             _references = imageReader.ReadInt32();
             Size = (int) imageReader.ReadUInt32();
@@ -249,7 +249,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             _width = imageReader.ReadInt16();
             _height = imageReader.ReadInt16();
             _graphicMode = imageReader.ReadByte();
-            
+
             Flags.flag = imageReader.ReadByte();
 
             imageReader.Skip(2);
@@ -260,10 +260,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             _transparent = imageReader.ReadColor();
             // Logger.Log($"Loading image {Handle.ToString(),4} Size: {_width,4}x{_height,4}");
             byte[] imageData;
-            if(Settings.twofiveplus) Flags["LZX"] = false;
+            if (Settings.twofiveplus) Flags["LZX"] = false;
             if (Flags["LZX"])
             {
-                
+
                 uint decompressedSize = imageReader.ReadUInt32();
                 imageData = Decompressor.decompress_block(imageReader, (int) (imageReader.Size() - imageReader.Tell()),
                     (int) decompressedSize);
@@ -276,14 +276,14 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
             int bytesRead = 0;
             rawImg = imageData;
-            
+
             if (Flags["RLE"] || Flags["RLEW"] || Flags["RLET"])
             {
-                
+
             }
             else
             {
-                
+
                 switch (_graphicMode)
                 {
                     case 4:
@@ -305,14 +305,14 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                     {
                         Logger.Log("Reading 32-bit color");
                         (_colorArray, bytesRead) = ImageHelper.Read32(imageData, _width, _height);
-                        break; 
+                        break;
                     }
                     default:
                     {
                         Logger.Log("Unknown Color Mode");
                         break;
                     }
-                        
+
                 }
             }
 
@@ -330,16 +330,20 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                     }
                 }
             }
-            /*else if (_transparent != null)
+            if (Settings.Build > 283)
             {
-                for (int i = 0; i < (_height * _width * 4)-3; i++)
+                if (_transparent != null)
                 {
-                    if (_colorArray[i+1]==_transparent.R&&_colorArray[i+2]==_transparent.G&&_colorArray[i+3]==_transparent.B)
+                    for (int i = 0; i < (_height * _width * 4) - 3; i++)
                     {
-                        _colorArray[i] = _transparent.A;
+                        if (_colorArray[i + 1] == _transparent.R && _colorArray[i + 2] == _transparent.G &&
+                            _colorArray[i + 3] == _transparent.B)
+                        {
+                            _colorArray[i] = _transparent.A;
+                        }
                     }
                 }
-            }*/
+            }
 
             return;
         }

@@ -13,7 +13,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
             Reader = new ByteReader(Chunk.ChunkData);
             Value = Reader.ReadUniversal();
-            Print(true);
         }
 
         public override void Print(bool ext)

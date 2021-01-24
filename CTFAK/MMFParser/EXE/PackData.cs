@@ -24,7 +24,9 @@ namespace CTFAK.MMFParser.EXE
             uint dataSize = exeReader.ReadUInt32();
 
             exeReader.Seek((int)(start + dataSize - 32));
-            Logger.Log(exeReader.ReadAscii(4));
+            var uheader = exeReader.ReadAscii(4);
+            if(uheader=="PAMU")Settings.Unicode = true;
+            else if(uheader=="PAME")Settings.Unicode = false;
             exeReader.Seek(start + 16);
 
             uint formatVersion = exeReader.ReadUInt32();
@@ -47,7 +49,7 @@ namespace CTFAK.MMFParser.EXE
             }
             
             header = exeReader.ReadFourCc();
-            Logger.Log(header.GetHex(4));
+            
             Logger.Log("PACK OFFSET: "+offset);
             exeReader.Seek(offset);
             for (int i = 0; i < count; i++)

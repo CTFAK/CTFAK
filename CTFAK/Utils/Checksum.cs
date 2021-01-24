@@ -27,10 +27,10 @@ namespace CTFAK.Utils
             foreach (char c in pass)
             {
                 v4 += WrapSingleChar(groupWords[v5] + (c & 0xC3)) ^ 0xF3;
-                v5++;
+                v5+=1;
                 if (v5 > groupWords.Length) v5 = 0;
             }
-
+            Logger.Log("GroupPass:"+v4);
             return v4;
             
         }

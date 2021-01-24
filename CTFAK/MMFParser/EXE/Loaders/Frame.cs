@@ -74,7 +74,10 @@ namespace CTFAK.MMFParser.EXE.Loaders
             {
                 $"Name: {Name}",
                 $"Size: {Width}x{Height}",
-                $"Objects: {Objects.Count}"
+                $"Virtual Size: {VirtWidth}x{VirtHeight}",
+                $"MVTimer: {MovementTimer}",
+                $"Objects: {Objects.Count}",
+                
             
             };
         }
