@@ -4,6 +4,8 @@ Experimental tool to decrypt, analyze, dump and decompile games made with ClickT
 
 **NOTE:** EXE -> MFA is not yet completely supported!
 
+**DISCLAIMER:** While this tool allows for MFA generation, **only use it for educational porpuses** and NEVER share the result with people who don't legally own the game (like we hope you do)
+
 # Build instructions
 
 Clone the project and build with VS2019, remember to include the ZLib C# extension and external libraries (GUI and decrypter.dll)
