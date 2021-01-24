@@ -90,6 +90,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     dir.Read();
                     DirectionDict.Add(i,dir);
                 }
+                else
+                {
+                    DirectionDict.Add(i,new AnimationDirection((ByteReader) null));
+                }
                 
             }
         }

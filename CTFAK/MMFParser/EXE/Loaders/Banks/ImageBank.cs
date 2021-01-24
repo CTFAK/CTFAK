@@ -149,7 +149,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             Handle = Reader.ReadInt32();
             if (!Debug)
             {
-                if (Settings.Build>288) Handle -= 1;
+                // if (Settings.Build>288) Handle -= 1;
                 if (Program.CleanData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
             }
             
@@ -330,7 +330,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                     }
                 }
             }
-            else if (_transparent != null)
+            /*else if (_transparent != null)
             {
                 for (int i = 0; i < (_height * _width * 4)-3; i++)
                 {
@@ -339,7 +339,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                         _colorArray[i] = _transparent.A;
                     }
                 }
-            }
+            }*/
 
             return;
         }

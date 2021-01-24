@@ -32,6 +32,7 @@ namespace CTFAK
         public static string ProjectPath;
 
         public static int Build;
+        public static bool Unicode;
 
         public static bool DoMFA;
         public static bool UseGUI;

@@ -406,19 +406,11 @@ namespace CTFAK.MMFParser.Translation
                             newAnimation.Name = $"User Defined {j}";
                             var newDirections = new List<AnimationDirection>();
                             EXE.Loaders.Objects.Animation animation = null;
-                            try
-                            {
-                                if (animHeader.AnimationDict.ContainsKey(origAnim.Key))
+                            if (animHeader.AnimationDict.ContainsKey(origAnim.Key))
                                 {
                                     animation = animHeader?.AnimationDict[origAnim.Key];
                                 }
                                 else break;
-
-                            }
-                            catch
-                            {
-                            }
-
                             if (animation != null)
                             {
                                 if (animation.DirectionDict != null)

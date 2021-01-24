@@ -124,6 +124,12 @@ namespace CTFAK.Utils
 
             return str;
         }
+
+        public string ReadUniversal(int len=-1)
+        {
+            if (Settings.Unicode) return ReadWideString(len);
+            else return ReadAscii(len);
+        }
         public Color ReadColor()
         {
             

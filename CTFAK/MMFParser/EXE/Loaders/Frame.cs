@@ -56,6 +56,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         private Transition _fadeIn;
         private Transition _fadeOut;
         private VirtualRect _virtualSize;
+        private MovementTimerBase _movementTimer;
 
 
         public override void Print(bool ext)
@@ -93,6 +94,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             _layers = Chunks.GetChunk<Layers>();
             _objects = Chunks.GetChunk<ObjectInstances>();
             _events = Chunks.GetChunk<Events.Events>();
+            _movementTimer = Chunks.GetChunk<MovementTimerBase>();
             
             _fadeIn = Chunks.PopChunk<Transition>();
             _fadeOut = Chunks.PopChunk<Transition>();
@@ -106,6 +108,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public int Height => _header.Height;
         public int VirtWidth => _virtualSize.Right;
         public int VirtHeight => _virtualSize.Bottom;
+        public int MovementTimer => _movementTimer.Value;
         public string Name => _name?.Value ?? "UNK";
         public string Password => _password.Value;
         public Color Background => _header.Background;
@@ -355,7 +358,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             YCoeff = Reader.ReadSingle();
             NumberOfBackgrounds = Reader.ReadInt32();
             BackgroudIndex = Reader.ReadInt32();
-            Name = Reader.ReadWideString();
+            Name = Reader.ReadUniversal();
         }
 
         public override void Print(bool ext)
@@ -397,5 +400,32 @@ namespace CTFAK.MMFParser.EXE.Loaders
     {
         public VirtualRect(ByteReader reader) : base(reader){}
         public VirtualRect(ChunkList.Chunk chunk) : base(chunk){}
+    }
+    public class MovementTimerBase:ChunkLoader
+    {
+        public int Value;
+
+        public MovementTimerBase(ByteReader reader) : base(reader)
+        {
+        }
+
+        public MovementTimerBase(ChunkList.Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+            Value = Reader.ReadInt32();
+        }
+
+        public override void Print(bool ext)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string[] GetReadableData()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

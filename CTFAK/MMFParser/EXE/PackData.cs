@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using CTFAK.Utils;
 
@@ -17,16 +18,18 @@ namespace CTFAK.MMFParser.EXE
             long start = exeReader.Tell();
             byte[] header = exeReader.ReadBytes(8);
 
-            exeReader.Skip(8);
+            // exeReader.Skip(8);
             uint headerSize = exeReader.ReadUInt32();
+            Debug.Assert(headerSize==32);
             uint dataSize = exeReader.ReadUInt32();
 
             exeReader.Seek((int)(start + dataSize - 32));
-            exeReader.Skip(4);
+            Logger.Log(exeReader.ReadAscii(4));
             exeReader.Seek(start + 16);
 
             uint formatVersion = exeReader.ReadUInt32();
-            exeReader.Skip(8);
+            Debug.Assert(exeReader.ReadInt32()==0);
+            Debug.Assert(exeReader.ReadInt32()==0);
 
             uint count = exeReader.ReadUInt32();
 
@@ -44,7 +47,8 @@ namespace CTFAK.MMFParser.EXE
             }
             
             header = exeReader.ReadFourCc();
-
+            Logger.Log(header.GetHex(4));
+            Logger.Log("PACK OFFSET: "+offset);
             exeReader.Seek(offset);
             for (int i = 0; i < count; i++)
             {
@@ -68,7 +72,10 @@ namespace CTFAK.MMFParser.EXE
         public void Read(ByteReader exeReader)
         {
             UInt16 len = exeReader.ReadUInt16();
-            PackFilename = exeReader.ReadWideString(len);
+            PackFilename = exeReader.ReadUniversal(len);
+            
+            
+            Logger.Log(PackFilename);
             _bingo = exeReader.ReadInt32();
             Data = exeReader.ReadBytes(exeReader.ReadInt32());
             

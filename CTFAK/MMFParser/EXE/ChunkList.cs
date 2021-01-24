@@ -297,6 +297,9 @@ namespace CTFAK.MMFParser.EXE
                 case 13117:
                     loader = new Events(chunk);
                     break;
+                case 13127:
+                    loader= new MovementTimerBase(chunk);
+                    break;
             }
 
             loader?.Read();
