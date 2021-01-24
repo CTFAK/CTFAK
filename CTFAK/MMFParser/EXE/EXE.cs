@@ -70,6 +70,7 @@ namespace CTFAK.MMFParser.EXE
                 Logger.Log("Found PackData header!\nReading PackData header.", true, ConsoleColor.Blue);
                 PackData.Read(exeReader);
                 GameData = new GameData();
+                Program.CleanData = GameData;
                 GameData.Read(exeReader);
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
             }
@@ -79,6 +80,7 @@ namespace CTFAK.MMFParser.EXE
                 var oldData = new ChunkList();
                 oldData.Read(exeReader);
                 GameData = new GameData();
+                Program.CleanData = GameData;
                 GameData.Read(exeReader);
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
             }

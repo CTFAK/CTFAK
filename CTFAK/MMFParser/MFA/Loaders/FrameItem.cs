@@ -73,7 +73,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 throw new NotImplementedException("invalid icon");
             }
             Chunks = new ChunkList(Reader);
-            Chunks.Log = true;
+            // Chunks.Log = true;
             Chunks.Read();
             
             if (MFA.defaultObjChunks == null) MFA.defaultObjChunks = Chunks;

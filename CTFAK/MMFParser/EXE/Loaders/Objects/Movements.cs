@@ -82,6 +82,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 case 1:
                     Loader = new Mouse(Reader);
                     break;
+                case 2:
+                    Loader = new RaceMovement(Reader);
+                    break;
                 case 3:
                     Loader=new EightDirections(Reader);
                     break;
@@ -343,6 +346,46 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             Writer.WriteInt16(Deceleration);
             Writer.WriteInt16(BounceFactor);
             Writer.WriteInt16(Directions);
+        }
+    }
+    public class RaceMovement:MovementLoader
+    {
+        public short Speed;
+        public short Acceleration;
+        public short Deceleration;
+        public short RotationSpeed;
+        public short BounceFactor;
+        public short Angles;
+        public short ReverseEnabled;
+
+        public RaceMovement(ByteReader reader) : base(reader)
+        {
+        }
+
+        public RaceMovement(ChunkList.Chunk chunk) : base(chunk)
+        {
+        }
+
+        public override void Read()
+        {
+            Speed = Reader.ReadInt16();
+            Acceleration = Reader.ReadInt16();
+            Deceleration = Reader.ReadInt16();
+            RotationSpeed = Reader.ReadInt16();
+            BounceFactor = Reader.ReadInt16();
+            Angles = Reader.ReadInt16();
+            ReverseEnabled = Reader.ReadInt16();
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt16(Speed);
+            Writer.WriteInt16(Acceleration);
+            Writer.WriteInt16(Deceleration);
+            Writer.WriteInt16(RotationSpeed);
+            Writer.WriteInt16(BounceFactor);
+            Writer.WriteInt16(Angles);
+            Writer.WriteInt16(ReverseEnabled);
         }
     }
 }

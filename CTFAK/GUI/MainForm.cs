@@ -50,10 +50,8 @@ namespace CTFAK.GUI
         {
             //Buttons
             InitializeComponent();
-            if (LoadableSettings.instance["lang"]?.ToString()?.Length > 0)
-            {
-                Thread.CurrentThread.CurrentUICulture=new CultureInfo(LoadableSettings.instance["lang"].ToString());
-            }
+            Thread.CurrentThread.CurrentUICulture=new CultureInfo("en-US");
+            
             
             ColorTheme = color;
             foreach (Control item in Controls)
@@ -274,7 +272,7 @@ namespace CTFAK.GUI
             Logger.Log("Loading GUI");
             //GameData gameData = null;
             var exe = Exe.Instance;
-            var gameData = exe.GameData;
+            var gameData = exe?.GameData ?? Program.CleanData;
 
 
             treeView1.Nodes.Clear();

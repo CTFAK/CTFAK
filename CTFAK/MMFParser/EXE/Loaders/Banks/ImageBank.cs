@@ -17,7 +17,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public bool SaveImages = false;
         public Dictionary<int, ImageItem> Images = new Dictionary<int, ImageItem>();
         public uint NumberOfItems;
-        public bool PreloadOnly=true;
+        public bool PreloadOnly=false;
 
         public ImageBank(ByteReader reader) : base(reader)
         {
@@ -76,8 +76,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             if (!Settings.DoMFA) Reader.Seek(0); //Reset the reader to avoid bugs when dumping more than once
             var tempImages = new Dictionary<int, ImageItem>();
 
-
-            NumberOfItems = Reader.ReadUInt32();
+            NumberOfItems = (uint) Reader.ReadInt32();
 
             Logger.Log($"Found {NumberOfItems} images",true,ConsoleColor.Green);
             
@@ -157,7 +156,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             Handle = Reader.ReadInt32();
             if (!Debug)
             {
-                if (Exe.Instance.GameData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
+                if (Program.CleanData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
             }
             
             Position = (int) Reader.Tell();
@@ -265,7 +264,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             ActionX = imageReader.ReadInt16();
             ActionY = imageReader.ReadInt16();
             _transparent = imageReader.ReadColor();
-             if(Settings.twofiveplus)Logger.Log($"Loading image {Handle.ToString(),4} Size: {_width,4}x{_height,4}");
+            // Logger.Log($"Loading image {Handle.ToString(),4} Size: {_width,4}x{_height,4}");
             byte[] imageData;
             if(Settings.twofiveplus) Flags["LZX"] = false;
             if (Flags["LZX"])

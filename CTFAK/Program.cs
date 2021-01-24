@@ -18,6 +18,8 @@ namespace CTFAK
     public class Program
     {
         public static MainForm MyForm;
+        public static GameData CleanData;
+
         public delegate void DumperEvent(object obj);
 
 
@@ -30,11 +32,11 @@ namespace CTFAK
             {
                 File.Create("settings.sav");
             }
-            LoadableSettings.FromFile("settings.sav");
+            // LoadableSettings.FromFile("settings.sav");
             //
             // MFAGenerator.WriteTestMFA();
-            MFAGenerator.ReadTestMFA();
-            Environment.Exit(0);
+            // MFAGenerator.ReadTestMFA();
+            // Environment.Exit(0);
             AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
             {
                 
@@ -52,19 +54,26 @@ namespace CTFAK
             }
             if (args.Length > 1)
             {
-                ReadFile(args[1],true,false,true);
-                MFAGenerator.BuildMFA();
-                Environment.Exit(0);
+                if (args[1].EndsWith(".exe"))
+                {
+                    ReadFile(args[1],true,false,true);
+                    MFAGenerator.BuildMFA();
+                    Environment.Exit(0);
+                }
+                else
+                {
+                    var reader = new ByteReader(new FileStream(args[1],FileMode.Open));
+                    CleanData = new GameData();
+                    CleanData.Read(reader);
+                }
+                
             }
             else if(args.Length==0)
             {
-                if (LoadableSettings.instance["mainColor"] == null)
-                        MyForm = new MainForm(Color.FromArgb(223, 114, 38));
-                    else
-                        MyForm = new MainForm(
-                            LoadableSettings.instance.ToActual<Color>(LoadableSettings.instance["mainColor"]));
+                MyForm = new MainForm(Color.FromArgb(223, 114, 38));
+                Application.Run(MyForm);
             }
-            Application.Run(MyForm);
+            
             
 
             
@@ -98,15 +107,25 @@ namespace CTFAK
             Settings.DumpImages = dumpImages;
             Settings.DumpSounds = dumpSounds;
             Settings.Verbose = verbose;
-            
-            var exeReader = new ByteReader(path, FileMode.Open);
-            var currentExe = new Exe();
-            Exe.Instance = currentExe;
-            var stopWatch = new Stopwatch();
-            stopWatch.Start();
-            currentExe.ParseExe(exeReader);
-            stopWatch.Stop();
-            Logger.Log("Finished in "+stopWatch.Elapsed.ToString("g"), true, ConsoleColor.Yellow);
+            if (path.EndsWith(".exe"))
+            {
+               
+                var exeReader = new ByteReader(path, FileMode.Open);
+                var currentExe = new Exe();
+                Exe.Instance = currentExe;
+                var stopWatch = new Stopwatch();
+                stopWatch.Start();
+                currentExe.ParseExe(exeReader);
+                stopWatch.Stop();
+                Logger.Log("Finished in "+stopWatch.Elapsed.ToString("g"), true, ConsoleColor.Yellow);
+
+            }
+            else
+            {
+                var reader = new ByteReader(new FileStream(path,FileMode.Open));
+                CleanData = new GameData();
+                CleanData.Read(reader);
+            }
             
         }
 

@@ -295,7 +295,7 @@ namespace CTFAK.MMFParser.MFA
             Music = new MusicBank(Reader);
             Music.Read();
 
-            if (Reader.ReadAscii(4) != "AGMI") throw new Exception("Invalid Icon Bank");
+            if (Reader.ReadAscii(4)!= "AGMI") throw new Exception("Invalid Icon Bank: ");
             Icons = new AGMIBank(Reader);
             Icons.Read();
 

@@ -174,7 +174,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 }
                 else if (name == EventEnd)
                 {
-                    _cache = Reader.ReadBytes(122);
+                    // _cache = Reader.ReadBytes(122);
                     
                     break;
                 }
@@ -279,7 +279,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
 
             Writer.WriteAscii(EventEnd);
             
-            Writer.WriteBytes(_cache);
+            // Writer.WriteBytes(_cache);
 
 
 

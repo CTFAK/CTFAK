@@ -24,12 +24,7 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
 
             for (int i = 0; i < 9; i++)
             {
-                if(_qualifiers.Count<i) Writer.WriteInt16(_qualifiers[i]);
-                else
-                {
-                    Writer.WriteInt16(-1);
-                    break;
-                }
+                Writer.WriteInt16(-1);
             }
 
             Values.Write(Writer);
@@ -90,7 +85,7 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
             Behaviours = new Behaviours(Reader);
             Behaviours.Read();
             Reader.Skip(2);//Transitions
-            Print();
+            // Print();
 
 
             

@@ -165,6 +165,7 @@
     <Compile Include="GUI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MMFParser\EXE\Loaders\Common.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Click.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\ExpressionParameter.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Group.cs" />

@@ -54,6 +54,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         private Events.Events _events;
         private Transition _fadeIn;
         private Transition _fadeOut;
+        private VirtualRect _virtualSize;
 
 
         public override void Print(bool ext)
@@ -69,9 +70,9 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
             return new string[]
             {
-                $"Name: {_name}",
+                $"Name: {Name}",
                 $"Size: {Width}x{Height}",
-                $"Objects: {_objects.CountOfObjects}"
+                $"Objects: {Objects.Count}"
             
             };
         }
@@ -81,10 +82,10 @@ namespace CTFAK.MMFParser.EXE.Loaders
             var frameReader = new ByteReader(Chunk.ChunkData);
             Chunks = new ChunkList();
             Chunks.Read(frameReader);
-
-            Logger.Log(Properties.GlobalStrings.readingFrame+" "+_name,true,ConsoleColor.Green);
+            
             
             _header = Chunks.GetChunk<FrameHeader>();
+            _virtualSize = Chunks.GetChunk<VirtualRect>();
             _name = Chunks.GetChunk<FrameName>();
             _password = Chunks.GetChunk<FramePassword>();
             _palette = Chunks.GetChunk<FramePalette>();
@@ -96,11 +97,15 @@ namespace CTFAK.MMFParser.EXE.Loaders
             _fadeOut = Chunks.PopChunk<Transition>();
             
             Flags.flag = _header.Flags.flag;
+            Logger.Log(Properties.GlobalStrings.readingFrame+$" {Name}",true,ConsoleColor.Green);
+
         }
 
         public int Width => _header.Width;
         public int Height => _header.Height;
-        public string Name => _name.Value;
+        public int VirtWidth => _virtualSize.Right;
+        public int VirtHeight => _virtualSize.Bottom;
+        public string Name => _name?.Value ?? "UNK";
         public string Password => _password.Value;
         public Color Background => _header.Background;
         public List<ObjectInstance> Objects => _objects?.Items ?? null;
@@ -249,8 +254,8 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
             get
             {
-                if (Exe.Instance.GameData.GameChunks.GetChunk<FrameItems>() == null) return null;
-                return Exe.Instance.GameData.GameChunks.GetChunk<FrameItems>().FromHandle(ObjectInfo);
+                if (Program.CleanData.GameChunks.GetChunk<FrameItems>() == null) return null;
+                return Program.CleanData.GameChunks.GetChunk<FrameItems>().FromHandle(ObjectInfo);
             }
         } 
 
@@ -384,16 +389,12 @@ namespace CTFAK.MMFParser.EXE.Loaders
             }
         }
 
-        public override void Print(bool ext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string[] GetReadableData()
-        {
-            throw new NotImplementedException();
-        }
+        public override void Print(bool ext){}
+        public override string[] GetReadableData() => null;
     }
-
-
+    public class VirtualRect:Rect
+    {
+        public VirtualRect(ByteReader reader) : base(reader){}
+        public VirtualRect(ChunkList.Chunk chunk) : base(chunk){}
+    }
 }

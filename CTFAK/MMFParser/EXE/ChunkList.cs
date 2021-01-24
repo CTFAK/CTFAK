@@ -258,6 +258,9 @@ namespace CTFAK.MMFParser.EXE
                 case 13116:
                     loader = new Transition(chunk);
                     break;
+                case 13122:
+                    loader = new VirtualRect(chunk);
+                    break;
                 case 13121:
                     loader = new Layers(chunk);
                     break;
@@ -289,7 +292,7 @@ namespace CTFAK.MMFParser.EXE
                     loader = new GlobalStrings(chunk);
                     break;
                 case 13117:
-                    loader = new Events(chunk);//NOT WORKING
+                    // loader = new Events(chunk);
                     break;
             }
 

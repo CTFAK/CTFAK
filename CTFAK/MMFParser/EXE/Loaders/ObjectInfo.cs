@@ -158,7 +158,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             Flags = Reader.ReadUInt16();
             InkEffect = Reader.ReadByte();
             InkEffectParameter = Reader.ReadByte(); 
-            Logger.Log("InkParam: "+InkEffectParameter);
         }
     }
 }

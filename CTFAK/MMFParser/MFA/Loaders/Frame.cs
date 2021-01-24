@@ -215,6 +215,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             } 
             
             Chunks = new ChunkList(Reader);
+            Chunks.Log = true;
             Chunks.Read();
             if(Events.Items.Count==0)MFA.emptyEvents = Events;
              
