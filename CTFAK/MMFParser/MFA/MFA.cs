@@ -98,7 +98,7 @@ namespace CTFAK.MMFParser.MFA
         public int InitialLifes;
         public int FrameRate;
         public int BuildType;
-        public string BuildPath;
+        public string BuildPath=" ";
         public string CommandLine;
         public string Aboutbox;
         public uint MenuSize;
@@ -179,7 +179,7 @@ namespace CTFAK.MMFParser.MFA
             Writer.WriteUInt32((uint) InitialLifes);
             Writer.WriteInt32(FrameRate);
             Writer.WriteInt32(BuildType);
-            Writer.AutoWriteUnicode(BuildPath);
+            Writer.AutoWriteUnicode(BuildPath ?? "");
             Writer.AutoWriteUnicode(unknown_string_2);
             Writer.AutoWriteUnicode(CommandLine);
             Writer.AutoWriteUnicode(Aboutbox);

@@ -52,6 +52,8 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
                 Writer.WriteUInt32(Magic);
                 Writer.AutoWriteUnicode(SubType);
             }
+
+            // if (ExtensionData == null) ExtensionData = new byte[0];
             Writer.WriteInt32(ExtensionData.Length+20);
             Writer.WriteInt32(ExtensionData.Length+20);
             Writer.WriteInt32(-1);

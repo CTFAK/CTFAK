@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using CTFAK.Utils;
 
 namespace CTFAK.MMFParser.EXE.Loaders
@@ -109,9 +110,9 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public string Password => _password.Value;
         public Color Background => _header.Background;
         public List<ObjectInstance> Objects => _objects?.Items ?? null;
-        public List<Color> Palette => _palette.Items;
+        public List<Color> Palette => _palette?.Items ?? new Color[256].ToList();
         public Events.Events Events => _events;
-        public List<Layer> Layers => _layers.Items;
+        public List<Layer> Layers => _layers?.Items ?? null;
         
 
         public Frame(ByteReader reader) : base(reader){}

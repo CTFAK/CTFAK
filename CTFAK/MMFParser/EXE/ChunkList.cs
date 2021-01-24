@@ -300,8 +300,8 @@ namespace CTFAK.MMFParser.EXE
             }
 
             loader?.Read();
-            chunk.ChunkData = null;
-            chunk.RawData = null;
+            // chunk.ChunkData = null;
+            // chunk.RawData = null;
             return loader;
         }
 

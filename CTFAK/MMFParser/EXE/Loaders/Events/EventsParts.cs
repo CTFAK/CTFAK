@@ -25,7 +25,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             ByteWriter newWriter = new ByteWriter(new MemoryStream());
             // Logger.Log($"{ObjectType}-{Num}-{ObjectInfo}-{ObjectInfoList}-{Flags}-{OtherFlags}-{Items.Count}-{DefType}-{Identifier}");
             newWriter.WriteInt16((short) ObjectType);
-            if (Num == -42) Num = -27;
             newWriter.WriteInt16((short) Num);
             newWriter.WriteUInt16((ushort) ObjectInfo);
             newWriter.WriteInt16((short) ObjectInfoList);
@@ -187,7 +186,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             }
             else
             {
-                throw new Exception("Loader is null");
+                throw new Exception("Loader is null: "+Code);
             }
             Reader.Seek(currentPosition+size);
 

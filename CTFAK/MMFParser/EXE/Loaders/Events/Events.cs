@@ -233,22 +233,44 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             
             foreach (Condition condition in Conditions)
             {
+                var cond = condition;
+                Fixer.FixConditions(ref cond);
                 condition.Write(newWriter);
             }
            
             foreach (Action action in Actions)
             {
-                action.Write(newWriter);
+                var act = action;
+                Fixer.FixActions(ref act);
+                act.Write(newWriter);
             }
             Writer.WriteInt16((short) ((newWriter.Size()+2)*-1));
             
             Writer.WriteWriter(newWriter);
 
-            
-
-            
-            
-            
+      
         }
     }
+
+    public static class Fixer
+    {
+        public static void FixConditions(ref Condition cond)
+        {
+            var num = cond.Num;
+            if (num == -42) num = -27;
+            // if (num == -28||num == -29||num == -30||num == -31||num == -32||num == -33||num == -34||num == -35||num == -36||num == -37||num == -38||num == -39) num = -8;
+            cond.Num = num;
+        }
+        public static void FixActions(ref Action act)
+        {
+            var num = act.Num;
+            // if (num == 27||num == 28||num == 29||num == 30) num = 3;
+            act.Num = num;
+        }
+        
+        
+    }
+    
+    
+    
 }

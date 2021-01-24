@@ -75,7 +75,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
             if (!Settings.DoMFA) Reader.Seek(0); //Reset the reader to avoid bugs when dumping more than once
             var tempImages = new Dictionary<int, ImageItem>();
-
+            // if (!Settings.DoMFA)return;
             NumberOfItems = (uint) Reader.ReadInt32();
 
             Logger.Log($"Found {NumberOfItems} images", true, ConsoleColor.Green);
@@ -149,6 +149,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             Handle = Reader.ReadInt32();
             if (!Debug)
             {
+                if (Settings.Build>288) Handle -= 1;
                 if (Program.CleanData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
             }
             

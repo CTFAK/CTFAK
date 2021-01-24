@@ -62,6 +62,7 @@ namespace CTFAK
                     var reader = new ByteReader(new FileStream(args[0],FileMode.Open));
                     CleanData = new GameData();
                     CleanData.Read(reader);
+                    MFAGenerator.BuildMFA();
                 }
                 
             }

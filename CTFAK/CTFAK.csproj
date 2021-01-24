@@ -168,6 +168,7 @@
     <Compile Include="MMFParser\EXE\Loaders\Common.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Click.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\ExpressionParameter.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Extension.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Group.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\GroupPointer.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\KeyParameter.cs" />

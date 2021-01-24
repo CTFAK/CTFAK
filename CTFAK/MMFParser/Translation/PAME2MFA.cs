@@ -17,6 +17,7 @@ using Backdrop = CTFAK.MMFParser.MFA.Loaders.mfachunks.Backdrop;
 using ChunkList = CTFAK.MMFParser.MFA.Loaders.ChunkList;
 using Counter = CTFAK.MMFParser.MFA.Loaders.mfachunks.Counter;
 using Events = CTFAK.MMFParser.MFA.Loaders.Events;
+using Extension = CTFAK.MMFParser.EXE.Loaders.Extension;
 using Frame = CTFAK.MMFParser.EXE.Loaders.Frame;
 using Layer = CTFAK.MMFParser.MFA.Loaders.Layer;
 using Movement = CTFAK.MMFParser.MFA.Loaders.mfachunks.Movement;
@@ -145,10 +146,12 @@ namespace CTFAK.MMFParser.Translation
                 newFrame.Password = "";
                 newFrame.LastViewedX = 320;
                 newFrame.LastViewedY = 240;
+                if (frame.Palette == null) continue;
                 newFrame.Palette = frame.Palette;
                 newFrame.StampHandle = 13;
                 newFrame.ActiveLayer = 0;
                 //LayerInfo
+                if(frame.Layers==null) continue;
                 var count = frame.Layers.Count;
                 Logger.Log($"{newFrame.Name} - {count}");
                 for (int i=0;i<count;i++)
@@ -210,15 +213,14 @@ namespace CTFAK.MMFParser.Translation
                     newFolder.Items = new List<uint>() {(uint) newFrameItem.Handle};
                     newFrame.Folders.Add(newFolder);
                 }
-
                 
-                if (frame.Events != null)
                 {
                     newFrame.Events = new Events((ByteReader) null);
                     newFrame.Events.Items = new List<EventGroup>();
                     newFrame.Events.Objects = new List<EventObject>();
                     newFrame.Events._ifMFA = true;
                     newFrame.Events.Version = 1028;
+                    if(frame.Events != null)
                     {
                         foreach (var item in newFrame.Items)
                         {
@@ -234,9 +236,14 @@ namespace CTFAK.MMFParser.Translation
                             newObject.InstanceHandle = 0xFFFFFFFF;
                             newFrame.Events.Objects.Add(newObject);
                         }
-                        newFrame.Events.Items = frame.Events.Items;
+
+                        foreach (EventGroup item in frame.Events.Items)
+                        {
+                            newFrame.Events.Items.Add(item);
+                        }
                     }
                 }
+                
                 mfa.Frames.Add(newFrame);
                 
 
@@ -403,7 +410,7 @@ namespace CTFAK.MMFParser.Translation
                             {
                                 if (animHeader.AnimationDict.ContainsKey(origAnim.Key))
                                 {
-                                    animation = animHeader.AnimationDict[origAnim.Key];
+                                    animation = animHeader?.AnimationDict[origAnim.Key];
                                 }
                                 else break;
 
@@ -456,7 +463,7 @@ namespace CTFAK.MMFParser.Translation
                         newExt.Movements = newObject.Movements;
                         newExt.Behaviours = newObject.Behaviours;
                     }
-                    var exts = Exe.Instance.GameData.GameChunks.GetChunk<Extensions>();
+                    var exts = Program.CleanData.GameChunks.GetChunk<Extensions>();
                     Extension ext = null;
                     foreach (var testExt in exts.Items)
                     {
@@ -492,20 +499,33 @@ namespace CTFAK.MMFParser.Translation
                         newText.Movements = newObject.Movements;
                         newText.Behaviours = newObject.Behaviours;
                     }
-                    newText.Width = (uint) text.Width;
-                    newText.Height = (uint) text.Height;
-                    var paragraph = text.Items[0];
-                    newText.Font = paragraph.FontHandle;
-                    newText.Color = paragraph.Color;
-                    newText.Flags = 0;
-                    newText.Items = new List<Paragraph>();
-                    foreach (EXE.Loaders.Objects.Paragraph exePar in text.Items)
+                    if (text == null)
                     {
-                        var newPar = new Paragraph((ByteReader) null);
-                        newPar.Value = exePar.Value;
-                        newPar.Flags = exePar.Flags.flag;
-                        newText.Items.Add(newPar);
+                        newText.Width = 10;
+                        newText.Height = 10;
+                        newText.Font = 0;
+                        newText.Color=Color.Black;
+                        newText.Flags = 0;
+                        newText.Items=new List<Paragraph>();
                     }
+                    else
+                    {
+                        newText.Width = (uint) text.Width;
+                        newText.Height = (uint) text.Height;
+                        var paragraph = text.Items[0];
+                        newText.Font = paragraph.FontHandle;
+                        newText.Color = paragraph.Color;
+                        newText.Flags = 0;
+                        newText.Items = new List<Paragraph>();
+                        foreach (EXE.Loaders.Objects.Paragraph exePar in text.Items)
+                        {
+                            var newPar = new Paragraph((ByteReader) null);
+                            newPar.Value = exePar.Value;
+                            newPar.Flags = exePar.Flags.flag;
+                            newText.Items.Add(newPar);
+                        }  
+                    }
+                    
 
                     newItem.Loader = newText;
                 }
@@ -545,9 +565,20 @@ namespace CTFAK.MMFParser.Translation
                         newCount.Movements = newObject.Movements;
                         newCount.Behaviours = newObject.Behaviours;
                     }
-                    newCount.Value = itemLoader.Counter.Initial;
-                    newCount.Maximum = itemLoader.Counter.Maximum;
-                    newCount.Minimum = itemLoader.Counter.Minimum;
+                    if (itemLoader.Counter == null)
+                    {
+                        newCount.Value = 0;
+                        newCount.Minimum = 0;
+                        newCount.Maximum = 0;
+
+                    }
+                    else
+                    {
+                        newCount.Value = itemLoader.Counter.Initial;
+                        newCount.Maximum = itemLoader.Counter.Maximum;
+                        newCount.Minimum = itemLoader.Counter.Minimum;
+                    }
+                    
                     newCount.Images = new List<int>() {0};
                     var shape = counter?.Shape;
 

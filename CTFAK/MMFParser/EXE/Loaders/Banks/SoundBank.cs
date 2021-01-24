@@ -38,6 +38,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
             if (!Settings.DoMFA)Reader.Seek(0);//Reset the reader to avoid bugs when dumping more than once
             Items = new List<SoundItem>();
+            // if (!Settings.DoMFA)return;
             NumOfItems = Reader.ReadInt32(); 
             Logger.Log("Found " + NumOfItems + " sounds",true,ConsoleColor.Green);
             //if (!Settings.DumpSounds) return;

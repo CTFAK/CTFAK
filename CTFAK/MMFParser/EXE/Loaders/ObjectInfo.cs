@@ -38,7 +38,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             _name = infoChunks.GetChunk<ObjectName>();
             _properties = infoChunks.GetChunk<ObjectProperties>();
             _properties.ReadNew((int) ObjectType,this);
-            
         }
 
         public int Handle => _header.Handle;

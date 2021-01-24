@@ -24,20 +24,13 @@ namespace CTFAK.MMFParser.EXE.Loaders
             for (int i = 0; i < len; i++)
             {
                 var handle = Reader.ReadInt16();
-                Logger.Log("Frame Handle: "+handle);
                 Items.Add(i,handle);
             }
 
         }
 
-        public override void Print(bool ext)
-        {
-            throw new System.NotImplementedException();
-        }
+        public override void Print(bool ext){}
+        public override string[] GetReadableData() => null;
 
-        public override string[] GetReadableData()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

@@ -37,7 +37,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             Writer.WriteInt32(IconHandle);
             
             Chunks.Write(Writer);
-            Loader.Write(Writer);
+            Loader?.Write(Writer);
 
 
 
