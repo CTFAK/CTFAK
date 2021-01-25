@@ -46,7 +46,8 @@ namespace CTFAK.Utils
 
         public static string ToDebugString<TKey, TValue>(IDictionary<TKey, TValue> dictionary)
         {
-            return string.Join(";", dictionary.Select(kv => kv.Key + "=" + kv.Value).ToArray());
+            // return string.Join(";", dictionary.Select(kv => kv.Key + "=" + kv.Value).ToArray());
+            return string.Join("\n", dictionary.Select(kv => kv.Key + "=" + kv.Value).ToArray());
         }
 
         public override string ToString()

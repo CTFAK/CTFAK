@@ -18,7 +18,7 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
 
         public override void Write(ByteWriter Writer)
         {
-            Writer.WriteInt32(ObjectFlags);
+            Writer.WriteInt32((int) ObjectFlags);
             Writer.WriteInt32(NewObjectFlags);
             Writer.WriteColor(BackgroundColor);
 
@@ -61,7 +61,7 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
 
         public override void Read()
         {
-            ObjectFlags = Reader.ReadInt32();
+            ObjectFlags =  Reader.ReadInt32();
             NewObjectFlags = Reader.ReadInt32();
             BackgroundColor = Reader.ReadColor();
             var end = Reader.Tell() + 2 * (8+1);

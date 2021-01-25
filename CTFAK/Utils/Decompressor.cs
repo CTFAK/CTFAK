@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.IO.Compression;
+using System.Runtime.InteropServices;
 using Joveler.Compression.ZLib;
+using zlib;
 using DeflateStream = System.IO.Compression.DeflateStream;
 using GZipStream = Joveler.Compression.ZLib.GZipStream;
 
@@ -9,6 +12,8 @@ namespace CTFAK.Utils
 {
     public static class Decompressor
     {
+        [DllImport("TinflateDecompress.dll")]
+        public static extern int decompress(IntPtr source, int source_size, IntPtr output, int output_size);
         public static byte[] Decompress(ByteReader exeReader, out int decompressed)
         {
             Int32 decompSize = exeReader.ReadInt32();
@@ -40,17 +45,18 @@ namespace CTFAK.Utils
             return decompressedData;
         }
 
-        public static byte[] decompressOld(ByteReader reader, int size, int decompSize)
+        public static byte[] decompressOld(byte[] buff,int size,int decompSize)
         {
-            ZLibDecompressOptions decompOpts = new ZLibDecompressOptions();
-            MemoryStream compressedStream = new MemoryStream(reader.ReadBytes(size));
-            MemoryStream decompressedStream = new MemoryStream();
+            var originalBuff = Marshal.AllocHGlobal(size);
+            Marshal.Copy(buff,0,originalBuff,buff.Length);
+            var outputBuff = Marshal.AllocHGlobal(decompSize);
+            decompress(originalBuff, size, outputBuff, decompSize);
+            Marshal.FreeHGlobal(originalBuff);
+            byte[] data = new byte[decompSize];
+            Marshal.Copy(outputBuff,data,0,decompSize);
+            Marshal.FreeHGlobal(outputBuff);
+            return data;
 
-            byte[] decompressedData = decompressedStream.GetBuffer();
-            // Trimming array to decompSize,
-            // because ZlibStream always pads to 0x100
-            Array.Resize<byte>(ref decompressedData, decompSize);
-            return decompressedData;
         }
         
 

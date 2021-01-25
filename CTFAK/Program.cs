@@ -37,6 +37,7 @@ namespace CTFAK
             // MFAGenerator.WriteTestMFA();
             // MFAGenerator.ReadTestMFA();
             // Environment.Exit(0);
+            Thread.CurrentThread.CurrentUICulture=new CultureInfo("en-US");
             AppDomain.CurrentDomain.FirstChanceException += (sender, eventArgs) =>
             {
                 
@@ -105,7 +106,7 @@ namespace CTFAK
             Settings.DumpImages = dumpImages;
             Settings.DumpSounds = dumpSounds;
             Settings.Verbose = verbose;
-            if (path.EndsWith(".exe"))
+            if (path.ToLower().EndsWith(".exe"))
             {
                
                 var exeReader = new ByteReader(path, FileMode.Open);

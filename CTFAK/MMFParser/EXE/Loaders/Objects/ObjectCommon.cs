@@ -21,7 +21,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         
         public Animations Animations;
 
-        private BitDict preferences = new BitDict(new string[]
+        public BitDict Preferences = new BitDict(new string[]
             {
                 "Backsave",
                 "ScrollingIndependant",
@@ -104,7 +104,35 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
-            var currentPosition = Reader.Tell();
+            if (Settings.Old)
+            {
+                var currentPosition = Reader.Tell();
+                var size = Reader.ReadInt16();
+                var checksum = Reader.ReadInt16();
+                _movementsOffset = (ushort) Reader.ReadInt16();
+                _animationsOffset = (ushort) Reader.ReadInt16();
+                var version = Reader.ReadInt16();
+                _counterOffset = (ushort) Reader.ReadInt16();
+                _systemObjectOffset = (ushort) Reader.ReadInt16();
+                var ocVariable = Reader.ReadInt32();
+                Flags.flag = (uint) Reader.ReadInt16();
+                var end = Reader.Tell() + 8 * 2;//maybe its 9*2
+                Reader.Seek(end);
+
+                _extensionOffset = (ushort) Reader.ReadInt16();
+                _valuesOffset = (ushort) Reader.ReadInt16();
+                NewFlags.flag = (uint) Reader.ReadInt16();
+                Preferences.flag = (uint) Reader.ReadInt16();
+                Identifier = Reader.ReadInt16();
+                BackColor = Reader.ReadColor();
+                _fadeinOffset = (uint) Reader.ReadInt32();
+                _fadeoutOffset = (uint) Reader.ReadInt32();
+
+
+            }
+            else
+            {
+                var currentPosition = Reader.Tell();
             var size = Reader.ReadInt32();
             if (Settings.Build >= 284)
             {
@@ -139,7 +167,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             _valuesOffset = Reader.ReadUInt16();
             _stringsOffset = Reader.ReadUInt16();
             NewFlags.flag = Reader.ReadUInt16();
-            preferences.flag = Reader.ReadUInt16();
+            Preferences.flag = Reader.ReadUInt16();
             Identifier = Reader.ReadInt32();
             BackColor = Reader.ReadColor();
             _fadeinOffset = Reader.ReadUInt32();
@@ -157,10 +185,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 Movements=new Movements(Reader);
                 Movements.Read();
             }
-            
+
             if (_systemObjectOffset > 0)
             {
-                Reader.Seek(currentPosition+_systemObjectOffset);
+                Reader.Seek(currentPosition + _systemObjectOffset);
                 switch (Parent.ObjectType)
                 {
                     //Text
@@ -170,10 +198,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                         break;
                     //Counter
                     case Constants.ObjectType.Counter:
-                        Counters=new Counters(Reader);
+                        Counters = new Counters(Reader);
                         Counters.Read();
                         break;
-                    
+
                 }
             }
 
@@ -201,6 +229,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 Counter.Read();
             }
 
+                
+            }
+            
             // Logger.Log("anims: "+_animationsOffset);
             // Logger.Log("fadeIn: "+_fadeinOffset);
             // Logger.Log("fadeOut: "+_fadeoutOffset);

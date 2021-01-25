@@ -33,7 +33,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
                 var item = new ObjectInfo(Reader);
                 item.Read();
                 ItemDict.Add(item.Handle, item);
-                Names.Add(item.Name);
+                // Names.Add(item.Name);
                 // Logger.Log($"Found FrameItem: '{item.Name}' with handle ({item.Handle})", true, ConsoleColor.Magenta);
             }
             GameData.TestItems = this;

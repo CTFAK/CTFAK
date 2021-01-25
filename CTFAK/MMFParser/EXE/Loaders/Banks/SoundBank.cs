@@ -112,11 +112,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
     public class SoundItem : SoundBase
     {
-        public bool Compressed;
         public int Checksum;
         public int References;
         public int Flags;
-        public bool IsCompressed = true;
+        public bool IsCompressed = false;
 
         
         public override void Read()

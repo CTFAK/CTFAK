@@ -304,6 +304,10 @@ namespace CTFAK.GUI
                         var frameItem = items.ItemDict[key];
                         var objNode = new ChunkNode($"{(Constants.ObjectType) frameItem.ObjectType} - {frameItem.Name}",
                             frameItem);
+                        foreach (ChunkList.Chunk chunk in frameItem.Chunks)
+                        {
+                            objNode.Nodes.Add(new ChunkNode(chunk.Name, chunk));
+                        }
                         newNode.Nodes.Add(objNode);
                     }
             }
@@ -314,12 +318,6 @@ namespace CTFAK.GUI
             musicsButton.Visible = true;
             GameInfo.Visible = true;
             loadingLabel.Visible = false;
-            
-            InitPackDataTab();
-            InitImages();
-            InitSounds();
-            InitKeyTab();
-            InitPlugins();
             var toLog = "";
             toLog += $"{Properties.Locale.ChunkNames.title}: {Exe.Instance.GameData.Name}\n";
             toLog += $"{Properties.Locale.ChunkNames.copyright}: {Exe.Instance.GameData.Copyright}\n";
@@ -333,6 +331,13 @@ namespace CTFAK.GUI
             toLog += $"{Properties.GlobalStrings.frameitemCount}: {Exe.Instance.GameData.Frameitems?.NumberOfItems}\n";
             toLog += $"{Properties.GlobalStrings.frameCount}: {Exe.Instance.GameData.Frames.Count}\n";
             toLog += $"Chunks Count: {Exe.Instance.GameData.GameChunks.Chunks.Count}\n";
+            GameInfo.Text = toLog;
+            InitPackDataTab();
+            InitImages();
+            InitSounds();
+            InitKeyTab();
+            InitPlugins();
+            
             if (Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>() != null)
                 Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().OnImageSaved += UpdateImageBar;
             if (Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>() != null)
@@ -341,7 +346,7 @@ namespace CTFAK.GUI
                 Exe.Instance.GameData.GameChunks.GetChunk<MusicBank>().OnMusicSaved += UpdateMusicBar;
 
 
-            GameInfo.Text = toLog;
+            
             Loaded = true;
         }
 

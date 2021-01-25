@@ -29,6 +29,7 @@ namespace CTFAK.MMFParser.OLD.Loaders
             controls.Read();
             var borderColor = Reader.ReadColor();
             var frameCount = Reader.ReadInt32();
+            Logger.Log(frameCount);
         }
 
         public override void Print(bool ext)

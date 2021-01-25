@@ -46,10 +46,14 @@ namespace CTFAK.MMFParser.Translation
             //mfa.Stamp = wtf;
             //if (game.Fonts != null) mfa.Fonts = game.Fonts;
             mfa.Sounds.Items.Clear();
-            foreach (var item in game.Sounds.Items)
+            if (game.Sounds != null)
             {
-                mfa.Sounds.Items.Add(item);
+                foreach (var item in game.Sounds.Items)
+                {
+                    mfa.Sounds.Items.Add(item);
+                }
             }
+            
             
             // mfa.Music = game.Music;
             mfa.Images.Items = game.Images.Images;
@@ -320,7 +324,9 @@ namespace CTFAK.MMFParser.Translation
             newItem.InkEffect = item.InkEffect;
             newItem.InkEffectParameter = item.InkEffectValue;
             newItem.AntiAliasing = item.Antialias ? 1 : 0;
-            newItem.Flags = (int) item.Flags;
+            newItem.Flags = item.Flags;
+            // if(item.Flags!=0)Logger.Log($"{item.Name}-{item.Flags}");
+            
             newItem.IconHandle = 12;
             newItem.Chunks = new ChunkList(null);
 
@@ -358,8 +364,9 @@ namespace CTFAK.MMFParser.Translation
                 Logger.Log("Translating Object: " + itemLoader.Parent.Name);
                 //CommonSection
                 var newObject = new ObjectLoader(null);
-                newObject.ObjectFlags = (int) (itemLoader.Flags.flag);
+                newObject.ObjectFlags =  (int) (itemLoader.Flags.flag);
                 newObject.NewObjectFlags = (int) (itemLoader.NewFlags.flag);
+                
                 newObject.BackgroundColor = itemLoader.BackColor;
                 //newLoader.Qualifiers;
                 newObject.Strings = ConvertStrings(itemLoader.Strings);
@@ -523,7 +530,7 @@ namespace CTFAK.MMFParser.Translation
 
                     newItem.Loader = newText;
                 }
-                else if (item.ObjectType == Constants.ObjectType.Lives)
+                else if (item.ObjectType == Constants.ObjectType.Lives|| item.ObjectType==Constants.ObjectType.Score)
                 {
                     var counter = itemLoader.Counters;
                     var lives = new Lives(null);

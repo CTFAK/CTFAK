@@ -52,8 +52,12 @@ namespace CTFAK.MMFParser.OLD.Loaders
 
         public override void Read()
         {
-            Keys = new Keys(Reader);
-            Keys.Read();
+            for (int i = 0; i < 4; i++)
+            {
+                Keys = new Keys(Reader);
+                Keys.Read();  
+            }
+            
         }
 
         public override void Print(bool ext)

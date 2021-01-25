@@ -51,7 +51,7 @@ namespace CTFAK.MMFParser.EXE
         public void Read(ByteReader exeReader)
         {
             string magic = exeReader.ReadAscii(4); //Reading header
-
+            Logger.Log("MAGIC HEADER: "+magic);
             //Checking for header
             if (magic == Constants.UnicodeGameHeader) Constants.IsUnicode = true;//PAMU
             else if (magic == Constants.GameHeader) Constants.IsUnicode = false;//PAME

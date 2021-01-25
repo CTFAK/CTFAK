@@ -52,6 +52,7 @@ namespace CTFAK.MMFParser.EXE
                     chunk.Verbose = Verbose;
                     chunk.Read(reader);
                     chunk.Loader = LoadOld(chunk);
+                    Chunks.Add(chunk);
                     if (reader.Tell() >= reader.Size()) break;
                     if (chunk.Id == 32639) break; //LAST chunkID
                 }
@@ -93,13 +94,8 @@ namespace CTFAK.MMFParser.EXE
 
                 Flag = (ChunkFlags) exeReader.ReadInt16();
                 Size = exeReader.ReadInt32();
-                if((Id!=26214&&Id!=26216)) //To prevent RAM from commiting suicide
-                {                
-                    RawData = exeReader.ReadBytes(Size);
-                    exeReader.BaseStream.Position -= Size;
-                    //Saving raw data cuz why not 
-                }
-                if(Settings.Old) Logger.Log("Reading old chunk"+(Constants.ChunkNames)Id);
+                
+                // if(Settings.Old) Logger.Log("Reading old chunk"+(Constants.ChunkNames)Id);
 
                 switch (Flag)
                 {
@@ -113,8 +109,11 @@ namespace CTFAK.MMFParser.EXE
                         if (!Settings.Old) ChunkData = Decompressor.Decompress(exeReader, out DecompressedSize);
                         else
                         {
-                            Int32 decompSize = exeReader.ReadInt32();
-                            ChunkData = Decompressor.decompressOld(exeReader, Size, decompSize);
+                            var start = exeReader.Tell();
+                            var decompSize = exeReader.ReadInt32();
+                            var buff = exeReader.ReadBytes(Size);
+                            ChunkData = Decompressor.decompressOld(buff, Size, decompSize);
+                            exeReader.Seek(start+Size);
                         }
                         break;
                     case ChunkFlags.NotCompressed:
@@ -312,9 +311,50 @@ namespace CTFAK.MMFParser.EXE
             ChunkLoader loader = null;
             switch (chunk.Id)
             {
-                case 8739:
-                    loader = new AppHeader(chunk);
+                case 8740:
+                    loader = new AppName(chunk);
                     break;
+                case 8741:
+                    loader = new AppAuthor(chunk);
+                    break;
+                case 8745:
+                    loader = new FrameItems(chunk);
+                    break;
+                case 17477:
+                    loader = new ObjectName(chunk);
+                    break;
+                case 17476:
+                    loader = new ObjectHeader(chunk);
+                    break;
+                case 17478:
+                    loader = new ObjectProperties(chunk);
+                    return loader;
+                case 13107:
+                    loader = new Frame(chunk);
+                    break;
+                case 8750:
+                    loader = new EditorFilename(chunk);
+                    break;
+                case 8751:
+                    loader = new TargetFilename(chunk);
+                    break;
+                case 13109:
+                    loader = new FrameName(chunk);
+                    break;
+                case 13108:
+                    loader = new FrameHeader(chunk);
+                    break;
+                case 13112:
+                    loader = new ObjectInstances(chunk);
+                    break;
+                case 26214:
+                    // loader = new ImageBank(chunk);
+                    break;
+                case 26216:
+                    // loader = new SoundBank(chunk);
+                    break;
+                
+
             }
             loader?.Read();
             return loader;

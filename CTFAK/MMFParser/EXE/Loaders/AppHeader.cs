@@ -59,28 +59,28 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override void Read()
         {
-            Size = Reader.ReadInt32();
-            Flags.flag=(uint) Reader.ReadInt16();
+            
+            {
+                if (!Settings.Old) Size = Reader.ReadInt32();
+                Flags.flag=(uint) Reader.ReadInt16();
 
-            NewFlags.flag = (uint) Reader.ReadInt16();
-            var graphicsMode = Reader.ReadInt16();
-            var otherflags = Reader.ReadInt16();
-            //TODO: Add OtherFlags
+                NewFlags.flag = (uint) Reader.ReadInt16();
+                var graphicsMode = Reader.ReadInt16();
+                var otherflags = Reader.ReadInt16();
+                WindowWidth = Reader.ReadInt16();
+                WindowHeight = Reader.ReadInt16();
+                InitialScore = (int) (Reader.ReadUInt32() ^ 0xffffffff);
+                InitialLives = (int) (Reader.ReadUInt32() ^ 0xffffffff);
+                // var controls = new Controls(Reader);
+                // controls.Read();
+                BorderColor = Reader.ReadColor();
+                NumberOfFrames = Reader.ReadInt32();
+                
+                FrameRate = Reader.ReadInt32();
+                var windowsMenuIndex = Reader.ReadSByte(); 
+            }
             
-            WindowWidth = Reader.ReadInt16();
-            WindowHeight = Reader.ReadInt16();
             
-            InitialScore = (int) (Reader.ReadUInt32() ^ 0xffffffff);
-            InitialLives = (int) (Reader.ReadUInt32() ^ 0xffffffff);
-            
-            var controls = new Controls(Reader);
-            controls.Read();
-            
-
-            BorderColor = Reader.ReadColor();
-            NumberOfFrames = Reader.ReadInt32();
-            FrameRate = Reader.ReadInt32();
-            var windowsMenuIndex = Reader.ReadSByte();
         }
 
         public override void Print(bool ext)

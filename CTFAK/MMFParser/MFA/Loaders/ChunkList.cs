@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using CTFAK.MMFParser.EXE;
 using CTFAK.Utils;
@@ -108,8 +109,15 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 case 33:
                     Loader = new FrameVirtualRect(dataReader);
                     break;
+                case 56:
+                    Loader=new GlobalObject(dataReader);
+                    break;
+                case 72:
+                    Loader = new Opacity(dataReader);
+                    break;
                 default:
                     Loader = null;
+                    // Logger.Log($"{Id} - {Data.GetHex()}");
                     break;
                 
             }
@@ -140,6 +148,26 @@ namespace CTFAK.MMFParser.MFA.Loaders
             
         }
     }
+
+    public class Opacity : MFAChunkLoader
+    {
+        public int Value;
+
+        public Opacity(ByteReader dataReader) : base(dataReader){}
+        
+
+        public override void Read()
+        {
+            Value = Reader.ReadInt32();
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Value = 255;
+            Writer.WriteInt32(Value);
+        }
+    }
+
     public class FrameVirtualRect:MFAChunkLoader
     {
         public int Left;
@@ -147,9 +175,6 @@ namespace CTFAK.MMFParser.MFA.Loaders
         public int Right;
         public int Bottom;
         public FrameVirtualRect(ByteReader reader) : base(reader){}
-
-        
-
         public override void Read()
         {
             Left = Reader.ReadInt32();
@@ -165,7 +190,28 @@ namespace CTFAK.MMFParser.MFA.Loaders
             Writer.WriteInt32(Top);
             Writer.WriteInt32(Right);
             Writer.WriteInt32(Bottom);
+        }
+    }
+    public class GlobalObject:MFAChunkLoader
+    {
+        public byte[] Value;
 
+        public GlobalObject(ByteReader reader) : base(reader)
+        {
+        }
+
+        public override void Read()
+        {
+            Value = Reader.ReadBytes(12);
+            for(int i=0;i<Value.Length;i++)
+            {
+                Value[i] = 0;
+            }
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteBytes(Value);
         }
     }
 

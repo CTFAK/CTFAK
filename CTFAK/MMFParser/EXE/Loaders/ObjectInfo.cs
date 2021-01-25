@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using CTFAK.MMFParser.EXE.Loaders.Banks;
 using CTFAK.MMFParser.EXE.Loaders.Objects;
 using CTFAK.Utils;
@@ -33,10 +34,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
             var infoChunks = new ChunkList();
             infoChunks.Verbose = false;
             infoChunks.Read(Reader);
-
+            
             _header = infoChunks.GetChunk<ObjectHeader>();
             _name = infoChunks.GetChunk<ObjectName>();
             _properties = infoChunks.GetChunk<ObjectProperties>();
+            
             _properties.ReadNew((int) ObjectType,this);
         }
 
@@ -153,8 +155,8 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
             Handle = Reader.ReadInt16();
             ObjectType = Reader.ReadInt16();
-            Int16 reserved = Reader.ReadInt16();
             Flags = Reader.ReadUInt16();
+            Int16 reserved = Reader.ReadInt16();
             InkEffect = Reader.ReadByte();
             InkEffectParameter = Reader.ReadByte(); 
         }

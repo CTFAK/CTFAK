@@ -61,7 +61,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override void Print(bool ext)
         {
-            Logger.Log($"Frame: {_name}", true, ConsoleColor.Green);
+            Logger.Log($"Frame: {Name}", true, ConsoleColor.Green);
             Logger.Log($"   Password: {Password}", true, ConsoleColor.Green);
             Logger.Log($"   Size: {Width}x{Height}", true, ConsoleColor.Green);
             Logger.Log($"   Objects: {_objects.CountOfObjects}", true, ConsoleColor.Green);
@@ -95,10 +95,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
             _password = Chunks.GetChunk<FramePassword>();
             _palette = Chunks.GetChunk<FramePalette>();
             _layers = Chunks.GetChunk<Layers>();
+            //layerEffects
             _objects = Chunks.GetChunk<ObjectInstances>();
             _events = Chunks.GetChunk<Events.Events>();
             _movementTimer = Chunks.GetChunk<MovementTimerBase>();
-            
+            //frameEffects
             _fadeIn = Chunks.PopChunk<Transition>();
             _fadeOut = Chunks.PopChunk<Transition>();
             
@@ -113,7 +114,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public int VirtHeight => _virtualSize.Bottom;
         public int MovementTimer => _movementTimer.Value;
         public string Name => _name?.Value ?? "UNK";
-        public string Password => _password.Value;
+        public string Password => _password?.Value ?? "";
         public Color Background => _header.Background;
         public List<ObjectInstance> Objects => _objects?.Items ?? null;
         public List<Color> Palette => _palette?.Items ?? new Color[256].ToList();
@@ -170,10 +171,21 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override void Read()
         {
-            Width = Reader.ReadInt32();
-            Height = Reader.ReadInt32();
-            Background = Reader.ReadColor();
-            Flags.flag = Reader.ReadUInt32();
+            if (Settings.Old)
+            {
+                Width = Reader.ReadInt16();
+                Height = Reader.ReadInt16();
+                Background = Reader.ReadColor();
+                Flags.flag = (uint) Reader.ReadInt16(); 
+            }
+            else
+            {
+                Width = Reader.ReadInt32();
+                Height = Reader.ReadInt32();
+                Background = Reader.ReadColor();
+                Flags.flag = Reader.ReadUInt32(); 
+            }
+            
             
             
 
@@ -229,7 +241,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public int Y;
         public short ParentType;
         public short Layer;
-        public string Name;
         public short ParentHandle;
 
         public ObjectInstance(ByteReader reader) : base(reader)
@@ -244,16 +255,25 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
             Handle = (ushort) Reader.ReadInt16();
             ObjectInfo = (ushort) Reader.ReadInt16();
-            X = Reader.ReadInt32();
-            Y = Reader.ReadInt32();
-            ParentType = Reader.ReadInt16();
-            ParentHandle = Reader.ReadInt16();
-            Layer = Reader.ReadInt16();
-            var reserved = Reader.ReadInt16();
+            if (Settings.Old)
+            {
+                X = Reader.ReadInt16();
+                Y = Reader.ReadUInt16();
+                ParentType = Reader.ReadInt16();
+                ParentHandle = Reader.ReadInt16();
+            }
+            else
+            {
+                X = Reader.ReadInt32();
+                Y = Reader.ReadInt32();
+                ParentType = Reader.ReadInt16();
+                ParentHandle = Reader.ReadInt16();
+                Layer = Reader.ReadInt16();
+                var reserved = Reader.ReadInt16();
+            }
+            
             
             //-------------------------
-            if (FrameItem != null) Name = FrameItem.Name;
-            else Name = $"UNKNOWN-{Handle}";
 
         }
 
@@ -264,7 +284,9 @@ namespace CTFAK.MMFParser.EXE.Loaders
                 if (Program.CleanData.GameChunks.GetChunk<FrameItems>() == null) return null;
                 return Program.CleanData.GameChunks.GetChunk<FrameItems>().FromHandle(ObjectInfo);
             }
-        } 
+        }
+
+        public string Name => FrameItem.Name;
 
         public override void Print(bool ext)
         {

@@ -37,12 +37,24 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
-            Size = Reader.ReadInt32();
-            ObstacleType = (Obstacle) Reader.ReadInt16();
-            CollisionType = (Collision) Reader.ReadInt16();
-            Width = Reader.ReadInt32();
-            Height = Reader.ReadInt32();
-            Image = Reader.ReadInt16();
+            if (Settings.Old)
+            {
+                Size = Reader.ReadInt32();
+                ObstacleType = (Obstacle) Reader.ReadInt16();
+                CollisionType = (Collision) Reader.ReadInt16();
+                Image = Reader.ReadInt16();
+            }
+            else
+            {
+                Size = Reader.ReadInt32();
+                ObstacleType = (Obstacle) Reader.ReadInt16();
+                CollisionType = (Collision) Reader.ReadInt16();
+                Width = Reader.ReadInt32();
+                Height = Reader.ReadInt32();
+                Image = Reader.ReadInt16();
+                
+            }
+            
 
         }
 

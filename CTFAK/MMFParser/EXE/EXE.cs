@@ -64,6 +64,10 @@ namespace CTFAK.MMFParser.EXE
             Logger.Log("First Short: " + firstShort.ToString("X2"), true, ConsoleColor.Yellow);
             if (firstShort == 0x7777) Settings.Old = false;
             else if (firstShort == 0x222c) Settings.Old = true;
+            else
+            {
+                Logger.Log(firstShort.ToString("x8"));
+            }
             if (!Settings.Old)
             {
                 PackData = new PackData();

@@ -134,6 +134,77 @@ namespace CTFAK.Utils
             return alpha;
         }
 
+        public static (byte[], int) ReadRLE(byte[] data, int width, int height, int pointSize)
+        {
+            var pad = GetPadding(width, pointSize);
+            var currentPosition = 0;
+            var i = 0;
+            var pos = 0;
+            var points= new byte[width * height * 4];
+            while (true)
+            {
+                var command = data[currentPosition];
+                currentPosition += 1;
+                if (command == 0) break;
+                if (command > 128)
+                {
+                    command -= 128;
+                    for (int j = 0; j < command; j++)
+                    {
+                        if ((pos & (width + pad)) < width)
+                        {
+                            {
+                                UInt16 newShort = (ushort) (data[currentPosition] | data[currentPosition + 1] << 8);
+                                byte r = (byte) ((newShort & 31744) >> 10);
+                                byte g = (byte) ((newShort & 992) >> 5);
+                                byte b = (byte) ((newShort & 31));
+
+                                r = (byte) (r << 3);
+                                g = (byte) (g << 3);
+                                b = (byte) (b << 3);
+                                points[i] = r;
+                                points[i + 1] = g;
+                                points[i + 2] = b;
+                                points[i + 3] = 255;
+                            }
+
+                            i += 1;
+                        }
+
+                        pos += 1;
+                        currentPosition += 2;
+
+                    }
+                }
+                else
+                {
+                    if((pos)%(width+pad)<width)
+                    {
+                        UInt16 newShort = (ushort) (data[currentPosition] | data[currentPosition + 1] << 8);
+                        byte r = (byte) ((newShort & 31744) >> 10);
+                        byte g = (byte) ((newShort & 992) >> 5);
+                        byte b = (byte) ((newShort & 31));
+
+                        r = (byte) (r << 3);
+                        g = (byte) (g << 3);
+                        b = (byte) (b << 3);
+                        points[i] = r;
+                        points[i + 1] = g;
+                        points[i + 2] = b;
+                        points[i + 3] = 255;
+                        i += 1;
+                    }
+                    pos += 1;
+                }
+
+                currentPosition += 2;
+            }
+
+            return (points, currentPosition);
+
+
+        }
+
         public static int GetPadding(int width, int pointSize, int bytes = 2)
         {
             int pad = bytes - ((width * pointSize) % bytes);

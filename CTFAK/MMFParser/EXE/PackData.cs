@@ -25,13 +25,16 @@ namespace CTFAK.MMFParser.EXE
 
             exeReader.Seek((int)(start + dataSize - 32));
             var uheader = exeReader.ReadAscii(4);
+            Logger.Log("SUPERHEADER: "+uheader);
             if(uheader=="PAMU")Settings.Unicode = true;
             else if(uheader=="PAME")Settings.Unicode = false;
             exeReader.Seek(start + 16);
 
             uint formatVersion = exeReader.ReadUInt32();
-            Debug.Assert(exeReader.ReadInt32()==0);
-            Debug.Assert(exeReader.ReadInt32()==0);
+            var check = exeReader.ReadInt32();
+            Debug.Assert(check==0);
+            check = exeReader.ReadInt32();
+            Debug.Assert(check==0);
 
             uint count = exeReader.ReadUInt32();
 

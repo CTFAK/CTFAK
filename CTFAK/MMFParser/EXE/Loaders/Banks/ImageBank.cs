@@ -183,39 +183,31 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             Reader.Seek(Position);
             ByteReader imageReader;
             if (!Settings.twofiveplus)
-                imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
-            else imageReader = Reader;           
-            long start = imageReader.Tell();
-
-
-            if (Settings.twofiveplus)
             {
-                var unk = imageReader.ReadBytes(4);
-                if (unk.GetHex(4) != "FF FF FF FF ")
+                if (Settings.Old)
                 {
-                    Logger.Log(Reader.Tell().ToString());
-                    Size = (int) BitConverter.ToUInt32(unk,0);
-                    _references = imageReader.ReadInt32();
-                    _checksum = (int) imageReader.ReadUInt32();
+                    var decompSize = Reader.ReadInt32();
+                    imageReader =new ByteReader(Decompressor.decompressOld(Reader.ReadBytes((int) Reader.Size()), (int) Reader.Size(), decompSize));
                 }
                 else
                 {
-                    Size = (int) imageReader.ReadInt32();
-                    _references = imageReader.ReadInt32();
-                    _checksum = (int) imageReader.ReadUInt32();
-                }
-                
-                Logger.Log("Size: "+Size);
-                Logger.Log("References: "+_references);
-                Logger.Log("Checksum: "+_checksum);
+                    imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
+                } 
+            }
+            else imageReader = Reader;
+            long start = imageReader.Tell();
 
-            }
-            else
+
+            //return;
+            if (Settings.twofiveplus) imageReader.Skip(4);
+            if (Settings.Old)
             {
-                _checksum = imageReader.ReadInt32();
-                _references = imageReader.ReadInt32();
-                Size = (int) imageReader.ReadUInt32();  
+                _checksum = imageReader.ReadInt16();
             }
+            else _checksum = imageReader.ReadInt32();
+            
+            _references = imageReader.ReadInt32();
+            Size = (int) imageReader.ReadUInt32();
 
             
             imageReader.Seek(start+ _checksum);//to prevent bugs
@@ -229,14 +221,29 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             Reader.Seek(Position);
             ByteReader imageReader;
             if (!Settings.twofiveplus)
-                imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
+            {
+                if (Settings.Old)
+                {
+                    var decompSize = Reader.ReadInt32();
+                    imageReader =new ByteReader(Decompressor.decompressOld(Reader.ReadBytes((int) Reader.Size()), (int) Reader.Size(), decompSize));
+                }
+                else
+                {
+                    imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
+                } 
+            }
             else imageReader = Reader;
             long start = imageReader.Tell();
 
 
             //return;
             if (Settings.twofiveplus) imageReader.Skip(4);
-            _checksum = imageReader.ReadInt32();
+            if (Settings.Old)
+            {
+                _checksum = imageReader.ReadInt16();
+            }
+            else _checksum = imageReader.ReadInt32();
+            
             _references = imageReader.ReadInt32();
             Size = (int) imageReader.ReadUInt32();
             if (Debug)
@@ -250,12 +257,12 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
             Flags.flag = imageReader.ReadByte();
 
-            imageReader.Skip(2);
+            if(!Settings.Old)imageReader.Skip(2);
             XHotspot = imageReader.ReadInt16();
             YHotspot = imageReader.ReadInt16();
             ActionX = imageReader.ReadInt16();
             ActionY = imageReader.ReadInt16();
-            _transparent = imageReader.ReadColor();
+            if(!Settings.Old)_transparent = imageReader.ReadColor();
             // Logger.Log($"Loading image {Handle.ToString(),4} Size: {_width,4}x{_height,4}");
             byte[] imageData;
             if (Settings.twofiveplus) Flags["LZX"] = false;
@@ -277,11 +284,12 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
             if (Flags["RLE"] || Flags["RLEW"] || Flags["RLET"])
             {
-
+                Reader.Seek(start+Size);
+                return;
             }
             else
             {
-
+                
                 switch (_graphicMode)
                 {
                     case 4:
@@ -307,7 +315,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                     }
                     default:
                     {
-                        Logger.Log("Unknown Color Mode");
+                        Logger.Log("Unknown Color Mode: " + _graphicMode);
                         break;
                     }
 
@@ -328,21 +336,25 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                     }
                 }
             }
-            if (Settings.Build > 283) // No idea, but this is not working with old games
+            if (!Settings.Old)
             {
-                if (_transparent != null)
+                if (Settings.Build > 283) // No idea, but this is not working with old games
                 {
-                    for (int i = 0; i < (_height * _width * 4) - 3; i++)
+                    if (_transparent != null)
                     {
-                        if (_colorArray[i + 1] == _transparent.R && _colorArray[i + 2] == _transparent.G &&
-                            _colorArray[i + 3] == _transparent.B)
+                        for (int i = 0; i < (_height * _width * 4) - 3; i++)
                         {
-                            _colorArray[i] = _transparent.A;
+                            if (_colorArray[i + 1] == _transparent.R && _colorArray[i + 2] == _transparent.G &&
+                                _colorArray[i + 3] == _transparent.B)
+                            {
+                                _colorArray[i] = _transparent.A;
+                            }
                         }
                     }
                 }
             }
-
+            // Logger.Log("ImageSize: "+_colorArray.Length);
+            // Save($@"DUMP\\{Handle}-test.png");
             return;
         }
 
