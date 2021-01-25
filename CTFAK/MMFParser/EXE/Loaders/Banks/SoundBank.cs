@@ -128,11 +128,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             Checksum = Reader.ReadInt32();
             References = Reader.ReadInt32();
             var decompressedSize = Reader.ReadInt32();
-            Flags = (int)Reader.ReadUInt32(); //flags
+            Flags = (int)Reader.ReadUInt32(); 
             var reserved = Reader.ReadInt32();
             var nameLenght = Reader.ReadInt32();
             ByteReader soundData;
-            if (IsCompressed) //compressed
+            if (IsCompressed) 
             {
                 var size = Reader.ReadInt32();
                 soundData = new ByteReader(Decompressor.decompress_block(Reader, size, decompressedSize));
@@ -141,23 +141,14 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             {
                 soundData = new ByteReader(Reader.ReadBytes(decompressedSize));
             }
-            if (IsCompressed)
-            {
-                Name = soundData.ReadAscii(nameLenght);
-                
-            }
-            else
-            {
-                Name = soundData.ReadWideString(nameLenght);
-            }
+            Name = soundData.ReadWideString(nameLenght);
+            Logger.Log(Name);
 
-
-            this.Data = soundData.ReadBytes((int) soundData.Size());
+            Data = soundData.ReadBytes((int) soundData.Size());
             if (Settings.DumpSounds)
             {
                 Name = Helper.CleanInput(Name);
                 File.WriteAllBytes($"{Settings.SoundPath}\\{Name}.wav", Data);
-                // File.WriteAllBytes($"{Name}.wav", Data);
             }
             
             
@@ -169,11 +160,14 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             writer.WriteUInt32((uint)Handle);
             writer.WriteInt32(Checksum);
             writer.WriteInt32(References);
-            writer.WriteInt32(Data.Length+Name.Length+8);
+            writer.WriteInt32(Data.Length+(Name.Length*2));
             writer.WriteInt32(Flags);
             writer.WriteInt32(0);
             writer.WriteInt32(Name.Length);
             writer.WriteUnicode(Name);
+            // writer.BaseStream.Position -= 4;
+            
+            
             writer.WriteBytes(Data);
 
 

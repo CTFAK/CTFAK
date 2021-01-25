@@ -179,15 +179,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
 
             var actualLoader = Helper.LoadParameter(Code,Reader);
             this.Loader = actualLoader;
-            if (Loader!=null)
-            {
-                
-                Loader.Read();
-            }
-            else
-            {
-                throw new Exception("Loader is null: "+Code);
-            }
+            if (Loader!=null) Loader.Read();
+            else throw new Exception("Loader is null: "+Code);
+          
             Reader.Seek(currentPosition+size);
 
         }

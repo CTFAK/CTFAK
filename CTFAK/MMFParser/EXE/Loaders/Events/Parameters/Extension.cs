@@ -18,7 +18,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
             Size = Reader.ReadInt16();
             Type = Reader.ReadInt16();
             Code = Reader.ReadInt16();
-            Data = Reader.ReadBytes(Size-20);
+            Data = Reader.ReadBytes((Size-20>0?Size-20:0));
 
         }
 

@@ -17,7 +17,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public bool SaveImages = false;
         public Dictionary<int, ImageItem> Images = new Dictionary<int, ImageItem>();
         public uint NumberOfItems;
-        public bool PreloadOnly = true;
+        public bool PreloadOnly = false;
 
         public ImageBank(ByteReader reader) : base(reader)
         {
@@ -132,16 +132,13 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
         public int Size;
 
-        //tranparent,add later
         Color _transparent;
         byte[] _colorArray;
 
         public byte[] rawImg;
         public byte[] rawAlpha;
 
-
         public bool Debug = false;
-        public int Debug2 = 1;
         private Bitmap _bitmap;
 
         public void Read(bool load)
@@ -149,7 +146,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             Handle = Reader.ReadInt32();
             if (!Debug)
             {
-                if (Settings.Build>=290) Handle -= 1;
+                if (Settings.Build>291) Handle -= 1;
                 if (Program.CleanData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
             }
             
@@ -163,6 +160,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             Handle = Reader.ReadInt32();
             if (!Debug)
             {
+                if (Settings.Build>291) Handle -= 1;
                 if (Exe.Instance.GameData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
 
             }
@@ -330,7 +328,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                     }
                 }
             }
-            if (Settings.Build > 283)
+            if (Settings.Build > 283) // No idea, but this is not working with old games
             {
                 if (_transparent != null)
                 {

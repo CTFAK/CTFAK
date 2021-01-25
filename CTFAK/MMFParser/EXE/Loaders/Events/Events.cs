@@ -209,9 +209,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             newWriter.WriteUInt16(Flags);
             if (Settings.Build >= 284)
             {
-                if(isMFA)
+                if(isMFA)//For MFA
                 {
-                    newWriter.WriteInt16((short) IsRestricted); //For MFA
+                    newWriter.WriteInt16((short) IsRestricted); 
                     newWriter.WriteInt16((short) RestrictCpt);
                     newWriter.WriteInt16((short) Identifier);
                     newWriter.WriteInt16((short) Undo);
@@ -258,13 +258,19 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         {
             var num = cond.Num;
             if (num == -42) num = -27;
-            // if (num == -28||num == -29||num == -30||num == -31||num == -32||num == -33||num == -34||num == -35||num == -36||num == -37||num == -38||num == -39) num = -8;
+            if (Settings.Build >= 290)
+            {
+                if (num == -28||num == -29||num == -30||num == -31||num == -32||num == -33||num == -34||num == -35||num == -36||num == -37||num == -38||num == -39) num = -8;
+            }
             cond.Num = num;
         }
         public static void FixActions(ref Action act)
         {
             var num = act.Num;
-            // if (num == 27||num == 28||num == 29||num == 30) num = 3;
+            if (Settings.Build >= 290)
+            {
+                if (num == 27||num == 28||num == 29||num == 30) num = 3;
+            }
             act.Num = num;
         }
         

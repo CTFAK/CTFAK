@@ -164,6 +164,11 @@ namespace CTFAK.Utils
                 item = new Click(reader);
             }
 
+            if (code == 33)
+            {
+                item = new MMFParser.EXE.Loaders.Events.Parameters.Program(reader);
+            }
+
             if (code == 55)
             {
                 item = new Extension(reader);

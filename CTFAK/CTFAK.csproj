@@ -172,6 +172,7 @@
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Group.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\GroupPointer.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\KeyParameter.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Program.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Shoot.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\StringParam.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\TwoShorts.cs" />

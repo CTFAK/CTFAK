@@ -46,10 +46,10 @@ namespace CTFAK.MMFParser.Translation
             //mfa.Stamp = wtf;
             //if (game.Fonts != null) mfa.Fonts = game.Fonts;
             mfa.Sounds.Items.Clear();
-            // foreach (var item in game.Sounds.Items)
-            // {
-                // mfa.Sounds.Items.Add(item);
-            // }
+            foreach (var item in game.Sounds.Items)
+            {
+                mfa.Sounds.Items.Add(item);
+            }
             
             // mfa.Music = game.Music;
             mfa.Images.Items = game.Images.Images;
@@ -122,7 +122,8 @@ namespace CTFAK.MMFParser.Translation
                 
                 var newFrame = new MFA.Loaders.Frame(null);
                 newFrame.Chunks = new ChunkList(null);//MFA.MFA.emptyFrameChunks;
-                newFrame.Handle = indexHandles[a];
+                newFrame.Handle = a;
+                indexHandles.TryGetValue(a,out newFrame.Handle);
                 Message($"Translating frame: {frame.Name} - {newFrame.Handle}" );
                 newFrame.Name = frame.Name;
                 newFrame.SizeX = frame.Width;
@@ -213,13 +214,14 @@ namespace CTFAK.MMFParser.Translation
                     newFolder.Items = new List<uint>() {(uint) newFrameItem.Handle};
                     newFrame.Folders.Add(newFolder);
                 }
-                
+          
                 {
                     newFrame.Events = new Events((ByteReader) null);
                     newFrame.Events.Items = new List<EventGroup>();
                     newFrame.Events.Objects = new List<EventObject>();
                     newFrame.Events._ifMFA = true;
                     newFrame.Events.Version = 1028;
+                    // if (false) 
                     if(frame.Events != null)
                     {
                         foreach (var item in newFrame.Items)

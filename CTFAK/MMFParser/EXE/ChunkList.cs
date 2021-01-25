@@ -29,7 +29,6 @@ namespace CTFAK.MMFParser.EXE
                     if (chunk.Id == 26214)
                     {
                         if(!Settings.twofiveplus) chunk.Loader = LoadModern(chunk); 
-                        //LoadChunk(chunk); 
                     }
                     else
                     {
@@ -303,7 +302,7 @@ namespace CTFAK.MMFParser.EXE
             }
 
             loader?.Read();
-            // chunk.ChunkData = null;
+            // chunk.ChunkData = null; //TODO:Do something smarter
             // chunk.RawData = null;
             return loader;
         }

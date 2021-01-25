@@ -22,7 +22,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
             Id = Reader.ReadUInt16();
             Name = Reader.ReadWideString();
             Password = Reader.ReadInt32();
-            Password = Checksum.MakeGroupChecksum("", Name);
+            Password = Checksum.MakeGroupChecksum("pass", Name);
             Logger.Log("Password: "+Password);
         }
 

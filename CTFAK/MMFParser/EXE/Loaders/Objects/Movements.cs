@@ -95,6 +95,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 case 5:
                     Loader=new MovementPath(Reader);
                     break;
+                case 9:
+                    Loader = new PlatformMovement(Reader);
+                    break;
                 case 14:
                     Loader = new ExtensionsMovement(Reader);
                     break;
@@ -324,7 +327,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         public short Speed;
         public short Acceleration;
         public short Deceleration;
-        public short Directions;
+        public int Directions;
         public short BounceFactor;
 
         public EightDirections(ByteReader reader) : base(reader)
@@ -341,7 +344,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             Acceleration = Reader.ReadInt16();
             Deceleration = Reader.ReadInt16();
             BounceFactor = Reader.ReadInt16();
-            Directions = Reader.ReadInt16();
+            Directions = Reader.ReadInt32();
         }
 
         public override void Write(ByteWriter Writer)
@@ -350,7 +353,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             Writer.WriteInt16(Acceleration);
             Writer.WriteInt16(Deceleration);
             Writer.WriteInt16(BounceFactor);
-            Writer.WriteInt16(Directions);
+            Writer.WriteInt32(Directions);
         }
     }
     public class RaceMovement:MovementLoader
