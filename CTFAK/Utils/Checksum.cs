@@ -30,7 +30,6 @@ namespace CTFAK.Utils
                 v5+=1;
                 if (v5 > groupWords.Length) v5 = 0;
             }
-            Logger.Log("GroupPass:"+v4);
             return v4;
             
         }

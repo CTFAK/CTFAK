@@ -61,7 +61,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
             
             {
-                if (!Settings.Old) Size = Reader.ReadInt32();
+                if (Settings.GameType != GameType.OnePointFive) Size = Reader.ReadInt32();
                 Flags.flag=(uint) Reader.ReadInt16();
 
                 NewFlags.flag = (uint) Reader.ReadInt16();

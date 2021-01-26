@@ -100,7 +100,6 @@ namespace CTFAK
         public static void ReadFile(string path, bool verbose = false, bool dumpImages = false, bool dumpSounds = true)
         {
             Settings.GamePath = path;
-            Logger.Log("DecryptionLibExist: "+File.Exists("x64\\Decrypter-x64.dll"));
             PrepareFolders();
 
             Settings.DumpImages = dumpImages;

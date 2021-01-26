@@ -14,8 +14,7 @@ namespace CTFAK
         public static bool DumpMusic;
         public static bool SaveChunks;
         public static bool Verbose;
-        public static bool Old;
-        public static bool twofiveplus = false;
+        public static GameType GameType;
         
         public static string GamePath;
         public static string GameName => Path.GetFileNameWithoutExtension(GamePath);
@@ -134,5 +133,14 @@ namespace CTFAK
 
 
 
+    }
+
+    public enum GameType
+    {
+        Normal,
+        TwoFivePlus,
+        OnePointFive,
+        MMFTwo,
+        Android
     }
 }

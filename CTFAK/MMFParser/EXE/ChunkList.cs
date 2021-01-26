@@ -19,7 +19,7 @@ namespace CTFAK.MMFParser.EXE
         public void Read(ByteReader reader)
         {
             Chunks.Clear();
-            if (!Settings.Old)
+            if (Settings.GameType == GameType.Normal)
             {
                 while (true)
                 {
@@ -28,7 +28,7 @@ namespace CTFAK.MMFParser.EXE
                     chunk.Read(reader);
                     if (chunk.Id == 26214)
                     {
-                        if(!Settings.twofiveplus) chunk.Loader = LoadModern(chunk); 
+                        if(Settings.GameType != GameType.TwoFivePlus) chunk.Loader = LoadModern(chunk); 
                     }
                     else
                     {
@@ -37,14 +37,14 @@ namespace CTFAK.MMFParser.EXE
 
                     Chunks.Add(chunk);
                     if (chunk.Id == 8750) chunk.BuildKey();
-                    if (chunk.Id == 8788) Settings.twofiveplus = true;
+                    if (chunk.Id == 8788) Settings.GameType = GameType.TwoFivePlus;
                 
 
                     if (reader.Tell() >= reader.Size()) break;
                     if (chunk.Id == 32639) break; //LAST chunkID
                 }
             }
-            else
+            else if(Settings.GameType == GameType.OnePointFive)
             {
                 while (true)
                 {
@@ -106,15 +106,14 @@ namespace CTFAK.MMFParser.EXE
                         ChunkData = Decryption.DecodeMode3(exeReader.ReadBytes(Size), Size,Id,out DecompressedSize);
                         break;
                     case ChunkFlags.Compressed:
-                        if (!Settings.Old) ChunkData = Decompressor.Decompress(exeReader, out DecompressedSize);
-                        else
+                        if (Settings.GameType == GameType.OnePointFive)
                         {
                             var start = exeReader.Tell();
-                            var decompSize = exeReader.ReadInt32();
-                            var buff = exeReader.ReadBytes(Size);
-                            ChunkData = Decompressor.decompressOld(buff, Size, decompSize);
+                            ChunkData = Decompressor.DecompressOld(exeReader);
                             exeReader.Seek(start+Size);
                         }
+                        else ChunkData = Decompressor.Decompress(exeReader, out DecompressedSize);
+                        
                         break;
                     case ChunkFlags.NotCompressed:
                         ChunkData = exeReader.ReadBytes(Size);

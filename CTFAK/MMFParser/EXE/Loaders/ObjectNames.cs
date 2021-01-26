@@ -6,10 +6,8 @@ namespace CTFAK.MMFParser.EXE.Loaders
 {
     class ObjectNames : ChunkLoader//2.5+ trash
     {
-        public override void Print(bool ext)
-        {
-            
-        }
+        public override void Print(bool ext){}
+        
 
         public override string[] GetReadableData()
         {

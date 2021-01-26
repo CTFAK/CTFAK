@@ -170,7 +170,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Write(ByteWriter Writer)
         {
-            Logger.Log("Writing mouse mov");
             Writer.WriteInt16(X1);
             Writer.WriteInt16(X2);
             Writer.WriteInt16(Y1);

@@ -38,7 +38,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             _header = infoChunks.GetChunk<ObjectHeader>();
             _name = infoChunks.GetChunk<ObjectName>();
             _properties = infoChunks.GetChunk<ObjectProperties>();
-            
             _properties.ReadNew((int) ObjectType,this);
         }
 
@@ -47,6 +46,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public ObjectProperties Properties => _properties;
         public Constants.ObjectType ObjectType => (Constants.ObjectType) _header.ObjectType;
         public int Flags => (int) _header.Flags;
+        public int Reserved => (int) _header.Reserved;
         public int InkEffect => (int) _header.InkEffect;
         public int InkEffectValue => (int) _header.InkEffectParameter;
         public bool Transparent => ByteFlag.GetFlag((uint) InkEffect, 28);
@@ -145,6 +145,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public UInt32 Flags;
         public UInt32 InkEffect;
         public UInt32 InkEffectParameter;
+        public short Reserved;
 
         public ObjectHeader(ByteReader reader) : base(reader){}
         public ObjectHeader(Chunk chunk) : base(chunk){}
@@ -156,7 +157,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             Handle = Reader.ReadInt16();
             ObjectType = Reader.ReadInt16();
             Flags = Reader.ReadUInt16();
-            Int16 reserved = Reader.ReadInt16();
+            Reserved = Reader.ReadInt16();
             InkEffect = Reader.ReadByte();
             InkEffectParameter = Reader.ReadByte(); 
         }

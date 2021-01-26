@@ -88,6 +88,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         private ushort _zeroUnk;
         public Text Text;
         public Counter Counter;
+        public short[] _qualifiers=new short[8];
 
 
         public ObjectCommon(ByteReader reader) : base(reader)
@@ -104,7 +105,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
-            if (Settings.Old)
+            if (Settings.GameType == GameType.OnePointFive)
             {
                 var currentPosition = Reader.Tell();
                 var size = Reader.ReadInt16();
@@ -152,14 +153,12 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             _extensionOffset = Reader.ReadUInt16();
             _counterOffset = Reader.ReadUInt16();
             Flags.flag = Reader.ReadUInt16();
+            Reader.Skip(2);
             var end = Reader.Tell()+(8+1)*2;
-            List<Int16> qualifiers = new List<Int16>();
-            while(true)
+            for (int i = 0; i < 8; i++)
             {
-                // break;
                 var value = Reader.ReadInt16();
-                if(value!=-1) qualifiers.Add(value);
-                else break;
+                _qualifiers[i]=value;
             }
             Reader.Seek(end);
             _systemObjectOffset = Reader.ReadUInt16();

@@ -89,6 +89,7 @@ namespace CTFAK.MMFParser.Translation
             mfa.BuildType = 0;
             mfa.BuildPath = game.TargetFilename;
             mfa.CommandLine = "";
+            mfa.FrameRate = 60;
             mfa.Aboutbox = game.AboutText?.Length > 0
                 ? game?.AboutText
                 : "";
@@ -325,10 +326,9 @@ namespace CTFAK.MMFParser.Translation
             newItem.InkEffectParameter = item.InkEffectValue;
             newItem.AntiAliasing = item.Antialias ? 1 : 0;
             newItem.Flags = item.Flags;
-            // if(item.Flags!=0)Logger.Log($"{item.Name}-{item.Flags}");
             
             newItem.IconHandle = 12;
-            newItem.Chunks = new ChunkList(null);
+            newItem.Chunks = MFA.MFA.defaultObjChunks;
 
             if (item.ObjectType == 0)
             {
@@ -361,14 +361,16 @@ namespace CTFAK.MMFParser.Translation
             {
                 var itemLoader = (ObjectCommon) item?.Properties?.Loader;
                 if (itemLoader == null) throw new NotImplementedException("Null loader");
-                Logger.Log("Translating Object: " + itemLoader.Parent.Name);
+                Logger.Log(("Translating Object: " + itemLoader.Parent.Name),false,ConsoleColor.Blue,false);
                 //CommonSection
                 var newObject = new ObjectLoader(null);
                 newObject.ObjectFlags =  (int) (itemLoader.Flags.flag);
                 newObject.NewObjectFlags = (int) (itemLoader.NewFlags.flag);
                 
                 newObject.BackgroundColor = itemLoader.BackColor;
-                //newLoader.Qualifiers;
+                
+                newObject.Qualifiers = itemLoader._qualifiers;
+                
                 newObject.Strings = ConvertStrings(itemLoader.Strings);
                 newObject.Values = ConvertValue(itemLoader.Values);
                 newObject.Movements = new MFA.Loaders.mfachunks.Movements(null);
@@ -401,6 +403,7 @@ namespace CTFAK.MMFParser.Translation
                         active.Values = newObject.Values;
                         active.Movements = newObject.Movements;
                         active.Behaviours = newObject.Behaviours;
+                        active.Qualifiers = newObject.Qualifiers;
                     }
 
 
@@ -463,6 +466,8 @@ namespace CTFAK.MMFParser.Translation
                         newExt.Values = newObject.Values;
                         newExt.Movements = newObject.Movements;
                         newExt.Behaviours = newObject.Behaviours;
+                        newExt.Qualifiers = newObject.Qualifiers;
+
                     }
                     var exts = Program.CleanData.GameChunks.GetChunk<Extensions>();
                     Extension ext = null;
@@ -499,6 +504,8 @@ namespace CTFAK.MMFParser.Translation
                         newText.Values = newObject.Values;
                         newText.Movements = newObject.Movements;
                         newText.Behaviours = newObject.Behaviours;
+                        newText.Qualifiers = newObject.Qualifiers;
+
                     }
                     if (text == null)
                     {
@@ -542,6 +549,8 @@ namespace CTFAK.MMFParser.Translation
                         lives.Values = newObject.Values;
                         lives.Movements = newObject.Movements;
                         lives.Behaviours = newObject.Behaviours;
+                        lives.Qualifiers = newObject.Qualifiers;
+
                     }
                     lives.Player = counter?.Player ?? 0;
                     lives.Images = counter?.Frames ?? new List<int>() {0};
@@ -565,6 +574,8 @@ namespace CTFAK.MMFParser.Translation
                         newCount.Values = newObject.Values;
                         newCount.Movements = newObject.Movements;
                         newCount.Behaviours = newObject.Behaviours;
+                        newCount.Qualifiers = newObject.Qualifiers;
+
                     }
                     if (itemLoader.Counter == null)
                     {

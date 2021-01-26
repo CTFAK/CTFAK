@@ -62,13 +62,16 @@ namespace CTFAK.MMFParser.EXE
             exeReader.Seek(possition);
             var firstShort = exeReader.PeekUInt16();
             Logger.Log("First Short: " + firstShort.ToString("X2"), true, ConsoleColor.Yellow);
-            if (firstShort == 0x7777) Settings.Old = false;
-            else if (firstShort == 0x222c) Settings.Old = true;
-            else
+            if (firstShort == 0x7777)
             {
-                Logger.Log(firstShort.ToString("x8"));
+                Settings.GameType = GameType.Normal;
             }
-            if (!Settings.Old)
+            else if (firstShort == 0x222c)
+            {
+                Settings.GameType = GameType.OnePointFive;
+            }
+            
+            if (Settings.GameType == GameType.Normal)
             {
                 PackData = new PackData();
                 Logger.Log("Found PackData header!\nReading PackData header.", true, ConsoleColor.Blue);

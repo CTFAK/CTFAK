@@ -134,14 +134,13 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             if (IsCompressed) 
             {
                 var size = Reader.ReadInt32();
-                soundData = new ByteReader(Decompressor.decompress_block(Reader, size, decompressedSize));
+                soundData = new ByteReader(Decompressor.DecompressBlock(Reader, size, decompressedSize));
             }
             else
             {
                 soundData = new ByteReader(Reader.ReadBytes(decompressedSize));
             }
             Name = soundData.ReadWideString(nameLenght);
-            Logger.Log(Name);
 
             Data = soundData.ReadBytes((int) soundData.Size());
             if (Settings.DumpSounds)

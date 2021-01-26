@@ -104,7 +104,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             var size = Reader.ReadInt32();
             Data = Reader.ReadBytes(size);
             var dataReader = new ByteReader(Data);
-            switch (Id)
+            /*switch (Id)
             {
                 case 33:
                     Loader = new FrameVirtualRect(dataReader);
@@ -120,7 +120,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
                     // Logger.Log($"{Id} - {Data.GetHex()}");
                     break;
                 
-            }
+            }*/
             Loader?.Read();
             
             
@@ -163,7 +163,6 @@ namespace CTFAK.MMFParser.MFA.Loaders
 
         public override void Write(ByteWriter Writer)
         {
-            Value = 255;
             Writer.WriteInt32(Value);
         }
     }

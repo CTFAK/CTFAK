@@ -13,13 +13,13 @@ namespace CTFAK.Utils
     public static class Decompressor
     {
         [DllImport("TinflateDecompress.dll")]
-        public static extern int decompress(IntPtr source, int source_size, IntPtr output, int output_size);
+        public static extern int decompressOld(IntPtr source, int source_size, IntPtr output, int output_size);
         public static byte[] Decompress(ByteReader exeReader, out int decompressed)
         {
             Int32 decompSize = exeReader.ReadInt32();
             Int32 compSize = exeReader.ReadInt32();
             decompressed = decompSize;
-            return decompress_block(exeReader, compSize, decompSize);
+            return DecompressBlock(exeReader, compSize, decompSize);
         }
 
         public static ByteReader DecompressAsReader(ByteReader exeReader, out int decompressed)
@@ -28,7 +28,7 @@ namespace CTFAK.Utils
             return new ByteReader(Decompress(exeReader, out decompressed));
         }
 
-        public static byte[] decompress_block(ByteReader reader, int size, int decompSize)
+        public static byte[] DecompressBlock(ByteReader reader, int size, int decompSize)
         {
             ZLibDecompressOptions decompOpts = new ZLibDecompressOptions();
             MemoryStream compressedStream = new MemoryStream(reader.ReadBytes(size));
@@ -45,12 +45,22 @@ namespace CTFAK.Utils
             return decompressedData;
         }
 
-        public static byte[] decompressOld(byte[] buff,int size,int decompSize)
+        public static byte[] DecompressOld(ByteReader reader)
+        {
+            var start = reader.Tell();
+            var decompressedSize = reader.ReadInt32();
+            var compressedSize = reader.Size();
+            var buffer = reader.ReadBytes((int) compressedSize);
+            return DecompressOldBlock(buffer, (int) compressedSize, decompressedSize);
+
+        }
+
+        public static byte[] DecompressOldBlock(byte[] buff,int size,int decompSize)
         {
             var originalBuff = Marshal.AllocHGlobal(size);
             Marshal.Copy(buff,0,originalBuff,buff.Length);
             var outputBuff = Marshal.AllocHGlobal(decompSize);
-            decompress(originalBuff, size, outputBuff, decompSize);
+            decompressOld(originalBuff, size, outputBuff, decompSize);
             Marshal.FreeHGlobal(originalBuff);
             byte[] data = new byte[decompSize];
             Marshal.Copy(outputBuff,data,0,decompSize);

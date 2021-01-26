@@ -609,7 +609,7 @@ namespace CTFAK.GUI
 
         public void InitImages()
         {
-            if (Settings.twofiveplus) return;
+            if (Settings.GameType == GameType.TwoFivePlus) return;
             var bank = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
             var items = bank.Images.ToList();
             var filtered = items.OrderBy(x => x.Value.Handle);

@@ -23,7 +23,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
             Name = Reader.ReadWideString();
             Password = Reader.ReadInt32();
             Password = Checksum.MakeGroupChecksum("pass", Name);
-            Logger.Log("Password: "+Password);
         }
 
         public override void Write(ByteWriter Writer)

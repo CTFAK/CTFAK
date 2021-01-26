@@ -23,7 +23,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override void Read()
         {
-            Logger.Log("dumpingIcon");
             Reader.ReadBytes(Reader.ReadInt32() - 4);
             List<byte> colorIndexes = new List<byte>();
             for (int i = 0; i < 16 * 16; i++)

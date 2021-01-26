@@ -171,7 +171,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override void Read()
         {
-            if (Settings.Old)
+            if (Settings.GameType == GameType.OnePointFive)
             {
                 Width = Reader.ReadInt16();
                 Height = Reader.ReadInt16();
@@ -255,7 +255,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
             Handle = (ushort) Reader.ReadInt16();
             ObjectInfo = (ushort) Reader.ReadInt16();
-            if (Settings.Old)
+            if (Settings.GameType == GameType.OnePointFive)
             {
                 X = Reader.ReadInt16();
                 Y = Reader.ReadUInt16();

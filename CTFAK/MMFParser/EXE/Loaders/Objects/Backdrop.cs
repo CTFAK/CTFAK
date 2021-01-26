@@ -37,7 +37,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
-            if (Settings.Old)
+            if (Settings.GameType == GameType.OnePointFive)
             {
                 Size = Reader.ReadInt32();
                 ObstacleType = (Obstacle) Reader.ReadInt16();
@@ -150,7 +150,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             // else if(FillType==3)
             // {
                 Image = Reader.ReadInt16();
-                Logger.Log("QuickbackdropIMG: "+Image);
             // }
         }
 

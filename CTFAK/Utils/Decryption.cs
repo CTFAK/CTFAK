@@ -62,7 +62,7 @@ namespace CTFAK.Utils
             {
                 uint compressedSize = data.ReadUInt32();
                 decompressed = (int) decompressedSize;
-                return Decompressor.decompress_block(data, (int) compressedSize, (int) decompressedSize);
+                return Decompressor.DecompressBlock(data, (int) compressedSize, (int) decompressedSize);
             }
         }
 

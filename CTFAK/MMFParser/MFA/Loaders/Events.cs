@@ -17,6 +17,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
         public const string TimeListData = "EvEd";
         public const string EditorPositionData = "EvTs";
         public const string EditorLineData = "EvLs";
+        public const string UnknownEventData = "E2Ts";
         public const string EventEnd ="!DNE";
         public List<EventGroup> Items;
         public ushort Version;
@@ -172,13 +173,17 @@ namespace CTFAK.MMFParser.MFA.Loaders
                     EventLine = Reader.ReadUInt32();
                     EventLineY = Reader.ReadUInt32();
                 }
+                else if (name == UnknownEventData)
+                {
+                    Reader.Skip(12);
+                }
                 else if (name == EventEnd)
                 {
                     // _cache = Reader.ReadBytes(122);
                     
                     break;
                 }
-                else throw new NotImplementedException("Fuck Something is Broken");
+                else Logger.Log("UnknownGroup: "+name);//throw new NotImplementedException("Fuck Something is Broken: "+name);
 
             }
         }
@@ -269,6 +274,11 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 Writer.WriteUInt32(EventLine);
                 Writer.WriteUInt32(EventLineY);
             }
+            Writer.WriteAscii(UnknownEventData);
+            Writer.WriteInt8(8);
+            Writer.Skip(9);
+            Writer.WriteInt16(0);
+            
             Writer.WriteAscii(EventEditorData);
             // Writer.Skip(4+2*2+4*3);
             Writer.WriteInt32(EditorDataUnk);

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using CTFAK.MMFParser.EXE;
 using CTFAK.Utils;
 
@@ -10,7 +12,7 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
         public int ObjectFlags;
         public int NewObjectFlags;
         public Color BackgroundColor;
-        List<short> _qualifiers = new List<short>();
+        public short[] Qualifiers = new short[8];
         public ValueList Values;
         public ValueList Strings;
         public Movements Movements;
@@ -18,15 +20,16 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
 
         public override void Write(ByteWriter Writer)
         {
+            // if(Qualifiers==null) throw new NullReferenceException("QUALIFIERS NULL");
             Writer.WriteInt32((int) ObjectFlags);
             Writer.WriteInt32(NewObjectFlags);
             Writer.WriteColor(BackgroundColor);
 
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 8; i++)
             {
-                Writer.WriteInt16(-1);
+                Writer.WriteInt16(Qualifiers[i]);
             }
-
+            Writer.WriteInt16(-1);
             Values.Write(Writer);
             Strings.Write(Writer);
             Movements.Write(Writer);
@@ -72,7 +75,7 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
                 {
                     break;
                 }
-                _qualifiers.Add(value);
+                Qualifiers[i]=value;
             }
             Reader.Seek(end);
 
