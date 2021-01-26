@@ -153,13 +153,14 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             _extensionOffset = Reader.ReadUInt16();
             _counterOffset = Reader.ReadUInt16();
             Flags.flag = Reader.ReadUInt16();
-            Reader.Skip(2);
             var end = Reader.Tell()+(8+1)*2;
-            for (int i = 0; i < 8; i++)
+            Reader.Skip(2);
+            for (int i = 0; i < 9; i++)
             {
                 var value = Reader.ReadInt16();
-                _qualifiers[i]=value;
+                // _qualifiers[i]=value;
             }
+            
             Reader.Seek(end);
             _systemObjectOffset = Reader.ReadUInt16();
             

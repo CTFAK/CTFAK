@@ -104,6 +104,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             }
             else if (DisplayType == 2 || DisplayType == 3 || DisplayType == 5)
             {
+                Frames=new List<int>(){0};
                 Shape = new Shape(Reader);
                 Shape.Read();
             }

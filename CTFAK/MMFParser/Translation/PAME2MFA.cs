@@ -593,16 +593,7 @@ namespace CTFAK.MMFParser.Translation
                     
                     newCount.Images = new List<int>() {0};
                     var shape = counter?.Shape;
-
-
-                    if (counter != null)
-                    {
-                        if(counter.DisplayType==2||counter.DisplayType==3)
-                        {
-                            counter = null;
-                            shape = null;
-                        }
-                    }
+                    if(counter==null) throw new NullReferenceException(nameof(counter));
                     if (counter == null)
                     {
                         newCount.DisplayType = 0;
@@ -613,7 +604,6 @@ namespace CTFAK.MMFParser.Translation
                     }
                     else
                     {
-                        
                         newCount.DisplayType = counter.DisplayType;
                         newCount.CountType = counter.Inverse ? 1 : 0;
                         newCount.Width = (int) counter.Width;
@@ -631,8 +621,8 @@ namespace CTFAK.MMFParser.Translation
                     }
                     else
                     {
-                        newCount.Color1 = Color.Green;
-                        newCount.Color2 = Color.Red;
+                        newCount.Color1 = shape.Color1;
+                        newCount.Color2 = shape.Color2;
                         newCount.VerticalGradient = (uint) shape.GradFlags;
                         newCount.Flags = (uint) shape.FillType;
                         

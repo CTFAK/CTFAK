@@ -24,7 +24,6 @@ namespace CTFAK.Utils
 
         public static ByteReader DecompressAsReader(ByteReader exeReader, out int decompressed)
         {
-            
             return new ByteReader(Decompress(exeReader, out decompressed));
         }
 

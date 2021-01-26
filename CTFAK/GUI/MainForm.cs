@@ -938,7 +938,7 @@ namespace CTFAK.GUI
                 {
                     var node = (ChunkNode) objTreeView.SelectedNode;
                     var path =
-                        $"{Settings.ImagePath}\\{Helper.GetTreePath(objTreeView, (ChunkNode) objTreeView.SelectedNode)}";
+                        $"{Settings.ImagePath}\\{objTreeView.SelectedNode.FullPath}";
                     if (node == null) return;
                     ImageDumper.SaveFromNode(node);
                 }
@@ -972,7 +972,7 @@ namespace CTFAK.GUI
             Logger.Log("Dumping");
             var node = (ChunkNode) LastSelected;
             var path =
-                $"{Settings.ImagePath}\\{Helper.GetTreePath(objTreeView, (ChunkNode) objTreeView.SelectedNode)}";
+                $"{Settings.ImagePath}\\{objTreeView.SelectedNode.FullPath}";
             if (node == null) return;
             ImageDumper.SaveFromNode(node);
         }

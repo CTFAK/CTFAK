@@ -68,13 +68,13 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
             NewObjectFlags = Reader.ReadInt32();
             BackgroundColor = Reader.ReadColor();
             var end = Reader.Tell() + 2 * (8+1);
-            for (int i = 0; i < 8+1; i++)
+            for (int i = 0; i < 8; i++)
             {
                 var value = Reader.ReadInt16();
-                if(value==-1)
-                {
-                    break;
-                }
+                // if(value==-1)
+                // {
+                    // break;
+                // }
                 Qualifiers[i]=value;
             }
             Reader.Seek(end);

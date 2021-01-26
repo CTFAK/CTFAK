@@ -36,39 +36,6 @@ namespace CTFAK.Utils
             var date = DateTime.Now;
             return $"[{date.Hour,2}:{date.Minute,2}:{date.Second,2}:{date.Millisecond,3}]";
         }
-
-        public static string GetTreePath(TreeView tree, ChunkNode node)
-        {
-            string CombinedPath=node.FullPath;
-           
-
-            return CombinedPath;
-        }
-
-        public static string Log(this byte[] bytes, bool log = true, string format = "")
-        {
-            string temp = String.Empty;
-            for (int i = 0; i < bytes.Length; i++)
-            {
-                var item = bytes[i];
-                if (i > 0)
-                {
-                    temp += " " + item.ToString(format);
-                }
-                else
-                {
-                    temp += item.ToString(format);
-                }
-            }
-
-            if (log)
-            {
-                Console.WriteLine(temp);
-            }
-
-            return temp;
-        }
-
         public static string FirstCharToUpper(this string input)
         {
             switch (input)
