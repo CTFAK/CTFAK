@@ -62,6 +62,8 @@ namespace CTFAK.MMFParser.EXE
             ProductVersion = (Constants.Products)exeReader.ReadInt32();
             ProductBuild = exeReader.ReadInt32();//Easy Access
             Settings.Build=ProductBuild;
+            Logger.Log("GAME BUILD: "+Settings.Build);
+            Logger.Log("PRODUCT: "+ProductVersion);
             
             Build = ProductBuild;
 

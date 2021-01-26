@@ -12,6 +12,8 @@ using CTFAK.GUI.GUIComponents;
 using CTFAK.MMFParser.EXE;
 using CTFAK.MMFParser.EXE.Loaders.Events.Parameters;
 using CTFAK.MMFParser.EXE.Loaders.Objects;
+using CTFAK.MMFParser.MFA.Loaders;
+using ChunkList = CTFAK.MMFParser.EXE.ChunkList;
 
 namespace CTFAK.Utils
 {
@@ -44,6 +46,16 @@ namespace CTFAK.Utils
                 case "": throw new ArgumentException($"{nameof(input)} cannot be empty", nameof(input));
                 default: return input.First().ToString().ToUpper() + input.Substring(1);
             }
+        }
+
+        public static bool ContainsItem(this List<FrameItem> items, int handle)
+        {
+            bool contrains = false;
+            foreach (var item in items)
+            {
+                if (item.Handle == handle) return true;
+            }
+            return false;
         }
 
         public static string AutoReadUnicode(this ByteReader reader)

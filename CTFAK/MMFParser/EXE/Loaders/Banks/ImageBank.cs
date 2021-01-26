@@ -146,8 +146,8 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             Handle = Reader.ReadInt32();
             if (!Debug)
             {
-                if (Settings.Build>=289) Handle -= 1;
-                // if (Program.CleanData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
+                // if (Settings.Build>=287) Handle -= 1;
+                if (Program.CleanData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
             }
             
             Position = (int) Reader.Tell();
@@ -160,8 +160,8 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             Handle = Reader.ReadInt32();
             if (!Debug)
             {
-                if (Settings.Build>=289) Handle -= 1;
-                // if (Exe.Instance.GameData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
+                // if (Settings.Build>=287) Handle -= 1;
+                if (Exe.Instance.GameData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
 
             }
             Position = (int) Reader.Tell();

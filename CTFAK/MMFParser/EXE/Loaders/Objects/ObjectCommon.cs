@@ -155,10 +155,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             Flags.flag = Reader.ReadUInt16();
             var end = Reader.Tell()+(8+1)*2;
             Reader.Skip(2);
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 8; i++)
             {
                 var value = Reader.ReadInt16();
-                // _qualifiers[i]=value;
+                _qualifiers[i]=value;
             }
             
             Reader.Seek(end);

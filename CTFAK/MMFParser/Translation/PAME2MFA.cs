@@ -159,7 +159,6 @@ namespace CTFAK.MMFParser.Translation
                 //LayerInfo
                 if(frame.Layers==null) continue;
                 var count = frame.Layers.Count;
-                Logger.Log($"{newFrame.Name} - {count}");
                 for (int i=0;i<count;i++)
                 {
                     var layer = frame.Layers[i];
@@ -244,10 +243,23 @@ namespace CTFAK.MMFParser.Translation
                             newFrame.Events.Objects.Add(newObject);
                         }
 
-                        foreach (EventGroup item in frame.Events.Items)
+                        newFrame.Events.Items = frame.Events.Items;
+                        /*for (int i=0;i<frame.Events.Items.Count;i++)
                         {
+                            var item = frame.Events.Items[i];
                             newFrame.Events.Items.Add(item);
-                        }
+                            for (int j = 0; j < item.Conditions.Count; j++)
+                            {
+                                var cond = item.Conditions[j];
+                                // if (newFrame.Items.ContainsItem(cond.ObjectInfo)) item.Conditions.Remove(cond);
+                            }
+                            for (int j = 0; j < item.Actions.Count; j++)
+                            {
+                                var act = item.Actions[j];
+                                // if (newFrame.Items.ContainsItem(act.ObjectInfo)) item.Actions.Remove(act);
+                            }
+                            
+                        }*/
                     }
                 }
                 
@@ -593,7 +605,7 @@ namespace CTFAK.MMFParser.Translation
                     
                     newCount.Images = new List<int>() {0};
                     var shape = counter?.Shape;
-                    if(counter==null) throw new NullReferenceException(nameof(counter));
+                    // if(counter==null) throw new NullReferenceException(nameof(counter));
                     if (counter == null)
                     {
                         newCount.DisplayType = 0;
