@@ -283,7 +283,7 @@ namespace CTFAK.MMFParser.EXE
                     loader = new ObjectProperties(chunk);
                     return loader;
                 case 8788:
-                    //loader = new ObjectNames(chunk);
+                    // loader = new ObjectNames(chunk);
                     break;
                 case 8754:
                     loader = new GlobalValues(chunk);

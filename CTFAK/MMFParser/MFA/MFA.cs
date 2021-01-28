@@ -275,7 +275,7 @@ namespace CTFAK.MMFParser.MFA
             MfaBuild = Reader.ReadInt32();
             Product = Reader.ReadInt32();
             BuildVersion = Reader.ReadInt32();
-            Settings.Build = BuildVersion;
+            // Settings.Build = BuildVersion;
             LangId = Reader.ReadInt32();
             Name = Helper.AutoReadUnicode(Reader);
             Description = Helper.AutoReadUnicode(Reader);

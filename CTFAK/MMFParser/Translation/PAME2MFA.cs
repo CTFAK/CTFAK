@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using CTFAK.MMFParser.EXE;
 using CTFAK.MMFParser.EXE.Loaders;
+using CTFAK.MMFParser.EXE.Loaders.Banks;
 using CTFAK.MMFParser.EXE.Loaders.Events;
 using CTFAK.MMFParser.EXE.Loaders.Events.Parameters;
 using CTFAK.MMFParser.EXE.Loaders.Objects;
@@ -55,7 +56,7 @@ namespace CTFAK.MMFParser.Translation
             
             
             // mfa.Music = game.Music;
-            mfa.Images.Items = game.Images.Images;
+            mfa.Images.Items = game.Images?.Images ?? new Dictionary<int, ImageItem>();
             foreach (var key in mfa.Images.Items.Keys)
             {
                 mfa.Images.Items[key].Debug = true;
@@ -356,9 +357,16 @@ namespace CTFAK.MMFParser.Translation
             newItem.Transparent = 1;
             newItem.InkEffect = item.InkEffect;
             newItem.InkEffectParameter = item.InkEffectValue;
-            newItem.AntiAliasing = item.Antialias? 1 : 0;;
+            newItem.AntiAliasing = item.Antialias? 1 : 0;
             newItem.Flags = item.Flags;
-            newItem.Chunks.GetOrCreateChunk<Opacity>().Blend = (byte) item.InkEffectValue;
+            if (item.InkEffectValue == 0&&Settings.Build<=284)
+            {
+                newItem.Chunks.GetOrCreateChunk<Opacity>().Blend = 255;
+            }
+            else
+            {
+                newItem.Chunks.GetOrCreateChunk<Opacity>().Blend = item.InkEffectValue;
+            }
             newItem.Chunks.GetOrCreateChunk<Opacity>().RGBCoeff = Color.White;
             
             newItem.IconHandle = 12;
@@ -408,7 +416,7 @@ namespace CTFAK.MMFParser.Translation
                 newObject.Strings = ConvertStrings(itemLoader.Strings);
                 newObject.Values = ConvertValue(itemLoader.Values);
                 newObject.Movements = new MFA.Loaders.mfachunks.Movements(null);
-                for (int j = 0; j < itemLoader.Movements.Items.Count; j++)
+                for (int j = 0; j < itemLoader.Movements?.Items?.Count; j++)
                 {
                     var mov = itemLoader.Movements.Items[j];
                     var newMov = new Movement(null);

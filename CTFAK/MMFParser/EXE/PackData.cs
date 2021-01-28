@@ -97,8 +97,21 @@ namespace CTFAK.MMFParser.EXE
         public void Dump(string path = "[DEFAULT-PATH]")
         {
             Logger.Log($"Dumping {PackFilename}", true, ConsoleColor.DarkBlue);
-            var actualPath = path=="[DEFAULT-PATH]" ? ($"{Settings.ExtensionPath}\\{PackFilename}"):path;
-            File.WriteAllBytes(actualPath, Data);
+            if (path == "[DEFAULT-PATH]")
+            {
+                switch (Path.GetExtension(PackFilename))
+                {
+                    case ".exe": path = $"{Settings.EXEPath}\\{PackFilename}";
+                        break;
+                    case ".dll": path = $"{Settings.DLLPath}\\{PackFilename}";
+                        break;
+                    case ".mfx": path = $"{Settings.ExtensionPath}\\{PackFilename}";
+                        break;
+                    default: path = $"{Settings.DumpPath}\\PackData\\{PackFilename}";
+                        break;
+                }
+            }
+            File.WriteAllBytes(path, Data);
         }
 
     }

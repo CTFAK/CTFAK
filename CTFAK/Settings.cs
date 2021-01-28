@@ -18,13 +18,15 @@ namespace CTFAK
         
         public static string GamePath;
         public static string GameName => Path.GetFileNameWithoutExtension(GamePath);
-        public static string DumpPath => $"DUMP\\{GameName}";
+        public static string DumpPath => $"Dumps\\{GameName}";
         public static string ImagePath=>$"{DumpPath}\\Images";
         public static string SoundPath=>$"{DumpPath}\\Sounds";
         public static string MusicPath=>$"{DumpPath}\\Musics";
 
         public static string ChunkPath=>$"{DumpPath}\\Chunks";
-        public static string ExtensionPath=>$"{DumpPath}\\Extensions";
+        public static string ExtensionPath=>$"{DumpPath}\\PackData\\Extensions";
+        public static string DLLPath=>$"{DumpPath}\\PackData\\DLLs";
+        public static string EXEPath=>$"{DumpPath}\\PackData\\Exes";
               
         public static string AppName;
         public static string Copyright;

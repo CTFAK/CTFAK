@@ -37,10 +37,15 @@ namespace CTFAK.MMFParser.EXE.Loaders
             
             _header = infoChunks.GetChunk<ObjectHeader>();
             _name = infoChunks.GetChunk<ObjectName>();
-            _properties = infoChunks.GetChunk<ObjectProperties>();
-            _properties.ReadNew((int) ObjectType,this); 
-            
-            Logger.Log($"{Name}: {InkEffect}-{InkEffectValue}");
+            _properties = infoChunks.GetChunk<ObjectProperties>(); 
+            _properties.ReadNew((int) ObjectType,this);
+            if (Settings.Build > 284)
+            {
+            }
+            else
+            {
+                // if(InkEffectValue==0) _header.InkEffectParameter = 255;
+            }
         }
 
         public int Handle => _header.Handle;
@@ -50,7 +55,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public int Flags => (int) _header.Flags;
         public int Reserved => (int) _header.Reserved;
         public int InkEffect => (int) _header.InkEffect&0xffff;
-        public int InkEffectValue => (int) _header.InkEffectParameter;
+        public byte InkEffectValue => (byte) _header.InkEffectParameter;
         public bool Transparent => ByteFlag.GetFlag((uint) _header.InkEffect, 28);
         public bool Antialias => ByteFlag.GetFlag((uint) _header.InkEffect, 29);
         
@@ -146,7 +151,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public Int16 ObjectType;
         public UInt32 Flags;
         public UInt32 InkEffect;
-        public Int32 InkEffectParameter;
+        public byte InkEffectParameter;
         public Int16 Reserved;
 
         public ObjectHeader(ByteReader reader) : base(reader){}
@@ -160,10 +165,10 @@ namespace CTFAK.MMFParser.EXE.Loaders
             ObjectType = Reader.ReadInt16();
             Flags = Reader.ReadUInt16();
             Reserved = Reader.ReadInt16();
-            InkEffect = (uint) Reader.ReadInt32();
-            Reader.Skip(3);
-            InkEffectParameter = Reader.ReadByte();
-            
+            InkEffect = (uint) Reader.ReadUInt32(); 
+            // Reader.Skip(3);
+            InkEffectParameter =(byte) Reader.ReadInt32();
+
             // if (InkEffect != 0) InkEffectParameter = 255;
 
 

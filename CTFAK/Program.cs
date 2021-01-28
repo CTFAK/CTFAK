@@ -62,6 +62,7 @@ namespace CTFAK
                 }
                 else
                 {
+                    Settings.Unicode = true;
                     var reader = new ByteReader(new FileStream(args[0],FileMode.Open));
                     CleanData = new GameData();
                     CleanData.Read(reader);
@@ -136,6 +137,8 @@ namespace CTFAK
             Directory.CreateDirectory($"{Settings.MusicPath}");
             Directory.CreateDirectory($"{Settings.ChunkPath}");
             Directory.CreateDirectory($"{Settings.ExtensionPath}");
+            Directory.CreateDirectory($"{Settings.DLLPath}");
+            Directory.CreateDirectory($"{Settings.EXEPath}");
             Directory.CreateDirectory($"{PluginAPI.PluginAPI.PluginPath}");
         }
         public static void InitNativeLibrary()
