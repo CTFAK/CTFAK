@@ -18,6 +18,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public Dictionary<int, ImageItem> Images = new Dictionary<int, ImageItem>();
         public uint NumberOfItems;
         public bool PreloadOnly = false;
+        public static bool Load = true;
 
         public ImageBank(ByteReader reader) : base(reader)
         {
@@ -87,15 +88,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             {
                 if (MainForm.BreakImages) break;
                 {
-
-
                     var item = new ImageItem(Reader);
-
                     item.Read(!PreloadOnly);
                     tempImages.Add(item.Handle, item);
                     if (SaveImages) item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
                     OnImageSaved?.Invoke(i, (int) NumberOfItems);
-
                 }
                 
             }
@@ -146,8 +143,8 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             Handle = Reader.ReadInt32();
             if (!Debug)
             {
-                // if (Settings.Build>=287) Handle -= 1;
-                if (Program.CleanData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
+                if (Settings.Build>=284) Handle -= 1;
+                // if (Program.CleanData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
             }
             
             Position = (int) Reader.Tell();
@@ -157,11 +154,13 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         }
         public override void Read()
         {
+            // if (Settings.Build>=284) Handle -= 1;
             Handle = Reader.ReadInt32();
+            
             if (!Debug)
             {
-                // if (Settings.Build>=287) Handle -= 1;
-                if (Exe.Instance.GameData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
+                if (Settings.Build>=284) Handle -= 1;
+                // if (Exe.Instance.GameData.ProductVersion != Constants.Products.MMF15&&Settings.Build>=284) Handle -= 1;
 
             }
             Position = (int) Reader.Tell();
@@ -281,10 +280,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
             int bytesRead = 0;
             rawImg = imageData;
-
+            if(!ImageBank.Load)return;
+            // Reader.Seek((_width*3)*_height+(ImageHelper.GetPadding(_width,3)*3*_height));
             if (Flags["RLE"] || Flags["RLEW"] || Flags["RLET"])
             {
-                Reader.Seek(start+Size);
+                // Reader.Seek(start+Size);
                 return;
             }
             else

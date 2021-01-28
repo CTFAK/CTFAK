@@ -18,7 +18,7 @@ namespace CTFAK.Utils
                     colorArray[(y * stride) + (x * 4) + 1] = data[position + 1];
                     colorArray[(y * stride) + (x * 4) + 2] = data[position + 2];
                     colorArray[(y * stride) + (x * 4) + 3] = 255;
-                    position += 3;
+                    position += 3; 
                 }
 
                 position += pad * 3;

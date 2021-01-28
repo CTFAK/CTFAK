@@ -23,7 +23,9 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
             // if(Qualifiers==null) throw new NullReferenceException("QUALIFIERS NULL");
             Writer.WriteInt32((int) ObjectFlags);
             Writer.WriteInt32(NewObjectFlags);
+            // var col = Color.FromArgb(255,BackgroundColor.R,BackgroundColor.G,BackgroundColor.B);
             Writer.WriteColor(BackgroundColor);
+            
 
             for (int i = 0; i < 8; i++)
             {

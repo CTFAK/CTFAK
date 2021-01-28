@@ -127,7 +127,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             Checksum = Reader.ReadInt32();
             References = Reader.ReadInt32();
             var decompressedSize = Reader.ReadInt32();
-            Flags = (int)Reader.ReadUInt32(); 
+            Flags = (int)Reader.ReadUInt32();
             var reserved = Reader.ReadInt32();
             var nameLenght = Reader.ReadInt32();
             ByteReader soundData;
@@ -141,15 +141,13 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 soundData = new ByteReader(Reader.ReadBytes(decompressedSize));
             }
             Name = soundData.ReadWideString(nameLenght);
-
+            Name = Name.Replace(" ", "");
             Data = soundData.ReadBytes((int) soundData.Size());
             if (Settings.DumpSounds)
             {
                 Name = Helper.CleanInput(Name);
                 File.WriteAllBytes($"{Settings.SoundPath}\\{Name}.wav", Data);
             }
-            
-            
         }
 
         

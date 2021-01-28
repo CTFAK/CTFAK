@@ -41,7 +41,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             "SamplesWhenNotFocused",
             "NoMinimizeBox",
             "NoMaximizeBox",
-            "NoThiccFrame",
+            "NoThickFrame",
             "DoNotCenterFrame",
             "ScreensaverAutostop",
             "DisableClose",

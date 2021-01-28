@@ -119,6 +119,8 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public List<ObjectInstance> Objects => _objects?.Items ?? null;
         public List<Color> Palette => _palette?.Items ?? new Color[256].ToList();
         public Events.Events Events => _events;
+        public Transition FadeIn => _fadeIn;
+        public Transition FadeOut => _fadeOut;
         public List<Layer> Layers => _layers?.Items ?? null;
         
 

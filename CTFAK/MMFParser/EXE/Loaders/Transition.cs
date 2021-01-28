@@ -36,6 +36,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             ModuleFile = Reader.ReadAscii();
             Reader.Seek(currentPos+parameterOffset);
             ParameterData = Reader.ReadBytes(parameterSize);
+      
 
 
         }

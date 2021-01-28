@@ -158,7 +158,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 }
                 else if (name == EditorPositionData)
                 {
-                    if(Reader.ReadUInt16()!=1)throw new NotImplementedException("Invalid chunkversion");
+                    if(Reader.ReadUInt16()!=1)//throw new NotImplementedException("Invalid chunkversion");
                     X = Reader.ReadUInt32();
                     Y = Reader.ReadUInt32();
                     CaretType = Reader.ReadUInt32();
@@ -167,7 +167,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 }
                 else if (name == EditorLineData)
                 {
-                    if(Reader.ReadUInt16()!=1)throw new NotImplementedException("Invalid chunkversion");
+                    if(Reader.ReadUInt16()!=1)//throw new NotImplementedException("Invalid chunkversion");
                     LineY = Reader.ReadUInt32();
                     LineItemType = Reader.ReadUInt32();
                     EventLine = Reader.ReadUInt32();
@@ -258,7 +258,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             // if (X != 0)
             {
                 Writer.WriteAscii(EditorPositionData);
-                Writer.WriteInt16(1);
+                Writer.WriteInt16(10);
                 Writer.WriteInt32((int) X);
                 Writer.WriteInt32((int) Y);
                 Writer.WriteUInt32(CaretType);
@@ -268,7 +268,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             // if (LineY != 0)
             {
                 Writer.WriteAscii(EditorLineData);
-                Writer.WriteInt16(1);
+                Writer.WriteInt16(10);
                 Writer.WriteUInt32(LineY);
                 Writer.WriteUInt32(LineItemType);
                 Writer.WriteUInt32(EventLine);

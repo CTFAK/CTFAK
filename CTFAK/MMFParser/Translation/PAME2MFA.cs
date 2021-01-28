@@ -43,7 +43,6 @@ namespace CTFAK.MMFParser.Translation
             mfa.Description = "";
             mfa.Path = game.EditorFilename;
 
-            //mfa.Stamp = wtf;
             //if (game.Fonts != null) mfa.Fonts = game.Fonts;
             mfa.Sounds.Items.Clear();
             if (game.Sounds != null)
@@ -74,10 +73,25 @@ namespace CTFAK.MMFParser.Translation
             var flags = game.Header.Flags;
             var newFlags = game.Header.NewFlags;
             mfa.Extensions.Clear();
-            displaySettings["MDI"] = newFlags["MDI"];
+            
+            displaySettings["MaximizedOnBoot"] = flags["Maximize"];
+            displaySettings["ResizeDisplay"] = flags["MDI"];
+            displaySettings["FullscreenAtStart"] = flags["FullscreenAtStart"];
+            displaySettings["AllowFullscreen"] = flags["FullscreenSwitch"];
+            displaySettings["Heading"] = !flags["NoHeading"];
+            displaySettings["HeadingWhenMaximized"] = true;
             displaySettings["MenuBar"] = flags["MenuBar"];
             displaySettings["MenuOnBoot"] = !flags["MenuHidden"];
-            graphicSettings["MultiSamples"] = flags["MultiSamples"];
+            displaySettings["NoMinimize"] = newFlags["NoMinimizeBox"];
+            displaySettings["NoMaximize"] = newFlags["NoMaximizeBox"];
+            displaySettings["NoThickFrame"] = newFlags["NoThickFrame"];
+            // displaySettings["NoCenter"] = flags["MDI"];
+            displaySettings["DisableClose"] = newFlags["DisableClose"];
+            displaySettings["HiddenAtStart"] = newFlags["HiddenAtStart"];
+            displaySettings["MDI"] = newFlags["MDI"];
+    
+            
+            mfa.GraphicFlags = graphicSettings;
             mfa.DisplayFlags = displaySettings;
             mfa.WindowX = game.Header.WindowWidth;
             mfa.WindowY = game.Header.WindowHeight;
@@ -135,8 +149,8 @@ namespace CTFAK.MMFParser.Translation
                 newFrame.SizeY = frame.Height;
 
                 newFrame.Background = frame.Background;
-                newFrame.FadeIn = null;
-                newFrame.FadeOut = null;
+                newFrame.FadeIn = frame.FadeIn!=null ? ConvertTransition(frame.FadeIn):null;
+                newFrame.FadeOut = frame.FadeOut!=null ? ConvertTransition(frame.FadeOut):null;
                 var mfaFlags = newFrame.Flags;
                 var originalFlags = frame.Flags;
 
@@ -184,7 +198,6 @@ namespace CTFAK.MMFParser.Translation
 
                     for (int i = 0; i < frame.Objects.Count; i++)
                     {
-
                         var instance = frame.Objects[i];
                         FrameItem frameItem;
 
@@ -202,6 +215,10 @@ namespace CTFAK.MMFParser.Translation
                             newInstance.ParentHandle = (uint) instance.ParentHandle;
                             newInstance.Layer = (uint) (instance.Layer);
                             newInstances.Add(newInstance);
+                        }
+                        else
+                        {
+                            throw new NullReferenceException("Object");
                         }
                     }
                 }
@@ -272,15 +289,17 @@ namespace CTFAK.MMFParser.Translation
 
         public static MFA.Loaders.Transition ConvertTransition(EXE.Loaders.Transition gameTrans)
         {
-            var mfaTrans = new MFA.Loaders.Transition((ByteReader) null);
-            mfaTrans.Module = gameTrans.ModuleFile;
-            mfaTrans.Name = gameTrans.Name.FirstCharToUpper();
-            mfaTrans.Id = gameTrans.Module;
-            mfaTrans.TransitionId = gameTrans.Name;
-            mfaTrans.Flags = gameTrans.Flags;
-            mfaTrans.Color = gameTrans.Color;
-            mfaTrans.ParameterData = gameTrans.ParameterData;
-            mfaTrans.Duration = gameTrans.Duration;
+            var mfaTrans = new MFA.Loaders.Transition((ByteReader) null)
+            {
+                Module = "cctrans.dll",//gameTrans.ModuleFile,
+                Name = "Transition",
+                Id = gameTrans.Module,
+                TransitionId = gameTrans.Name,
+                Flags = gameTrans.Flags,
+                Color = gameTrans.Color,
+                ParameterData = gameTrans.ParameterData,
+                Duration = gameTrans.Duration
+            };
             return mfaTrans;
 
         }
@@ -330,17 +349,20 @@ namespace CTFAK.MMFParser.Translation
         public static FrameItem TranslateObject(ObjectInfo item)
         {
             var newItem = new FrameItem(null);
+            newItem.Chunks = new ChunkList(null);
             newItem.Name = item.Name;
             newItem.ObjectType = (int)item.ObjectType;
             newItem.Handle = item.Handle;
             newItem.Transparent = 1;
             newItem.InkEffect = item.InkEffect;
             newItem.InkEffectParameter = item.InkEffectValue;
-            newItem.AntiAliasing = item.Antialias ? 1 : 0;
+            newItem.AntiAliasing = item.Antialias? 1 : 0;;
             newItem.Flags = item.Flags;
+            newItem.Chunks.GetOrCreateChunk<Opacity>().Blend = (byte) item.InkEffectValue;
+            newItem.Chunks.GetOrCreateChunk<Opacity>().RGBCoeff = Color.White;
             
             newItem.IconHandle = 12;
-            newItem.Chunks = MFA.MFA.defaultObjChunks;
+            
 
             if (item.ObjectType == 0)
             {
@@ -376,9 +398,9 @@ namespace CTFAK.MMFParser.Translation
                 Logger.Log(("Translating Object: " + itemLoader.Parent.Name),false,ConsoleColor.Blue,false);
                 //CommonSection
                 var newObject = new ObjectLoader(null);
-                newObject.ObjectFlags =  (int) (itemLoader.Flags.flag);
+                newObject.ObjectFlags = (int) (itemLoader.Flags.flag);
                 newObject.NewObjectFlags = (int) (itemLoader.NewFlags.flag);
-                
+
                 newObject.BackgroundColor = itemLoader.BackColor;
                 
                 newObject.Qualifiers = itemLoader._qualifiers;
@@ -431,10 +453,11 @@ namespace CTFAK.MMFParser.Translation
                             var newDirections = new List<AnimationDirection>();
                             EXE.Loaders.Objects.Animation animation = null;
                             if (animHeader.AnimationDict.ContainsKey(origAnim.Key))
-                                {
-                                    animation = animHeader?.AnimationDict[origAnim.Key];
-                                }
-                                else break;
+                            {
+                                animation = animHeader?.AnimationDict[origAnim.Key];
+                            }
+                            else break;
+
                             if (animation != null)
                             {
                                 if (animation.DirectionDict != null)

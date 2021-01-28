@@ -134,104 +134,106 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             else
             {
                 var currentPosition = Reader.Tell();
-            var size = Reader.ReadInt32();
-            if (Settings.Build >= 284)
-            {
-                _animationsOffset = Reader.ReadUInt16();
-                _movementsOffset = Reader.ReadUInt16();
-            }
-            else
-            {
-                _movementsOffset = Reader.ReadUInt16();
-                _animationsOffset = Reader.ReadUInt16();
-            }
-            _zeroUnk = Reader.ReadUInt16();
-            
-            if(_zeroUnk!=0) throw new NotImplementedException("Unknown value is not zero");
-            var version = Reader.ReadUInt16();
-
-            _extensionOffset = Reader.ReadUInt16();
-            _counterOffset = Reader.ReadUInt16();
-            Flags.flag = Reader.ReadUInt16();
-            var end = Reader.Tell()+(8+1)*2;
-            Reader.Skip(2);
-            for (int i = 0; i < 8; i++)
-            {
-                var value = Reader.ReadInt16();
-                _qualifiers[i]=value;
-            }
-            
-            Reader.Seek(end);
-            _systemObjectOffset = Reader.ReadUInt16();
-            
-            _valuesOffset = Reader.ReadUInt16();
-            _stringsOffset = Reader.ReadUInt16();
-            NewFlags.flag = Reader.ReadUInt16();
-            Preferences.flag = Reader.ReadUInt16();
-            Identifier = Reader.ReadInt32();
-            BackColor = Reader.ReadColor();
-            _fadeinOffset = Reader.ReadUInt32();
-            _fadeoutOffset = Reader.ReadUInt32();
-            if (_animationsOffset > 0)
-            {
-                Reader.Seek(currentPosition+_animationsOffset);
-                Animations=new Animations(Reader);
-                Animations.Read();
-            }
-            
-            if (_movementsOffset > 0)
-            {
-                Reader.Seek(currentPosition+_movementsOffset);
-                Movements=new Movements(Reader);
-                Movements.Read();
-            }
-
-            if (_systemObjectOffset > 0)
-            {
-                Reader.Seek(currentPosition + _systemObjectOffset);
-                switch (Parent.ObjectType)
+                var size = Reader.ReadInt32();
+                if (Settings.Build >= 284)
                 {
-                    //Text
-                    case Constants.ObjectType.Text:
-                        Text = new Text(Reader);
-                        Text.Read();
-                        break;
-                    //Counter
-                    case Constants.ObjectType.Counter:
-                        Counters = new Counters(Reader);
-                        Counters.Read();
-                        break;
-
+                    _animationsOffset = Reader.ReadUInt16();
+                    _movementsOffset = Reader.ReadUInt16();
                 }
-            }
-
-            if (_extensionOffset > 0)
-            {
-                Reader.Seek(currentPosition + _extensionOffset);
-
-                var dataSize = Reader.ReadInt32() - 20;
-                Reader.Skip(4); //maxSize;
-                ExtensionVersion = Reader.ReadInt32();
-                ExtensionId = Reader.ReadInt32();
-                ExtensionPrivate = Reader.ReadInt32();
-                if (dataSize != 0)
+                else
                 {
-                    ExtensionData = Reader.ReadBytes(dataSize);
+                    _movementsOffset = Reader.ReadUInt16();
+                    _animationsOffset = Reader.ReadUInt16();
                 }
-                else ExtensionData=new byte[0];
-                Logger.Log($"{Parent.Name} - {ExtensionId}");
+
+                _zeroUnk = Reader.ReadUInt16();
+
+                if (_zeroUnk != 0) throw new NotImplementedException("Unknown value is not zero");
+                var version = Reader.ReadUInt16();
+
+                _extensionOffset = Reader.ReadUInt16();
+                _counterOffset = Reader.ReadUInt16();
+                Flags.flag = Reader.ReadUInt16();
+                var end = Reader.Tell() + (8 + 1) * 2;
+                Reader.Skip(2);
+                for (int i = 0; i < 8; i++)
+                {
+                    var value = Reader.ReadInt16();
+                    _qualifiers[i] = value;
+                }
+
+                Reader.Seek(end);
+                _systemObjectOffset = Reader.ReadUInt16();
+
+                _valuesOffset = Reader.ReadUInt16();
+                _stringsOffset = Reader.ReadUInt16();
+                NewFlags.flag = Reader.ReadUInt16();
+                Preferences.flag = Reader.ReadUInt16();
+                Identifier = Reader.ReadInt32();
+                BackColor = Reader.ReadColor();
+                _fadeinOffset = Reader.ReadUInt32();
+                _fadeoutOffset = Reader.ReadUInt32();
+                if (_animationsOffset > 0)
+                {
+                    Reader.Seek(currentPosition + _animationsOffset);
+                    Animations = new Animations(Reader);
+                    Animations.Read();
+                }
+
+                if (_movementsOffset > 0)
+                {
+                    Reader.Seek(currentPosition + _movementsOffset);
+                    Movements = new Movements(Reader);
+                    Movements.Read();
+                }
+
+                if (_systemObjectOffset > 0)
+                {
+                    Reader.Seek(currentPosition + _systemObjectOffset);
+                    switch (Parent.ObjectType)
+                    {
+                        //Text
+                        case Constants.ObjectType.Text:
+                            Text = new Text(Reader);
+                            Text.Read();
+                            break;
+                        //Counter
+                        case Constants.ObjectType.Counter:
+                            Counters = new Counters(Reader);
+                            Counters.Read();
+                            break;
+
+                    }
+                }
+
+                if (_extensionOffset > 0)
+                {
+                    Reader.Seek(currentPosition + _extensionOffset);
+
+                    var dataSize = Reader.ReadInt32() - 20;
+                    Reader.Skip(4); //maxSize;
+                    ExtensionVersion = Reader.ReadInt32();
+                    ExtensionId = Reader.ReadInt32();
+                    ExtensionPrivate = Reader.ReadInt32();
+                    if (dataSize != 0)
+                    {
+                        ExtensionData = Reader.ReadBytes(dataSize);
+                    }
+                    else ExtensionData = new byte[0];
+
+                    Logger.Log($"{Parent.Name} - {ExtensionId}");
+                }
+
+                if (_counterOffset > 0)
+                {
+                    Reader.Seek(currentPosition + _counterOffset);
+                    Counter = new Counter(Reader);
+                    Counter.Read();
+                }
+
+
             }
 
-            if (_counterOffset > 0)
-            {
-                Reader.Seek(currentPosition+_counterOffset);
-                Counter = new Counter(Reader);
-                Counter.Read();
-            }
-
-                
-            }
-            
             // Logger.Log("anims: "+_animationsOffset);
             // Logger.Log("fadeIn: "+_fadeinOffset);
             // Logger.Log("fadeOut: "+_fadeoutOffset);

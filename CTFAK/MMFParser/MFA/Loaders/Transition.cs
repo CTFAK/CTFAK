@@ -33,7 +33,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             Flags = Reader.ReadInt32();
             Color = Reader.ReadColor();
             ParameterData = Reader.ReadBytes(Reader.ReadInt32());
-
+            
         }
 
         public override void Write(ByteWriter Writer)

@@ -10,6 +10,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
         public ushort Id;
         public string Name;
         public int Password;
+        private short _unk;
 
         public Group(ByteReader reader) : base(reader)
         {
@@ -21,8 +22,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
             Flags = Reader.ReadUInt16();
             Id = Reader.ReadUInt16();
             Name = Reader.ReadWideString();
+            Reader.Skip(178);
             Password = Reader.ReadInt32();
-            Password = Checksum.MakeGroupChecksum("pass", Name);
+            _unk = Reader.ReadInt16();
         }
 
         public override void Write(ByteWriter Writer)
@@ -30,7 +32,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
             Writer.WriteUInt16(Flags);
             Writer.WriteUInt16(Id);
             Writer.WriteUnicode(Name,true);
+            Writer.Skip(178);
             Writer.WriteInt32(Password);
+            Writer.WriteInt16(_unk);
+            
         }
 
         public override string ToString()

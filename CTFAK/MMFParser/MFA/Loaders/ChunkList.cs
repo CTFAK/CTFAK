@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
@@ -14,7 +15,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
         public List<MFAChunk> Items = new List<MFAChunk>();
         public bool Log=false;
 
-        public T GetChunk<T>() where T : MFAChunkLoader
+        public T GetOrCreateChunk<T>() where T : MFAChunkLoader, new()
         {
             foreach (MFAChunk chunk in Items)
             {
@@ -23,7 +24,11 @@ namespace CTFAK.MMFParser.MFA.Loaders
                     return (T) chunk.Loader;
                 }
             }
-            return null;
+            var newChunk = new MFAChunk(null);
+            newChunk.Id=45;
+            newChunk.Loader = new T();
+            Items.Add(newChunk);
+            return (T) newChunk.Loader;
         }
 
         public bool ContainsChunk<T>() where T : MFAChunkLoader
@@ -104,15 +109,13 @@ namespace CTFAK.MMFParser.MFA.Loaders
             var size = Reader.ReadInt32();
             Data = Reader.ReadBytes(size);
             var dataReader = new ByteReader(Data);
-            /*switch (Id)
+            switch (Id)
             {
                 case 33:
                     Loader = new FrameVirtualRect(dataReader);
                     break;
-                case 56:
-                    Loader=new GlobalObject(dataReader);
-                    break;
-                case 72:
+          
+                case 45:
                     Loader = new Opacity(dataReader);
                     break;
                 default:
@@ -120,7 +123,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
                     // Logger.Log($"{Id} - {Data.GetHex()}");
                     break;
                 
-            }*/
+            }
             Loader?.Read();
             
             
@@ -151,19 +154,35 @@ namespace CTFAK.MMFParser.MFA.Loaders
 
     public class Opacity : MFAChunkLoader
     {
-        public int Value;
+        public Color RGBCoeff;
+        public byte Blend;
 
         public Opacity(ByteReader dataReader) : base(dataReader){}
-        
+
+        public Opacity() : base()
+        {
+            
+        }
+
 
         public override void Read()
         {
-            Value = Reader.ReadInt32();
+            var b = Reader.ReadByte();
+            var g = Reader.ReadByte();
+            var r = Reader.ReadByte();
+            Blend = Reader.ReadByte();
+            RGBCoeff = Color.FromArgb(Blend,r,g,b);
+            var unk = Reader.ReadInt32();
+
         }
 
         public override void Write(ByteWriter Writer)
         {
-            Writer.WriteInt32(Value);
+            Writer.WriteInt8(RGBCoeff.B);
+            Writer.WriteInt8(RGBCoeff.G);
+            Writer.WriteInt8(RGBCoeff.R);
+            Writer.WriteInt8(Blend);
+            Writer.WriteInt32(0);
         }
     }
 
@@ -191,30 +210,6 @@ namespace CTFAK.MMFParser.MFA.Loaders
             Writer.WriteInt32(Bottom);
         }
     }
-    public class GlobalObject:MFAChunkLoader
-    {
-        public byte[] Value;
-
-        public GlobalObject(ByteReader reader) : base(reader)
-        {
-        }
-
-        public override void Read()
-        {
-            Value = Reader.ReadBytes(12);
-            for(int i=0;i<Value.Length;i++)
-            {
-                Value[i] = 0;
-            }
-        }
-
-        public override void Write(ByteWriter Writer)
-        {
-            Writer.WriteBytes(Value);
-        }
-    }
-
-
     public abstract class MFAChunkLoader
     {
         public ByteReader Reader;
@@ -222,6 +217,10 @@ namespace CTFAK.MMFParser.MFA.Loaders
         {
             Reader = reader;
         }
+
+        protected MFAChunkLoader(){}
+        
+
         public abstract void Read();
         public abstract void Write(ByteWriter Writer);
     }
