@@ -110,7 +110,13 @@ namespace CTFAK
             Settings.Verbose = verbose;
             if (path.ToLower().EndsWith(".exe"))
             {
-               
+                var icon = new IconLoader(path);
+                foreach (var ico in icon.GetAllIcons())
+                {
+                    ico.Save(new FileStream($"{Settings.IconPath}\\{ico.Width}x{ico.Height}.png",FileMode.CreateNew));
+                }
+                
+                
                 var exeReader = new ByteReader(path, FileMode.Open);
                 var currentExe = new Exe();
                 Exe.Instance = currentExe;
@@ -139,6 +145,7 @@ namespace CTFAK
             Directory.CreateDirectory($"{Settings.ExtensionPath}");
             Directory.CreateDirectory($"{Settings.DLLPath}");
             Directory.CreateDirectory($"{Settings.EXEPath}");
+            Directory.CreateDirectory($"{Settings.IconPath}");
             Directory.CreateDirectory($"{PluginAPI.PluginAPI.PluginPath}");
         }
         public static void InitNativeLibrary()

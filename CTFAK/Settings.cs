@@ -27,6 +27,7 @@ namespace CTFAK
         public static string ExtensionPath=>$"{DumpPath}\\PackData\\Extensions";
         public static string DLLPath=>$"{DumpPath}\\PackData\\DLLs";
         public static string EXEPath=>$"{DumpPath}\\PackData\\Exes";
+        public static string IconPath=>$"{DumpPath}\\Icons";
               
         public static string AppName;
         public static string Copyright;

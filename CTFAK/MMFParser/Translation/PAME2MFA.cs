@@ -79,8 +79,8 @@ namespace CTFAK.MMFParser.Translation
             displaySettings["ResizeDisplay"] = flags["MDI"];
             displaySettings["FullscreenAtStart"] = flags["FullscreenAtStart"];
             displaySettings["AllowFullscreen"] = flags["FullscreenSwitch"];
-            displaySettings["Heading"] = !flags["NoHeading"];
-            displaySettings["HeadingWhenMaximized"] = true;
+            // displaySettings["Heading"] = !flags["NoHeading"];
+            // displaySettings["HeadingWhenMaximized"] = true;
             displaySettings["MenuBar"] = flags["MenuBar"];
             displaySettings["MenuOnBoot"] = !flags["MenuHidden"];
             displaySettings["NoMinimize"] = newFlags["NoMinimizeBox"];
@@ -361,13 +361,13 @@ namespace CTFAK.MMFParser.Translation
             newItem.Flags = item.Flags;
             if (item.InkEffectValue == 0&&Settings.Build<=284)
             {
-                newItem.Chunks.GetOrCreateChunk<Opacity>().Blend = 255;
+                // newItem.Chunks.GetOrCreateChunk<Opacity>().Blend = 255;
             }
             else
             {
-                newItem.Chunks.GetOrCreateChunk<Opacity>().Blend = item.InkEffectValue;
+                // newItem.Chunks.GetOrCreateChunk<Opacity>().Blend = item.InkEffectValue;
             }
-            newItem.Chunks.GetOrCreateChunk<Opacity>().RGBCoeff = Color.White;
+            // newItem.Chunks.GetOrCreateChunk<Opacity>().RGBCoeff = Color.White;
             
             newItem.IconHandle = 12;
             

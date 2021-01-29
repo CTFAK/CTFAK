@@ -275,6 +275,7 @@
     <Compile Include="Utils\ByteReader.cs" />
     <Compile Include="Utils\Decompressor.cs" />
     <Compile Include="Utils\Decryption.cs" />
+    <Compile Include="Utils\IconLoader.cs" />
     <Compile Include="Utils\ImageDumper.cs" />
     <Compile Include="Utils\ImageHelper.cs" />
     <Compile Include="Utils\Logger.cs" />
