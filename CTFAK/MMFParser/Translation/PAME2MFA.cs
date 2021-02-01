@@ -371,6 +371,7 @@ namespace CTFAK.MMFParser.Translation
             
             newItem.IconHandle = 12;
             
+            
 
             if (item.ObjectType == 0)
             {

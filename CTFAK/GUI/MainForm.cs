@@ -319,18 +319,18 @@ namespace CTFAK.GUI
             GameInfo.Visible = true;
             loadingLabel.Visible = false;
             var toLog = "";
-            toLog += $"{Properties.Locale.ChunkNames.title}: {Exe.Instance.GameData.Name}\n";
-            toLog += $"{Properties.Locale.ChunkNames.copyright}: {Exe.Instance.GameData.Copyright}\n";
+            toLog += $"{Properties.Locale.ChunkNames.title}: {Program.CleanData.Name}\n";
+            toLog += $"{Properties.Locale.ChunkNames.copyright}: {Program.CleanData.Copyright}\n";
             //toLog += $"Editor Filename: {Exe.Instance.GameData.EditorFilename}\n";
-            toLog += $"Product Version: {Exe.Instance.GameData.ProductVersion}\n";
-            toLog += $"Build: {Exe.Instance.GameData.Build}\n";
-            toLog += $"Runtime Version: {Exe.Instance.GameData.RuntimeVersion}\n";
-            toLog += $"{Properties.GlobalStrings.imageCount}: {Exe.Instance.GameData.Images?.NumberOfItems ?? 0}\n";
-            toLog += $"{Properties.GlobalStrings.soundCount}: {Exe.Instance.GameData.Sounds?.NumOfItems ?? 0}\n";
-            toLog += $"{Properties.GlobalStrings.musicCount}: {Exe.Instance.GameData.Music?.NumOfItems ?? 0}\n";
-            toLog += $"{Properties.GlobalStrings.frameitemCount}: {Exe.Instance.GameData.Frameitems?.NumberOfItems}\n";
-            toLog += $"{Properties.GlobalStrings.frameCount}: {Exe.Instance.GameData.Frames.Count}\n";
-            toLog += $"Chunks Count: {Exe.Instance.GameData.GameChunks.Chunks.Count}\n";
+            toLog += $"Product Version: {Program.CleanData.ProductVersion}\n";
+            toLog += $"Build: {Program.CleanData.Build}\n";
+            toLog += $"Runtime Version: {Program.CleanData.RuntimeVersion}\n";
+            toLog += $"{Properties.GlobalStrings.imageCount}: {Program.CleanData.Images?.NumberOfItems ?? 0}\n";
+            toLog += $"{Properties.GlobalStrings.soundCount}: {Program.CleanData.Sounds?.NumOfItems ?? 0}\n";
+            toLog += $"{Properties.GlobalStrings.musicCount}: {Program.CleanData.Music?.NumOfItems ?? 0}\n";
+            toLog += $"{Properties.GlobalStrings.frameitemCount}: {Program.CleanData.Frameitems?.NumberOfItems}\n";
+            toLog += $"{Properties.GlobalStrings.frameCount}: {Program.CleanData.Frames.Count}\n";
+            toLog += $"Chunks Count: {Program.CleanData.GameChunks.Chunks.Count}\n";
             GameInfo.Text = toLog;
             InitPackDataTab();
             InitImages();
@@ -338,12 +338,12 @@ namespace CTFAK.GUI
             InitKeyTab();
             InitPlugins();
             
-            if (Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>() != null)
-                Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().OnImageSaved += UpdateImageBar;
-            if (Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>() != null)
-                Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>().OnSoundSaved += UpdateSoundBar;
-            if (Exe.Instance.GameData.GameChunks.GetChunk<MusicBank>() != null)
-                Exe.Instance.GameData.GameChunks.GetChunk<MusicBank>().OnMusicSaved += UpdateMusicBar;
+            if (Program.CleanData.GameChunks.GetChunk<ImageBank>() != null)
+                Program.CleanData.GameChunks.GetChunk<ImageBank>().OnImageSaved += UpdateImageBar;
+            if (Program.CleanData.GameChunks.GetChunk<SoundBank>() != null)
+                Program.CleanData.GameChunks.GetChunk<SoundBank>().OnSoundSaved += UpdateSoundBar;
+            if (Program.CleanData.GameChunks.GetChunk<MusicBank>() != null)
+                Program.CleanData.GameChunks.GetChunk<MusicBank>().OnMusicSaved += UpdateMusicBar;
 
 
             
@@ -547,6 +547,7 @@ namespace CTFAK.GUI
 
         public void InitPackDataTab()
         {
+            if (Settings.GameType == GameType.Android) return;
             packDataListBox.Items.Clear();
             foreach (var item in Exe.Instance.PackData.Items) packDataListBox.Items.Add(item.PackFilename);
 
@@ -609,8 +610,8 @@ namespace CTFAK.GUI
 
         public void InitImages()
         {
-            if (Settings.GameType == GameType.TwoFivePlus) return;
-            var bank = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
+            if (Settings.GameType == GameType.TwoFivePlus||Settings.GameType == GameType.Android) return;
+            var bank = Program.CleanData.GameChunks.GetChunk<ImageBank>();
             var items = bank.Images.ToList();
             var filtered = items.OrderBy(x => x.Value.Handle);
             foreach (var frame in Exe.Instance.GameData.Frames)
@@ -912,11 +913,12 @@ namespace CTFAK.GUI
 
         public void InitSounds()
         {
-            var bank = Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>();
+            if (Settings.GameType == GameType.Android) return;
+            var bank = Program.CleanData.GameChunks.GetChunk<SoundBank>();
             if (bank == null) return;
             foreach (var soundItem in bank.Items) soundList.Nodes.Add(new ChunkNode(soundItem.Name, soundItem));
             _soundPlayer =
-                new SoundPlayer(new MemoryStream(Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>().Items[0].Data));
+                new SoundPlayer(new MemoryStream(Program.CleanData.GameChunks.GetChunk<SoundBank>().Items[0].Data));
         }
 
         private void playSoundBtn_Click(object sender, EventArgs e)

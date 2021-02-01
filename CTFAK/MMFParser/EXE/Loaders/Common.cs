@@ -19,6 +19,9 @@ namespace CTFAK.MMFParser.EXE.Loaders
         }
 
         public override void Print(bool ext){}
-        public override string[] GetReadableData() => null;
+        public override string[] GetReadableData() => new string[]
+        {
+            $"Value: {Right}x{Bottom}"
+        };
     }
 }

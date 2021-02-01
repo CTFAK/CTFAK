@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using CTFAK.Utils;
 
 namespace CTFAK.MMFParser.EXE
@@ -43,7 +44,7 @@ namespace CTFAK.MMFParser.EXE
                 if (sectionName == ".extra")
                 {
                     exeReader.Seek(entry + 20);
-                    possition = (int) exeReader.ReadUInt32();
+                    possition = (int) exeReader.ReadUInt32(); //Pointer to raw data
                     break;
                 }
 
@@ -51,7 +52,7 @@ namespace CTFAK.MMFParser.EXE
                 {
                     exeReader.Seek(entry + 16);
                     var size = exeReader.ReadUInt32();
-                    var address = exeReader.ReadUInt32();
+                    var address = exeReader.ReadUInt32(); //Pointer to raw data
                     possition = (int) (address + size);
                     break;
                 }
@@ -60,16 +61,12 @@ namespace CTFAK.MMFParser.EXE
             }
 
             exeReader.Seek(possition);
+            
             var firstShort = exeReader.PeekUInt16();
             Logger.Log("First Short: " + firstShort.ToString("X2"), true, ConsoleColor.Yellow);
-            if (firstShort == 0x7777)
-            {
-                Settings.GameType = GameType.Normal;
-            }
-            else if (firstShort == 0x222c)
-            {
-                Settings.GameType = GameType.OnePointFive;
-            }
+            if (firstShort == 0x7777) Settings.GameType = GameType.Normal;
+            else if (firstShort == 0x222c) Settings.GameType = GameType.OnePointFive;
+            else throw new InvalidDataException("Unknown data header: 0x"+firstShort.ToString("X4"));
             
             if (Settings.GameType == GameType.Normal)
             {

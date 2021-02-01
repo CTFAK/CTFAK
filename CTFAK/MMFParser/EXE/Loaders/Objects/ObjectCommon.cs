@@ -237,7 +237,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     Animations.Read();
                 }
 
-                if (_movementsOffset > 0)
+                if (_movementsOffset > 0&&Settings.GameType!=GameType.Android)
                 {
                     Reader.Seek(currentPosition + _movementsOffset);
                     Movements = new Movements(Reader);
@@ -277,8 +277,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                         ExtensionData = Reader.ReadBytes(dataSize);
                     }
                     else ExtensionData = new byte[0];
-
-                    Logger.Log($"{Parent.Name} - {ExtensionId}");
                 }
 
                 if (_counterOffset > 0)

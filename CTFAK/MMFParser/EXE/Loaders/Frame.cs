@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using CTFAK.MMFParser.EXE.Loaders.Objects;
 using CTFAK.Utils;
 
 namespace CTFAK.MMFParser.EXE.Loaders
@@ -64,7 +65,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             Logger.Log($"Frame: {Name}", true, ConsoleColor.Green);
             Logger.Log($"   Password: {Password}", true, ConsoleColor.Green);
             Logger.Log($"   Size: {Width}x{Height}", true, ConsoleColor.Green);
-            Logger.Log($"   Objects: {_objects.CountOfObjects}", true, ConsoleColor.Green);
+            Logger.Log($"   Objects: {Objects.Count}", true, ConsoleColor.Green);
             Logger.Log($"-------------------------", true, ConsoleColor.Green);
         }
 
@@ -77,8 +78,10 @@ namespace CTFAK.MMFParser.EXE.Loaders
                 $"Virtual Size: {VirtWidth}x{VirtHeight}",
                 $"MVTimer: {MovementTimer}",
                 $"Objects: {Objects.Count}",
-                
-            
+                $"Layers: {Layers.Count}",
+                $"Event Count: {Events.Items.Count}",
+                $"{(FadeIn!=null ?$"Fade In: {FadeIn.Name}":"")}",
+                $"{(FadeOut!=null ?$"Fade Out: {FadeOut.Name}":"")}",
             };
         }
 
@@ -196,8 +199,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
     public class ObjectInstances : ChunkLoader
     {
-        
-        public int CountOfObjects=0;
         public List<ObjectInstance> Items = new List<ObjectInstance>();
 
         public ObjectInstances(ByteReader reader) : base(reader)
@@ -217,15 +218,15 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
             return new string[]
             {
-                $"Number of objects: {CountOfObjects}"
+                $"Number of objects: {Items.Count}"
             };
         }
 
         public override void Read()
         {
             
-            CountOfObjects = Reader.ReadInt32();
-            for (int i = 0; i < CountOfObjects; i++)
+            var count = Reader.ReadInt32();
+            for (int i = 0; i < count; i++)
             {
                 var item = new ObjectInstance(Reader);
                 item.Read();
@@ -338,10 +339,8 @@ namespace CTFAK.MMFParser.EXE.Loaders
             throw new NotImplementedException();
         }
 
-        public override string[] GetReadableData()
-        {
-            throw new NotImplementedException();
-        }
+        public override string[] GetReadableData()=>new string[]{$"Layers: {Items.Count}" };
+        
     }
 
     public class Layer : ChunkLoader
@@ -421,7 +420,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         }
 
         public override void Print(bool ext){}
-        public override string[] GetReadableData() => null;
+        public override string[] GetReadableData() => new string[]{"Length: 256"};
     }
     public class VirtualRect:Rect
     {
@@ -444,15 +443,8 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
             Value = Reader.ReadInt32();
         }
-
-        public override void Print(bool ext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string[] GetReadableData()
-        {
-            throw new NotImplementedException();
-        }
+        public override void Print(bool ext){}
+        public override string[] GetReadableData()=>new string[]{"Value: "+Value};
+        
     }
 }

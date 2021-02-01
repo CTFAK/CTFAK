@@ -18,7 +18,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public Dictionary<int, ImageItem> Images = new Dictionary<int, ImageItem>();
         public uint NumberOfItems;
         public bool PreloadOnly = false;
-        public static bool Load = true;
+        public static bool Load = false;
 
         public ImageBank(ByteReader reader) : base(reader)
         {
@@ -81,7 +81,8 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
             Logger.Log($"Found {NumberOfItems} images", true, ConsoleColor.Green);
 
-
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
             //if (!Settings.DumpImages) return;
             Logger.Log("Reading Images", true, ConsoleColor.Green);
             for (int i = 0; i < NumberOfItems; i++)
@@ -94,9 +95,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                     if (SaveImages) item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
                     OnImageSaved?.Invoke(i, (int) NumberOfItems);
                 }
-                
             }
-            Logger.Log("Images success", true, ConsoleColor.Green);
+            stopWatch.Stop();
+            Logger.Log($"Images finished in {stopWatch.Elapsed.ToString("g")}", true, ConsoleColor.Green);
+            Load = true;
             if (!MainForm.BreakImages) Images = tempImages;
             MainForm.BreakImages = false;
         }
@@ -281,10 +283,8 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             int bytesRead = 0;
             rawImg = imageData;
             if(!ImageBank.Load)return;
-            // Reader.Seek((_width*3)*_height+(ImageHelper.GetPadding(_width,3)*3*_height));
             if (Flags["RLE"] || Flags["RLEW"] || Flags["RLET"])
             {
-                // Reader.Seek(start+Size);
                 return;
             }
             else

@@ -32,10 +32,8 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             throw new NotImplementedException();
         }
 
-        public override string[] GetReadableData()
-        {
-            throw new NotImplementedException();
-        }
+        public override string[] GetReadableData() => new[] {$"Event Count: {Items.Count}" };
+        
 
         public override void Read()
         {

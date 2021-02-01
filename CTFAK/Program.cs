@@ -49,26 +49,13 @@ namespace CTFAK
             };
             
             Settings.UseGUI = true;
-            
-            
+
+
             if (args.Length > 0)
             {
-                ImageBank.Load = false; 
-                if (args[0].EndsWith(".exe"))
-                {
-                    ReadFile(args[0],true,false,true);
-                    MFAGenerator.BuildMFA();
-                    Environment.Exit(0);
-                }
-                else
-                {
-                    Settings.Unicode = true;
-                    var reader = new ByteReader(new FileStream(args[0],FileMode.Open));
-                    CleanData = new GameData();
-                    CleanData.Read(reader);
-                    MFAGenerator.BuildMFA();
-                }
-                
+                ImageBank.Load = false;
+                ReadFile(args[0], true, false, true);
+                MFAGenerator.BuildMFA();
             }
             else if(args.Length==0)
             {
@@ -113,6 +100,7 @@ namespace CTFAK
                 var icon = new IconLoader(path);
                 foreach (var ico in icon.GetAllIcons())
                 {
+                    if (File.Exists($"{Settings.IconPath}\\{ico.Width}x{ico.Height}.png")) continue;
                     ico.Save(new FileStream($"{Settings.IconPath}\\{ico.Width}x{ico.Height}.png",FileMode.CreateNew));
                 }
                 
@@ -127,11 +115,15 @@ namespace CTFAK
                 Logger.Log("Finished in "+stopWatch.Elapsed.ToString("g"), true, ConsoleColor.Yellow);
 
             }
-            else
+            else if (path.ToLower().EndsWith(".apk"))
             {
-                var reader = new ByteReader(new FileStream(path,FileMode.Open));
-                CleanData = new GameData();
-                CleanData.Read(reader);
+                var apk = new APK();
+                var stopWatch = new Stopwatch();
+                stopWatch.Start();
+                apk.ParseAPK(path);
+                stopWatch.Stop();
+                Logger.Log("Finished in "+stopWatch.Elapsed.ToString("g"), true, ConsoleColor.Yellow);
+                
             }
             
         }

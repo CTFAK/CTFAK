@@ -14,7 +14,8 @@ namespace CTFAK.Utils
         
         public static void MakeKey(string data1, string data2, string data3)
         {
-            
+            // MakeKeyUnicode(data1,data2,data3);
+            // return;
             IntPtr keyPtr;
             var combined = "";
             combined += data1;
@@ -22,13 +23,35 @@ namespace CTFAK.Utils
             combined += data3;
             Logger.Log("Combined data " + combined, true, ConsoleColor.Yellow);
             keyPtr = Marshal.StringToHGlobalAnsi(combined);
+            
             keyPtr = make_key_combined(keyPtr, MagicChar);
             byte[] key = new byte[256];
             Marshal.Copy(keyPtr, key, 0, 256);
+            Marshal.FreeHGlobal(keyPtr);
             _decryptionKey = key;
             Logger.Log($"First 16-Bytes of key: {_decryptionKey.GetHex(16)}", true, ConsoleColor.Yellow);
-            Logger.Log(Encoding.Unicode.GetString(_decryptionKey));
             File.WriteAllBytes($"{Settings.DumpPath}\\key.bin", _decryptionKey);
+        }
+
+        public static void MakeKeyUnicode(string data1, string data2, string data3)
+        {
+            IntPtr data1ptr;
+            IntPtr data2ptr;
+            IntPtr data3ptr;
+            IntPtr keyPtr;
+            data1ptr = Marshal.StringToHGlobalUni(data1);
+            data2ptr = Marshal.StringToHGlobalUni(data2);
+            data3ptr = Marshal.StringToHGlobalUni(data3);
+            keyPtr = make_key_w(data1ptr, data2ptr, data3ptr, MagicChar);
+            byte[] key = new byte[256];
+            Marshal.Copy(keyPtr, key, 0, 256);
+            _decryptionKey = key;
+            Marshal.FreeHGlobal(data1ptr);
+            Marshal.FreeHGlobal(data2ptr);
+            Marshal.FreeHGlobal(data3ptr);
+            Logger.Log($"First 16-Bytes of key: {_decryptionKey.GetHex(16)}", true, ConsoleColor.Yellow);
+
+            
         }
 
         public static byte[] MakeKeyFromComb(string data, byte magicChar = 54)

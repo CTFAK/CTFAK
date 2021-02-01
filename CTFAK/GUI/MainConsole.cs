@@ -16,6 +16,7 @@ namespace CTFAK.GUI
             {
                 Environment.Exit(0);
             };
+            setLineFormat(1,1);
         }
 
         public static void Message(string msg)
@@ -28,9 +29,7 @@ namespace CTFAK.GUI
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            setLineFormat(1,1);
             textBox1.SelectionStart = textBox1.Text.Length;
-            
             textBox1.ScrollToCaret();
         }
         

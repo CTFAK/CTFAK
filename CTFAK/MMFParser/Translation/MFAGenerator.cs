@@ -44,9 +44,6 @@ namespace CTFAK.MMFParser.Translation
             } 
             else mfaReader = new ByteReader(TemplatePath, FileMode.Open);
             Logger.Log("Loading images");
-            if(Program.CleanData.GameChunks.GetChunk<ImageBank>()!=null)Program.CleanData.GameChunks.GetChunk<ImageBank>().PreloadOnly = false;
-            // Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().Read(true,false);
-            // Exe.Instance.GameData.GameChunks.GetChunk<SoundBank>().Read();
             
             Settings.DoMFA = true;
             
@@ -58,7 +55,7 @@ namespace CTFAK.MMFParser.Translation
 
             var mfaWriter =
                 new ByteWriter(
-                    Program.CleanData.GameChunks.GetChunk<AppName>().Value.Length > 0 ? $"{Settings.DumpPath}\\{Path.GetFileNameWithoutExtension(Program.CleanData.GameChunks.GetChunk<EditorFilename>().Value)}.mfa" : "out.mfa",
+                    Program.CleanData.GameChunks.GetChunk<EditorFilename>().Value.Length > 0 ? $"{Settings.DumpPath}\\{Path.GetFileNameWithoutExtension(Program.CleanData.GameChunks.GetChunk<EditorFilename>().Value)}.mfa" : "out.mfa",
                     FileMode.Create); //New writer for new MFA
             Pame2Mfa.Message("");
             Pame2Mfa.Message("Writing MFA");

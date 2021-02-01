@@ -115,7 +115,7 @@
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.Filter = "CTF Executable|*.exe";
+            this.openFileDialog1.Filter = "CTF Executable|*.exe|CTF Android|*.apk";
             this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
             // 
             // treeView1

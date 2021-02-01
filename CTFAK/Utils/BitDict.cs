@@ -9,11 +9,7 @@ namespace CTFAK.Utils
         private String[] Keys;
         public UInt32 flag { get; set; }
 
-        public BitDict(String[] keys)
-        {
-            Keys = keys;
-        }
-
+        public BitDict(String[] keys)=> Keys = keys;
         public bool this[String key]
         {
             get => GetFlag(key);
@@ -27,7 +23,6 @@ namespace CTFAK.Utils
             {
                 return (flag & ((UInt32) Math.Pow(2, pos))) != 0;
             }
-
             return false;
         }
 
@@ -46,8 +41,8 @@ namespace CTFAK.Utils
 
         public static string ToDebugString<TKey, TValue>(IDictionary<TKey, TValue> dictionary)
         {
-            // return string.Join(";", dictionary.Select(kv => kv.Key + "=" + kv.Value).ToArray());
-            return string.Join("\n", dictionary.Select(kv => kv.Key + "=" + kv.Value).ToArray());
+            return string.Join(";", dictionary.Select(kv => kv.Key + "=" + kv.Value).ToArray());
+            // return string.Join("\n", dictionary.Select(kv => kv.Key + "=" + kv.Value).ToArray());
         }
 
         public override string ToString()
@@ -57,10 +52,8 @@ namespace CTFAK.Utils
             {
                 actualKeys[key] = this[key];
             }
-
             return ToDebugString(actualKeys);
         }
-
         
     }
 }

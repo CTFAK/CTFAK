@@ -83,6 +83,10 @@
     <DefineConstants>WIN32</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="7z.NET, Version=1.0.3.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\7z.NET.1.0.3\lib\net463\7z.NET.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Be.Windows.Forms.HexBox, Version=1.6.1.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Be.Windows.Forms.HexBox.1.6.1\lib\net40\Be.Windows.Forms.HexBox.dll</HintPath>
       <Private>True</Private>
@@ -165,6 +169,7 @@
     <Compile Include="GUI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MMFParser\EXE\APK.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Common.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Click.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\ExpressionParameter.cs" />
@@ -186,8 +191,6 @@
     <Compile Include="MMFParser\MFA\Loaders\mfachunks\ExtensionObject.cs" />
     <Compile Include="MMFParser\MFA\Loaders\mfachunks\Lives.cs" />
     <Compile Include="MMFParser\MFA\Loaders\mfachunks\Text.cs" />
-    <Compile Include="MMFParser\OLD\Loaders\AppHeader.cs" />
-    <Compile Include="MMFParser\OLD\Loaders\Controls.cs" />
     <Compile Include="MMFParser\Translation\MFAGenerator.cs" />
     <Compile Include="MMFParser\Translation\PAME2MFA.cs" />
     <Compile Include="MMFParser\EXE\ChunkList.cs" />
@@ -344,6 +347,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Joveler.ZLibWrapper.1.3.1\build\net45\Joveler.ZLibWrapper.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Joveler.ZLibWrapper.1.3.1\build\net45\Joveler.ZLibWrapper.targets'))" />
     <Error Condition="!Exists('..\packages\Joveler.Compression.ZLib.4.0.0\build\net451\Joveler.Compression.ZLib.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Joveler.Compression.ZLib.4.0.0\build\net451\Joveler.Compression.ZLib.targets'))" />
+    <Error Condition="!Exists('..\packages\7z.NET.1.0.3\build\7z.NET.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\7z.NET.1.0.3\build\7z.NET.targets'))" />
   </Target>
   <Import Project="..\packages\Joveler.Compression.ZLib.4.0.0\build\net451\Joveler.Compression.ZLib.targets" Condition="Exists('..\packages\Joveler.Compression.ZLib.4.0.0\build\net451\Joveler.Compression.ZLib.targets')" />
   <PropertyGroup>
@@ -367,4 +371,5 @@ copy $(TargetDir)System.Runtime.CompilerServices.Unsafe.dll $(SolutionDir)Build\
 
 </PostBuildEvent>
   </PropertyGroup>
+  <Import Project="..\packages\7z.NET.1.0.3\build\7z.NET.targets" Condition="Exists('..\packages\7z.NET.1.0.3\build\7z.NET.targets')" />
 </Project>

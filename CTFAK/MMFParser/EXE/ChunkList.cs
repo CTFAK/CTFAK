@@ -19,32 +19,25 @@ namespace CTFAK.MMFParser.EXE
         public void Read(ByteReader reader)
         {
             Chunks.Clear();
-            if (Settings.GameType == GameType.Normal)
+            if (Settings.GameType != GameType.OnePointFive)
             {
                 while (true)
                 {
                     Chunk chunk = new Chunk(Chunks.Count, this);
                     chunk.Verbose = Verbose;
                     chunk.Read(reader);
-                    if (chunk.Id == 26214)
-                    {
-                        if(Settings.GameType != GameType.TwoFivePlus) chunk.Loader = LoadModern(chunk); 
-                    }
-                    else
-                    {
-                        chunk.Loader = LoadModern(chunk); 
-                    }
+                    if (chunk.Id == 26214&&Settings.GameType != GameType.TwoFivePlus) chunk.Loader = LoadModern(chunk);
+                        else chunk.Loader = LoadModern(chunk);
 
                     Chunks.Add(chunk);
+                    
                     if (chunk.Id == 8750) chunk.BuildKey();
                     if (chunk.Id == 8788) Settings.GameType = GameType.TwoFivePlus;
-                
-
                     if (reader.Tell() >= reader.Size()) break;
                     if (chunk.Id == 32639) break; //LAST chunkID
                 }
             }
-            else if(Settings.GameType == GameType.OnePointFive)
+            else
             {
                 while (true)
                 {
@@ -163,18 +156,11 @@ namespace CTFAK.MMFParser.EXE
                 Settings.AppName=_chunkList.GetChunk<AppName>()?.Value??"";
                 Settings.Copyright = _chunkList.GetChunk<Copyright>()?.Value??"";
                 Settings.ProjectPath = _chunkList.GetChunk<EditorFilename>()?.Value??"";
-
-                if (Settings.Build > 284)
-                {
-                    Logger.Log("Using New Key");
-                    Decryption.MakeKey(Settings.AppName,Settings.Copyright,Settings.ProjectPath);
-                }
-                else
-                {
-                    Logger.Log("Using Old Key");
-                    Decryption.MakeKey(Settings.ProjectPath, Settings.AppName, Settings.Copyright);
-                }
-                // Decryption.MakeKey(Settings.ProjectPath, Settings.AppName, Settings.Copyright);
+                
+                Logger.Log($"Using {(Settings.Build > 284 ? ("New"):("Old"))} Key");
+                
+                if (Settings.Build > 284) Decryption.MakeKey(Settings.AppName,Settings.Copyright,Settings.ProjectPath);
+                else Decryption.MakeKey(Settings.ProjectPath, Settings.AppName, Settings.Copyright);
             }
         }
 
@@ -265,12 +251,15 @@ namespace CTFAK.MMFParser.EXE
                     loader = new Layers(chunk);
                     break;
                 case 26214:
+                    if (Settings.GameType == GameType.Android) break;
                     loader = new ImageBank(chunk);
                     break;
                 case 26216:
+                    if (Settings.GameType == GameType.Android) break;
                     loader = new SoundBank(chunk);
                     break;
                 case 26217:
+                    if (Settings.GameType == GameType.Android) break;
                     loader = new MusicBank(chunk);
                     break;
                 case 17477:
@@ -292,6 +281,7 @@ namespace CTFAK.MMFParser.EXE
                     loader = new GlobalStrings(chunk);
                     break;
                 case 13117:
+                    if (Settings.GameType == GameType.Android) break;
                     loader = new Events(chunk);
                     break;
                 case 13127:

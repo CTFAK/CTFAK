@@ -86,9 +86,6 @@ namespace CTFAK.MMFParser.EXE
         {
             UInt16 len = exeReader.ReadUInt16();
             PackFilename = exeReader.ReadUniversal(len);
-            
-            
-            Logger.Log(PackFilename);
             _bingo = exeReader.ReadInt32();
             Data = exeReader.ReadBytes(exeReader.ReadInt32());
             
