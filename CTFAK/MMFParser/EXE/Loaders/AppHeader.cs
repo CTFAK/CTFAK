@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using CTFAK.Utils;
 using static CTFAK.MMFParser.EXE.ChunkList;
 
@@ -55,30 +57,63 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public Color BorderColor;
         public int FrameRate;
+        public short GraphicsMode;
+        public short Otherflags;
+        public Controls Controls;
+        public byte WindowsMenuIndex;
 
 
         public override void Read()
         {
             
             {
-                if (Settings.GameType != GameType.OnePointFive) Size = Reader.ReadInt32();
+                if (Settings.GameType != GameType.OnePointFive)
+                {
+                    Size = Reader.ReadInt32();
+                    Debug.Assert(Size==Reader.Size());
+                }
                 Flags.flag=(uint) Reader.ReadInt16();
 
                 NewFlags.flag = (uint) Reader.ReadInt16();
-                var graphicsMode = Reader.ReadInt16();
-                var otherflags = Reader.ReadInt16();
+                GraphicsMode = Reader.ReadInt16();
+                Otherflags = Reader.ReadInt16();
                 WindowWidth = Reader.ReadInt16();
                 WindowHeight = Reader.ReadInt16();
                 InitialScore = (int) (Reader.ReadUInt32() ^ 0xffffffff);
                 InitialLives = (int) (Reader.ReadUInt32() ^ 0xffffffff);
-                // var controls = new Controls(Reader);
-                // controls.Read();
+                Controls = new Controls(Reader);
+                Controls.Read();
                 BorderColor = Reader.ReadColor();
                 NumberOfFrames = Reader.ReadInt32();
+                // Reader.ReadByte();
+                // Reader.ReadByte();
                 
                 FrameRate = Reader.ReadInt32();
-                var windowsMenuIndex = Reader.ReadSByte(); 
+                WindowsMenuIndex = Reader.ReadByte(); 
             }
+            
+            
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt32(112);
+            Writer.WriteInt16((short) Flags.flag);
+            Writer.WriteInt16((short) NewFlags.flag);
+            Writer.WriteInt16(GraphicsMode);
+            Writer.WriteInt16(Otherflags);
+            Writer.WriteInt16((short) WindowWidth);
+            Writer.WriteInt16((short) WindowHeight);
+            Writer.WriteInt32((int) (InitialScore ^ 0xffffffff));
+            Writer.WriteInt32((int) (InitialLives ^ 0xffffffff));
+            Controls.Write(Writer);
+            Writer.WriteColor(BorderColor);
+            Writer.WriteInt32(NumberOfFrames);
+            Writer.WriteInt32(FrameRate);
+            Writer.WriteInt8(WindowsMenuIndex);
+            Writer.WriteInt16(0);
+            Writer.WriteInt8(0);
+          
             
             
         }
@@ -136,6 +171,14 @@ namespace CTFAK.MMFParser.EXE.Loaders
             }
         }
 
+        public override void Write(ByteWriter Writer)
+        {
+            foreach (PlayerControl control in Items)
+            {
+                control.Write(Writer);
+            }
+        }
+
         public override void Print(bool ext)
         {
             Logger.Log("Controls: ",true,ConsoleColor.Yellow);
@@ -153,7 +196,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
     public class PlayerControl
     {
-        int _controlType = 0;
+        int _controlType;
         ByteReader _reader;
         Keys _keys;
 
@@ -169,6 +212,13 @@ namespace CTFAK.MMFParser.EXE.Loaders
             _keys.Read();
         }
 
+        public void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt16((short) _controlType);
+            _keys.Write(Writer);
+            
+        }
+
         public void Print()
         {
             Logger.Log("    PlayerControl:", true, ConsoleColor.Yellow);
@@ -179,14 +229,14 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
     public class Keys
     {
-        int _up;
-        int _down;
-        int _left;
-        int _right;
-        int _button1;
-        int _button2;
-        int _button3;
-        int _button4;
+        short _up;
+        short _down;
+        short _left;
+        short _right;
+        short _button1;
+        short _button2;
+        short _button3;
+        short _button4;
         ByteReader _reader;
 
         public Keys(ByteReader reader)
@@ -205,6 +255,19 @@ namespace CTFAK.MMFParser.EXE.Loaders
             _button2 = _reader.ReadInt16();
             _button3 = _reader.ReadInt16();
             _button4 = _reader.ReadInt16();
+        }
+
+        public void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt16(_up);
+            Writer.WriteInt16(_down);
+            Writer.WriteInt16(_left);
+            Writer.WriteInt16(_right);
+            Writer.WriteInt16(_button1);
+            Writer.WriteInt16(_button2);
+            Writer.WriteInt16(_button3);
+            Writer.WriteInt16(_button4);
+            
         }
 
         public void Print()

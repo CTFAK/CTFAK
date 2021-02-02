@@ -18,6 +18,14 @@ namespace CTFAK.MMFParser.EXE.Loaders
             Bottom = Reader.ReadInt32();
         }
 
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt32(Left);
+            Writer.WriteInt32(Top);
+            Writer.WriteInt32(Right);
+            Writer.WriteInt32(Bottom);
+        }
+
         public override void Print(bool ext){}
         public override string[] GetReadableData() => new string[]
         {

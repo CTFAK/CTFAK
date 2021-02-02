@@ -210,7 +210,9 @@ namespace CTFAK.MMFParser.Translation
                             newInstance.X = instance.X;
                             newInstance.Y = instance.Y;
                             newInstance.Handle = instance.Handle;
-                            newInstance.Flags = (uint) instance.FrameItem.Flags;
+                            newInstance.Flags = ((instance.FrameItem.Properties.Loader as ObjectCommon)?.Preferences?.flag ?? (uint)instance.FrameItem.Flags);
+        
+                            
                             newInstance.ParentType = (uint) instance.ParentType;
                             newInstance.ItemHandle = (uint) (instance.ObjectInfo);
                             newInstance.ParentHandle = (uint) instance.ParentHandle;
@@ -369,7 +371,7 @@ namespace CTFAK.MMFParser.Translation
             }
             // newItem.Chunks.GetOrCreateChunk<Opacity>().RGBCoeff = Color.White;
             
-            newItem.IconHandle = 12;
+            newItem.IconHandle = 10;
             
             
 
@@ -409,9 +411,7 @@ namespace CTFAK.MMFParser.Translation
                 var newObject = new ObjectLoader(null);
                 newObject.ObjectFlags = (int) (itemLoader.Flags.flag);
                 newObject.NewObjectFlags = (int) (itemLoader.NewFlags.flag);
-
                 newObject.BackgroundColor = itemLoader.BackColor;
-                
                 newObject.Qualifiers = itemLoader._qualifiers;
                 
                 newObject.Strings = ConvertStrings(itemLoader.Strings);
@@ -661,14 +661,14 @@ namespace CTFAK.MMFParser.Translation
                         newCount.Color1=Color.Black;
                         newCount.Color2=Color.Black;
                         newCount.VerticalGradient = 0;
-                        newCount.Flags = 0;
+                        newCount.CountFlags = 0;
                     }
                     else
                     {
                         newCount.Color1 = shape.Color1;
                         newCount.Color2 = shape.Color2;
                         newCount.VerticalGradient = (uint) shape.GradFlags;
-                        newCount.Flags = (uint) shape.FillType;
+                        newCount.CountFlags = (uint) shape.FillType;
                         
                     }
 

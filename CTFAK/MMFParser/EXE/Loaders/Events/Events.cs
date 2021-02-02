@@ -27,6 +27,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         {
         }
 
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print(bool ext)
         {
             throw new NotImplementedException();
@@ -199,7 +204,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             
         }
 
-        public void Write(ByteWriter Writer)
+        public override void Write(ByteWriter Writer)
         {
             ByteWriter newWriter = new ByteWriter(new MemoryStream());
             newWriter.WriteInt8(NumberOfConditions);

@@ -11,6 +11,15 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public int NumberOfItems;
         public FrameItems(Chunk chunk) : base(chunk) { }
         public FrameItems(ByteReader reader) : base(reader) { }
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt32(ItemDict.Count);
+            foreach (ObjectInfo objectInfo in ItemDict.Values)
+            {
+                objectInfo.Write(Writer);
+            }
+        }
+
         public override void Print(bool ext)
         {
                        

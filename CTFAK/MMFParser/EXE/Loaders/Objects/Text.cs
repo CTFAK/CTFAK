@@ -43,6 +43,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         }
 
+        public override void Write(ByteWriter Writer)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void Print(bool ext)
         {
             throw new System.NotImplementedException();
@@ -82,6 +87,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             Flags.flag = Reader.ReadUInt16();
             Color = Reader.ReadColor();
             Value = Reader.ReadWideString();
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            throw new System.NotImplementedException();
         }
 
         public override void Print(bool ext)

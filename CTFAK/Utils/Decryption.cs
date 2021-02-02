@@ -80,7 +80,7 @@ namespace CTFAK.Utils
                 rawData[0] ^= (byte) ((byte) (chunkId & 0xFF) ^ (byte) (chunkId >> 0x8));
             }
 
-            rawData = DecodeChunk(rawData, chunkSize);
+            rawData = DecryptChunk(rawData, chunkSize);
             using (ByteReader data = new ByteReader(rawData))
             {
                 uint compressedSize = data.ReadUInt32();
@@ -89,7 +89,22 @@ namespace CTFAK.Utils
             }
         }
 
-        public static byte[] DecodeChunk(byte[] chunkData, int chunkSize)
+        public static byte[] EncryptAndCompressMode3(byte[] chunkData, int chunkId)
+        {
+
+            var compressedData = Decompressor.compress_block(chunkData);
+            var decryptedWriter = new ByteWriter(new MemoryStream());
+            decryptedWriter.WriteInt32(compressedData.Length);
+            
+            decryptedWriter.WriteBytes(compressedData);
+            var encryptedData = EncryptChunk(decryptedWriter.GetBuffer(), (int) decryptedWriter.Size());
+            var anotherWriter = new ByteWriter(new MemoryStream());
+            anotherWriter.WriteInt32(encryptedData.Length-12);
+            anotherWriter.WriteBytes(encryptedData);
+            return anotherWriter.GetBuffer();
+
+        }
+        public static byte[] DecryptChunk(byte[] chunkData, int chunkSize)
         {
             IntPtr inputChunkPtr = Marshal.AllocHGlobal(chunkData.Length);
             Marshal.Copy(chunkData, 0, inputChunkPtr, chunkData.Length);
@@ -107,6 +122,27 @@ namespace CTFAK.Utils
 
             return decodedChunk;
         }
+
+        public static byte[] EncryptChunk(byte[] chunkData, int chunkSize)
+        {
+            IntPtr inputChunkPtr = Marshal.AllocHGlobal(chunkData.Length);
+            Marshal.Copy(chunkData, 0, inputChunkPtr, chunkData.Length);
+
+            IntPtr keyPtr = Marshal.AllocHGlobal(_decryptionKey.Length);
+            Marshal.Copy(_decryptionKey, 0, keyPtr, _decryptionKey.Length);
+
+            var outputChunkPtr = decode_chunk(inputChunkPtr, chunkSize, MagicChar, keyPtr);
+
+            byte[] decodedChunk = new byte[chunkSize];
+            Marshal.Copy(outputChunkPtr, decodedChunk, 0, chunkSize);
+
+            Marshal.FreeHGlobal(inputChunkPtr);
+            Marshal.FreeHGlobal(keyPtr);
+
+            return decodedChunk;
+            
+        }
+        
         
 
         #if WIN64

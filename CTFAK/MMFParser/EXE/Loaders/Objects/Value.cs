@@ -34,6 +34,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             }
         }
 
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print(bool ext)
         {
             throw new System.NotImplementedException();
@@ -69,6 +74,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 Items.Add(item);
 
             }
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
         }
 
         public override void Print(bool ext)

@@ -9,14 +9,36 @@ namespace CTFAK.MMFParser.EXE
     public class PackData
     {
         public List<PackFile> Items = new List<PackFile>();
+        private byte[] _header;
+        public uint FormatVersion;
+
         public PackData()
         {
 
         }
+
+        public void Write(ByteWriter Writer)
+        {
+            var newWriter = new ByteWriter(new MemoryStream());
+            foreach (PackFile item in Items)
+            {
+                item.Write(newWriter);
+            }
+            Writer.WriteBytes(_header);
+            Writer.WriteInt32(32);
+            Writer.WriteInt32((int) (newWriter.Tell()+64));
+            Writer.WriteInt32((int) FormatVersion);
+            Writer.WriteInt32(0);
+            Writer.WriteInt32(0);
+            Writer.WriteInt32(Items.Count);
+            Writer.WriteWriter(newWriter);
+            
+            
+        }
         public void Read(ByteReader exeReader)
         {
             long start = exeReader.Tell();
-            byte[] header = exeReader.ReadBytes(8);
+            _header = exeReader.ReadBytes(8);
 
             // exeReader.Skip(8);
             uint headerSize = exeReader.ReadUInt32();
@@ -38,7 +60,7 @@ namespace CTFAK.MMFParser.EXE
             }
             exeReader.Seek(start + 16);
 
-            uint formatVersion = exeReader.ReadUInt32();
+            FormatVersion = exeReader.ReadUInt32();
             var check = exeReader.ReadInt32();
             Debug.Assert(check==0);
             check = exeReader.ReadInt32();
@@ -59,7 +81,7 @@ namespace CTFAK.MMFParser.EXE
                 if (!exeReader.Check(value)) break;
             }
             
-            header = exeReader.ReadFourCc();
+            var newHeader = exeReader.ReadFourCc();
             
             Logger.Log("PACK OFFSET: "+offset);
             exeReader.Seek(offset);
@@ -90,6 +112,16 @@ namespace CTFAK.MMFParser.EXE
             Data = exeReader.ReadBytes(exeReader.ReadInt32());
             
             Dump();
+        }
+
+        public void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt16((short) PackFilename.Length);
+            Writer.WriteUniversal(PackFilename);
+            Writer.WriteInt32(_bingo);
+            Writer.WriteInt32(Data.Length);
+            Writer.WriteBytes(Data);
+            
         }
         public void Dump(string path = "[DEFAULT-PATH]")
         {

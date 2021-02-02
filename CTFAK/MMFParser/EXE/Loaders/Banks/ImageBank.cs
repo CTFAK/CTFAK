@@ -28,6 +28,15 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
         }
 
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt32(Images.Count);
+            foreach (ImageItem item in Images.Values)
+            {
+                item.Write(Writer);
+            }
+        }
+
         public override void Print(bool ext)
         {
         }
@@ -76,11 +85,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
             if (!Settings.DoMFA) Reader.Seek(0); //Reset the reader to avoid bugs when dumping more than once
             var tempImages = new Dictionary<int, ImageItem>();
-            // if (!Settings.DoMFA)return;
             NumberOfItems = (uint) Reader.ReadInt32();
-
             Logger.Log($"Found {NumberOfItems} images", true, ConsoleColor.Green);
-
+            if (Settings.GameType == GameType.TwoFivePlus&&!Settings.DoMFA) return;
             var stopWatch = new Stopwatch();
             stopWatch.Start();
             //if (!Settings.DumpImages) return;
@@ -238,7 +245,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
 
             //return;
-            if (Settings.GameType == GameType.TwoFivePlus) imageReader.Skip(4);
+            if (Settings.GameType == GameType.TwoFivePlus&&!Settings.DoMFA) imageReader.Skip(4);
             if (Settings.GameType == GameType.OnePointFive)
             {
                 _checksum = imageReader.ReadInt16();
@@ -418,7 +425,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         
 
 
-        public void Write(ByteWriter writer)
+        public override void Write(ByteWriter writer)
         {
             ByteWriter chunk = new ByteWriter(new MemoryStream());
             chunk.WriteInt32(_checksum);

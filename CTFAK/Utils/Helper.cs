@@ -33,6 +33,13 @@ namespace CTFAK.Utils
             }
         }
 
+        public static byte[] GetBuffer(this ByteWriter writer)
+        {
+            var buf = ((MemoryStream) writer.BaseStream).GetBuffer();
+            Array.Resize(ref buf,(int) writer.Size());
+            return buf;
+        }
+
         public static string GetCurrentTime()
         {
             var date = DateTime.Now;

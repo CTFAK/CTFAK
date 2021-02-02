@@ -50,6 +50,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         }
 
+        public override void Write(ByteWriter Writer)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void Print(bool ext){}
         
         public override string[] GetReadableData()
@@ -98,6 +103,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             }
         }
 
+        public override void Write(ByteWriter Writer)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void Print(bool ext)
         {
             throw new System.NotImplementedException();
@@ -141,6 +151,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             }
             
 
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            throw new System.NotImplementedException();
         }
 
         public override void Print(bool ext)

@@ -64,7 +64,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             }
         }
 
-        public void Write(ByteWriter writer)
+        public override void Write(ByteWriter writer)
         {
             writer.WriteInt32(20);
             writer.WriteInt32(20);
@@ -171,7 +171,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public void Write(ByteWriter writer)
+        public override void Write(ByteWriter writer)
         {
             writer.WriteInt16(Flags);
             if (!ByteFlag.GetFlag((uint) Flags, 4))

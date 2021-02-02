@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using CTFAK.MMFParser.EXE.Loaders;
 using CTFAK.MMFParser.EXE.Loaders.Banks;
-using CTFAK.MMFParser.EXE.Loaders.Events;
+using CTFAK.MMFParser.MFA.Loaders;
 using CTFAK.Properties.Locale;
 using CTFAK.Utils;
+using Events = CTFAK.MMFParser.EXE.Loaders.Events.Events;
+using Frame = CTFAK.MMFParser.EXE.Loaders.Frame;
+using Transition = CTFAK.MMFParser.EXE.Loaders.Transition;
 
 namespace CTFAK.MMFParser.EXE
 {
@@ -14,8 +18,16 @@ namespace CTFAK.MMFParser.EXE
         public List<Chunk> Chunks = new List<Chunk>();
         public bool Verbose = false;
         public List<Frame> Frames = new List<Frame>();
-        
 
+        public void Write(ByteWriter Writer)
+        {
+            foreach (Chunk chunk in Chunks)
+            {
+                chunk.Write(Writer);
+            }
+            
+            
+        }
         public void Read(ByteReader reader)
         {
             Chunks.Clear();
@@ -31,9 +43,33 @@ namespace CTFAK.MMFParser.EXE
 
                     Chunks.Add(chunk);
                     
-                    if (chunk.Id == 8750) chunk.BuildKey();
-                    if (chunk.Id == 8788) Settings.GameType = GameType.TwoFivePlus;
-                    if (reader.Tell() >= reader.Size()) break;
+                    if (chunk.Id == 8750) BuildKey();//Only build key when we have all the needed info
+                    if (chunk.Id == 8788) Settings.GameType = GameType.TwoFivePlus; //Can be only seen in 2.5+
+                    if (chunk.Id == 8791)
+                    {
+                        Settings.GameType = GameType.TwoFivePlus; //Can be only seen in 2.5+
+                        var headers = GetChunk<ObjectHeaders>().Headers;
+                        var names = GetChunk<ObjectNames>().Names;
+                        Program.CleanData.Frameitems = new FrameItems((ByteReader) null);
+                        foreach (KeyValuePair<int,ObjectHeader> header in headers)
+                        {
+                            var newInfo = new ObjectInfo((ByteReader) null);
+                            newInfo.Handle = header.Value.Handle;
+                            newInfo.Name = names[header.Key];
+                            newInfo.ObjectType = (Constants.ObjectType) header.Value.ObjectType;
+                            newInfo.InkEffect = (int) header.Value.InkEffect;
+                            newInfo.InkEffectValue = header.Value.InkEffectParameter;
+
+                            Program.CleanData.Frameitems.ItemDict.Add(newInfo.Handle,newInfo);
+                        }
+                        
+                        
+
+
+
+                    }
+                    
+                    if (reader.Tell() >= reader.Size()) break;  //In case there is no LAST chunk(may happen for fnac)
                     if (chunk.Id == 32639) break; //LAST chunkID
                 }
             }
@@ -93,7 +129,7 @@ namespace CTFAK.MMFParser.EXE
                 switch (Flag)
                 {
                     case ChunkFlags.Encrypted:                       
-                        ChunkData = Decryption.DecodeChunk(exeReader.ReadBytes(Size),Size);
+                        ChunkData = Decryption.DecryptChunk(exeReader.ReadBytes(Size),Size);
                         break;
                     case ChunkFlags.CompressedAndEncrypted:
                         ChunkData = Decryption.DecodeMode3(exeReader.ReadBytes(Size), Size,Id,out DecompressedSize);
@@ -115,6 +151,68 @@ namespace CTFAK.MMFParser.EXE
                 //Save();
 
 
+            }
+
+            public void Write(ByteWriter Writer)
+            {
+                Loader = null;
+                Writer.WriteInt16((short) Id);
+                Writer.WriteInt16((short) Flag);
+                // if (!(Loader is Frame)) Loader = null;
+                if ((Loader is Events)) Loader = null;
+                if ((Loader is ImageBank)) Loader = null;
+                
+                if ((Loader is FrameHeader)) Loader = null;
+                if ((Loader is VirtualRect)) Loader = null;
+                if ((Loader is FrameName)) Loader = null;
+                if ((Loader is FramePalette)) Loader = null;
+                if ((Loader is Layers)) Loader = null;
+                // if ((Loader is AppMenu)) Loader = null;
+                // if ((Loader is MovementTimerBase)) Loader = null;
+                
+                // if ((Loader is FrameHandles)) Loader = null;
+                // if ((Loader is Extensions)) Loader = null;
+                // if ((Loader is StringChunk)) Loader = null;
+                // if ((Loader is Frame)) Loader = null;
+
+                var dataWriter = new ByteWriter(new MemoryStream());
+                if (Loader == null)
+                {
+                    // Logger.Log($"Loader for {Name} is null");
+                    dataWriter.WriteBytes(ChunkData);
+                }
+                else
+                {
+                    Logger.Log("Writing "+Name);
+                    Loader.Write(dataWriter); 
+                }
+
+                ByteWriter compressedData=new ByteWriter(new MemoryStream());
+                
+                switch (Flag)
+                {
+                    case ChunkFlags.NotCompressed:
+                        compressedData = dataWriter;
+                        
+                        break;
+                    case ChunkFlags.Compressed:
+                        var compressedBuffer = Decompressor.compress_block(dataWriter.GetBuffer());
+                        compressedData.WriteInt32((int) dataWriter.Size());
+                        compressedData.WriteInt32(compressedBuffer.Length);
+                        compressedData.WriteBytes(compressedBuffer);
+                        break;
+                    case ChunkFlags.Encrypted:
+                        var encryptedData = Decryption.EncryptChunk(dataWriter.GetBuffer(), (int) dataWriter.Size());
+                        compressedData.WriteBytes(encryptedData);
+                        break;
+                    case ChunkFlags.CompressedAndEncrypted:
+                        var newData = Decryption.EncryptAndCompressMode3(dataWriter.GetBuffer(), Id);
+                        compressedData.WriteBytes(newData);
+                        break;
+                    
+                }
+                Writer.WriteInt32((int) compressedData.Size());
+                Writer.WriteWriter(compressedData);
             }
 
             public void Save()
@@ -151,25 +249,56 @@ namespace CTFAK.MMFParser.EXE
                 }
                 
             }
-            public void BuildKey()
-            {
-                Settings.AppName=_chunkList.GetChunk<AppName>()?.Value??"";
-                Settings.Copyright = _chunkList.GetChunk<Copyright>()?.Value??"";
-                Settings.ProjectPath = _chunkList.GetChunk<EditorFilename>()?.Value??"";
-                
-                Logger.Log($"Using {(Settings.Build > 284 ? ("New"):("Old"))} Key");
-                
-                if (Settings.Build > 284) Decryption.MakeKey(Settings.AppName,Settings.Copyright,Settings.ProjectPath);
-                else Decryption.MakeKey(Settings.ProjectPath, Settings.AppName, Settings.Copyright);
-            }
+            
         }
-
+        public void BuildKey()
+        {
+            Settings.AppName=GetChunk<AppName>()?.Value??"";
+            Settings.Copyright = GetChunk<Copyright>()?.Value??"";
+            Settings.ProjectPath = GetChunk<EditorFilename>()?.Value??"";
+                
+            Logger.Log($"Using {(Settings.Build > 284 ? ("New"):("Old"))} Key");
+                
+            if (Settings.Build > 284) Decryption.MakeKey(Settings.AppName,Settings.Copyright,Settings.ProjectPath);
+            else Decryption.MakeKey(Settings.ProjectPath, Settings.AppName, Settings.Copyright);
+        }
         public enum ChunkFlags
         {
             NotCompressed = 0,
             Compressed = 1,
             Encrypted = 2,
             CompressedAndEncrypted = 3
+        }
+
+        public T CreateChunk<T>(ChunkFlags flag=ChunkFlags.NotCompressed) where T : ChunkLoader, new()
+        {
+            var newChunk = new Chunk(0,this);
+            newChunk.Flag = flag;
+            newChunk.Id = GetIdForChunk<T>();
+            var newLoader = new T();
+            newLoader.Chunk = newChunk;
+            Chunks.Add(newChunk);
+            return (T) newChunk.Loader;
+        }
+        
+
+        public static int GetIdForChunk<T>() where T : ChunkLoader
+        {
+            switch (typeof(T).Name)
+            {
+                case "AppHeader": return 8739;
+                case "AppName": return 8740;
+                case "AppAuthor": return 8741;
+                case "AppMenu": return 8742;
+                case "ExtPath": return 8739;
+                case "FrameItems": return 8745;
+                case "FrameHandles": return 8747;
+                
+                
+                default: return -1;
+                
+                
+            }
         }
 
         public ChunkLoader LoadModern(Chunk chunk)
@@ -210,8 +339,11 @@ namespace CTFAK.MMFParser.EXE
                 case 8745:
                     loader = new FrameItems(chunk);
                     break;
-                case 8757:
-                    loader = new AppIcon(chunk);
+                case 8787:
+                    loader = new ObjectHeaders(chunk);
+                    break;
+                case 8790:
+                    loader = new ObjectPropertyList(chunk);
                     break;
                 case 8762:
                     loader = new AboutText(chunk);
@@ -272,7 +404,7 @@ namespace CTFAK.MMFParser.EXE
                     loader = new ObjectProperties(chunk);
                     return loader;
                 case 8788:
-                    // loader = new ObjectNames(chunk);
+                    loader = new ObjectNames(chunk);
                     break;
                 case 8754:
                     loader = new GlobalValues(chunk);
@@ -427,6 +559,8 @@ namespace CTFAK.MMFParser.EXE
                 case 8771: return Properties.Locale.ChunkNames.shaders;//"Shaders";
                 case 8773: return Properties.Locale.ChunkNames.extHeader;//"Extended Header";
                 case 8774: return "Spacer";//"Spacer";
+                case 8787: return "Object Headers";
+                case 8788: return "Object Names";
                 case 13107:return Properties.Locale.ChunkNames.frame;//"Frame";
                 case 13108:return Properties.Locale.ChunkNames.frameHeader;//"Frame Header";
                 case 13109:return Properties.Locale.ChunkNames.frameName;//"Frame Name";

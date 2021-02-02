@@ -8,8 +8,8 @@ namespace CTFAK.MMFParser.EXE
 {
     public class GameData
     {
-        public int RuntimeVersion;
-        public int RuntimeSubversion;
+        public short RuntimeVersion;
+        public short RuntimeSubversion;
         public int ProductBuild;
         public Constants.Products ProductVersion;
         public int Build;
@@ -47,18 +47,29 @@ namespace CTFAK.MMFParser.EXE
 
         public List<Frame> Frames = new List<Frame>();
 
+        public void Write(ByteWriter Writer)
+        {
+            Writer.WriteAscii("PAMU");
+            Writer.WriteInt16(RuntimeVersion);
+            Writer.WriteInt16(RuntimeSubversion);
+            Writer.WriteInt32((int) ProductVersion);
+            Writer.WriteInt32(ProductBuild);
+            var newChunks = new ChunkList();
+            newChunks.Chunks = GameChunks.Chunks;
+            newChunks.Write(Writer);
 
+        }
         public void Read(ByteReader exeReader)
         {
             string magic = exeReader.ReadAscii(4); //Reading header
             Logger.Log("MAGIC HEADER: "+magic);
             //Checking for header
-            if (magic == Constants.UnicodeGameHeader) Constants.IsUnicode = true;//PAMU
-            else if (magic == Constants.GameHeader) Constants.IsUnicode = false;//PAME
+            if (magic == Constants.UnicodeGameHeader) Settings.Unicode = true;//PAMU
+            else if (magic == Constants.GameHeader) Settings.Unicode = false;//PAME
             else Logger.Log("Couldn't found any known headers", true, ConsoleColor.Red);//Header not found
 
-            RuntimeVersion = exeReader.ReadUInt16(); 
-            RuntimeSubversion = exeReader.ReadUInt16(); 
+            RuntimeVersion = (short) exeReader.ReadUInt16(); 
+            RuntimeSubversion = (short) exeReader.ReadUInt16(); 
             ProductVersion = (Constants.Products)exeReader.ReadInt32();
             ProductBuild = exeReader.ReadInt32();//Easy Access
             Settings.Build=ProductBuild;
@@ -99,7 +110,7 @@ namespace CTFAK.MMFParser.EXE
             Logger.Log($"    Runtime Subversion: { RuntimeSubversion}", true, ConsoleColor.DarkGreen);
             Logger.Log($"    Product Version: { ((Constants.Products)ProductVersion).ToString()}", true, ConsoleColor.DarkGreen);
             Logger.Log($"    Product Build: {ProductBuild}", true, ConsoleColor.DarkGreen);
-            Logger.Log($"    {(Constants.IsUnicode ? "Unicode" : "NonUnicode")} Game", true, ConsoleColor.DarkGreen);
+            Logger.Log($"    {(Settings.Unicode ? "Unicode" : "NonUnicode")} Game", true, ConsoleColor.DarkGreen);
             Logger.Log($"Game Info:", true, ConsoleColor.Cyan);
             Logger.Log($"    Name:{Name}", true, ConsoleColor.Cyan);
             Logger.Log($"    Author:{Author}", true, ConsoleColor.Cyan);

@@ -171,7 +171,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 {
                     _counterOffset = Reader.ReadUInt16();
                     var version = Reader.ReadUInt16();
-                    _zeroUnk = Reader.ReadUInt16();
+                    // _zeroUnk = Reader.ReadUInt16();
                     _movementsOffset = Reader.ReadUInt16();
                     _extensionOffset = Reader.ReadUInt16();
                     _animationsOffset = Reader.ReadUInt16();
@@ -230,12 +230,21 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     _fadeoutOffset = Reader.ReadUInt32();
                 }
                 
+                // Logger.Log("anims: "+_animationsOffset);
+                // Logger.Log("fadeIn: "+_fadeinOffset);
+                // Logger.Log("fadeOut: "+_fadeoutOffset);
+                // Logger.Log("movements: "+_movementsOffset);
+                // Logger.Log("strings: "+_stringsOffset);
+                // Logger.Log("values: "+_valuesOffset);
+                // Logger.Log("sysObj: "+_systemObjectOffset);
+                
                 if (_animationsOffset > 0)
                 {
                     Reader.Seek(currentPosition + _animationsOffset);
                     Animations = new Animations(Reader);
                     Animations.Read();
                 }
+
 
                 if (_movementsOffset > 0&&Settings.GameType!=GameType.Android)
                 {
@@ -256,6 +265,14 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                             break;
                         //Counter
                         case Constants.ObjectType.Counter:
+                            Counters = new Counters(Reader);
+                            Counters.Read();
+                            break;
+                        case Constants.ObjectType.Score:
+                            Counters = new Counters(Reader);
+                            Counters.Read();
+                            break;
+                        case Constants.ObjectType.Lives:
                             Counters = new Counters(Reader);
                             Counters.Read();
                             break;
@@ -289,14 +306,13 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
             }
 
-            // Logger.Log("anims: "+_animationsOffset);
-            // Logger.Log("fadeIn: "+_fadeinOffset);
-            // Logger.Log("fadeOut: "+_fadeoutOffset);
-            // Logger.Log("movements: "+_movementsOffset);
-            // Logger.Log("strings: "+_stringsOffset);
-            // Logger.Log("values: "+_valuesOffset);
-            // Logger.Log("sysObj: "+_systemObjectOffset);
+            
 
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
         }
 
         public override void Print(bool ext)

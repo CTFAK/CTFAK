@@ -25,6 +25,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
 
         public abstract void Read();
+        public abstract void Write(ByteWriter Writer);
 
 
         public abstract void Print(bool ext);

@@ -46,7 +46,16 @@ namespace CTFAK
                 var ex = (Exception) eventArgs.Exception;
                 Logger.Log("ERROR: ");
                 Logger.Log(ex.ToString());
+                return;
             };
+            // AppDomain.CurrentDomain.UnhandledException += (a,b) =>
+            // {
+                
+                // var ex = (Exception)b.ExceptionObject;
+                // if (ex is ThreadAbortException) return;
+                // Logger.Log("ERROR: ");
+                // Logger.Log(ex.ToString());
+            // };
             
             Settings.UseGUI = true;
 
@@ -113,7 +122,8 @@ namespace CTFAK
                 currentExe.ParseExe(exeReader);
                 stopWatch.Stop();
                 Logger.Log("Finished in "+stopWatch.Elapsed.ToString("g"), true, ConsoleColor.Yellow);
-
+                var newWriter = new ByteWriter("NewGame.exe",FileMode.Create);
+                // Exe.Instance.Write(newWriter);
             }
             else if (path.ToLower().EndsWith(".apk"))
             {

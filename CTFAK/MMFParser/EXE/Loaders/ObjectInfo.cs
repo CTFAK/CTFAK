@@ -13,11 +13,16 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public List<Chunk> Chunks = new List<Chunk>();
         public int ShaderId;
         public int Items;
-        private ObjectHeader _header;
-        private ObjectName _name;
+        private ObjectHeader _header=new ObjectHeader((ByteReader) null);
+        private ObjectName _name=new ObjectName((ByteReader) null);
         private ObjectProperties _properties;
         public ObjectInfo(Chunk chunk) : base(chunk){}
         public ObjectInfo(ByteReader reader) : base(reader){}
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print(bool ext){}
         public override string[] GetReadableData()
         {
@@ -39,23 +44,44 @@ namespace CTFAK.MMFParser.EXE.Loaders
             _name = infoChunks.GetChunk<ObjectName>();
             _properties = infoChunks.GetChunk<ObjectProperties>(); 
             _properties.ReadNew((int) ObjectType,this);
-            if (Settings.Build > 284)
-            {
-            }
-            else
-            {
-                // if(InkEffectValue==0) _header.InkEffectParameter = 255;
-            }
         }
 
-        public int Handle => _header.Handle;
-        public string Name => _name?.Value ?? "Unnamed Object - "+Handle;
+        public int Handle
+        {
+            get=>_header.Handle;
+            set => _header.Handle = (short) value;
+        }
+
+        public string Name
+        {
+            get=>_name?.Value ?? "Unnamed Object - "+Handle;
+            set => _name.Value = value;
+        } 
         public ObjectProperties Properties => _properties;
-        public Constants.ObjectType ObjectType => (Constants.ObjectType) _header.ObjectType;
-        public int Flags => (int) _header.Flags;
+
+        public Constants.ObjectType ObjectType
+        {
+            get=>(Constants.ObjectType) _header.ObjectType;
+            set => _header.ObjectType = (short) value;
+        }
+
+        public int Flags
+        {
+            get => (int) _header.Flags;
+            set => _header.Flags = (uint) value;
+        }
         public int Reserved => (int) _header.Reserved;
-        public int InkEffect => (int) _header.InkEffect&0xffff;
-        public byte InkEffectValue => (byte) _header.InkEffectParameter;
+
+        public int InkEffect
+        {
+            get => (int) _header.InkEffect & 0xffff;
+            set => _header.InkEffect=(uint) (value& 0xffff);
+        }
+        public byte InkEffectValue
+        {
+            get => _header.InkEffectParameter;
+            set => _header.InkEffectParameter = value;
+        }
         public bool Transparent => ByteFlag.GetFlag((uint) _header.InkEffect, 28);
         public bool Antialias => ByteFlag.GetFlag((uint) _header.InkEffect, 29);
         
@@ -140,6 +166,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
             Loader?.Read();
         }
         public override void Read(){}
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print(bool ext){}
         public override string[] GetReadableData() => null;
 
@@ -156,6 +187,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public ObjectHeader(ByteReader reader) : base(reader){}
         public ObjectHeader(Chunk chunk) : base(chunk){}
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print(bool ext){}
         public override string[] GetReadableData() => null;
 
@@ -168,6 +204,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             InkEffect = (uint) Reader.ReadUInt32(); 
             // Reader.Skip(3);
             InkEffectParameter =(byte) Reader.ReadInt32();
+            // Logger.Log($"{Handle}-{ObjectType}-{Flags}");
 
             // if (InkEffect != 0) InkEffectParameter = 255;
 

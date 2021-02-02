@@ -9,11 +9,55 @@ namespace CTFAK.MMFParser.EXE
         public static Exe Instance;
         public GameData GameData;
         public PackData PackData;
+        private byte[] _executable;
+
+        public void Write(ByteWriter Writer)
+        {
+            Writer.WriteBytes(_executable);
+            PackData.Write(Writer);
+            GameData.Write(Writer);
+            
+        }
 
         public void ParseExe(ByteReader exeReader)
         {
             Logger.Log($"Executable: {Settings.GameName}\n", true, ConsoleColor.DarkRed);
+            var entryPoint = CalculateEntryPoint(exeReader);
+            exeReader.Seek(0);
+            _executable = exeReader.ReadBytes(entryPoint);
+            
+            
+            
+            var firstShort = exeReader.PeekUInt16();
+            Logger.Log("First Short: " + firstShort.ToString("X2"), true, ConsoleColor.Yellow);
+            if (firstShort == 0x7777) Settings.GameType = GameType.Normal;
+            else if (firstShort == 0x222c) Settings.GameType = GameType.OnePointFive;
+            else throw new InvalidDataException("Unknown data header: 0x"+firstShort.ToString("X4"));
+            
+            if (Settings.GameType == GameType.Normal)
+            {
+                PackData = new PackData();
+                Logger.Log("Found PackData header!\nReading PackData header.", true, ConsoleColor.Blue);
+                PackData.Read(exeReader);
+                GameData = new GameData();
+                Program.CleanData = GameData;
+                GameData.Read(exeReader);
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+            }
+            else
+            {
+                Logger.Log("Using old system");
+                var oldData = new ChunkList();
+                oldData.Read(exeReader);
+                GameData = new GameData();
+                Program.CleanData = GameData;
+                GameData.Read(exeReader);
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+            }
+        }
 
+        public int CalculateEntryPoint(ByteReader exeReader)
+        {
             var sig = exeReader.ReadAscii(2);
             Logger.Log("EXE Header: " + sig, true, ConsoleColor.Yellow);
             if (sig != "MZ") Logger.Log("Invalid executable signature", true, ConsoleColor.Red);
@@ -61,33 +105,8 @@ namespace CTFAK.MMFParser.EXE
             }
 
             exeReader.Seek(possition);
-            
-            var firstShort = exeReader.PeekUInt16();
-            Logger.Log("First Short: " + firstShort.ToString("X2"), true, ConsoleColor.Yellow);
-            if (firstShort == 0x7777) Settings.GameType = GameType.Normal;
-            else if (firstShort == 0x222c) Settings.GameType = GameType.OnePointFive;
-            else throw new InvalidDataException("Unknown data header: 0x"+firstShort.ToString("X4"));
-            
-            if (Settings.GameType == GameType.Normal)
-            {
-                PackData = new PackData();
-                Logger.Log("Found PackData header!\nReading PackData header.", true, ConsoleColor.Blue);
-                PackData.Read(exeReader);
-                GameData = new GameData();
-                Program.CleanData = GameData;
-                GameData.Read(exeReader);
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-            }
-            else
-            {
-                Logger.Log("Using old system");
-                var oldData = new ChunkList();
-                oldData.Read(exeReader);
-                GameData = new GameData();
-                Program.CleanData = GameData;
-                GameData.Read(exeReader);
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-            }
+            return (int) exeReader.Tell();
         }
+        
     }
 }

@@ -72,7 +72,7 @@ namespace CTFAK.Utils
         public static byte[] compress_block(byte[] data)
         {
             ZLibCompressOptions compOpts = new ZLibCompressOptions();
-            compOpts.Level = ZLibCompLevel.Default;
+            compOpts.Level = ZLibCompLevel.BestCompression;
             MemoryStream decompressedStream = new MemoryStream(data);
             MemoryStream compressedStream = new MemoryStream();
             byte[] compressedData = null;

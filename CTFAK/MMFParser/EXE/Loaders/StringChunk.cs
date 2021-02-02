@@ -11,9 +11,13 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override void Read()
         {
-            Reader = new ByteReader(Chunk.ChunkData);
             Value = Reader.ReadUniversal();
             // Print(false);
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteUniversal(Value,true);
         }
 
         public override void Print(bool ext)

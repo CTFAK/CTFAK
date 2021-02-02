@@ -27,6 +27,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             Maximum = Reader.ReadInt32();
         }
 
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print(bool ext)
         {
             throw new System.NotImplementedException();
@@ -109,6 +114,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 Shape.Read();
             }
 
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
         }
 
         public override void Print(bool ext)

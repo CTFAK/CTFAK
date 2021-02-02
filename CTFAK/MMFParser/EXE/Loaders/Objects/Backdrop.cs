@@ -58,6 +58,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         }
 
+        public override void Write(ByteWriter Writer)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void Print(bool ext)
         {
             throw new System.NotImplementedException();
@@ -95,6 +100,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             Height = Reader.ReadInt32();
             Shape = new Shape(Reader);
             Shape.Read();
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            throw new System.NotImplementedException();
         }
 
         public override void Print(bool ext)
@@ -151,6 +161,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             // {
                 Image = Reader.ReadInt16();
             // }
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            throw new System.NotImplementedException();
         }
 
         public override void Print(bool ext)

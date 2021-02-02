@@ -8,8 +8,8 @@
         public enum Products
         {
             MMF1=1,
-            MMF15=2,
-            MMF2=3,
+            STD=2,
+            DEV=3,
             CNC1=0
 
         }

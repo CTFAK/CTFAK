@@ -11,7 +11,7 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
         public int Minimum;
         public int Maximum;
         public uint DisplayType;
-        public uint Flags;
+        public uint CountFlags;
         public Color Color1;
         public uint VerticalGradient;
         public Color Color2;
@@ -32,7 +32,7 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
             Minimum = Reader.ReadInt32();
             Maximum = Reader.ReadInt32();
             DisplayType = Reader.ReadUInt32();
-            Flags = Reader.ReadUInt32();
+            CountFlags = Reader.ReadUInt32();
             Color1 = Reader.ReadColor();
             Color2 = Reader.ReadColor();
             VerticalGradient = Reader.ReadUInt32();
@@ -57,7 +57,7 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
             Writer.WriteInt32(Minimum);
             Writer.WriteInt32(Maximum);
             Writer.WriteUInt32(DisplayType);
-            Writer.WriteUInt32(Flags);
+            Writer.WriteUInt32(CountFlags);
             Writer.WriteColor(Color1);;
             Writer.WriteColor(Color2);;
             Writer.WriteUInt32(VerticalGradient);

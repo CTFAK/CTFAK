@@ -13,6 +13,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public int References = 0;
         public List<MusicFile> Items;
 
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print(bool ext)
         {
         }
@@ -66,6 +71,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         private uint _flags;
         public byte[] Data;
         public int Handle;
+
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
 
         public override void Print(bool ext)
         {

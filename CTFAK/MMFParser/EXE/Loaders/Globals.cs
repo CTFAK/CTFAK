@@ -9,6 +9,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
     {
         public List<float> Items = new List<float>();
         public GlobalValues(Chunk chunk) : base(chunk) { }
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print(bool ext)
         {
             
@@ -53,6 +58,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
     {
         public List<string> Items = new List<string>();
         public GlobalStrings(Chunk chunk) : base(chunk) { }
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print(bool ext)
         {
 

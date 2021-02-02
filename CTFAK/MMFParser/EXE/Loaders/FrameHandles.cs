@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using CTFAK.Utils;
 
@@ -27,6 +28,14 @@ namespace CTFAK.MMFParser.EXE.Loaders
                 Items.Add(i,handle);
             }
 
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            foreach (KeyValuePair<int,int> item in Items)
+            {
+                Writer.WriteInt16((short) item.Value);
+            }
         }
 
         public override void Print(bool ext){}

@@ -74,6 +74,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
             
         }
 
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public override void Print(bool ext)
         {

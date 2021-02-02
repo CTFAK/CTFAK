@@ -37,6 +37,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             
         }
 
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void Print(bool ext)
         {
             throw new System.NotImplementedException();
@@ -106,6 +111,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             }
             if(Loader==null&&Type!=0) throw new Exception("Unsupported movement: "+Type);
             Loader?.Read();
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
         }
 
         public override void Print(bool ext)

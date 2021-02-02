@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using CTFAK.MMFParser.EXE.Loaders.Objects;
 using CTFAK.Utils;
 
@@ -60,6 +61,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
         private MovementTimerBase _movementTimer;
 
 
+        public override void Write(ByteWriter Writer)
+        {
+            Chunks.Write(Writer);
+        }
+
         public override void Print(bool ext)
         {
             Logger.Log($"Frame: {Name}", true, ConsoleColor.Green);
@@ -91,7 +97,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             Chunks = new ChunkList();
             Chunks.Read(frameReader);
             
-            
             _header = Chunks.GetChunk<FrameHeader>();
             _virtualSize = Chunks.GetChunk<VirtualRect>();
             _name = Chunks.GetChunk<FrameName>();
@@ -106,7 +111,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             _fadeIn = Chunks.PopChunk<Transition>();
             _fadeOut = Chunks.PopChunk<Transition>();
             
-            Flags.flag = _header.Flags.flag;
+            Flags.flag = _header?.Flags?.flag??0;
             Logger.Log(Properties.GlobalStrings.readingFrame+$" {Name}",true,ConsoleColor.Green);
 
         }
@@ -159,9 +164,16 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt32(Width);
+            Writer.WriteInt32(Height);
+            Writer.WriteColor(Background);
+            Writer.WriteInt32((int) Flags.flag);
+        }
+
         public override void Print(bool ext)
         {
-            
         }
 
         public override string[] GetReadableData()
@@ -207,6 +219,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public ObjectInstances(ChunkList.Chunk chunk) : base(chunk)
         {
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
         }
 
         public override void Print(bool ext)
@@ -272,20 +289,25 @@ namespace CTFAK.MMFParser.EXE.Loaders
                 ParentType = Reader.ReadInt16();
                 ParentHandle = Reader.ReadInt16();
                 Layer = Reader.ReadInt16();
-                var reserved = Reader.ReadInt16();
+                var res = Reader.ReadInt16();
             }
-            
+           
             
             //-------------------------
 
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            throw new NotImplementedException();
         }
 
         public ObjectInfo FrameItem
         {
             get
             {
-                if (Program.CleanData.GameChunks.GetChunk<FrameItems>() == null) return null;
-                return Program.CleanData.GameChunks.GetChunk<FrameItems>().FromHandle(ObjectInfo);
+                if (Program.CleanData.Frameitems == null) return null;
+                return Program.CleanData.Frameitems.FromHandle(ObjectInfo);
             }
         }
 
@@ -301,7 +323,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             return new string[]
             {
                 $"Name: {Name}",
-                $"Type:{(Constants.ObjectType)FrameItem.ObjectType} - {FrameItem.ObjectType}",
+                $"Type:{FrameItem?.ObjectType ?? 0}",
                 $"Position: {X,5}x{Y,5}",
                 $"Size: NotImplementedYet"
 
@@ -332,6 +354,15 @@ namespace CTFAK.MMFParser.EXE.Loaders
                 Items.Add(item);
             }
 
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt32(Items.Count);
+            foreach (Layer layer in Items)
+            {
+                layer.Write(Writer);
+            }
         }
 
         public override void Print(bool ext)
@@ -387,6 +418,16 @@ namespace CTFAK.MMFParser.EXE.Loaders
             Name = Reader.ReadUniversal();
         }
 
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt32((int) Flags.flag);
+            Writer.WriteSingle(XCoeff);
+            Writer.WriteSingle(YCoeff);
+            Writer.WriteInt32(NumberOfBackgrounds);
+            Writer.WriteInt32(BackgroudIndex);
+            Writer.WriteUniversal(Name);
+        }
+
         public override void Print(bool ext)
         {
             throw new NotImplementedException();
@@ -419,6 +460,14 @@ namespace CTFAK.MMFParser.EXE.Loaders
             }
         }
 
+        public override void Write(ByteWriter Writer)
+        {
+            foreach (Color item in Items)
+            {
+                Writer.WriteColor(item);
+            }
+        }
+
         public override void Print(bool ext){}
         public override string[] GetReadableData() => new string[]{"Length: 256"};
     }
@@ -443,6 +492,12 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
             Value = Reader.ReadInt32();
         }
+
+        public override void Write(ByteWriter Writer)
+        {
+            Writer.WriteInt32(Value);
+        }
+
         public override void Print(bool ext){}
         public override string[] GetReadableData()=>new string[]{"Value: "+Value};
         

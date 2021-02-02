@@ -55,7 +55,7 @@ namespace CTFAK.MMFParser.Translation
 
             var mfaWriter =
                 new ByteWriter(
-                    Program.CleanData.GameChunks.GetChunk<EditorFilename>().Value.Length > 0 ? $"{Settings.DumpPath}\\{Path.GetFileNameWithoutExtension(Program.CleanData.GameChunks.GetChunk<EditorFilename>().Value)}.mfa" : "out.mfa",
+                    Program.CleanData.GameChunks.GetChunk<EditorFilename>().Value.Length > 0 ? $"{Settings.DumpPath}\\{Path.GetFileNameWithoutExtension(Program.CleanData.GameChunks.GetChunk<EditorFilename>().Value)}.mfa" : $"{Settings.DumpPath}\\out.mfa",
                     FileMode.Create); //New writer for new MFA
             Pame2Mfa.Message("");
             Pame2Mfa.Message("Writing MFA");
@@ -91,21 +91,9 @@ namespace CTFAK.MMFParser.Translation
             
             for (int i = 0; i < 25; i++)
             {
-                var frame = refer;
-                frame.Handle = i;
-                frame.Name = "Frame " + i;
-
-                frame.Chunks = new ChunkList(null);
-                frame.Events = MFA.MFA.emptyEvents;
-                frame.Palette = refer.Palette;
-                // frame.Layers.Add(new Layer(null)
-                // {
-                    // Name="Layer"
-                // });
-                template.Frames.Add(frame);
-                
+                template.Frames.Add(PluginAPI.PluginAPI.EmptyFrame);
             }  
-            //Add modifications
+            
 
 
             var mfaWriter = new ByteWriter(outputPath, FileMode.Create);

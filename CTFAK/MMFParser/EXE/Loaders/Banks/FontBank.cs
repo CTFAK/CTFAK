@@ -20,7 +20,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
             NumberOfItems = Reader.ReadInt32();
         }
-        public void Write(ByteWriter writer)
+        public override void Write(ByteWriter writer)
         {
             writer.WriteInt32(NumberOfItems);
             //i am testing with no fonts
@@ -48,6 +48,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
             var handle = Reader.ReadUInt32();
 
+        }
+
+        public override void Write(ByteWriter Writer)
+        {
+            throw new System.NotImplementedException();
         }
 
         public override void Print(bool ext)

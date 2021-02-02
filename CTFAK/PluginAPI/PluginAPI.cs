@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using CTFAK.MMFParser.EXE;
+using CTFAK.MMFParser.MFA.Loaders;
+using CTFAK.Utils;
+using ChunkList = CTFAK.MMFParser.MFA.Loaders.ChunkList;
 
 namespace CTFAK.PluginAPI
 {
+    
     public static class PluginAPI
     {
         public static string PluginPath = System.IO.Path.Combine(
@@ -37,11 +42,8 @@ namespace CTFAK.PluginAPI
                     {
                         name = ((CTFDumperPluginAttribute) attribute).Name;
                     }
-                    
-                    var plugin = new Plugin(name,"Kostya",asm,pluginClass);
-                    
-                    
 
+                    var plugin = new Plugin(name, "Author", asm, pluginClass);
                     Plugins.Add(plugin);
                 }
             }
@@ -51,20 +53,51 @@ namespace CTFAK.PluginAPI
         {
             foreach (var attribute in plugin.Asm.GetCustomAttributes(typeof(CTFDumperPluginAttribute)))
             {
-                
+
                 if (((CTFDumperPluginAttribute) attribute).Type == PluginIOType.GameData)
                 {
                     return plugin.pluginClass.Activate(Exe.Instance.GameData);
                 }
                 else throw new NotImplementedException("Not Supported");
-                
+
             }
+
             throw new NotImplementedException("Critical error ");
         }
 
-       
 
-    }
+
+        //API
+        public static int LastAllocatedFrameHandle;
+        public static Frame EmptyFrame
+        {
+            get
+            {
+                LastAllocatedFrameHandle++;
+                var newFrame = new Frame(null)
+                {
+                    ActiveLayer =0,
+                    Background = Color.White,
+                    Chunks = new ChunkList(null),
+                    Events = new Events((ByteReader) null),
+                    FadeIn = null,
+                    FadeOut = null,
+                    Folders = new List<ItemFolder>(),
+                    Handle = LastAllocatedFrameHandle,
+                    SizeX = 640,
+                    SizeY = 480,
+                    Name = "Frame "+LastAllocatedFrameHandle,
+                    Palette = new List<Color>()
+                };
+                return newFrame;
+
+
+            }
+        }
+
+
+
+}
 
     public class Plugin
     {
