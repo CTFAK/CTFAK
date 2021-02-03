@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using CTFAK.MMFParser.Attributes;
 using CTFAK.Utils;
 using static CTFAK.MMFParser.EXE.ChunkList;
 
@@ -8,7 +9,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
     {
         public Dictionary<int, ObjectInfo> ItemDict = new Dictionary<int, ObjectInfo>();
         public List<string> Names = new List<string>();
-        public int NumberOfItems;
         public FrameItems(Chunk chunk) : base(chunk) { }
         public FrameItems(ByteReader reader) : base(reader) { }
         public override void Write(ByteWriter Writer)
@@ -29,15 +29,15 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
             return new string[]
             {
-                $"Number of items: {NumberOfItems}"
+                $"Number of items: {ItemDict.Count}"
             };
         }
 
         public override void Read()
         {
-            NumberOfItems = Reader.ReadInt32();
+            var count = Reader.ReadInt32();
             
-            for (int i = 0; i < NumberOfItems; i++)
+            for (int i = 0; i < count; i++)
             {
                 var item = new ObjectInfo(Reader);
                 item.Read();

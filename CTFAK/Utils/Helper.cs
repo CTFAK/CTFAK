@@ -4,16 +4,20 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Web.UI.Design.WebControls.WebParts;
 using System.Windows.Forms;
 using CTFAK.GUI.GUIComponents;
+using CTFAK.MMFParser.Attributes;
 using CTFAK.MMFParser.EXE;
+using CTFAK.MMFParser.EXE.Loaders;
 using CTFAK.MMFParser.EXE.Loaders.Events.Parameters;
 using CTFAK.MMFParser.EXE.Loaders.Objects;
 using CTFAK.MMFParser.MFA.Loaders;
 using ChunkList = CTFAK.MMFParser.EXE.ChunkList;
+using Extension = CTFAK.MMFParser.EXE.Loaders.Events.Parameters.Extension;
 
 namespace CTFAK.Utils
 {
@@ -301,37 +305,63 @@ namespace CTFAK.Utils
 
         
 
-        public static ChunkNode GetChunkNode(ChunkList.Chunk chunk, string customName = "[DEFAULT-NAME]")
+        public static ChunkNode GetChunkNode(ChunkList.Chunk chunk)
         {
-            ChunkNode node = null;
-            if (chunk.Loader != null)
+            
+            List<TreeNode> newNodes = new List<TreeNode>();
+            string newName = chunk.Name;
+            
+            if (chunk.Loader == null) return new ChunkNode(chunk.Name,chunk);
+            if (chunk.Loader.GetType().GetCustomAttribute(typeof(SubChunkListAttribute)) != null)
             {
-                node = new ChunkNode(chunk.Name, chunk.Loader);
+                var customAttribute = chunk.Loader.GetType()
+                    .GetCustomAttribute(typeof(SubChunkListAttribute)) as SubChunkListAttribute;
+                var chunkList = chunk.Loader.GetType().GetField(customAttribute.FieldName).GetValue(chunk.Loader) as ChunkList;
+                foreach (var subChunk in chunkList.Chunks)
+                {
+                    var subNode = new ChunkNode(subChunk.Name,subChunk);
+                    if (subChunk?.Loader?.HasAttribute<SubListAttribute>() ?? false)
+                    {
+                        subNode.Nodes.Add(GetChunkNode(subChunk));
+                    }
+                    newNodes.Add(subNode);
+                }
             }
-            else
+            if (chunk.Loader.GetType().GetCustomAttribute(typeof(SubListAttribute)) != null)
             {
-                node = new ChunkNode(chunk.Name, chunk);
+                var customAttribute = chunk.Loader.GetType()
+                    .GetCustomAttribute(typeof(SubListAttribute)) as SubListAttribute;
+                var chunkList = chunk.Loader.GetType().GetField(customAttribute.FieldName).GetValue(chunk.Loader) as List<ChunkLoader>;
+                if (chunkList != null)
+                {
+                    foreach (var subChunk in chunkList)
+                    {
+                        ChunkNode subnode;
+                        if (subChunk.HasAttribute<SubListAttribute>()) subnode = GetChunkNode(subChunk.Chunk);
+                        else subnode = new ChunkNode(subChunk.Chunk.Name,subChunk);
+                        newNodes.Add(subnode);
+                    } 
+                }
+                
             }
-
-            if (customName != "[DEFAULT-NAME]")
+            if (chunk.Loader.GetType().GetCustomAttribute(typeof(CustomVisualNameAttribute)) != null)
             {
-                node.Text = customName;
+                var attr = chunk.Loader.GetType().GetCustomAttribute(typeof(CustomVisualNameAttribute)) as CustomVisualNameAttribute;
+                string name = "";
+                if (attr.IsProp) name = chunk.Loader.GetType().GetProperty(attr.CustomName).GetValue(chunk.Loader) as string;
+                else name = chunk.Loader.GetType().GetField(attr.CustomName).GetValue(chunk.Loader) as string;
+                
+                newName = chunk.Name + " "+ name;
             }
-
+            ChunkNode node = new ChunkNode(newName,chunk);
+            node.Nodes.AddRange(newNodes.ToArray());
             return node;
         }
 
-        public static Animation GetClosestAnimation(int index, Dictionary<int, Animation> animDict, int count)
+        public static bool HasAttribute<T>(this object obj) where T : Attribute
         {
-            try
-            {
-                return animDict[index];
-            }
-            catch
-            {
-            }
-
-            return null;
+            var attr = obj.GetType().GetCustomAttribute(typeof(T));
+            return attr != null;
         }
 
         [DllImport("kernel32.dll")]

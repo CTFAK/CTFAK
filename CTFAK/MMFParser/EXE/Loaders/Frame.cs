@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using CTFAK.MMFParser.Attributes;
 using CTFAK.MMFParser.EXE.Loaders.Objects;
 using CTFAK.Utils;
 
@@ -29,7 +30,8 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
     }
-
+    [SubChunkList(nameof(Frame.Chunks))]
+    [CustomVisualName(nameof(Frame.Name),true)]
     public class Frame : ChunkLoader
     {
         public BitDict Flags=new BitDict(new string[]
@@ -208,7 +210,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         }
     }
-
+    [SubList(nameof(ObjectInstances.Items))]
     public class ObjectInstances : ChunkLoader
     {
         public List<ObjectInstance> Items = new List<ObjectInstance>();

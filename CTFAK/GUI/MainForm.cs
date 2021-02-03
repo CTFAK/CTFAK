@@ -7,11 +7,13 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Media;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using Be.Windows.Forms;
 using CTFAK.GUI.GUIComponents;
 using CTFAK.MMFParser;
+using CTFAK.MMFParser.Attributes;
 using CTFAK.MMFParser.EXE;
 using CTFAK.MMFParser.EXE.Loaders;
 using CTFAK.MMFParser.EXE.Loaders.Banks;
@@ -279,10 +281,11 @@ namespace CTFAK.GUI
             foreach (var item in gameData.GameChunks.Chunks)
             {
                 var ActualName = item.Name;
-                if (item.Loader is Frame frm) ActualName = ActualName + " " + frm.Name;
-                var newNode = Helper.GetChunkNode(item, ActualName);
+                // if (item.Loader is Frame frm) ActualName = ActualName + " " + frm.Name;
+                var newNode = Helper.GetChunkNode(item);
                 treeView1.Nodes.Add(newNode);
-                if (item.Loader is Frame frame)
+                
+                /*if (item.Loader is Frame frame)
                     foreach (var frmChunk in frame.Chunks.Chunks)
                     {
                         var frameNode = Helper.GetChunkNode(frmChunk);
@@ -309,7 +312,7 @@ namespace CTFAK.GUI
                             objNode.Nodes.Add(new ChunkNode(chunk.Name, chunk));
                         }
                         newNode.Nodes.Add(objNode);
-                    }
+                    }*/
             }
 
             FolderBTN.Visible = true;
@@ -328,7 +331,7 @@ namespace CTFAK.GUI
             toLog += $"{Properties.GlobalStrings.imageCount}: {Program.CleanData.Images?.NumberOfItems ?? 0}\n";
             toLog += $"{Properties.GlobalStrings.soundCount}: {Program.CleanData.Sounds?.NumOfItems ?? 0}\n";
             toLog += $"{Properties.GlobalStrings.musicCount}: {Program.CleanData.Music?.NumOfItems ?? 0}\n";
-            toLog += $"{Properties.GlobalStrings.frameitemCount}: {Program.CleanData.Frameitems?.NumberOfItems}\n";
+            toLog += $"{Properties.GlobalStrings.frameitemCount}: {Program.CleanData.Frameitems?.ItemDict.Count}\n";
             toLog += $"{Properties.GlobalStrings.frameCount}: {Program.CleanData.Frames.Count}\n";
             toLog += $"Chunks Count: {Program.CleanData.GameChunks.Chunks.Count}\n";
             GameInfo.Text = toLog;
@@ -470,30 +473,6 @@ namespace CTFAK.GUI
                 hexform.Show();
             }
         }
-
-
-        private void dumpSortedBtn_Click(object sender, EventArgs e)
-        {
-            imageBar.Visible = true;
-            imageLabel.Visible = true;
-            var worker = new BackgroundWorker();
-            worker.DoWork += (senderA, eA) =>
-            {
-                Settings.DumpImages = true;
-                var bank = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
-                bank.SaveImages = false;
-                bank.Read();
-            };
-            worker.RunWorkerCompleted += (senderA, eA) =>
-            {
-                imageBar.Visible = false;
-                imageLabel.Visible = false;
-                ImageDumper.DumpImages();
-            };
-            worker.RunWorkerAsync();
-        }
-
-
         private void dumpMFAButton_Click(object sender, EventArgs e)
         {
             var msg = MessageBox.Show("By using CTFAK, you agree that you will only used the decompiled MFAs for personal use and educational purposes.\nYou also agree that unless you are the original creator or have been given permission, you will not recompile any games using this tool.","Warning",MessageBoxButtons.OKCancel);
@@ -639,6 +618,7 @@ namespace CTFAK.GUI
                                             foreach (var dir in pair.Value?.DirectionDict)
                                                 if (pair.Value.DirectionDict.Count > 1)
                                                 {
+                                                    if (dir.Value.Reader == null) continue;
                                                     var dirNode = new ChunkNode(
                                                         $"Direction {pair.Value.DirectionDict.ToList().IndexOf(dir)}",
                                                         dir.Value);

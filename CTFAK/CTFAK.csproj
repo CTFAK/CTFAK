@@ -169,6 +169,9 @@
     <Compile Include="GUI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MMFParser\Attributes\CustomVisualNameAttribute.cs" />
+    <Compile Include="MMFParser\Attributes\SubChunkListAttribute.cs" />
+    <Compile Include="MMFParser\Attributes\SubListAttribute.cs" />
     <Compile Include="MMFParser\EXE\APK.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Common.cs" />
     <Compile Include="MMFParser\EXE\Loaders\TwoFivePlus.cs" />
@@ -224,7 +227,6 @@
     <Compile Include="MMFParser\EXE\Loaders\FrameItems.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Globals.cs" />
     <Compile Include="MMFParser\EXE\Loaders\ObjectInfo.cs" />
-    <Compile Include="MMFParser\EXE\Loaders\ObjectNames.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Objects\Animations.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Objects\Backdrop.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Objects\Counters.cs" />
