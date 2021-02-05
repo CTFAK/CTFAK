@@ -12,9 +12,11 @@ namespace CTFAK.GUI
             inst = this;
             InitializeComponent();
             textBox1.ForeColor = MainForm.ColorTheme;
-            this.Closing += (a,b) =>
+            Closing += (a, e) =>
             {
-                Environment.Exit(0);
+                var dlg = MessageBox.Show("Are you sure you want to exit?", "Exiting", MessageBoxButtons.YesNo);
+                if (dlg == DialogResult.Yes) Environment.Exit(0);
+                else e.Cancel = true;
             };
             setLineFormat(1,1);
         }

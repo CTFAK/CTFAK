@@ -54,6 +54,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.mainTab = new System.Windows.Forms.TabPage();
             this.mfaTab = new System.Windows.Forms.TabPage();
+            this.mfaDumpInfoLabel = new System.Windows.Forms.Label();
             this.dumpMFAButton = new System.Windows.Forms.Button();
             this.mfaLogBox = new System.Windows.Forms.TextBox();
             this.packDataTab = new System.Windows.Forms.TabPage();
@@ -415,6 +416,7 @@
             // mfaTab
             // 
             this.mfaTab.BackColor = System.Drawing.Color.Black;
+            this.mfaTab.Controls.Add(this.mfaDumpInfoLabel);
             this.mfaTab.Controls.Add(this.dumpMFAButton);
             this.mfaTab.Controls.Add(this.mfaLogBox);
             this.mfaTab.Location = new System.Drawing.Point(4, 24);
@@ -424,14 +426,26 @@
             this.mfaTab.TabIndex = 2;
             this.mfaTab.Text = "MFA Dump";
             // 
+            // mfaDumpInfoLabel
+            // 
+            this.mfaDumpInfoLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mfaDumpInfoLabel.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.mfaDumpInfoLabel.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
+            this.mfaDumpInfoLabel.Location = new System.Drawing.Point(408, 3);
+            this.mfaDumpInfoLabel.Name = "mfaDumpInfoLabel";
+            this.mfaDumpInfoLabel.Size = new System.Drawing.Size(524, 412);
+            this.mfaDumpInfoLabel.TabIndex = 2;
+            this.mfaDumpInfoLabel.Text = "SampleTextHere";
+            // 
             // dumpMFAButton
             // 
+            this.dumpMFAButton.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dumpMFAButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.dumpMFAButton.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.dumpMFAButton.ForeColor = System.Drawing.SystemColors.Desktop;
-            this.dumpMFAButton.Location = new System.Drawing.Point(411, 3);
+            this.dumpMFAButton.Location = new System.Drawing.Point(408, 415);
             this.dumpMFAButton.Name = "dumpMFAButton";
-            this.dumpMFAButton.Size = new System.Drawing.Size(103, 61);
+            this.dumpMFAButton.Size = new System.Drawing.Size(524, 61);
             this.dumpMFAButton.TabIndex = 1;
             this.dumpMFAButton.Text = "Dump MFA";
             this.dumpMFAButton.UseVisualStyleBackColor = true;
@@ -449,7 +463,7 @@
             this.mfaLogBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.mfaLogBox.Size = new System.Drawing.Size(405, 473);
             this.mfaLogBox.TabIndex = 0;
-            this.mfaLogBox.Text = "MFA Generation is currently unstable\r\nUSE AT YOUR OWN RISK";
+            this.mfaLogBox.Text = "MFA Generation is in beta testing\r\n";
             // 
             // packDataTab
             // 
@@ -508,10 +522,10 @@
             this.packDataListBox.BackColor = System.Drawing.SystemColors.WindowText;
             this.packDataListBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.packDataListBox.Dock = System.Windows.Forms.DockStyle.Left;
-            this.packDataListBox.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.packDataListBox.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.packDataListBox.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
             this.packDataListBox.FormattingEnabled = true;
-            this.packDataListBox.ItemHeight = 15;
+            this.packDataListBox.ItemHeight = 16;
             this.packDataListBox.Items.AddRange(new object[] {"PackFile1", "PackFile2", "PackFile3", "PackFile4", "PackFile5", "PackFile6"});
             this.packDataListBox.Location = new System.Drawing.Point(3, 3);
             this.packDataListBox.Name = "packDataListBox";
@@ -606,6 +620,7 @@
             // 
             // stopSoundBtn
             // 
+            this.stopSoundBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.stopSoundBtn.Location = new System.Drawing.Point(328, 3);
             this.stopSoundBtn.Name = "stopSoundBtn";
             this.stopSoundBtn.Size = new System.Drawing.Size(113, 50);
@@ -626,6 +641,7 @@
             // 
             // playSoundBtn
             // 
+            this.playSoundBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.playSoundBtn.Location = new System.Drawing.Point(209, 3);
             this.playSoundBtn.Name = "playSoundBtn";
             this.playSoundBtn.Size = new System.Drawing.Size(113, 50);
@@ -710,11 +726,11 @@
             this.activatePluginBtn.AutoSize = true;
             this.activatePluginBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.activatePluginBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.activatePluginBtn.Font = new System.Drawing.Font("Courier New", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
+            this.activatePluginBtn.Font = new System.Drawing.Font("Courier New", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (204)));
             this.activatePluginBtn.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
             this.activatePluginBtn.Location = new System.Drawing.Point(207, 6);
             this.activatePluginBtn.Name = "activatePluginBtn";
-            this.activatePluginBtn.Size = new System.Drawing.Size(101, 31);
+            this.activatePluginBtn.Size = new System.Drawing.Size(110, 33);
             this.activatePluginBtn.TabIndex = 1;
             this.activatePluginBtn.Text = "Activate";
             this.activatePluginBtn.UseVisualStyleBackColor = true;
@@ -777,7 +793,7 @@
             // 
             this.updateSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.updateSettings.ForeColor = System.Drawing.Color.FromArgb(((int) (((byte) (255)))), ((int) (((byte) (128)))), ((int) (((byte) (0)))));
-            this.updateSettings.Location = new System.Drawing.Point(8, 399);
+            this.updateSettings.Location = new System.Drawing.Point(185, 5);
             this.updateSettings.Name = "updateSettings";
             this.updateSettings.Size = new System.Drawing.Size(131, 72);
             this.updateSettings.TabIndex = 1;
@@ -827,6 +843,8 @@
             this.settingsTab.PerformLayout();
             this.ResumeLayout(false);
         }
+
+        private System.Windows.Forms.Label mfaDumpInfoLabel;
 
         private System.Windows.Forms.Button dumpSelectedBtn;
 

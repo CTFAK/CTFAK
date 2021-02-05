@@ -328,7 +328,7 @@ namespace CTFAK.GUI
             toLog += $"Product Version: {Program.CleanData.ProductVersion}\n";
             toLog += $"Build: {Program.CleanData.Build}\n";
             toLog += $"Runtime Version: {Program.CleanData.RuntimeVersion}\n";
-            toLog += $"{Properties.GlobalStrings.imageCount}: {Program.CleanData.Images?.NumberOfItems ?? 0}\n";
+            toLog += $"{Properties.GlobalStrings.imageCount}: {Program.CleanData.Images?.Images.Count ?? 0}\n";
             toLog += $"{Properties.GlobalStrings.soundCount}: {Program.CleanData.Sounds?.NumOfItems ?? 0}\n";
             toLog += $"{Properties.GlobalStrings.musicCount}: {Program.CleanData.Music?.NumOfItems ?? 0}\n";
             toLog += $"{Properties.GlobalStrings.frameitemCount}: {Program.CleanData.Frameitems?.ItemDict.Count}\n";
@@ -336,6 +336,7 @@ namespace CTFAK.GUI
             toLog += $"Chunks Count: {Program.CleanData.GameChunks.Chunks.Count}\n";
             GameInfo.Text = toLog;
             InitPackDataTab();
+            InitMFA();
             InitImages();
             InitSounds();
             InitKeyTab();
@@ -374,9 +375,7 @@ namespace CTFAK.GUI
             musicBar.Value = (int) (index / (float) all * 100);
             musicLabel.Text = $@"{index}/{all}";
         }
-
         
-
 
         private void FolderBTN_Click(object sender, EventArgs e)
         {
@@ -536,7 +535,11 @@ namespace CTFAK.GUI
         private void UpdatePackInfo(int index)
         {
             var item = Exe.Instance.PackData.Items[index];
-            infoLabel.Text = $"Name: {item.PackFilename}\nSize: {item.Data.Length.ToPrettySize()}";
+            string text = String.Empty;
+            text += $"Name: {item.PackFilename}\n";
+            text += $"Size: {item.Data.Length.ToPrettySize()}\n";
+
+            infoLabel.Text = text;
         }
 
         private void dumpPackButton_Click(object sender, EventArgs e)
@@ -546,6 +549,7 @@ namespace CTFAK.GUI
             packDataDialog.FileName = item.PackFilename;
             if (item.PackFilename.EndsWith(".mfx")) packDataDialog.Filter = "Clickteam Extension(*.mfx)|.mfx";
             else if (item.PackFilename.EndsWith(".dll")) packDataDialog.Filter = "Clickteam Module(*.dll)|.dll";
+            else packDataDialog.Filter = $"Unknown File (*{Path.GetExtension(item.PackFilename)})|{Path.GetExtension(item.PackFilename)}";
 
 
             packDataDialog.InitialDirectory = Path.GetFullPath(Settings.ExtensionPath);
@@ -581,12 +585,23 @@ namespace CTFAK.GUI
             InitKeyTab();
         }
 
-        private void charBox_TextChanged(object sender, EventArgs e)
+        private void charBox_TextChanged(object sender, EventArgs e)=> InitKeyTab();
+        public void InitMFA()
         {
-            InitKeyTab();
+            string toLog = string.Empty;
+            toLog += $"MFA Generator 1.0\n";
+            toLog += $"Game Build: {Program.CleanData.ProductBuild}\n";
+            toLog += $"Game Name: {Program.CleanData.Name}\n";
+            toLog += $"MFA Name: {Path.GetFileNameWithoutExtension(Program.CleanData.EditorFilename)}.mfa\n";
+            toLog += $"Frames to translate: {Program.CleanData.Frames.Count}\n";
+            toLog += $"Objects to translate: {Program.CleanData.Frameitems.ItemDict.Count}\n";
+            toLog += $"Images to write: {Program.CleanData.Images.Images.Count}\n";
+            toLog += $"Sounds to write: {Program.CleanData.Sounds.Items.Count}\n";
+
+
+            mfaDumpInfoLabel.Text = toLog;
+
         }
-
-
         public void InitImages()
         {
             if (Settings.GameType == GameType.TwoFivePlus||Settings.GameType == GameType.Android) return;
@@ -940,11 +955,12 @@ namespace CTFAK.GUI
         private void updateSettings_Click(object sender, EventArgs e)
         {
             LoadableSettings.instance["mainColor"] = colorBox.Text;
+            LoadableSettings.instance["lang"] = langComboBox.SelectedItem;
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            LoadableSettings.instance["lang"] = langComboBox.SelectedItem;
+            
         }
 
         

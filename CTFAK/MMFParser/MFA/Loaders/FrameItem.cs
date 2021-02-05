@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Web.UI.WebControls;
 using CTFAK.MMFParser.EXE;
 using CTFAK.MMFParser.MFA.Loaders.mfachunks;
@@ -37,7 +38,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             Writer.WriteInt32(IconHandle);
             
             Chunks.Write(Writer);
-            Loader?.Write(Writer);
+            Loader.Write(Writer);
 
 
 
@@ -68,10 +69,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
                 IconHandle = Reader.ReadInt32();
                 Logger.Log("IconHandle: "+IconHandle);
             }
-            else
-            {
-                throw new NotImplementedException("invalid icon");
-            }
+            else throw new InvalidDataException("invalid icon");
             Chunks = new ChunkList(Reader);
             Chunks.Log = true;
             Chunks.Read();

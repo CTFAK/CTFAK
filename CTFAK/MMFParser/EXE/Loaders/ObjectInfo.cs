@@ -77,7 +77,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             get => (int) _header.InkEffect & 0xffff;
             set => _header.InkEffect=(uint) (value& 0xffff);
         }
-        public byte InkEffectValue
+        public int InkEffectValue
         {
             get => _header.InkEffectParameter;
             set => _header.InkEffectParameter = value;
@@ -182,7 +182,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public Int16 ObjectType;
         public UInt32 Flags;
         public UInt32 InkEffect;
-        public byte InkEffectParameter;
+        public int InkEffectParameter;
         public Int16 Reserved;
 
         public ObjectHeader(ByteReader reader) : base(reader){}
@@ -202,11 +202,8 @@ namespace CTFAK.MMFParser.EXE.Loaders
             Flags = Reader.ReadUInt16();
             Reserved = Reader.ReadInt16();
             InkEffect = (uint) Reader.ReadUInt32(); 
-            // Reader.Skip(3);
-            InkEffectParameter =(byte) Reader.ReadInt32();
+            InkEffectParameter =Reader.ReadInt32();
             // Logger.Log($"{Handle}-{ObjectType}-{Flags}");
-
-            // if (InkEffect != 0) InkEffectParameter = 255;
 
 
 

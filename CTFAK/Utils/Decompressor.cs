@@ -36,8 +36,11 @@ namespace CTFAK.Utils
             {
                 zs.CopyTo(decompressedStream);
             }
+            
 
             byte[] decompressedData = decompressedStream.GetBuffer();
+            compressedStream.Dispose();
+            decompressedStream.Dispose();
             // Trimming array to decompSize,
             // because ZlibStream always pads to 0x100
             Array.Resize<byte>(ref decompressedData, decompSize);
@@ -72,7 +75,7 @@ namespace CTFAK.Utils
         public static byte[] compress_block(byte[] data)
         {
             ZLibCompressOptions compOpts = new ZLibCompressOptions();
-            compOpts.Level = ZLibCompLevel.BestCompression;
+            compOpts.Level = ZLibCompLevel.Default;
             MemoryStream decompressedStream = new MemoryStream(data);
             MemoryStream compressedStream = new MemoryStream();
             byte[] compressedData = null;

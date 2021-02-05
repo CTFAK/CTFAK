@@ -16,7 +16,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
     {
         public bool SaveImages = false;
         public Dictionary<int, ImageItem> Images = new Dictionary<int, ImageItem>();
-        public uint NumberOfItems;
         public bool PreloadOnly = false;
         public static bool Load = false;
 
@@ -45,7 +44,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
             return new string[]
             {
-                $"Number of images: {NumberOfItems}"
+                $"Number of images: {Images.Count}"
             };
         }
 
@@ -85,14 +84,14 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
             if (!Settings.DoMFA) Reader.Seek(0); //Reset the reader to avoid bugs when dumping more than once
             var tempImages = new Dictionary<int, ImageItem>();
-            NumberOfItems = (uint) Reader.ReadInt32();
-            Logger.Log($"Found {NumberOfItems} images", true, ConsoleColor.Green);
+            var count = (uint) Reader.ReadInt32();
+            Logger.Log($"Found {count} images", true, ConsoleColor.Green);
             if (Settings.GameType == GameType.TwoFivePlus&&!Settings.DoMFA) return;
             var stopWatch = new Stopwatch();
             stopWatch.Start();
             //if (!Settings.DumpImages) return;
             Logger.Log("Reading Images", true, ConsoleColor.Green);
-            for (int i = 0; i < NumberOfItems; i++)
+            for (int i = 0; i < count; i++)
             {
                 if (MainForm.BreakImages) break;
                 {
@@ -100,7 +99,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                     item.Read(!PreloadOnly);
                     tempImages.Add(item.Handle, item);
                     if (SaveImages) item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
-                    OnImageSaved?.Invoke(i, (int) NumberOfItems);
+                    OnImageSaved?.Invoke(i, (int) count);
                 }
             }
             stopWatch.Stop();
@@ -159,6 +158,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             Position = (int) Reader.Tell();
             if (load) Load();
             else Preload();
+            
 
         }
         public override void Read()

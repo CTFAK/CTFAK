@@ -47,7 +47,6 @@ namespace CTFAK.MMFParser.EXE
                     if (chunk.Id == 8788) Settings.GameType = GameType.TwoFivePlus; //Can be only seen in 2.5+
                     if (chunk.Id == 8791)
                     {
-                        Settings.GameType = GameType.TwoFivePlus; //Can be only seen in 2.5+
                         var headers = GetChunk<ObjectHeaders>().Headers;
                         var names = GetChunk<ObjectNames>().Names;
                         Program.CleanData.Frameitems = new FrameItems((ByteReader) null);
