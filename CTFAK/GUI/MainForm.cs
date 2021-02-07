@@ -234,8 +234,8 @@ namespace CTFAK.GUI
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            var nodeChunk = ((ChunkNode) treeView1.SelectedNode).chunk;
-            var nodeLoader = ((ChunkNode) treeView1.SelectedNode).loader;
+            var nodeChunk = (treeView1.SelectedNode as ChunkNode)?.chunk;
+            var nodeLoader = (treeView1.SelectedNode as ChunkNode)?.loader;
 
             listBox1.Items.Clear();
             if (nodeChunk != null)
@@ -278,42 +278,53 @@ namespace CTFAK.GUI
 
 
             treeView1.Nodes.Clear();
-            foreach (var item in gameData.GameChunks.Chunks)
             {
-                var ActualName = item.Name;
-                // if (item.Loader is Frame frm) ActualName = ActualName + " " + frm.Name;
-                var newNode = Helper.GetChunkNode(item);
-                treeView1.Nodes.Add(newNode);
+                if(gameData.Name!=null)treeView1.Nodes.Add(new ChunkNode($"Title '{gameData.Name.Value}'",gameData.Name));
+                if(gameData.Author!=null)treeView1.Nodes.Add(new ChunkNode($"Author '{gameData.Author.Value}'",gameData.Author));
+                if(gameData.TargetFilename!=null)treeView1.Nodes.Add(new ChunkNode(gameData.TargetFilename));
+                if(gameData.EditorFilename!=null)treeView1.Nodes.Add(new ChunkNode(gameData.EditorFilename));
+                if(gameData.Menu!=null)treeView1.Nodes.Add(new ChunkNode(gameData.Menu));
+                //Extension Data
+                //Other Extension
+                if(gameData.Extensions!=null)treeView1.Nodes.Add(new ChunkNode(gameData.Extensions));
+                //Icon
+                //Security Number
+                //EXE Only
+                //Protection
+                //Extended Header
+                //Spacer
+                //224F
+                if(gameData.FrameHandles!=null)treeView1.Nodes.Add(new ChunkNode(gameData.FrameHandles));
                 
-                /*if (item.Loader is Frame frame)
-                    foreach (var frmChunk in frame.Chunks.Chunks)
+                var frameBankNode = new TreeNode($"Frame Bank ({gameData.Frames.Count} Items)");
+                foreach (Frame dataFrame in gameData.Frames)
+                {
+                    var frameNode = new ChunkNode($"{dataFrame.Name}", dataFrame);
+                    foreach (var chunk in dataFrame.Chunks.Chunks)
                     {
-                        var frameNode = Helper.GetChunkNode(frmChunk);
-                        newNode.Nodes.Add(frameNode);
-                        if (frameNode.loader is ObjectInstances)
-                        {
-                            var objs = frame.Chunks.GetChunk<ObjectInstances>();
-                            if (objs != null)
-                                foreach (var frmitem in objs.Items)
-                                {
-                                    var objNode = new ChunkNode(frmitem.Name, frmitem);
-                                    frameNode.Nodes.Add(objNode);
-                                }
-                        }
+                        frameNode.Nodes.Add(new ChunkNode(chunk.Name,chunk));
                     }
-                else if (item.Loader is FrameItems items)
-                    foreach (var key in items.ItemDict.Keys)
-                    {
-                        var frameItem = items.ItemDict[key];
-                        var objNode = new ChunkNode($"{(Constants.ObjectType) frameItem.ObjectType} - {frameItem.Name}",
-                            frameItem);
-                        foreach (ChunkList.Chunk chunk in frameItem.Chunks)
-                        {
-                            objNode.Nodes.Add(new ChunkNode(chunk.Name, chunk));
-                        }
-                        newNode.Nodes.Add(objNode);
-                    }*/
+                    frameBankNode.Nodes.Add(frameNode);
+
+                }
+                treeView1.Nodes.Add(frameBankNode);
+                
+                var objBankNode = new TreeNode($"Object Bank ({gameData.Frameitems.ItemDict.Count} Items)");
+                foreach (ObjectInfo obj in gameData.Frameitems.ItemDict.Values)
+                {
+                    var objNode = new ChunkNode($"{obj.Name}",obj);
+                    objBankNode.Nodes.Add(objNode);
+
+                }
+
+                treeView1.Nodes.Add(objBankNode);
+
+
             }
+            
+            
+            
+            
 
             FolderBTN.Visible = true;
             imagesButton.Visible = true;
@@ -592,7 +603,7 @@ namespace CTFAK.GUI
             toLog += $"MFA Generator 1.0\n";
             toLog += $"Game Build: {Program.CleanData.ProductBuild}\n";
             toLog += $"Game Name: {Program.CleanData.Name}\n";
-            toLog += $"MFA Name: {Path.GetFileNameWithoutExtension(Program.CleanData.EditorFilename)}.mfa\n";
+            toLog += $"MFA Name: {Path.GetFileNameWithoutExtension(Program.CleanData.EditorFilename.Value)}.mfa\n";
             toLog += $"Frames to translate: {Program.CleanData.Frames.Count}\n";
             toLog += $"Objects to translate: {Program.CleanData.Frameitems.ItemDict.Count}\n";
             toLog += $"Images to write: {Program.CleanData.Images.Images.Count}\n";
@@ -605,7 +616,7 @@ namespace CTFAK.GUI
         public void InitImages()
         {
             if (Settings.GameType == GameType.TwoFivePlus||Settings.GameType == GameType.Android) return;
-            var bank = Program.CleanData.GameChunks.GetChunk<ImageBank>();
+            var bank = Program.CleanData.Images;
             var items = bank.Images.ToList();
             var filtered = items.OrderBy(x => x.Value.Handle);
             foreach (var frame in Exe.Instance.GameData.Frames)

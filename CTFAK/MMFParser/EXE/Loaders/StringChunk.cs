@@ -44,7 +44,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         }
     }
 
-    class AppName : StringChunk
+    public class AppName : StringChunk
     {
         public AppName(ByteReader reader) : base(reader)
         {
@@ -55,7 +55,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         }
     }
 
-    class AppAuthor : StringChunk
+    public class AppAuthor : StringChunk
     {
         public AppAuthor(ByteReader reader) : base(reader)
         {
@@ -77,7 +77,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         }
     }
 
-    class EditorFilename : StringChunk
+    public class EditorFilename : StringChunk
     {
         public EditorFilename(ByteReader reader) : base(reader)
         {
@@ -88,7 +88,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         }
     }
 
-    class TargetFilename : StringChunk
+    public class TargetFilename : StringChunk
     {
         public TargetFilename(ByteReader reader) : base(reader)
         {
@@ -121,7 +121,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         }
     }
 
-    class Copyright : StringChunk
+    public class Copyright : StringChunk
     {
         public Copyright(ByteReader reader) : base(reader)
         {

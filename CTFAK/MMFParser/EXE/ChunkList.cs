@@ -257,7 +257,6 @@ namespace CTFAK.MMFParser.EXE
             Settings.ProjectPath = GetChunk<EditorFilename>()?.Value??"";
                 
             Logger.Log($"Using {(Settings.Build > 284 ? ("New"):("Old"))} Key");
-                
             if (Settings.Build > 284) Decryption.MakeKey(Settings.AppName,Settings.Copyright,Settings.ProjectPath);
             else Decryption.MakeKey(Settings.ProjectPath, Settings.AppName, Settings.Copyright);
         }

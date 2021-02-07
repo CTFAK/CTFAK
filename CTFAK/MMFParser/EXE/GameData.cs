@@ -15,14 +15,14 @@ namespace CTFAK.MMFParser.EXE
         public int Build;
         public ChunkList GameChunks;
 
-        public string Name;
-        public string Author;
-        public string Copyright;
+        public AppName Name;
+        public AppAuthor Author;
+        public Copyright Copyright;
         public string AboutText;
         public string Doc;
 
-        public string EditorFilename;
-        public string TargetFilename;
+        public EditorFilename EditorFilename;
+        public TargetFilename TargetFilename;
 
         //public ExeOnly Exe_Only;
 
@@ -46,6 +46,8 @@ namespace CTFAK.MMFParser.EXE
         public FrameItems Frameitems;
 
         public List<Frame> Frames = new List<Frame>();
+        public FrameHandles FrameHandles;
+        public Extensions Extensions;
 
         public void Write(ByteWriter Writer)
         {
@@ -84,22 +86,27 @@ namespace CTFAK.MMFParser.EXE
             //Load chunks into gamedata for easier access
             //Can only be accessed from here AFTER loading all the chunks
             //If you need it AT LOADING - use ChunkList.get_chunk<ChunkType>();
-            if (GameChunks.GetChunk<AppName>() != null) Name = GameChunks.GetChunk<AppName>().Value;
-            if (GameChunks.GetChunk<Copyright>() != null) Copyright = GameChunks.GetChunk<Copyright>().Value;
-            if (GameChunks.GetChunk<AppAuthor>()!=null) Author = GameChunks.GetChunk<AppAuthor>().Value;
-            if (GameChunks.GetChunk<EditorFilename>() != null) EditorFilename = GameChunks.GetChunk<EditorFilename>().Value;
-            if (GameChunks.GetChunk<TargetFilename>() != null) TargetFilename = GameChunks.GetChunk<TargetFilename>().Value;
-            if (GameChunks.GetChunk<AppMenu>() != null) Menu = GameChunks.GetChunk<AppMenu>();
-            if (GameChunks.GetChunk<AppHeader>() != null) Header = GameChunks.GetChunk<AppHeader>();
-            if (GameChunks.GetChunk<SoundBank>() != null) Sounds = GameChunks.GetChunk<SoundBank>();
-            if (GameChunks.GetChunk<MusicBank>() != null) Music = GameChunks.GetChunk<MusicBank>();
-            if (GameChunks.GetChunk<FontBank>() != null) Fonts = GameChunks.GetChunk<FontBank>();
-            if (GameChunks.GetChunk<ImageBank>() != null) Images = GameChunks.GetChunk<ImageBank>();
-            if (GameChunks.GetChunk<AppIcon>() != null) Icon = GameChunks.GetChunk<AppIcon>();
-            if (GameChunks.GetChunk<GlobalStrings>() != null) GStrings = GameChunks.GetChunk<GlobalStrings>();
-            if (GameChunks.GetChunk<GlobalValues>() != null) GValues = GameChunks.GetChunk<GlobalValues>();
-            if (GameChunks.GetChunk<FrameItems>() != null) Frameitems = GameChunks.GetChunk<FrameItems>();
-            Frames = GameChunks.Frames; //Its a list, so i have to manually parse them in chunk list. 
+            if (GameChunks.GetChunk<AppName>() != null) Name = GameChunks.PopChunk<AppName>();
+            if (GameChunks.GetChunk<Copyright>() != null) Copyright = GameChunks.PopChunk<Copyright>();
+            if (GameChunks.GetChunk<AppAuthor>()!=null) Author = GameChunks.PopChunk<AppAuthor>();
+            if (GameChunks.GetChunk<EditorFilename>() != null) EditorFilename = GameChunks.PopChunk<EditorFilename>();
+            if (GameChunks.GetChunk<TargetFilename>() != null) TargetFilename = GameChunks.PopChunk<TargetFilename>();
+            if (GameChunks.GetChunk<AppMenu>() != null) Menu = GameChunks.PopChunk<AppMenu>();
+            if (GameChunks.GetChunk<AppHeader>() != null) Header = GameChunks.PopChunk<AppHeader>();
+            if (GameChunks.GetChunk<SoundBank>() != null) Sounds = GameChunks.PopChunk<SoundBank>();
+            if (GameChunks.GetChunk<MusicBank>() != null) Music = GameChunks.PopChunk<MusicBank>();
+            if (GameChunks.GetChunk<FontBank>() != null) Fonts = GameChunks.PopChunk<FontBank>();
+            if (GameChunks.GetChunk<ImageBank>() != null) Images = GameChunks.PopChunk<ImageBank>();
+            if (GameChunks.GetChunk<AppIcon>() != null) Icon = GameChunks.PopChunk<AppIcon>();
+            if (GameChunks.GetChunk<GlobalStrings>() != null) GStrings = GameChunks.PopChunk<GlobalStrings>();
+            if (GameChunks.GetChunk<GlobalValues>() != null) GValues = GameChunks.PopChunk<GlobalValues>();
+            if (GameChunks.GetChunk<FrameItems>() != null) Frameitems = GameChunks.PopChunk<FrameItems>();
+            if (GameChunks.GetChunk<FrameHandles>() != null) FrameHandles = GameChunks.PopChunk<FrameHandles>();
+            if (GameChunks.GetChunk<Extensions>() != null) Extensions = GameChunks.PopChunk<Extensions>();
+            for (int i = 0; i < Header.NumberOfFrames; i++)
+            {
+                Frames.Add(GameChunks.PopChunk<Frame>());
+            }
 
             //Print();
         }

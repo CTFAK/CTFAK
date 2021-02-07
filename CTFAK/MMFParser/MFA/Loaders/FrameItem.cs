@@ -15,7 +15,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
         public string Name;
         public int Transparent;
         public int InkEffect;
-        public int InkEffectParameter;
+        public uint InkEffectParameter;
         public int AntiAliasing;
         public int Flags;
         public int IconType;
@@ -31,7 +31,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             Writer.AutoWriteUnicode(Name);
             Writer.WriteInt32(Transparent);
             Writer.WriteInt32(InkEffect);
-            Writer.WriteInt32(InkEffectParameter);
+            Writer.WriteUInt32(InkEffectParameter);
             Writer.WriteInt32(AntiAliasing);
             Writer.WriteInt32(Flags);
             Writer.WriteInt32(1);
@@ -58,7 +58,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             Transparent = Reader.ReadInt32();
             
             InkEffect = Reader.ReadInt32();
-            InkEffectParameter = Reader.ReadInt32();
+            InkEffectParameter = Reader.ReadUInt32();
             AntiAliasing = Reader.ReadInt32();
 
             Flags = Reader.ReadInt32();
@@ -67,7 +67,6 @@ namespace CTFAK.MMFParser.MFA.Loaders
             if(IconType==1)
             {
                 IconHandle = Reader.ReadInt32();
-                Logger.Log("IconHandle: "+IconHandle);
             }
             else throw new InvalidDataException("invalid icon");
             Chunks = new ChunkList(Reader);
@@ -79,7 +78,14 @@ namespace CTFAK.MMFParser.MFA.Loaders
             {
                Loader = new ExtensionObject(Reader);
                
-
+            }
+            else if(ObjectType==0)
+            {
+                Loader = new QuickBackdrop(Reader);
+            }
+            else if(ObjectType==1)
+            {
+                Loader = new Backdrop(Reader);
             }
             else if(ObjectType==7)
             {

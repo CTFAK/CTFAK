@@ -17,7 +17,7 @@ namespace CTFAK
         public static GameType GameType;
         
         public static string GamePath;
-        public static string GameName => Path.GetFileNameWithoutExtension(GamePath);
+        public static string GameName =>Path.GetFileNameWithoutExtension(GamePath)??"EmptyGame";
         public static string DumpPath => $"Dumps\\{GameName}";
         public static string ImagePath=>$"{DumpPath}\\Images";
         public static string SoundPath=>$"{DumpPath}\\Sounds";

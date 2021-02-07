@@ -55,7 +55,7 @@ namespace CTFAK.MMFParser.Translation
 
             var mfaWriter =
                 new ByteWriter(
-                    Program.CleanData.GameChunks.GetChunk<EditorFilename>().Value.Length > 0 ? $"{Settings.DumpPath}\\{Path.GetFileNameWithoutExtension(Program.CleanData.GameChunks.GetChunk<EditorFilename>().Value)}.mfa" : $"{Settings.DumpPath}\\out.mfa",
+                    Program.CleanData.EditorFilename.Value.Length > 0 ? $"{Settings.DumpPath}\\{Path.GetFileNameWithoutExtension(Program.CleanData.EditorFilename.Value)}.mfa" : $"{Settings.DumpPath}\\out.mfa",
                     FileMode.Create); //New writer for new MFA
             Pame2Mfa.Message("");
             Pame2Mfa.Message("Writing MFA");

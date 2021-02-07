@@ -77,10 +77,15 @@ namespace CTFAK.MMFParser.EXE.Loaders
             get => (int) _header.InkEffect & 0xffff;
             set => _header.InkEffect=(uint) (value& 0xffff);
         }
-        public int InkEffectValue
+        public uint InkEffectValue
         {
             get => _header.InkEffectParameter;
             set => _header.InkEffectParameter = value;
+        }
+        public int BlendCoeff
+        {
+            get => _header.Opacity;
+            set => _header.Opacity = (byte) value;
         }
         public bool Transparent => ByteFlag.GetFlag((uint) _header.InkEffect, 28);
         public bool Antialias => ByteFlag.GetFlag((uint) _header.InkEffect, 29);
@@ -182,8 +187,9 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public Int16 ObjectType;
         public UInt32 Flags;
         public UInt32 InkEffect;
-        public int InkEffectParameter;
+        public UInt32 InkEffectParameter;
         public Int16 Reserved;
+        public byte Opacity;
 
         public ObjectHeader(ByteReader reader) : base(reader){}
         public ObjectHeader(Chunk chunk) : base(chunk){}
@@ -201,8 +207,13 @@ namespace CTFAK.MMFParser.EXE.Loaders
             ObjectType = Reader.ReadInt16();
             Flags = Reader.ReadUInt16();
             Reserved = Reader.ReadInt16();
-            InkEffect = (uint) Reader.ReadUInt32(); 
-            InkEffectParameter =Reader.ReadInt32();
+            InkEffect = (uint) Reader.ReadUInt32();
+            var val = Reader.ReadInt32();
+            Reader.BaseStream.Position -= 4;
+            Reader.Skip(3);
+            Opacity = Reader.ReadByte();
+            if (InkEffectParameter==255& InkEffect==1) InkEffectParameter = Opacity;
+
             // Logger.Log($"{Handle}-{ObjectType}-{Flags}");
 
 

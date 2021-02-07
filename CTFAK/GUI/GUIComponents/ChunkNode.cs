@@ -14,7 +14,17 @@ namespace CTFAK.GUI.GUIComponents
             this.loader = chunk.Loader;
             this.chunk = chunk;
         }
-
+        public ChunkNode(ChunkList.Chunk chunk)
+        {
+            this.chunk = chunk;
+            this.loader = chunk.Loader;
+        }
+        public ChunkNode(ChunkLoader loader)
+        {
+            this.chunk = loader.Chunk;
+            this.loader = loader;
+            this.Text = chunk.Name;
+        }
         public ChunkNode(string text, ChunkLoader loader) : base(text)
         {
             this.loader = loader;

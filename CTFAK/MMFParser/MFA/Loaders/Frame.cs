@@ -149,7 +149,6 @@ namespace CTFAK.MMFParser.MFA.Loaders
             StampHandle = Reader.ReadInt32();
             ActiveLayer = Reader.ReadInt32();
             int layersCount = Reader.ReadInt32();
-            Logger.Log("Layers: "+layersCount);
             for (int i = 0; i < layersCount; i++)
             {
                 var layer = new Layer(Reader);

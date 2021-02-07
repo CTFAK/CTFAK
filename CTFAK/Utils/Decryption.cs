@@ -22,9 +22,11 @@ namespace CTFAK.Utils
             combined += data2;
             combined += data3;
             Logger.Log("Combined data " + combined, true, ConsoleColor.Yellow);
-            keyPtr = Marshal.StringToHGlobalAnsi(combined);
-            
-            keyPtr = make_key_combined(keyPtr, MagicChar);
+            var data1Ptr = Marshal.StringToHGlobalAnsi(data1);
+            var data2Ptr = Marshal.StringToHGlobalAnsi(data2);
+            var data3Ptr = Marshal.StringToHGlobalAnsi(data3);
+
+            keyPtr = make_key(data1Ptr,data2Ptr,data3Ptr, MagicChar);
             byte[] key = new byte[256];
             Marshal.Copy(keyPtr, key, 0, 256);
             Marshal.FreeHGlobal(keyPtr);

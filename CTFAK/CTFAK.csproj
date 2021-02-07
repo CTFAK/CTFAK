@@ -175,6 +175,7 @@
     <Compile Include="MMFParser\Attributes\SubListAttribute.cs" />
     <Compile Include="MMFParser\EXE\APK.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Common.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Shaders.cs" />
     <Compile Include="MMFParser\EXE\Loaders\TwoFivePlus.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Click.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\ExpressionParameter.cs" />
@@ -258,6 +259,7 @@
     <Compile Include="MMFParser\MFA\Loaders\mfachunks\Movements.cs" />
     <Compile Include="MMFParser\MFA\Loaders\mfachunks\ObjectLoader.cs" />
     <Compile Include="MMFParser\MFA\Loaders\ValueList.cs" />
+    <Compile Include="MMFParser\Translation\ShaderGenerator.cs" />
     <Compile Include="PluginAPI\IPlugin.cs" />
     <Compile Include="PluginAPI\PluginAPI.cs" />
     <Compile Include="Properties\Locale\ChunkNames.Designer.cs">

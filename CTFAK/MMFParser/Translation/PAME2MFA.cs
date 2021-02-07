@@ -39,10 +39,10 @@ namespace CTFAK.MMFParser.Translation
             Message("Running Pame2MFA");
             Message("Original MFA Build: " + mfa.BuildVersion);
             Message("");
-            mfa.Name = game.Name;
+            mfa.Name = game.Name.Value;
             mfa.LangId = 0;//8192;
             mfa.Description = "";
-            mfa.Path = game.EditorFilename;
+            mfa.Path = game.EditorFilename.Value;
 
             //if (game.Fonts != null) mfa.Fonts = game.Fonts;
             mfa.Sounds.Items.Clear();
@@ -64,8 +64,8 @@ namespace CTFAK.MMFParser.Translation
 
             // game.Images.Images.Clear();
 
-            mfa.Author = game.Author ?? "";
-            mfa.Copyright = game.Copyright ?? "";
+            mfa.Author = game.Author.Value ?? "";
+            mfa.Copyright = game.Copyright.Value ?? "";
             mfa.Company = "";
             mfa.Version = "";
             //TODO:Binary Files
@@ -102,7 +102,7 @@ namespace CTFAK.MMFParser.Translation
             mfa.InitialLifes = game.Header.InitialLives;
             mfa.FrameRate = game.Header.FrameRate;
             mfa.BuildType = 0;
-            mfa.BuildPath = game.TargetFilename;
+            mfa.BuildPath = game.TargetFilename.Value;
             mfa.CommandLine = "";
             mfa.FrameRate = 60;
             mfa.Aboutbox = game.AboutText?.Length > 0
@@ -264,22 +264,31 @@ namespace CTFAK.MMFParser.Translation
                         }
 
                         newFrame.Events.Items = frame.Events.Items;
-                        /*for (int i=0;i<frame.Events.Items.Count;i++)
+                        foreach (EventGroup item in newFrame.Events.Items)
                         {
-                            var item = frame.Events.Items[i];
-                            newFrame.Events.Items.Add(item);
-                            for (int j = 0; j < item.Conditions.Count; j++)
+                            foreach (Condition condition in item.Conditions)
                             {
-                                var cond = item.Conditions[j];
-                                // if (newFrame.Items.ContainsItem(cond.ObjectInfo)) item.Conditions.Remove(cond);
+                                var contains = false;
+                                foreach (FrameItem frameItem in newFrame.Items)
+                                {
+                                    if (frameItem.Handle == condition.ObjectInfo) contains = true;
+
+                                }
+                                if(!contains)Logger.Log("shit no objectinfo, qualifier");
+                                
+                                // condition.ObjectInfo = frame.Events.QualifiersList.FirstOrDefault().Qualifier;
                             }
-                            for (int j = 0; j < item.Actions.Count; j++)
+                            foreach (Action action in item.Actions)
                             {
-                                var act = item.Actions[j];
-                                // if (newFrame.Items.ContainsItem(act.ObjectInfo)) item.Actions.Remove(act);
+                                var contains = false;
+                                foreach (FrameItem frameItem in newFrame.Items)
+                                {
+                                    if (frameItem.Handle == action.ObjectInfo) contains = true;
+                                }
+                                if(!contains) action.ObjectInfo =frame.Events.QualifiersList.FirstOrDefault().ObjectInfo;
+                                //  3; //
                             }
-                            
-                        }*/
+                        }
                     }
                 }
                 
@@ -361,15 +370,8 @@ namespace CTFAK.MMFParser.Translation
             newItem.InkEffectParameter = item.InkEffectValue;
             newItem.AntiAliasing = item.Antialias? 1 : 0;
             newItem.Flags = item.Flags;
-            if (item.InkEffectValue == 0&&Settings.Build<=284)
-            {
-                // newItem.Chunks.GetOrCreateChunk<Opacity>().Blend = 255;
-            }
-            else
-            {
-                // newItem.Chunks.GetOrCreateChunk<Opacity>().Blend = item.InkEffectValue;
-            }
-            // newItem.Chunks.GetOrCreateChunk<Opacity>().RGBCoeff = Color.White;
+            newItem.Chunks.GetOrCreateChunk<Opacity>().Blend = (sbyte) item.InkEffectValue;
+                newItem.Chunks.GetOrCreateChunk<Opacity>().RGBCoeff = Color.White;
             
             newItem.IconHandle = 10;
             

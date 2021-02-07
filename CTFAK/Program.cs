@@ -9,6 +9,7 @@ using System.Web.Caching;
 using System.Windows.Forms;
 using CTFAK.GUI;
 using CTFAK.MMFParser.EXE;
+using CTFAK.MMFParser.EXE.Loaders;
 using CTFAK.MMFParser.EXE.Loaders.Banks;
 using CTFAK.MMFParser.Translation;
 using CTFAK.Utils;

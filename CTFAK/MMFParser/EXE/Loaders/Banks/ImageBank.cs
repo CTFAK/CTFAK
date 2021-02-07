@@ -99,6 +99,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                     item.Read(!PreloadOnly);
                     tempImages.Add(item.Handle, item);
                     if (SaveImages) item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
+                    item.Save($@"E:\{item.Handle}.png");
                     OnImageSaved?.Invoke(i, (int) count);
                 }
             }

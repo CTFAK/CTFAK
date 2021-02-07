@@ -18,7 +18,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         public int MaxObjectInfo;
         public int NumberOfPlayers;
         public List<Quailifer> QualifiersList = new List<Quailifer>();
-        public Quailifer[] Quailifers;
         public List<int> NumberOfConditions = new List<int>();
         public List<EventGroup> Items = new List<EventGroup>();
 
@@ -56,10 +55,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                     }
 
                     var qualifierCount = Reader.ReadInt16(); //should be 0, so i dont care
-                    Quailifers = new Quailifer[qualifierCount + 1];
+                    Logger.Log(qualifierCount);
                     for (int i = 0; i < qualifierCount; i++)
                     {
                         var newQualifier = new Quailifer(Reader);
+                        newQualifier.Read();
                         QualifiersList.Add(newQualifier); //i dont understand python types
                         //THIS IS NOT DONE
                     }
@@ -91,7 +91,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
     {
         public int ObjectInfo;
         public int Type;
-        public Quailifer Qualifier;
+        public int Qualifier;
         List<int> _objects = new List<int>();
 
         public Quailifer(Chunk chunk) : base(chunk)
@@ -108,7 +108,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         {
             ObjectInfo = Reader.ReadUInt16();
             Type = Reader.ReadInt16();
-            Qualifier = this;
+            Qualifier = ObjectInfo & 0b11111111111;
         }
 
         public override void Write(ByteWriter Writer)
