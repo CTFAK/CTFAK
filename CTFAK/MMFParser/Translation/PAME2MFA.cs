@@ -64,8 +64,8 @@ namespace CTFAK.MMFParser.Translation
 
             // game.Images.Images.Clear();
 
-            mfa.Author = game.Author.Value ?? "";
-            mfa.Copyright = game.Copyright.Value ?? "";
+            mfa.Author = game.Author?.Value ?? "";
+            mfa.Copyright = game.Copyright?.Value ?? "";
             mfa.Company = "";
             mfa.Version = "";
             //TODO:Binary Files
@@ -126,7 +126,7 @@ namespace CTFAK.MMFParser.Translation
             mfa.Frames.Clear();
             
             Dictionary<int,int> indexHandles = new Dictionary<int, int>();
-            foreach (var pair in Program.CleanData.GameChunks.GetChunk<FrameHandles>().Items)
+            foreach (var pair in Program.CleanData.FrameHandles.Items)
             {
                 var key = pair.Key;
                 var handle = pair.Value;
@@ -139,12 +139,12 @@ namespace CTFAK.MMFParser.Translation
             {
                 var frame = game.Frames[a];
                 // if(frame.Palette==null|| frame.Events==null|| frame.Objects==null) continue;
-                
+                Message($"Translating frame: {frame.Name} - {a}" );
                 var newFrame = new MFA.Loaders.Frame(null);
                 newFrame.Chunks = new ChunkList(null);//MFA.MFA.emptyFrameChunks;
                 newFrame.Handle = a;
                 indexHandles.TryGetValue(a,out newFrame.Handle);
-                Message($"Translating frame: {frame.Name} - {newFrame.Handle}" );
+                
                 newFrame.Name = frame.Name;
                 newFrame.SizeX = frame.Width;
                 newFrame.SizeY = frame.Height;
@@ -264,31 +264,7 @@ namespace CTFAK.MMFParser.Translation
                         }
 
                         newFrame.Events.Items = frame.Events.Items;
-                        foreach (EventGroup item in newFrame.Events.Items)
-                        {
-                            foreach (Condition condition in item.Conditions)
-                            {
-                                var contains = false;
-                                foreach (FrameItem frameItem in newFrame.Items)
-                                {
-                                    if (frameItem.Handle == condition.ObjectInfo) contains = true;
-
-                                }
-                                if(!contains)Logger.Log("shit no objectinfo, qualifier");
-                                
-                                // condition.ObjectInfo = frame.Events.QualifiersList.FirstOrDefault().Qualifier;
-                            }
-                            foreach (Action action in item.Actions)
-                            {
-                                var contains = false;
-                                foreach (FrameItem frameItem in newFrame.Items)
-                                {
-                                    if (frameItem.Handle == action.ObjectInfo) contains = true;
-                                }
-                                if(!contains) action.ObjectInfo =frame.Events.QualifiersList.FirstOrDefault().ObjectInfo;
-                                //  3; //
-                            }
-                        }
+                    
                     }
                 }
                 
@@ -515,7 +491,7 @@ namespace CTFAK.MMFParser.Translation
                         newExt.Qualifiers = newObject.Qualifiers;
 
                     }
-                    var exts = Program.CleanData.GameChunks.GetChunk<Extensions>();
+                    var exts = Program.CleanData.Extensions;
                     Extension ext = null;
                     foreach (var testExt in exts.Items)
                     {

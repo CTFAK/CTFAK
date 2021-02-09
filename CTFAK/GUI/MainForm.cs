@@ -276,55 +276,60 @@ namespace CTFAK.GUI
             var exe = Exe.Instance;
             var gameData = exe?.GameData ?? Program.CleanData;
 
-
-            treeView1.Nodes.Clear();
+            if (false)
             {
-                if(gameData.Name!=null)treeView1.Nodes.Add(new ChunkNode($"Title '{gameData.Name.Value}'",gameData.Name));
-                if(gameData.Author!=null)treeView1.Nodes.Add(new ChunkNode($"Author '{gameData.Author.Value}'",gameData.Author));
-                if(gameData.TargetFilename!=null)treeView1.Nodes.Add(new ChunkNode(gameData.TargetFilename));
-                if(gameData.EditorFilename!=null)treeView1.Nodes.Add(new ChunkNode(gameData.EditorFilename));
-                if(gameData.Menu!=null)treeView1.Nodes.Add(new ChunkNode(gameData.Menu));
-                //Extension Data
-                //Other Extension
-                if(gameData.Extensions!=null)treeView1.Nodes.Add(new ChunkNode(gameData.Extensions));
-                //Icon
-                //Security Number
-                //EXE Only
-                //Protection
-                //Extended Header
-                //Spacer
-                //224F
-                if(gameData.FrameHandles!=null)treeView1.Nodes.Add(new ChunkNode(gameData.FrameHandles));
-                
-                var frameBankNode = new TreeNode($"Frame Bank ({gameData.Frames.Count} Items)");
-                foreach (Frame dataFrame in gameData.Frames)
+
+                treeView1.Nodes.Clear();
                 {
-                    var frameNode = new ChunkNode($"{dataFrame.Name}", dataFrame);
-                    foreach (var chunk in dataFrame.Chunks.Chunks)
+                    if (gameData.Name != null)
+                        treeView1.Nodes.Add(new ChunkNode($"Title '{gameData.Name.Value}'", gameData.Name));
+                    if (gameData.Author != null)
+                        treeView1.Nodes.Add(new ChunkNode($"Author '{gameData.Author.Value}'", gameData.Author));
+                    if (gameData.TargetFilename != null) treeView1.Nodes.Add(new ChunkNode(gameData.TargetFilename));
+                    if (gameData.EditorFilename != null) treeView1.Nodes.Add(new ChunkNode(gameData.EditorFilename));
+                    if (gameData.Menu != null) treeView1.Nodes.Add(new ChunkNode(gameData.Menu));
+                    //Extension Data
+                    //Other Extension
+                    if (gameData.Extensions != null) treeView1.Nodes.Add(new ChunkNode(gameData.Extensions));
+                    //Icon
+                    //Security Number
+                    //EXE Only
+                    //Protection
+                    //Extended Header
+                    //Spacer
+                    //224F
+                    if (gameData.FrameHandles != null) treeView1.Nodes.Add(new ChunkNode(gameData.FrameHandles));
+
+                    var frameBankNode = new TreeNode($"Frame Bank ({gameData.Frames.Count} Items)");
+                    foreach (Frame dataFrame in gameData.Frames)
                     {
-                        frameNode.Nodes.Add(new ChunkNode(chunk.Name,chunk));
+                        var frameNode = new ChunkNode($"{dataFrame.Name}", dataFrame);
+                        foreach (var chunk in dataFrame.Chunks.Chunks)
+                        {
+                            frameNode.Nodes.Add(new ChunkNode(chunk.Name, chunk));
+                        }
+
+                        frameBankNode.Nodes.Add(frameNode);
+
                     }
-                    frameBankNode.Nodes.Add(frameNode);
 
+                    treeView1.Nodes.Add(frameBankNode);
+
+                    var objBankNode = new TreeNode($"Object Bank ({gameData.Frameitems.ItemDict.Count} Items)");
+                    foreach (ObjectInfo obj in gameData.Frameitems.ItemDict.Values)
+                    {
+                        var objNode = new ChunkNode($"{obj.Name}", obj);
+                        objBankNode.Nodes.Add(objNode);
+
+                    }
+
+                    treeView1.Nodes.Add(objBankNode);
                 }
-                treeView1.Nodes.Add(frameBankNode);
-                
-                var objBankNode = new TreeNode($"Object Bank ({gameData.Frameitems.ItemDict.Count} Items)");
-                foreach (ObjectInfo obj in gameData.Frameitems.ItemDict.Values)
-                {
-                    var objNode = new ChunkNode($"{obj.Name}",obj);
-                    objBankNode.Nodes.Add(objNode);
-
-                }
-
-                treeView1.Nodes.Add(objBankNode);
-
-
             }
-            
-            
-            
-            
+
+
+
+
 
             FolderBTN.Visible = true;
             imagesButton.Visible = true;
