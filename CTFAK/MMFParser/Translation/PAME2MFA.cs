@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Web.UI.WebControls;
 using CTFAK.MMFParser.EXE;
 using CTFAK.MMFParser.EXE.Loaders;
 using CTFAK.MMFParser.EXE.Loaders.Banks;
@@ -346,14 +347,14 @@ namespace CTFAK.MMFParser.Translation
             newItem.InkEffectParameter = item.InkEffectValue;
             newItem.AntiAliasing = item.Antialias? 1 : 0;
             newItem.Flags = item.Flags;
-            newItem.Chunks.GetOrCreateChunk<Opacity>().Blend = (sbyte) item.InkEffectValue;
+            newItem.Chunks.GetOrCreateChunk<Opacity>().Blend = (byte) (item.BlendCoeff);
                 newItem.Chunks.GetOrCreateChunk<Opacity>().RGBCoeff = Color.White;
             
             newItem.IconHandle = 10;
             
             
 
-            if (item.ObjectType == 0)
+            if (item.ObjectType == Constants.ObjectType.QuickBackdrop)
             {
                 var backdropLoader = (EXE.Loaders.Objects.Quickbackdrop) item.Properties.Loader;
                 var backdrop = new QuickBackdrop((ByteReader) null);
@@ -613,15 +614,17 @@ namespace CTFAK.MMFParser.Translation
                         newCount.Minimum = itemLoader.Counter.Minimum;
                     }
                     
-                    newCount.Images = new List<int>() {0};
                     var shape = counter?.Shape;
                     // if(counter==null) throw new NullReferenceException(nameof(counter));
+                    // counter = null;
+                    // shape = null;
                     if (counter == null)
                     {
                         newCount.DisplayType = 0;
                         newCount.CountType = 0;
                         newCount.Width = 0;
                         newCount.Height = 0;
+                        newCount.Images=new List<int>(){0};
                         newCount.Font = 0;
                     }
                     else
@@ -647,7 +650,7 @@ namespace CTFAK.MMFParser.Translation
                         newCount.Color2 = shape.Color2;
                         newCount.VerticalGradient = (uint) shape.GradFlags;
                         newCount.CountFlags = (uint) shape.FillType;
-                        
+
                     }
 
                     newItem.Loader = newCount;

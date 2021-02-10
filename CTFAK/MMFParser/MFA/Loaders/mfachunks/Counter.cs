@@ -40,6 +40,7 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
             Width = Reader.ReadInt32();
             Height = Reader.ReadInt32();
             Images = new List<int>();
+            Logger.Log($"{CountFlags}-{VerticalGradient}-{CountType}-{DisplayType}");
             var imageCount = Reader.ReadUInt32();
             for (int i = 0; i < imageCount; i++)
             {

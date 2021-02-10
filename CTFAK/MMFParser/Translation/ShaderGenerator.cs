@@ -50,7 +50,7 @@ namespace CTFAK.MMFParser.Translation
                 content += $"        <code>{parameter.Name}</code>\n";
                 content += $"        <type>{parameter.GetType()}</type>\n";//TODO:Shader Type
                 content += $"        <property>edit</property>\n";
-                content += $"        <value>0</value>\n";
+                content += $"        <value>1.0</value>\n";
                 content += $"</parameter>\n";
             }
             content += $"</effect>\n";

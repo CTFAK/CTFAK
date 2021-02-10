@@ -31,7 +31,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
             {
                 $"Value: {Value}"
             };
+        }
 
+        public override string ToString()
+        {
+            return Value;
         }
 
 

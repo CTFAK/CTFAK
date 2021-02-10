@@ -17,7 +17,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         private ushort _systemObjectOffset;
         public ushort _counterOffset;
         public ushort _extensionOffset;
-        private int Identifier;
+        public string Identifier;
         
         public Animations Animations;
 
@@ -124,7 +124,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 _valuesOffset = (ushort) Reader.ReadInt16();
                 NewFlags.flag = (uint) Reader.ReadInt16();
                 Preferences.flag = (uint) Reader.ReadInt16();
-                Identifier = Reader.ReadInt16();
+                Identifier = Reader.ReadAscii(2);
                 BackColor = Reader.ReadColor();
                 _fadeinOffset = (uint) Reader.ReadInt32();
                 _fadeoutOffset = (uint) Reader.ReadInt32();
@@ -135,108 +135,52 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             {
                 var currentPosition = Reader.Tell();
                 var size = Reader.ReadInt32();
-                if (Settings.Build >= 284&&true)
+                if (Settings.Build >= 284)
                 {
                     _animationsOffset = Reader.ReadUInt16();
                     _movementsOffset = Reader.ReadUInt16();
-                    _zeroUnk = Reader.ReadUInt16();
                     var version = Reader.ReadUInt16();
+                    Reader.Skip(2);
                     _extensionOffset = Reader.ReadUInt16();
                     _counterOffset = Reader.ReadUInt16();
-                    Flags.flag = Reader.ReadUInt16();
-                    
-                    var end = Reader.Tell() + (8+1) * 2;
-                    Reader.Skip(2);
-                    for (int i = 0; i < 8; i++)
-                    {
-                        var value = Reader.ReadInt16();
-                        _qualifiers[i] = value;
-                    }
-
-                    Reader.Seek(end);
-                    _systemObjectOffset = Reader.ReadUInt16();
-
-                    _valuesOffset = Reader.ReadUInt16();
-                    _stringsOffset = Reader.ReadUInt16();
-                    NewFlags.flag = Reader.ReadUInt16();
-                    Preferences.flag = Reader.ReadUInt16();
-                    Identifier = Reader.ReadInt32();
-                    BackColor = Reader.ReadColor();
-                    _fadeinOffset = Reader.ReadUInt32();
-                    _fadeoutOffset = Reader.ReadUInt32();
-                    
-                    
-                }
-                else if (Settings.Build>=284)
-                {
-                    _counterOffset = Reader.ReadUInt16();
-                    var version = Reader.ReadUInt16();
-                    // _zeroUnk = Reader.ReadUInt16();
-                    _movementsOffset = Reader.ReadUInt16();
-                    _extensionOffset = Reader.ReadUInt16();
-                    _animationsOffset = Reader.ReadUInt16();
-                    Flags.flag = Reader.ReadUInt16();
-                    
-                    var end = Reader.Tell() + (8+1) * 2;
-                    Reader.Skip(2);
-                    for (int i = 0; i < 8; i++)
-                    {
-                        var value = Reader.ReadInt16();
-                        _qualifiers[i] = value;
-                    }
-
-                    Reader.Seek(end);
-                    _systemObjectOffset = Reader.ReadUInt16();
-
-                    _valuesOffset = Reader.ReadUInt16();
-                    _stringsOffset = Reader.ReadUInt16();
-                    NewFlags.flag = Reader.ReadUInt16();
-                    Preferences.flag = Reader.ReadUInt16();
-                    Identifier = Reader.ReadInt32();
-                    BackColor = Reader.ReadColor();
-                    _fadeinOffset = Reader.ReadUInt32();
-                    _fadeoutOffset = Reader.ReadUInt32();
-                    
                 }
                 else
                 {
                     _movementsOffset = Reader.ReadUInt16();
                     _animationsOffset = Reader.ReadUInt16();
                     var version = Reader.ReadUInt16();
-                    _counterOffset = Reader.ReadUInt16();
-                    _systemObjectOffset = Reader.ReadUInt16();
-                    _zeroUnk = Reader.ReadUInt16();
-                    Flags.flag = Reader.ReadUInt16();
-                    
-                    var end = Reader.Tell() + (8+1) * 2;
                     Reader.Skip(2);
-                    for (int i = 0; i < 8; i++)
-                    {
-                        var value = Reader.ReadInt16();
-                        _qualifiers[i] = value;
-                    }
-
-                    Reader.Seek(end);
-                    
                     _extensionOffset = Reader.ReadUInt16();
-                    
-                    _valuesOffset = Reader.ReadUInt16();
-                    _stringsOffset = Reader.ReadUInt16();
-                    NewFlags.flag = Reader.ReadUInt16();
-                    Preferences.flag = Reader.ReadUInt16();
-                    Identifier = Reader.ReadInt32();
-                    BackColor = Reader.ReadColor();
-                    _fadeinOffset = Reader.ReadUInt32();
-                    _fadeoutOffset = Reader.ReadUInt32();
+                    _counterOffset = Reader.ReadUInt16();
                 }
-                
-                // Logger.Log("anims: "+_animationsOffset);
-                // Logger.Log("fadeIn: "+_fadeinOffset);
-                // Logger.Log("fadeOut: "+_fadeoutOffset);
-                // Logger.Log("movements: "+_movementsOffset);
-                // Logger.Log("strings: "+_stringsOffset);
-                // Logger.Log("values: "+_valuesOffset);
-                // Logger.Log("sysObj: "+_systemObjectOffset);
+
+                Flags.flag = Reader.ReadUInt16();
+                Reader.Skip(2);
+                var end = Reader.Tell() + 8 * 2;
+                for (int i = 0; i < 8; i++)
+                {
+                    _qualifiers[i] = Reader.ReadInt16();
+                }
+                Reader.Seek(end);
+
+                if (Settings.Build >= 284)
+                {
+                    _systemObjectOffset = Reader.ReadUInt16();
+                }
+                else
+                {
+                    _extensionOffset = Reader.ReadUInt16();
+                }
+
+                _valuesOffset = Reader.ReadUInt16();
+                _stringsOffset = Reader.ReadUInt16();
+                NewFlags.flag = Reader.ReadUInt32();
+                Preferences.flag = Reader.ReadUInt32();
+                Identifier = Reader.ReadAscii(4);
+                BackColor = Reader.ReadColor();
+                _fadeinOffset = Reader.ReadUInt32();
+                _fadeoutOffset = Reader.ReadUInt32();
+            
                 
                 if (_animationsOffset > 0)
                 {

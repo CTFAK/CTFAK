@@ -276,60 +276,55 @@ namespace CTFAK.GUI
             var exe = Exe.Instance;
             var gameData = exe?.GameData ?? Program.CleanData;
 
-            if (false)
+
+            treeView1.Nodes.Clear();
             {
-
-                treeView1.Nodes.Clear();
+                if(gameData.Name!=null)treeView1.Nodes.Add(new ChunkNode($"Title '{gameData.Name.Value}'",gameData.Name));
+                if(gameData.Author!=null)treeView1.Nodes.Add(new ChunkNode($"Author '{gameData.Author.Value}'",gameData.Author));
+                if(gameData.TargetFilename!=null)treeView1.Nodes.Add(new ChunkNode(gameData.TargetFilename));
+                if(gameData.EditorFilename!=null)treeView1.Nodes.Add(new ChunkNode(gameData.EditorFilename));
+                if(gameData.Menu!=null)treeView1.Nodes.Add(new ChunkNode(gameData.Menu));
+                //Extension Data
+                //Other Extension
+                if(gameData.Extensions!=null)treeView1.Nodes.Add(new ChunkNode(gameData.Extensions));
+                //Icon
+                //Security Number
+                //EXE Only
+                //Protection
+                //Extended Header
+                //Spacer
+                //224F
+                if(gameData.FrameHandles!=null)treeView1.Nodes.Add(new ChunkNode(gameData.FrameHandles));
+                
+                var frameBankNode = new TreeNode($"Frame Bank ({gameData.Frames.Count} Items)");
+                foreach (Frame dataFrame in gameData.Frames)
                 {
-                    if (gameData.Name != null)
-                        treeView1.Nodes.Add(new ChunkNode($"Title '{gameData.Name.Value}'", gameData.Name));
-                    if (gameData.Author != null)
-                        treeView1.Nodes.Add(new ChunkNode($"Author '{gameData.Author.Value}'", gameData.Author));
-                    if (gameData.TargetFilename != null) treeView1.Nodes.Add(new ChunkNode(gameData.TargetFilename));
-                    if (gameData.EditorFilename != null) treeView1.Nodes.Add(new ChunkNode(gameData.EditorFilename));
-                    if (gameData.Menu != null) treeView1.Nodes.Add(new ChunkNode(gameData.Menu));
-                    //Extension Data
-                    //Other Extension
-                    if (gameData.Extensions != null) treeView1.Nodes.Add(new ChunkNode(gameData.Extensions));
-                    //Icon
-                    //Security Number
-                    //EXE Only
-                    //Protection
-                    //Extended Header
-                    //Spacer
-                    //224F
-                    if (gameData.FrameHandles != null) treeView1.Nodes.Add(new ChunkNode(gameData.FrameHandles));
-
-                    var frameBankNode = new TreeNode($"Frame Bank ({gameData.Frames.Count} Items)");
-                    foreach (Frame dataFrame in gameData.Frames)
+                    var frameNode = new ChunkNode($"{dataFrame.Name}", dataFrame);
+                    foreach (var chunk in dataFrame.Chunks.Chunks)
                     {
-                        var frameNode = new ChunkNode($"{dataFrame.Name}", dataFrame);
-                        foreach (var chunk in dataFrame.Chunks.Chunks)
-                        {
-                            frameNode.Nodes.Add(new ChunkNode(chunk.Name, chunk));
-                        }
-
-                        frameBankNode.Nodes.Add(frameNode);
-
+                        frameNode.Nodes.Add(new ChunkNode(chunk.Name,chunk));
                     }
+                    frameBankNode.Nodes.Add(frameNode);
 
-                    treeView1.Nodes.Add(frameBankNode);
-
-                    var objBankNode = new TreeNode($"Object Bank ({gameData.Frameitems.ItemDict.Count} Items)");
-                    foreach (ObjectInfo obj in gameData.Frameitems.ItemDict.Values)
-                    {
-                        var objNode = new ChunkNode($"{obj.Name}", obj);
-                        objBankNode.Nodes.Add(objNode);
-
-                    }
-
-                    treeView1.Nodes.Add(objBankNode);
                 }
+                treeView1.Nodes.Add(frameBankNode);
+                
+                var objBankNode = new TreeNode($"Object Bank ({gameData.Frameitems.ItemDict.Count} Items)");
+                foreach (ObjectInfo obj in gameData.Frameitems.ItemDict.Values)
+                {
+                    var objNode = new ChunkNode($"{obj.Name}",obj);
+                    objBankNode.Nodes.Add(objNode);
+
+                }
+
+                treeView1.Nodes.Add(objBankNode);
+
+
             }
-
-
-
-
+            
+            
+            
+            
 
             FolderBTN.Visible = true;
             imagesButton.Visible = true;
@@ -612,7 +607,7 @@ namespace CTFAK.GUI
             toLog += $"Frames to translate: {Program.CleanData.Frames.Count}\n";
             toLog += $"Objects to translate: {Program.CleanData.Frameitems.ItemDict.Count}\n";
             toLog += $"Images to write: {Program.CleanData.Images.Images.Count}\n";
-            toLog += $"Sounds to write: {Program.CleanData.Sounds.Items.Count}\n";
+            toLog += $"Sounds to write: {Program.CleanData.Sounds?.Items.Count ?? 0}\n";
 
 
             mfaDumpInfoLabel.Text = toLog;
@@ -732,7 +727,7 @@ namespace CTFAK.GUI
                     foreach (var dir in anim.DirectionDict)
                     {
                         foreach (var frame in dir.Value.Frames)
-                            frames.Add(Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().Images[frame].Bitmap);
+                            frames.Add(Program.CleanData.Images.Images[frame].Bitmap);
                         animThread.Start(new Tuple<List<Bitmap>, AnimationDirection>(frames, dir.Value));
                         break;
                     }
@@ -825,7 +820,7 @@ namespace CTFAK.GUI
                 text += $"Current frame: 0";
                 text+=$"\r\nAnimation Speed: {anim.DirectionDict.FirstOrDefault().Value.MaxSpeed}";
 
-                imageViewPictureBox.Image = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>()
+                imageViewPictureBox.Image = Program.CleanData.Images
                     .FromHandle(anim.DirectionDict.FirstOrDefault().Value.Frames[0]).Bitmap;
 
             }
@@ -855,11 +850,12 @@ namespace CTFAK.GUI
                 if (instance.FrameItem.Properties.IsCommon)
                 {
                     var common = ((ObjectCommon) instance.FrameItem.Properties.Loader);
+                    text += $"Identifier: {common.Identifier}\r\n";
                     switch (instance.FrameItem.ObjectType)
                     {
                         case Constants.ObjectType.Active:
                             text += $"Animations: {common.Animations?.AnimationDict.Count}";
-                            imageViewPictureBox.Image = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>()
+                            imageViewPictureBox.Image = Program.CleanData.Images
                                 .FromHandle(common.Animations.AnimationDict.FirstOrDefault().Value.DirectionDict
                                     .FirstOrDefault().Value.Frames.FirstOrDefault()).Bitmap;
                             break;
@@ -883,7 +879,7 @@ namespace CTFAK.GUI
                             if (handle == null) imageViewPictureBox.Image = imageViewPictureBox.ErrorImage;
                             else
                             {
-                                imageViewPictureBox.Image = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>()
+                                imageViewPictureBox.Image = Program.CleanData.Images
                                 .FromHandle((int) handle).Bitmap;
                             }
                             
@@ -899,7 +895,7 @@ namespace CTFAK.GUI
                 else
                 {
                     if (instance.FrameItem.ObjectType == Constants.ObjectType.Backdrop)
-                        imageViewPictureBox.Image = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>().FromHandle(((Backdrop)instance.FrameItem.Properties.Loader).Image).Bitmap;
+                        imageViewPictureBox.Image = Program.CleanData.Images.FromHandle(((Backdrop)instance.FrameItem.Properties.Loader).Image).Bitmap;
                 }
                 
                 

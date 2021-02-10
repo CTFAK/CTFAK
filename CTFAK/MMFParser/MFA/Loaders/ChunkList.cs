@@ -154,7 +154,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
     public class Opacity : MFAChunkLoader
     {
         public Color RGBCoeff;
-        public sbyte Blend;
+        public byte Blend;
 
         public Opacity(ByteReader dataReader) : base(dataReader){}
 
@@ -169,7 +169,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             var b = Reader.ReadByte();
             var g = Reader.ReadByte();
             var r = Reader.ReadByte();
-            Blend = (sbyte) (255-Reader.ReadSByte());
+            Blend = Reader.ReadByte();
             RGBCoeff = Color.FromArgb(Blend,r,g,b);
             var unk = Reader.ReadInt32();
 
@@ -180,7 +180,7 @@ namespace CTFAK.MMFParser.MFA.Loaders
             Writer.WriteInt8(RGBCoeff.B);
             Writer.WriteInt8(RGBCoeff.G);
             Writer.WriteInt8(RGBCoeff.R);
-            Writer.WriteUInt8((sbyte) (255-Blend));
+            Writer.WriteInt8(Blend);
             Writer.WriteInt32(0);
         }
     }

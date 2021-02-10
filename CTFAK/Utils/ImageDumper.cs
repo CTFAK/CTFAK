@@ -20,7 +20,7 @@ namespace CTFAK.Utils
         {
             var timer = new Stopwatch();
             timer.Start();
-            var bank = Exe.Instance.GameData.GameChunks.GetChunk<ImageBank>();
+            var bank = Program.CleanData.Images;
             var fullPath = $"{Settings.ImagePath}\\Sorted\\{node.FullPath}";
             if (fullPath == null) return;
             

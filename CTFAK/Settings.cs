@@ -41,7 +41,7 @@ namespace CTFAK
         
         
 
-        public static string DumperVersion = true ? "CTFAK 0.5 BETA" : "CTFAK 0.2.1-a Debug";
+        public static string DumperVersion = true ? "CTFAK 0.6 BETA" : "CTFAK 0.2.1-a Debug";
     }
 
     public class LoadableSettings
