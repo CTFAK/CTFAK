@@ -392,6 +392,9 @@ namespace CTFAK.MMFParser.EXE
                     if (Settings.GameType == GameType.Android) break;
                     loader = new MusicBank(chunk);
                     break;
+                case 26215:
+                    loader=new FontBank(chunk);
+                    break;
                 case 17477:
                     loader = new ObjectName(chunk);
                     break;

@@ -43,7 +43,6 @@ namespace CTFAK.MMFParser.MFA.Loaders
 
         public override void Write(ByteWriter writer)
         {
-            Logger.Log("TEX WRITE");
             writer.WriteInt32(GraphicMode);
             writer.WriteInt16((short) PaletteVersion);
             writer.WriteInt16((short) PaletteEntries);

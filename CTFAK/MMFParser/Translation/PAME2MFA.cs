@@ -54,7 +54,15 @@ namespace CTFAK.MMFParser.Translation
                     mfa.Sounds.Items.Add(item);
                 }
             }
-            
+            mfa.Fonts.Items.Clear();
+            if (game.Fonts != null)
+            {
+                foreach (var item in game.Fonts.Items)
+                {
+                    item.Compressed = false;
+                    mfa.Fonts.Items.Add(item);
+                }
+            }
             
             // mfa.Music = game.Music;
             mfa.Images.Items = game.Images?.Images ?? new Dictionary<int, ImageItem>();
@@ -211,9 +219,9 @@ namespace CTFAK.MMFParser.Translation
                             newInstance.X = instance.X;
                             newInstance.Y = instance.Y;
                             newInstance.Handle = instance.Handle;
-                            newInstance.Flags = ((instance.FrameItem.Properties.Loader as ObjectCommon)?.Preferences?.flag ?? (uint)instance.FrameItem.Flags);
-        
-                            
+                            // newInstance.Flags = ((instance.FrameItem.Properties.Loader as ObjectCommon)?.Preferences?.flag ?? (uint)instance.FrameItem.Flags);
+                            newInstance.Flags = 0;
+                                
                             newInstance.ParentType = (uint) instance.ParentType;
                             newInstance.ItemHandle = (uint) (instance.ObjectInfo);
                             newInstance.ParentHandle = (uint) instance.ParentHandle;
@@ -347,10 +355,10 @@ namespace CTFAK.MMFParser.Translation
             newItem.InkEffectParameter = item.InkEffectValue;
             newItem.AntiAliasing = item.Antialias? 1 : 0;
             newItem.Flags = item.Flags;
-            newItem.Chunks.GetOrCreateChunk<Opacity>().Blend = (byte) (item.BlendCoeff);
+            newItem.Chunks.GetOrCreateChunk<Opacity>().Blend = (byte) (item.InkEffectValue);
                 newItem.Chunks.GetOrCreateChunk<Opacity>().RGBCoeff = Color.White;
             
-            newItem.IconHandle = 10;
+            newItem.IconHandle = 12;
             
             
 
@@ -537,7 +545,10 @@ namespace CTFAK.MMFParser.Translation
                         newText.Font = 0;
                         newText.Color=Color.Black;
                         newText.Flags = 0;
-                        newText.Items=new List<Paragraph>();
+                        newText.Items=new List<Paragraph>(){new Paragraph((ByteReader) null)
+                        {
+                            Value="ERROR"
+                        }};
                     }
                     else
                     {
@@ -546,7 +557,7 @@ namespace CTFAK.MMFParser.Translation
                         var paragraph = text.Items[0];
                         newText.Font = paragraph.FontHandle;
                         newText.Color = paragraph.Color;
-                        newText.Flags = 0;
+                        newText.Flags = paragraph.Flags.flag;
                         newText.Items = new List<Paragraph>();
                         foreach (EXE.Loaders.Objects.Paragraph exePar in text.Items)
                         {

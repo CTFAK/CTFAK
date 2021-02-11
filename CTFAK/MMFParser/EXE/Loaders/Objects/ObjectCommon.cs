@@ -135,6 +135,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             {
                 var currentPosition = Reader.Tell();
                 var size = Reader.ReadInt32();
+
                 if (Settings.Build >= 284)
                 {
                     _animationsOffset = Reader.ReadUInt16();
@@ -143,45 +144,60 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     Reader.Skip(2);
                     _extensionOffset = Reader.ReadUInt16();
                     _counterOffset = Reader.ReadUInt16();
-                }
-                else
-                {
-                    _movementsOffset = Reader.ReadUInt16();
-                    _animationsOffset = Reader.ReadUInt16();
-                    var version = Reader.ReadUInt16();
+                    Flags.flag = Reader.ReadUInt16();
                     Reader.Skip(2);
-                    _extensionOffset = Reader.ReadUInt16();
-                    _counterOffset = Reader.ReadUInt16();
-                }
+                    var end = Reader.Tell() + 8 * 2;
+                    for (int i = 0; i < 8; i++)
+                    {
+                        _qualifiers[i] = Reader.ReadInt16();
+                    }
 
-                Flags.flag = Reader.ReadUInt16();
-                Reader.Skip(2);
-                var end = Reader.Tell() + 8 * 2;
-                for (int i = 0; i < 8; i++)
-                {
-                    _qualifiers[i] = Reader.ReadInt16();
-                }
-                Reader.Seek(end);
+                    Reader.Seek(end);
 
-                if (Settings.Build >= 284)
-                {
                     _systemObjectOffset = Reader.ReadUInt16();
+
+                    _valuesOffset = Reader.ReadUInt16();
+                    _stringsOffset = Reader.ReadUInt16();
+                    NewFlags.flag = Reader.ReadUInt16();
+                    Preferences.flag = Reader.ReadUInt16();
+                    Identifier = Reader.ReadAscii(4);
+                    BackColor = Reader.ReadColor();
+                    _fadeinOffset = Reader.ReadUInt32();
+                    _fadeoutOffset = Reader.ReadUInt32();
                 }
                 else
                 {
-                    _extensionOffset = Reader.ReadUInt16();
-                }
+                    _movementsOffset = Reader.ReadUInt16();
+                    _animationsOffset = Reader.ReadUInt16();
+                    var version = Reader.ReadUInt16();
+                    _counterOffset = Reader.ReadUInt16();
+                    _systemObjectOffset = Reader.ReadUInt16();
+                    Reader.Skip(2);
+                    Flags.flag = Reader.ReadUInt32();
+                    var end = Reader.Tell() + 8 * 2;
+                    for (int i = 0; i < 8; i++)
+                    {
+                        _qualifiers[i] = Reader.ReadInt16();
+                    }
 
-                _valuesOffset = Reader.ReadUInt16();
-                _stringsOffset = Reader.ReadUInt16();
-                NewFlags.flag = Reader.ReadUInt32();
-                Preferences.flag = Reader.ReadUInt32();
-                Identifier = Reader.ReadAscii(4);
-                BackColor = Reader.ReadColor();
-                _fadeinOffset = Reader.ReadUInt32();
-                _fadeoutOffset = Reader.ReadUInt32();
-            
+                    Reader.Seek(end);
+
+                    _extensionOffset = Reader.ReadUInt16();
+
+                    _valuesOffset = Reader.ReadUInt16();
+                    _stringsOffset = Reader.ReadUInt16();
+                    NewFlags.flag = Reader.ReadUInt16();
+                    Preferences.flag = Reader.ReadUInt16();
+                    Identifier = Reader.ReadAscii(4);
+                    BackColor = Reader.ReadColor();
+                    _fadeinOffset = Reader.ReadUInt32();
+                    _fadeoutOffset = Reader.ReadUInt32();
+                }
                 
+                
+                
+
+
                 if (_animationsOffset > 0)
                 {
                     Reader.Seek(currentPosition + _animationsOffset);
@@ -190,7 +206,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 }
 
 
-                if (_movementsOffset > 0&&Settings.GameType!=GameType.Android)
+                if (_movementsOffset > 0 && Settings.GameType != GameType.Android)
                 {
                     Reader.Seek(currentPosition + _movementsOffset);
                     Movements = new Movements(Reader);
@@ -247,11 +263,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     Counter.Read();
                 }
 
-
             }
-
-            
-
         }
 
         public override void Write(ByteWriter Writer)
