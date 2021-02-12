@@ -69,7 +69,6 @@ namespace CTFAK.MMFParser.EXE
             if (magic == Constants.UnicodeGameHeader) Settings.Unicode = true;//PAMU
             else if (magic == Constants.GameHeader) Settings.Unicode = false;//PAME
             else Logger.Log("Couldn't found any known headers", true, ConsoleColor.Red);//Header not found
-
             RuntimeVersion = (short) exeReader.ReadUInt16(); 
             RuntimeSubversion = (short) exeReader.ReadUInt16(); 
             ProductVersion = (Constants.Products)exeReader.ReadInt32();

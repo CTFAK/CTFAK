@@ -41,6 +41,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.OnePointFive) return;
             while (true)
             {
                 var identifier = Reader.ReadAscii(4);

@@ -30,7 +30,6 @@ namespace CTFAK.Utils
                 return Regex.Replace(strIn, @"[^\w\.@-]", "",
                     RegexOptions.None, TimeSpan.FromSeconds(1.5));
             }
-
             catch (RegexMatchTimeoutException)
             {
                 return String.Empty;
@@ -60,8 +59,7 @@ namespace CTFAK.Utils
         }
 
         public static bool ContainsItem(this List<FrameItem> items, int handle)
-        {
-            bool contrains = false;
+        { 
             foreach (var item in items)
             {
                 if (item.Handle == handle) return true;

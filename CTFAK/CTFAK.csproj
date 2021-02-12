@@ -273,7 +273,6 @@
       <DependentUpon>GlobalStrings.resx</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="Utils\Backend.cs" />
     <Compile Include="Utils\BitDict.cs" />
     <Compile Include="Utils\ByteFlag.cs" />
     <Compile Include="Utils\ByteWriter.cs" />
@@ -288,7 +287,7 @@
     <Compile Include="Utils\ImageDumper.cs" />
     <Compile Include="Utils\ImageHelper.cs" />
     <Compile Include="Utils\Logger.cs" />
-    <Compile Include="Utils\WAVReading.cs" />
+    <Compile Include="Utils\NativeLib.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

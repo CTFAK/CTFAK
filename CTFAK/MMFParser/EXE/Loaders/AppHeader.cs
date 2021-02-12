@@ -65,8 +65,9 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override void Read()
         {
-            
+
             {
+                var start = Reader.Tell();
                 if (Settings.GameType != GameType.OnePointFive)
                 {
                     Size = Reader.ReadInt32();
@@ -82,12 +83,13 @@ namespace CTFAK.MMFParser.EXE.Loaders
                 InitialScore = (int) (Reader.ReadUInt32() ^ 0xffffffff);
                 InitialLives = (int) (Reader.ReadUInt32() ^ 0xffffffff);
                 Controls = new Controls(Reader);
-                Controls.Read();
+                
+                if (Settings.GameType == GameType.OnePointFive) Reader.Skip(56);
+                else Controls.Read();
+                
                 BorderColor = Reader.ReadColor();
                 NumberOfFrames = Reader.ReadInt32();
-                // Reader.ReadByte();
-                // Reader.ReadByte();
-                
+                if (Settings.GameType == GameType.OnePointFive) return;
                 FrameRate = Reader.ReadInt32();
                 WindowsMenuIndex = Reader.ReadByte(); 
             }
@@ -109,6 +111,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             Controls.Write(Writer);
             Writer.WriteColor(BorderColor);
             Writer.WriteInt32(NumberOfFrames);
+           
             Writer.WriteInt32(FrameRate);
             Writer.WriteInt8(WindowsMenuIndex);
             Writer.WriteInt16(0);

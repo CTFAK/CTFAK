@@ -44,6 +44,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             _name = infoChunks.GetChunk<ObjectName>();
             _properties = infoChunks.GetChunk<ObjectProperties>(); 
             _properties.ReadNew((int) ObjectType,this);
+            
         }
 
         public int Handle
@@ -54,7 +55,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public string Name
         {
-            get=>_name?.Value ?? "Unnamed Object - "+Handle;
+            get=>_name?.Value ?? $"{ObjectType} - "+Handle;
             set => _name.Value = value;
         } 
         public ObjectProperties Properties => _properties;

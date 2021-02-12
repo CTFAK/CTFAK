@@ -46,8 +46,8 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
         public string Name="ERROR";
         public string Extension;
         public uint Identifier;
-        public short Player;
-        public short Type;
+        public ushort Player;
+        public ushort Type;
         public byte MovingAtStart=1;
         public int DirectionAtStart;
         public int DataSize;
@@ -61,8 +61,8 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
             Writer.WriteUInt32(Identifier);
             var newWriter = new ByteWriter(new MemoryStream());
 
-                newWriter.WriteInt16(Player);
-                newWriter.WriteInt16(Type);
+                newWriter.WriteUInt16(Player);
+                newWriter.WriteUInt16(Type);
                 newWriter.WriteInt8(MovingAtStart);
                 newWriter.Skip(3);
                 newWriter.WriteInt32(DirectionAtStart);
@@ -96,8 +96,8 @@ namespace CTFAK.MMFParser.MFA.Loaders.mfachunks
             }
             else
             {
-                Player = Reader.ReadInt16();
-                Type = Reader.ReadInt16();
+                Player = Reader.ReadUInt16();
+                Type = Reader.ReadUInt16();
                 MovingAtStart = Reader.ReadByte();
                 Reader.Skip(3);
                 DirectionAtStart = Reader.ReadInt32();

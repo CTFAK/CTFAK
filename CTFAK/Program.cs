@@ -65,6 +65,7 @@ namespace CTFAK
             {
                 ImageBank.Load = false;
                 ReadFile(args[0], true, false, true);
+                
                 MFAGenerator.BuildMFA();
             }
             else if(args.Length==0)

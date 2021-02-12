@@ -21,6 +21,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.OnePointFive) return;
             var count = Reader.ReadUInt16();
             PreloadExtensions = Reader.ReadUInt16();
             Items = new List<Extension>();

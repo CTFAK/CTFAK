@@ -29,9 +29,15 @@ namespace CTFAK.MMFParser.EXE
             
             
             var firstShort = exeReader.PeekUInt16();
+            bool retard = false;
             Logger.Log("First Short: " + firstShort.ToString("X2"), true, ConsoleColor.Yellow);
             if (firstShort == 0x7777) Settings.GameType = GameType.Normal;
             else if (firstShort == 0x222c) Settings.GameType = GameType.OnePointFive;
+            else if(firstShort==0x4150)
+            {
+                Settings.GameType = GameType.OnePointFive;
+                retard = true;
+            }
             else throw new InvalidDataException("Unknown data header: 0x"+firstShort.ToString("X4"));
             
             if (Settings.GameType == GameType.Normal)
@@ -48,7 +54,7 @@ namespace CTFAK.MMFParser.EXE
             {
                 Logger.Log("Using old system");
                 var oldData = new ChunkList();
-                oldData.Read(exeReader);
+                if(!retard)oldData.Read(exeReader);
                 GameData = new GameData();
                 Program.CleanData = GameData;
                 GameData.Read(exeReader);

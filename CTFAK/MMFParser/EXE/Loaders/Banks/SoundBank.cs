@@ -36,6 +36,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public event MainForm.SaveHandler OnSoundSaved;
         public override void Read()
         {
+            if (Settings.GameType == GameType.OnePointFive && !Settings.DoMFA) return;
             if (!Settings.DoMFA)Reader.Seek(0);//Reset the reader to avoid bugs when dumping more than once
             Items = new List<SoundItem>();
             // if (!Settings.DoMFA)return;

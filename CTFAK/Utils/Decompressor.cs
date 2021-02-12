@@ -12,8 +12,7 @@ namespace CTFAK.Utils
 {
     public static class Decompressor
     {
-        [DllImport("TinflateDecompress.dll")]
-        public static extern int decompressOld(IntPtr source, int source_size, IntPtr output, int output_size);
+        
         public static byte[] Decompress(ByteReader exeReader, out int decompressed)
         {
             Int32 decompSize = exeReader.ReadInt32();
@@ -22,22 +21,16 @@ namespace CTFAK.Utils
             return DecompressBlock(exeReader, compSize, decompSize);
         }
 
-        public static ByteReader DecompressAsReader(ByteReader exeReader, out int decompressed)
-        {
-            return new ByteReader(Decompress(exeReader, out decompressed));
-        }
+        public static ByteReader DecompressAsReader(ByteReader exeReader, out int decompressed)=>new ByteReader(Decompress(exeReader, out decompressed));
+       
 
         public static byte[] DecompressBlock(ByteReader reader, int size, int decompSize)
         {
             ZLibDecompressOptions decompOpts = new ZLibDecompressOptions();
             MemoryStream compressedStream = new MemoryStream(reader.ReadBytes(size));
             MemoryStream decompressedStream = new MemoryStream();
-            using (ZLibStream zs = new ZLibStream(compressedStream, decompOpts))
-            {
-                zs.CopyTo(decompressedStream);
-            }
+            using (ZLibStream zs = new ZLibStream(compressedStream, decompOpts)) zs.CopyTo(decompressedStream);
             
-
             byte[] decompressedData = decompressedStream.GetBuffer();
             compressedStream.Dispose();
             decompressedStream.Dispose();
@@ -62,7 +55,7 @@ namespace CTFAK.Utils
             var originalBuff = Marshal.AllocHGlobal(size);
             Marshal.Copy(buff,0,originalBuff,buff.Length);
             var outputBuff = Marshal.AllocHGlobal(decompSize);
-            decompressOld(originalBuff, size, outputBuff, decompSize);
+            NativeLib.decompressOld(originalBuff, size, outputBuff, decompSize);
             Marshal.FreeHGlobal(originalBuff);
             byte[] data = new byte[decompSize];
             Marshal.Copy(outputBuff,data,0,decompSize);
@@ -70,6 +63,8 @@ namespace CTFAK.Utils
             return data;
 
         }
+
+        
         
 
         public static byte[] compress_block(byte[] data)

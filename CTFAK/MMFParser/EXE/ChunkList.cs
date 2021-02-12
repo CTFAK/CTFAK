@@ -28,64 +28,52 @@ namespace CTFAK.MMFParser.EXE
             
             
         }
+
         public void Read(ByteReader reader)
         {
             Chunks.Clear();
-            if (Settings.GameType != GameType.OnePointFive)
-            {
-                while (true)
-                {
-                    Chunk chunk = new Chunk(Chunks.Count, this);
-                    chunk.Verbose = Verbose;
-                    chunk.Read(reader);
-                    if (chunk.Id == 26214&&Settings.GameType != GameType.TwoFivePlus) chunk.Loader = LoadModern(chunk);
-                        else chunk.Loader = LoadModern(chunk);
 
-                    Chunks.Add(chunk);
-                    
-                    if (chunk.Id == 8750) BuildKey();//Only build key when we have all the needed info
-                    if (chunk.Id == 8788) Settings.GameType = GameType.TwoFivePlus; //Can be only seen in 2.5+
-                    if (chunk.Id == 8791)
+            while (true)
+            {
+                Chunk chunk = new Chunk(Chunks.Count, this);
+                chunk.Verbose = Verbose;
+                chunk.Read(reader);
+                if (chunk.Id == 26214 && Settings.GameType != GameType.TwoFivePlus) chunk.Loader = LoadModern(chunk);
+                else chunk.Loader = LoadModern(chunk);
+
+                Chunks.Add(chunk);
+                if (reader.Tell() >= reader.Size()) break; //In case there is no LAST chunk(may happen for fnac)
+                if (chunk.Id == 32639) break; //LAST chunkID
+                if (chunk.Id == 8750) BuildKey(); //Only build key when we have all the needed info
+                if (chunk.Id == 8788) Settings.GameType = GameType.TwoFivePlus; //Can be only seen in 2.5+
+                if (chunk.Id == 8791)
+                {
+                    var headers = GetChunk<ObjectHeaders>().Headers;
+                    var names = GetChunk<ObjectNames>().Names;
+                    Program.CleanData.Frameitems = new FrameItems((ByteReader) null);
+                    foreach (KeyValuePair<int, ObjectHeader> header in headers)
                     {
-                        var headers = GetChunk<ObjectHeaders>().Headers;
-                        var names = GetChunk<ObjectNames>().Names;
-                        Program.CleanData.Frameitems = new FrameItems((ByteReader) null);
-                        foreach (KeyValuePair<int,ObjectHeader> header in headers)
-                        {
-                            var newInfo = new ObjectInfo((ByteReader) null);
-                            newInfo.Handle = header.Value.Handle;
-                            newInfo.Name = names[header.Key];
-                            newInfo.ObjectType = (Constants.ObjectType) header.Value.ObjectType;
-                            newInfo.InkEffect = (int) header.Value.InkEffect;
-                            newInfo.InkEffectValue = header.Value.InkEffectParameter;
+                        var newInfo = new ObjectInfo((ByteReader) null);
+                        newInfo.Handle = header.Value.Handle;
+                        newInfo.Name = names[header.Key];
+                        newInfo.ObjectType = (Constants.ObjectType) header.Value.ObjectType;
+                        newInfo.InkEffect = (int) header.Value.InkEffect;
+                        newInfo.InkEffectValue = header.Value.InkEffectParameter;
 
-                            Program.CleanData.Frameitems.ItemDict.Add(newInfo.Handle,newInfo);
-                        }
-                        
-                        
-
-
-
+                        Program.CleanData.Frameitems.ItemDict.Add(newInfo.Handle, newInfo);
                     }
-                    
-                    if (reader.Tell() >= reader.Size()) break;  //In case there is no LAST chunk(may happen for fnac)
-                    if (chunk.Id == 32639) break; //LAST chunkID
+
+
+
+
+
                 }
+
+                
             }
-            else
-            {
-                while (true)
-                {
-                    Chunk chunk = new Chunk(Chunks.Count, this);
-                    chunk.Verbose = Verbose;
-                    chunk.Read(reader);
-                    chunk.Loader = LoadOld(chunk);
-                    Chunks.Add(chunk);
-                    if (reader.Tell() >= reader.Size()) break;
-                    if (chunk.Id == 32639) break; //LAST chunkID
-                }
-            }
-            
+
+
+
         }
 
         public class Chunk
@@ -330,6 +318,9 @@ namespace CTFAK.MMFParser.EXE
                     break;
                 case 8752:
                     loader = new AppDoc(chunk);
+                    break;
+                case 8771:
+                    loader = new Shaders(chunk);
                     break;
                 case 8756:
                     loader = new Extensions(chunk);

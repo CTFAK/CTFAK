@@ -105,39 +105,13 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
-            if (Settings.GameType == GameType.OnePointFive)
             {
                 var currentPosition = Reader.Tell();
-                var size = Reader.ReadInt16();
-                var checksum = Reader.ReadInt16();
-                _movementsOffset = (ushort) Reader.ReadInt16();
-                _animationsOffset = (ushort) Reader.ReadInt16();
-                var version = Reader.ReadInt16();
-                _counterOffset = (ushort) Reader.ReadInt16();
-                _systemObjectOffset = (ushort) Reader.ReadInt16();
-                var ocVariable = Reader.ReadInt32();
-                Flags.flag = (uint) Reader.ReadInt16();
-                var end = Reader.Tell() + 8 * 2;//maybe its 9*2
-                Reader.Seek(end);
+                
 
-                _extensionOffset = (ushort) Reader.ReadInt16();
-                _valuesOffset = (ushort) Reader.ReadInt16();
-                NewFlags.flag = (uint) Reader.ReadInt16();
-                Preferences.flag = (uint) Reader.ReadInt16();
-                Identifier = Reader.ReadAscii(2);
-                BackColor = Reader.ReadColor();
-                _fadeinOffset = (uint) Reader.ReadInt32();
-                _fadeoutOffset = (uint) Reader.ReadInt32();
-
-
-            }
-            else
-            {
-                var currentPosition = Reader.Tell();
-                var size = Reader.ReadInt32();
-
-                if (Settings.Build >= 284)
+                if (Settings.Build >= 284&&Settings.GameType != GameType.OnePointFive)
                 {
+                    var size = Reader.ReadInt32();
                     _animationsOffset = Reader.ReadUInt16();
                     _movementsOffset = Reader.ReadUInt16();
                     var version = Reader.ReadUInt16();
@@ -165,15 +139,17 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     _fadeinOffset = Reader.ReadUInt32();
                     _fadeoutOffset = Reader.ReadUInt32();
                 }
-                else
+                else if(Settings.GameType != GameType.OnePointFive)
                 {
+                    var size = Reader.ReadInt32();
                     _movementsOffset = Reader.ReadUInt16();
                     _animationsOffset = Reader.ReadUInt16();
                     var version = Reader.ReadUInt16();
                     _counterOffset = Reader.ReadUInt16();
                     _systemObjectOffset = Reader.ReadUInt16();
                     Reader.Skip(2);
-                    Flags.flag = Reader.ReadUInt32();
+                    Flags.flag = Reader.ReadUInt16();
+                    Reader.Skip(2);
                     var end = Reader.Tell() + 8 * 2;
                     for (int i = 0; i < 8; i++)
                     {
@@ -186,6 +162,34 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
                     _valuesOffset = Reader.ReadUInt16();
                     _stringsOffset = Reader.ReadUInt16();
+                    NewFlags.flag = Reader.ReadUInt16();
+                    Preferences.flag = Reader.ReadUInt16();
+                    Identifier = Reader.ReadAscii(2);
+                    BackColor = Reader.ReadColor();
+                    _fadeinOffset = Reader.ReadUInt32();
+                    _fadeoutOffset = Reader.ReadUInt32();
+                }
+                else
+                {
+                    var size = Reader.ReadUInt16();
+                    var checksum = Reader.ReadUInt16();
+                    _movementsOffset = Reader.ReadUInt16();
+                    _animationsOffset = Reader.ReadUInt16();
+                    var version = Reader.ReadUInt16();
+                    _counterOffset = Reader.ReadUInt16();
+                    _systemObjectOffset = Reader.ReadUInt16();
+                    var ocVariable = Reader.ReadUInt32();
+                    Flags.flag = Reader.ReadUInt16();
+                    
+                    var end = Reader.Tell() + 8 * 2;
+                    for (int i = 0; i < 8; i++)
+                    {
+                        _qualifiers[i] = Reader.ReadInt16();
+                    }
+                    Reader.Seek(end);
+
+                    _extensionOffset = Reader.ReadUInt16();
+                    _valuesOffset = Reader.ReadUInt16();
                     NewFlags.flag = Reader.ReadUInt16();
                     Preferences.flag = Reader.ReadUInt16();
                     Identifier = Reader.ReadAscii(4);
@@ -206,11 +210,23 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 }
 
 
-                if (_movementsOffset > 0 && Settings.GameType != GameType.Android)
+                if (_movementsOffset > 0)
                 {
                     Reader.Seek(currentPosition + _movementsOffset);
-                    Movements = new Movements(Reader);
-                    Movements.Read();
+                    if (Settings.GameType == GameType.OnePointFive)
+                    {
+                        Movements=new Movements((ByteReader) null);
+                        var mov = new Movement(Reader);
+                        mov.Read();
+                        Movements.Items.Add(mov);
+                        
+                    }
+                    else
+                    {
+                        Movements = new Movements(Reader);
+                        Movements.Read(); 
+                    }
+                    
                 }
 
                 if (_systemObjectOffset > 0)

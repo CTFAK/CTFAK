@@ -46,16 +46,21 @@ namespace CTFAK.MMFParser.Translation
             Logger.Log("Loading images");
             
             Settings.DoMFA = true;
-            
+            var cacheBuild = Settings.Build;
+            var cacheType = Settings.GameType;
+            Settings.Build = 288;
+            Settings.GameType = GameType.Normal;
             var template = new MFA.MFA(mfaReader);
             Pame2Mfa.Message("Loading Template");
             template.Read(); //Loading template
             Pame2Mfa.Message("Translating...");
+            Settings.Build = cacheBuild;
+            Settings.GameType = cacheType;
             Pame2Mfa.Translate(ref template, Program.CleanData); //Translation
-
+            
             var mfaWriter =
                 new ByteWriter(
-                    Program.CleanData.EditorFilename.Value.Length > 0 ? $"{Settings.DumpPath}\\{Path.GetFileNameWithoutExtension(Program.CleanData.EditorFilename.Value)}.mfa" : $"{Settings.DumpPath}\\out.mfa",
+                    Program.CleanData.EditorFilename?.Value?.Length > 0 ? $"{Settings.DumpPath}\\{Path.GetFileNameWithoutExtension(Program.CleanData.EditorFilename.Value)}.mfa" : $"{Settings.DumpPath}\\out.mfa",
                     FileMode.Create); //New writer for new MFA
             Pame2Mfa.Message("");
             Pame2Mfa.Message("Writing MFA");

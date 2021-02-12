@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Web.UI.WebControls;
 using CTFAK.MMFParser.EXE;
@@ -43,19 +44,20 @@ namespace CTFAK.MMFParser.Translation
             mfa.Name = game.Name.Value;
             mfa.LangId = 0;//8192;
             mfa.Description = "";
-            mfa.Path = game.EditorFilename.Value;
+            mfa.Path = game.EditorFilename?.Value ?? "";
 
             //if (game.Fonts != null) mfa.Fonts = game.Fonts;
             mfa.Sounds.Items.Clear();
-            if (game.Sounds != null)
+            if (game.Sounds != null&&game.Sounds.Items!=null)
             {
-                foreach (var item in game.Sounds.Items)
+                
+                foreach (var item in game.Sounds?.Items)
                 {
                     mfa.Sounds.Items.Add(item);
                 }
             }
             mfa.Fonts.Items.Clear();
-            if (game.Fonts != null)
+            if (game.Fonts?.Items != null)
             {
                 foreach (var item in game.Fonts.Items)
                 {
@@ -126,7 +128,11 @@ namespace CTFAK.MMFParser.Translation
                 var key = game.Frameitems.ItemDict.Keys.ToArray()[i];
                 var item = game.Frameitems.ItemDict[key];
                 var newItem = TranslateObject(item);
-                if(newItem.Loader==null) throw new NotImplementedException("Unsupported Object: "+newItem.ObjectType);              
+                if (newItem.Loader == null)
+                {
+                    continue;
+                    // throw new NotImplementedException("Unsupported Object: "+newItem.ObjectType);
+                }              
                 FrameItems.Add(newItem.Handle, newItem);
             }
 
@@ -163,7 +169,7 @@ namespace CTFAK.MMFParser.Translation
                 newFrame.FadeOut = frame.FadeOut!=null ? ConvertTransition(frame.FadeOut):null;
                 var mfaFlags = newFrame.Flags;
                 var originalFlags = frame.Flags;
-
+                
                 mfaFlags["GrabDesktop"] = originalFlags["GrabDesktop"];
                 mfaFlags["KeepDisplay"] = originalFlags["KeepDisplay"];
                 mfaFlags["BackgroundCollisions"] = originalFlags["TotalCollisionMask"];
@@ -177,30 +183,42 @@ namespace CTFAK.MMFParser.Translation
                 newFrame.LastViewedX = 320;
                 newFrame.LastViewedY = 240;
                 if (frame.Palette == null) continue;
+                
                 newFrame.Palette = frame.Palette;
                 newFrame.StampHandle = 13;
                 newFrame.ActiveLayer = 0;
                 //LayerInfo
-                if(frame.Layers==null) continue;
-                var count = frame.Layers.Count;
-                for (int i=0;i<count;i++)
+                // if(frame.Layers==null) continue;
+                if (Settings.GameType != GameType.OnePointFive)
                 {
-                    var layer = frame.Layers[i];
-                    var newLayer = new Layer(null);
-                    newLayer.Name = layer.Name;
-                    newLayer.Flags["HideAtStart"] = layer.Flags["ToHide"];
-                    newLayer.Flags["Visible"] = true;
-                    newLayer.Flags["NoBackground"] = layer.Flags["DoNotSaveBackground"];
-                    newLayer.Flags["WrapHorizontally"] = layer.Flags["WrapHorizontally"];
-                    newLayer.XCoefficient = layer.XCoeff;
-                    newLayer.YCoefficient = layer.YCoeff;
-        
-                    newFrame.Layers.Add(newLayer);
-      
+                    var count = frame.Layers.Count;
+                    for (int i = 0; i < count; i++)
+                    {
+                        var layer = frame.Layers[i];
+                        var newLayer = new Layer(null);
+                        newLayer.Name = layer.Name;
+                        newLayer.Flags["HideAtStart"] = layer.Flags["ToHide"];
+                        newLayer.Flags["Visible"] = true;
+                        newLayer.Flags["NoBackground"] = layer.Flags["DoNotSaveBackground"];
+                        newLayer.Flags["WrapHorizontally"] = layer.Flags["WrapHorizontally"];
+                        newLayer.XCoefficient = layer.XCoeff;
+                        newLayer.YCoefficient = layer.YCoeff;
 
+                        newFrame.Layers.Add(newLayer);
+                    }
+                }
+                else
+                {
+                    var tempLayer = new Layer(null);
+
+                    tempLayer.Name = "Layer 1";
+                    tempLayer.XCoefficient = 1;
+                    tempLayer.YCoefficient = 1;
+                    tempLayer.Flags["Visible"] = true;
+                    newFrame.Layers.Add(tempLayer);
                 }
 
-                
+
                 var newFrameItems = new List<FrameItem>();
                 var newInstances = new List<FrameInstance>();
                 if (frame.Objects != null)
@@ -230,13 +248,13 @@ namespace CTFAK.MMFParser.Translation
                         }
                         else
                         {
-                            throw new NullReferenceException("Object");
+                            Logger.Log("WARNING: OBJECT NOT FOUND");
+                            break;
                         }
                     }
                 }
 
-
-
+                
                 newFrame.Items = newFrameItems;
                 newFrame.Instances = newInstances;
                 newFrame.Folders = new List<ItemFolder>();
@@ -246,8 +264,8 @@ namespace CTFAK.MMFParser.Translation
                     newFolder.isRetard = true;
                     newFolder.Items = new List<uint>() {(uint) newFrameItem.Handle};
                     newFrame.Folders.Add(newFolder);
-                }
-          
+                }   
+                // if(false)
                 {
                     newFrame.Events = new Events((ByteReader) null);
                     newFrame.Events.Items = new List<EventGroup>();
@@ -276,7 +294,7 @@ namespace CTFAK.MMFParser.Translation
                     
                     }
                 }
-                
+                Logger.Log("Frame Translated");
                 mfa.Frames.Add(newFrame);
                 
 
@@ -355,8 +373,8 @@ namespace CTFAK.MMFParser.Translation
             newItem.InkEffectParameter = item.InkEffectValue;
             newItem.AntiAliasing = item.Antialias? 1 : 0;
             newItem.Flags = item.Flags;
-            newItem.Chunks.GetOrCreateChunk<Opacity>().Blend = (byte) (item.InkEffectValue);
-                newItem.Chunks.GetOrCreateChunk<Opacity>().RGBCoeff = Color.White;
+            // newItem.Chunks.GetOrCreateChunk<Opacity>().Blend = (byte) (item.InkEffectValue);
+                // newItem.Chunks.GetOrCreateChunk<Opacity>().RGBCoeff = Color.White;
             
             newItem.IconHandle = 12;
             
@@ -404,20 +422,38 @@ namespace CTFAK.MMFParser.Translation
                 newObject.Strings = ConvertStrings(itemLoader.Strings);
                 newObject.Values = ConvertValue(itemLoader.Values);
                 newObject.Movements = new MFA.Loaders.mfachunks.Movements(null);
-                for (int j = 0; j < itemLoader.Movements?.Items?.Count; j++)
+                if(itemLoader.Movements==null)
                 {
-                    var mov = itemLoader.Movements.Items[j];
                     var newMov = new Movement(null);
-                    newMov.Name = $"Movement #{j}";
+                    newMov.Name = $"Movement #{0}";
                     newMov.Extension = "";
-                    newMov.Type =  mov.Type;
-                    newMov.Identifier = (uint) mov.Type;
-                    newMov.Loader = mov.Loader;
-                    newMov.Player = mov.Player;
-                    newMov.MovingAtStart = mov.MovingAtStart;
-                    newMov.DirectionAtStart = mov.DirectionAtStart;
+                    newMov.Type =  0;
+                    newMov.Identifier = (uint) 0;
+                    newMov.Loader = null;
+                    newMov.Player = 0;
+                    newMov.MovingAtStart = 1;
+                    newMov.DirectionAtStart = 0;
                     newObject.Movements.Items.Add(newMov);
+                    
                 }
+                else
+                {
+                    for (int j = 0; j < itemLoader.Movements.Items.Count; j++)
+                    {
+                        var mov = itemLoader.Movements.Items[j];
+                        var newMov = new Movement(null);
+                        newMov.Name = $"Movement #{j}";
+                        newMov.Extension = "";
+                        newMov.Type =  mov.Type;
+                        newMov.Identifier = (uint) mov.Type;
+                        newMov.Loader = mov.Loader;
+                        newMov.Player = mov.Player;
+                        newMov.MovingAtStart = mov.MovingAtStart;
+                        newMov.DirectionAtStart = mov.DirectionAtStart;
+                        newObject.Movements.Items.Add(newMov);
+                    }  
+                }
+                
 
                 newObject.Behaviours = new Behaviours(null);
 
@@ -500,26 +536,29 @@ namespace CTFAK.MMFParser.Translation
                         newExt.Qualifiers = newObject.Qualifiers;
 
                     }
-                    var exts = Program.CleanData.Extensions;
-                    Extension ext = null;
-                    foreach (var testExt in exts.Items)
+                    if (Settings.GameType != GameType.OnePointFive)
                     {
-                        if (testExt.Handle == (int)item.ObjectType - 32) ext = testExt;
-                    }
+                        var exts = Program.CleanData.Extensions;
+                        Extension ext = null;
+                        foreach (var testExt in exts.Items)
+                        {
+                            if (testExt.Handle == (int) item.ObjectType - 32) ext = testExt;
+                        }
 
-                    newExt.ExtensionType = -1;
-                    newExt.ExtensionName = "";
-                    newExt.Filename = $"{ext.Name}.mfx";
-                    newExt.Magic = (uint) ext.MagicNumber;
-                    newExt.SubType = ext.SubType;
-                    newExt.ExtensionVersion = itemLoader.ExtensionVersion;
-                    newExt.ExtensionId = itemLoader.ExtensionId;
-                    newExt.ExtensionPrivate = itemLoader.ExtensionPrivate;
-                    newExt.ExtensionData = itemLoader.ExtensionData;
-                    newItem.Loader = newExt;
-                    var tuple = new Tuple<int, string, string, int, string>(ext.Handle, ext.Name, "",
-                        ext.MagicNumber, ext.SubType);
-                    // mfa.Extensions.Add(tuple);
+                        newExt.ExtensionType = -1;
+                        newExt.ExtensionName = "";
+                        newExt.Filename = $"{ext.Name}.mfx";
+                        newExt.Magic = (uint) ext.MagicNumber;
+                        newExt.SubType = ext.SubType;
+                        newExt.ExtensionVersion = itemLoader.ExtensionVersion;
+                        newExt.ExtensionId = itemLoader.ExtensionId;
+                        newExt.ExtensionPrivate = itemLoader.ExtensionPrivate;
+                        newExt.ExtensionData = itemLoader.ExtensionData;
+                        newItem.Loader = newExt;
+                        var tuple = new Tuple<int, string, string, int, string>(ext.Handle, ext.Name, "",
+                            ext.MagicNumber, ext.SubType);
+                        // mfa.Extensions.Add(tuple);
+                    }
 
                 }
                 else if (item.ObjectType == Constants.ObjectType.Text)

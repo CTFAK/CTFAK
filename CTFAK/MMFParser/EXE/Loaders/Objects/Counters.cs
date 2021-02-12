@@ -79,40 +79,70 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
-            
-            var size = Reader.ReadUInt32();
-            Width = Reader.ReadUInt32();
-            Height = Reader.ReadUInt32();
-            Player = Reader.ReadUInt16();
-            DisplayType = Reader.ReadUInt16();
-            Flags = Reader.ReadUInt16();
-
-            IntegerDigits = Flags & _intDigitsMask;
-            FormatFloat = (Flags & _formatFloat) != 0;
-            FloatDigits = (Flags & _floatDigitsMask) >> _floatDigitsShift + 1;
-            UseDecimals = (Flags & _useDecimals) != 0;
-            Decimals = (Flags & _floatDecimalsMask) >> _floatDecimalsShift;
-            AddNulls = (Flags & _floatPad) != 0;
-
-            Inverse = ByteFlag.GetFlag(Flags, 8);
-            Font = Reader.ReadUInt16();
-            if (DisplayType == 0) return;
-            else if (DisplayType == 1 || DisplayType == 4|| DisplayType==50)
+            if (Settings.GameType == GameType.OnePointFive)
             {
-                
-                Frames = new List<int>();
-                var count = Reader.ReadInt16();
-                for (int i = 0; i < count; i++)
+                var size = Reader.ReadUInt32();
+                Width = Reader.ReadUInt16();
+                Height = Reader.ReadUInt16();
+                Player = Reader.ReadUInt16();
+                DisplayType = Reader.ReadUInt16();
+                Flags = Reader.ReadUInt16();
+                Inverse = ByteFlag.GetFlag(Flags, 8);
+                if (DisplayType == 0) return;
+                else if (DisplayType == 1 || DisplayType == 4|| DisplayType==50)
                 {
-                    Frames.Add(Reader.ReadUInt16());
+                
+                    Frames = new List<int>();
+                    var count = Reader.ReadInt16();
+                    for (int i = 0; i < count; i++)
+                    {
+                        Frames.Add(Reader.ReadUInt16());
+                    }
                 }
+                else if (DisplayType == 2 || DisplayType == 3 || DisplayType == 5)
+                {
+                    Frames=new List<int>(){0};
+                    Shape = new Shape(Reader);
+                    Shape.Read();
+                } 
             }
-            else if (DisplayType == 2 || DisplayType == 3 || DisplayType == 5)
+            else
             {
-                Frames=new List<int>(){0};
-                Shape = new Shape(Reader);
-                Shape.Read();
+                var size = Reader.ReadUInt32();
+                Width = Reader.ReadUInt32();
+                Height = Reader.ReadUInt32();
+                Player = Reader.ReadUInt16();
+                DisplayType = Reader.ReadUInt16();
+                Flags = Reader.ReadUInt16();
+
+                IntegerDigits = Flags & _intDigitsMask;
+                FormatFloat = (Flags & _formatFloat) != 0;
+                FloatDigits = (Flags & _floatDigitsMask) >> _floatDigitsShift + 1;
+                UseDecimals = (Flags & _useDecimals) != 0;
+                Decimals = (Flags & _floatDecimalsMask) >> _floatDecimalsShift;
+                AddNulls = (Flags & _floatPad) != 0;
+
+                Inverse = ByteFlag.GetFlag(Flags, 8);
+                Font = Reader.ReadUInt16();
+                if (DisplayType == 0) return;
+                else if (DisplayType == 1 || DisplayType == 4|| DisplayType==50)
+                {
+                
+                    Frames = new List<int>();
+                    var count = Reader.ReadInt16();
+                    for (int i = 0; i < count; i++)
+                    {
+                        Frames.Add(Reader.ReadUInt16());
+                    }
+                }
+                else if (DisplayType == 2 || DisplayType == 3 || DisplayType == 5)
+                {
+                    Frames=new List<int>(){0};
+                    Shape = new Shape(Reader);
+                    Shape.Read();
+                } 
             }
+            
 
         }
 

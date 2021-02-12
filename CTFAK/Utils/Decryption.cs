@@ -26,7 +26,7 @@ namespace CTFAK.Utils
             var data2Ptr = Marshal.StringToHGlobalAnsi(data2);
             var data3Ptr = Marshal.StringToHGlobalAnsi(data3);
 
-            keyPtr = make_key(data1Ptr,data2Ptr,data3Ptr, MagicChar);
+            keyPtr = NativeLib.make_key(data1Ptr,data2Ptr,data3Ptr, MagicChar);
             byte[] key = new byte[256];
             Marshal.Copy(keyPtr, key, 0, 256);
             Marshal.FreeHGlobal(keyPtr);
@@ -44,7 +44,7 @@ namespace CTFAK.Utils
             data1ptr = Marshal.StringToHGlobalUni(data1);
             data2ptr = Marshal.StringToHGlobalUni(data2);
             data3ptr = Marshal.StringToHGlobalUni(data3);
-            keyPtr = make_key_w(data1ptr, data2ptr, data3ptr, MagicChar);
+            keyPtr = NativeLib.make_key_w(data1ptr, data2ptr, data3ptr, MagicChar);
             byte[] key = new byte[256];
             Marshal.Copy(keyPtr, key, 0, 256);
             _decryptionKey = key;
@@ -59,7 +59,7 @@ namespace CTFAK.Utils
         public static byte[] MakeKeyFromComb(string data, byte magicChar = 54)
         {
             var rawKeyPtr = Marshal.StringToHGlobalAnsi(data);
-            var ptr = Decryption.make_key_combined(rawKeyPtr, magicChar);
+            var ptr = NativeLib.make_key_combined(rawKeyPtr, magicChar);
 
             byte[] key = new byte[256];
             Marshal.Copy(ptr, key, 0, 256);
@@ -114,7 +114,7 @@ namespace CTFAK.Utils
             IntPtr keyPtr = Marshal.AllocHGlobal(_decryptionKey.Length);
             Marshal.Copy(_decryptionKey, 0, keyPtr, _decryptionKey.Length);
 
-            var outputChunkPtr = decode_chunk(inputChunkPtr, chunkSize, MagicChar, keyPtr);
+            var outputChunkPtr = NativeLib.decode_chunk(inputChunkPtr, chunkSize, MagicChar, keyPtr);
 
             byte[] decodedChunk = new byte[chunkSize];
             Marshal.Copy(outputChunkPtr, decodedChunk, 0, chunkSize);
@@ -133,7 +133,7 @@ namespace CTFAK.Utils
             IntPtr keyPtr = Marshal.AllocHGlobal(_decryptionKey.Length);
             Marshal.Copy(_decryptionKey, 0, keyPtr, _decryptionKey.Length);
 
-            var outputChunkPtr = decode_chunk(inputChunkPtr, chunkSize, MagicChar, keyPtr);
+            var outputChunkPtr = NativeLib.decode_chunk(inputChunkPtr, chunkSize, MagicChar, keyPtr);
 
             byte[] decodedChunk = new byte[chunkSize];
             Marshal.Copy(outputChunkPtr, decodedChunk, 0, chunkSize);
@@ -147,25 +147,6 @@ namespace CTFAK.Utils
         
         
 
-        #if WIN64
-        private const string _dllPath = "x64\\Decrypter-x64.dll";
-        #else
-        private const string _dllPath = "x86\\Decrypter-x86.dll";
-        #endif
         
-        [DllImport(_dllPath, EntryPoint = "decode_chunk", CharSet = CharSet.Auto)]
-        public static extern IntPtr decode_chunk(IntPtr chunkData, int chunkSize, byte magicChar, IntPtr wrapperKey);
-
-        [DllImport(_dllPath, EntryPoint = "make_key", CharSet = CharSet.Auto)]
-        public static extern IntPtr make_key(IntPtr cTitle, IntPtr cCopyright, IntPtr cProject, byte magicChar);
-        [DllImport(_dllPath, EntryPoint = "make_key_w", CharSet = CharSet.Unicode)]
-        public static extern IntPtr make_key_w(IntPtr cTitle, IntPtr cCopyright, IntPtr cProject, byte magicChar);
-
-
-        [DllImport(_dllPath, EntryPoint = "make_key_combined", CharSet = CharSet.Auto)]
-        public static extern IntPtr make_key_combined(IntPtr data, byte magicChar);
-
-        [DllImport(_dllPath, EntryPoint = "make_key_w_combined", CharSet = CharSet.Auto)]
-        public static extern IntPtr make_key_w_combined(IntPtr data, byte magicChar);
     }
 }

@@ -8,7 +8,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 {
     public class Movements:ChunkLoader
     {
-        public List<Movement> Items;
+        public List<Movement> Items=new List<Movement>();
 
         public Movements(ByteReader reader) : base(reader)
         {
@@ -20,7 +20,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
-            Items = new List<Movement>();
             var rootPosition = Reader.Tell();
             var count = Reader.ReadUInt32();
             var currentPos = Reader.Tell();
@@ -57,8 +56,8 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
     {
         public static int DataSize;
         public int rootPos;
-        public short Player;
-        public short Type;
+        public ushort Player;
+        public ushort Type;
         public byte MovingAtStart;
         public int DirectionAtStart;
         public MovementLoader Loader;
@@ -73,44 +72,85 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
-            var nameOffset = Reader.ReadInt32();
-            var movementId = Reader.ReadInt32();
-            var newOffset = Reader.ReadInt32();
-            DataSize = Reader.ReadInt32();
-            Reader.Seek(rootPos+newOffset);
-            Player = Reader.ReadInt16();
-            Type = Reader.ReadInt16();
-            MovingAtStart = Reader.ReadByte();
-            Reader.Skip(3);
-            DirectionAtStart = Reader.ReadInt32();
-            switch (Type)
+            if (Settings.GameType == GameType.OnePointFive)
             {
-                case 1:
+                Player = Reader.ReadUInt16();
+                Type = Reader.ReadUInt16();
+                MovingAtStart = Reader.ReadByte();
+                Reader.Skip(3);
+                DirectionAtStart = Reader.ReadInt32();
+                switch (Type)
+                {
+                    case 1:
                     Loader = new Mouse(Reader);
                     break;
-                case 2:
+                    case 2:
                     Loader = new RaceMovement(Reader);
                     break;
-                case 3:
+                    case 3:
                     Loader=new EightDirections(Reader);
                     break;
-                case 4:
+                    case 4:
                     Loader=new Ball(Reader);
                     break;
-                case 5:
+                    case 5:
                     Loader=new MovementPath(Reader);
                     break;
-                case 9:
+                    case 9:
                     Loader = new PlatformMovement(Reader);
                     break;
-                case 14:
+                    case 14:
                     Loader = new ExtensionsMovement(Reader);
                     break;
                 
 
+                }
+                if(Loader==null&&Type!=0) throw new Exception("Unsupported movement: "+Type);
+                Loader?.Read(); 
+
             }
-            if(Loader==null&&Type!=0) throw new Exception("Unsupported movement: "+Type);
-            Loader?.Read();
+            else
+            {
+                var nameOffset = Reader.ReadInt32();
+                var movementId = Reader.ReadInt32();
+                var newOffset = Reader.ReadInt32();
+                DataSize = Reader.ReadInt32();
+                Reader.Seek(rootPos+newOffset);
+                Player = Reader.ReadUInt16();
+                Type = Reader.ReadUInt16();
+                MovingAtStart = Reader.ReadByte();
+                Reader.Skip(3);
+                DirectionAtStart = Reader.ReadInt32();
+                switch (Type)
+                {
+                    case 1:
+                        Loader = new Mouse(Reader);
+                        break;
+                    case 2:
+                        Loader = new RaceMovement(Reader);
+                        break;
+                    case 3:
+                        Loader=new EightDirections(Reader);
+                        break;
+                    case 4:
+                        Loader=new Ball(Reader);
+                        break;
+                    case 5:
+                        Loader=new MovementPath(Reader);
+                        break;
+                    case 9:
+                        Loader = new PlatformMovement(Reader);
+                        break;
+                    case 14:
+                        Loader = new ExtensionsMovement(Reader);
+                        break;
+                
+
+                }
+                if(Loader==null&&Type!=0) throw new Exception("Unsupported movement: "+Type);
+                Loader?.Read(); 
+            }
+            
         }
 
         public override void Write(ByteWriter Writer)

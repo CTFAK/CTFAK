@@ -401,7 +401,18 @@ namespace CTFAK.GUI
             {
                 SetSoundElements(true);
                 IsDumpingSounds = true;
-                Backend.DumpSounds(this, true, true);
+                using (var worker = new BackgroundWorker())
+                {
+                    if (Program.CleanData.Sounds == null) return;
+                    SetSoundElements(true);
+                    worker.DoWork += (senderA, eA) => { Program.CleanData.Sounds.Read(true); };
+                    worker.RunWorkerCompleted += (senderA, eA) =>
+                    {
+                        SetSoundElements(false);
+                        MainForm.IsDumpingSounds = false;
+                    };
+                    worker.RunWorkerAsync();
+                }
             }
             else
             {
@@ -418,7 +429,7 @@ namespace CTFAK.GUI
             {
                 SetImageElements(true);
                 IsDumpingImages = true;
-                Backend.DumpImages(this, true, true);
+                // Backend.DumpImages(this, true, true);
             }
             else
             {
@@ -435,7 +446,7 @@ namespace CTFAK.GUI
             {
                 SetMusicElements(true);
                 IsDumpingMusics = true;
-                Backend.DumpMusics(this, true, true);
+                // Backend.DumpMusics(this, true, true);
             }
             else
             {
@@ -536,7 +547,7 @@ namespace CTFAK.GUI
 
         public void InitPackDataTab()
         {
-            if (Settings.GameType == GameType.Android) return;
+            if (Settings.GameType == GameType.Android||Settings.GameType == GameType.OnePointFive) return;
             packDataListBox.Items.Clear();
             foreach (var item in Exe.Instance.PackData.Items) packDataListBox.Items.Add(item.PackFilename);
 
@@ -606,8 +617,8 @@ namespace CTFAK.GUI
             toLog += $"MFA Name: {Path.GetFileNameWithoutExtension(Program.CleanData.EditorFilename.Value)}.mfa\n";
             toLog += $"Frames to translate: {Program.CleanData.Frames.Count}\n";
             toLog += $"Objects to translate: {Program.CleanData.Frameitems.ItemDict.Count}\n";
-            toLog += $"Images to write: {Program.CleanData.Images.Images.Count}\n";
-            toLog += $"Sounds to write: {Program.CleanData.Sounds?.Items.Count ?? 0}\n";
+            toLog += $"Images to write: {Program.CleanData.Images?.Images?.Count}\n";
+            toLog += $"Sounds to write: {Program.CleanData.Sounds?.Items?.Count ?? 0}\n";
 
 
             mfaDumpInfoLabel.Text = toLog;
