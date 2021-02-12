@@ -12,7 +12,6 @@ namespace CTFAK.Utils
 {
     public static class Decompressor
     {
-        
         public static byte[] Decompress(ByteReader exeReader, out int decompressed)
         {
             Int32 decompSize = exeReader.ReadInt32();
@@ -21,8 +20,9 @@ namespace CTFAK.Utils
             return DecompressBlock(exeReader, compSize, decompSize);
         }
 
-        public static ByteReader DecompressAsReader(ByteReader exeReader, out int decompressed)=>new ByteReader(Decompress(exeReader, out decompressed));
-       
+        public static ByteReader DecompressAsReader(ByteReader exeReader, out int decompressed) =>
+            new ByteReader(Decompress(exeReader, out decompressed));
+
 
         public static byte[] DecompressBlock(ByteReader reader, int size, int decompSize)
         {
@@ -30,7 +30,7 @@ namespace CTFAK.Utils
             MemoryStream compressedStream = new MemoryStream(reader.ReadBytes(size));
             MemoryStream decompressedStream = new MemoryStream();
             using (ZLibStream zs = new ZLibStream(compressedStream, decompOpts)) zs.CopyTo(decompressedStream);
-            
+
             byte[] decompressedData = decompressedStream.GetBuffer();
             compressedStream.Dispose();
             decompressedStream.Dispose();
@@ -46,26 +46,32 @@ namespace CTFAK.Utils
             var decompressedSize = reader.ReadInt32();
             var compressedSize = reader.Size();
             var buffer = reader.ReadBytes((int) compressedSize);
-            return DecompressOldBlock(buffer, (int) compressedSize, decompressedSize);
-
+            Int32 actualSize = 0;
+            return DecompressOldBlock(buffer, (int) compressedSize, decompressedSize, out actualSize);
         }
 
-        public static byte[] DecompressOldBlock(byte[] buff,int size,int decompSize)
+        public static byte[] DecompressOld(ByteReader reader, Int32 decompressSize, out Int32 actualSize)
+        {
+            var start = reader.Tell();
+            var compressedSize = reader.Size();
+            var buffer = reader.ReadBytes((int) compressedSize);
+            return DecompressOldBlock(buffer, (int) compressedSize, decompressSize, out actualSize);
+        }
+
+
+        public static byte[] DecompressOldBlock(byte[] buff, int size, int decompSize, out Int32 actual_size)
         {
             var originalBuff = Marshal.AllocHGlobal(size);
-            Marshal.Copy(buff,0,originalBuff,buff.Length);
+            Marshal.Copy(buff, 0, originalBuff, buff.Length);
             var outputBuff = Marshal.AllocHGlobal(decompSize);
-            NativeLib.decompressOld(originalBuff, size, outputBuff, decompSize);
+            actual_size = NativeLib.decompressOld(originalBuff, size, outputBuff, decompSize);
             Marshal.FreeHGlobal(originalBuff);
             byte[] data = new byte[decompSize];
-            Marshal.Copy(outputBuff,data,0,decompSize);
+            Marshal.Copy(outputBuff, data, 0, decompSize);
             Marshal.FreeHGlobal(outputBuff);
             return data;
-
         }
 
-        
-        
 
         public static byte[] compress_block(byte[] data)
         {

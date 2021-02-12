@@ -75,6 +75,12 @@ namespace CTFAK.Utils
             Seek(-2, SeekOrigin.Current);
             return value;
         }
+        public Int32 PeekInt32()
+        {
+            Int32 value = ReadInt32();
+            Seek(-4, SeekOrigin.Current);
+            return value;
+        }
 
 
         public string ReadAscii(int length = -1)
