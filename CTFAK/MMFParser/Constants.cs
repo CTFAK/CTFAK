@@ -3,8 +3,7 @@
     public static class Constants
     {
         public static readonly string GameHeader = "PAME";
-        public static readonly string UnicodeGameHeader = "PAMU";//"50 41 4D 55";
-        public static bool IsUnicode;
+        public static readonly string UnicodeGameHeader = "PAMU";
         public enum Products
         {
             MMF1=1,
@@ -40,10 +39,7 @@
             Counter=7,
             Rtf=8,
             SubApplication=9,
-            Ini=33,
             Extension=32,
-            File=34,
-            TextEntry=35
 
         }
         public enum ChunkNames

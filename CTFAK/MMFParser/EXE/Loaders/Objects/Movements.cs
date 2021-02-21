@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Web.UI.WebControls;
 using CTFAK.Utils;
+using static CTFAK.Settings;
 
 namespace CTFAK.MMFParser.EXE.Loaders.Objects
 {
@@ -14,9 +15,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         {
         }
 
-        public Movements(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+        
 
         public override void Read()
         {
@@ -66,19 +65,23 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         {
         }
 
-        public Movement(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+     
 
         public override void Read()
         {
-            if (Settings.GameType == GameType.OnePointFive)
+            if (Old)
             {
                 Player = Reader.ReadUInt16();
                 Type = Reader.ReadUInt16();
                 MovingAtStart = Reader.ReadByte();
                 Reader.Skip(3);
                 DirectionAtStart = Reader.ReadInt32();
+                if (Type == 5 && Old)
+                {
+                    Type = 0;
+                    Loader = null;
+                    return;
+                }
                 switch (Type)
                 {
                     case 1:
@@ -310,15 +313,31 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
-            Speed = Reader.ReadByte();
-            Direction = Reader.ReadByte();
-            DestinationX = Reader.ReadInt16();
-            DestinationY = Reader.ReadInt16();
-            Cosinus = Reader.ReadInt16();
-            Sinus = Reader.ReadInt16();
-            Length = Reader.ReadInt16();
-            Pause = Reader.ReadInt16();
-            Name = Reader.ReadAscii();
+            if (Settings.Old)
+            {
+                Speed = Reader.ReadByte();
+                Direction = Reader.ReadByte();
+                DestinationX = Reader.ReadByte();
+                DestinationY = Reader.ReadByte();
+                Cosinus = Reader.ReadByte();
+                Sinus = Reader.ReadByte();
+                Length = Reader.ReadByte();
+                Pause = Reader.ReadByte();
+                Name = Reader.ReadAscii();
+            }
+            else
+            {
+                Speed = Reader.ReadByte();
+                Direction = Reader.ReadByte();
+                DestinationX = Reader.ReadInt16();
+                DestinationY = Reader.ReadInt16();
+                Cosinus = Reader.ReadInt16();
+                Sinus = Reader.ReadInt16();
+                Length = Reader.ReadInt16();
+                Pause = Reader.ReadInt16();
+                Name = Reader.ReadAscii(); 
+            }
+            
         }
 
         public override void Write(ByteWriter Writer)

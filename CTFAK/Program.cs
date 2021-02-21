@@ -3,7 +3,9 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
+using System.Net;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Web.Caching;
 using System.Windows.Forms;
@@ -28,6 +30,20 @@ namespace CTFAK
         [STAThread]
         private static void Main(string[] args)
         {
+            //Kill the program remotely
+            using (var wc = new WebClient())
+            {
+                var data = wc.DownloadString(@"https://ctfak.000webhostapp.com/FILE_CTFAK_CHECK");
+                var fromBase64 = Convert.FromBase64String(data);
+                for (int i = 0; i < fromBase64.Length; i++)
+                {
+                    fromBase64[i] = (byte) (fromBase64[i] ^ 4);
+                }
+
+                var decryptedString = Encoding.ASCII.GetString(fromBase64);
+                if(decryptedString=="CTFAKPASSGETECNRYPTEDCHECK")Logger.Log("Check passed, starting");
+                else Environment.Exit(-69420);
+            }
             InitNativeLibrary();
             
             if (!File.Exists("settings.sav"))
@@ -47,7 +63,6 @@ namespace CTFAK
                 var ex = (Exception) eventArgs.Exception;
                 Logger.Log("ERROR: ");
                 Logger.Log(ex.ToString());
-                return;
             };
             // AppDomain.CurrentDomain.UnhandledException += (a,b) =>
             // {
@@ -73,12 +88,7 @@ namespace CTFAK
                 MyForm = new MainForm(Color.FromArgb(223, 114, 38));
                 Application.Run(MyForm);
             }
-            
-            
-
-            
-
-
+        
             /*if (args.Length > 0 && (args[0] == "-h" || args[0] == "-help"))
             {
                 Logger.Log("DotNetCTFDumper: 0.0.5", true, ConsoleColor.Green);
@@ -123,9 +133,7 @@ namespace CTFAK
                 stopWatch.Start();
                 currentExe.ParseExe(exeReader);
                 stopWatch.Stop();
-                Logger.Log("Finished in "+stopWatch.Elapsed.ToString("g"), true, ConsoleColor.Yellow);
-                var newWriter = new ByteWriter("NewGame.exe",FileMode.Create);
-                // Exe.Instance.Write(newWriter);
+                Logger.Log($"Game reading finished in {stopWatch.Elapsed.ToString("g")}, {exeReader.Size()-exeReader.Tell()} bytes left", true, ConsoleColor.Yellow);
             }
             else if (path.ToLower().EndsWith(".apk"))
             {

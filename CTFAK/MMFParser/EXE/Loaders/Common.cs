@@ -9,7 +9,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public int Right;
         public int Bottom;
         public Rect(ByteReader reader) : base(reader){}
-        public Rect(ChunkList.Chunk chunk) : base(chunk){}
+
         public override void Read()
         {
             Left = Reader.ReadInt32();

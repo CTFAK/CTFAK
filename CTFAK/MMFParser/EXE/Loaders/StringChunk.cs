@@ -37,15 +37,17 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
             return Value;
         }
+        public static implicit operator string(StringChunk chunk)
+        {
+            return chunk.Value;
+        }
 
 
         public StringChunk(ByteReader reader) : base(reader)
         {
         }
 
-        public StringChunk(Chunk chunk) : base(chunk)
-        {
-        }
+   
     }
 
     public class AppName : StringChunk
@@ -54,9 +56,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public AppName(Chunk chunk) : base(chunk)
-        {
-        }
+        
     }
 
     public class AppAuthor : StringChunk
@@ -65,9 +65,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public AppAuthor(Chunk chunk) : base(chunk)
-        {
-        }
+        
     }
 
     class ExtPath : StringChunk
@@ -76,9 +74,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public ExtPath(Chunk chunk) : base(chunk)
-        {
-        }
+       
     }
 
     public class EditorFilename : StringChunk
@@ -87,9 +83,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public EditorFilename(Chunk chunk) : base(chunk)
-        {
-        }
+       
     }
 
     public class TargetFilename : StringChunk
@@ -97,10 +91,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public TargetFilename(ByteReader reader) : base(reader)
         {
         }
-
-        public TargetFilename(Chunk chunk) : base(chunk)
-        {
-        }
+        
     }
 
     class AppDoc : StringChunk
@@ -109,9 +100,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public AppDoc(Chunk chunk) : base(chunk)
-        {
-        }
+        
     }
 
     class AboutText : StringChunk
@@ -120,9 +109,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public AboutText(Chunk chunk) : base(chunk)
-        {
-        }
+        
     }
 
     public class Copyright : StringChunk
@@ -131,9 +118,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public Copyright(Chunk chunk) : base(chunk)
-        {
-        }
+        
     }
 
     class DemoFilePath : StringChunk
@@ -142,8 +127,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public DemoFilePath(Chunk chunk) : base(chunk)
-        {
-        }
+        
     }
 }

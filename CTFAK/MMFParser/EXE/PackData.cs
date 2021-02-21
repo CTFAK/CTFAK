@@ -81,13 +81,16 @@ namespace CTFAK.MMFParser.EXE
                 if (!exeReader.Check(value)) break;
             }
             
-            var newHeader = exeReader.ReadFourCc();
-            
+            var newHeader = exeReader.ReadAscii(4);
+            bool hasBingo=newHeader != "PAME" && newHeader != "PAMU";
+            Logger.Log(newHeader);
+
             Logger.Log("PACK OFFSET: "+offset);
             exeReader.Seek(offset);
             for (int i = 0; i < count; i++)
             {
                 var item = new PackFile();
+                item.HasBingo = hasBingo;
                 item.Read(exeReader);
                 Items.Add(item);
                     
@@ -103,12 +106,13 @@ namespace CTFAK.MMFParser.EXE
         public string PackFilename = "ERROR";
         int _bingo = 0;
         public byte[] Data;
+        public bool HasBingo;
 
         public void Read(ByteReader exeReader)
         {
             UInt16 len = exeReader.ReadUInt16();
-            PackFilename = exeReader.ReadUniversal(len);
-            _bingo = exeReader.ReadInt32();
+            PackFilename = exeReader.ReadUniversal(len); 
+             _bingo = exeReader.ReadInt32();
             Data = exeReader.ReadBytes(exeReader.ReadInt32());
             
             Dump();

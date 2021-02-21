@@ -15,9 +15,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public ObjectHeaders(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+ 
 
         public override void Read()
         {
@@ -57,9 +55,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public ObjectPropertyList(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+    
 
         public override void Read()
         {
@@ -116,6 +112,5 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         }
         public ObjectNames(ByteReader reader) : base(reader) { }
-        public ObjectNames(ChunkList.Chunk chunk) : base(chunk) { }
     }
 }

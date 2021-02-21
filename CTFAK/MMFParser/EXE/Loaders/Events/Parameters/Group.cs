@@ -10,7 +10,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
         public ushort Id;
         public string Name;
         public int Password;
-        private int _unk;
         public byte[] Unk1;
         public byte[] Unk2;
 

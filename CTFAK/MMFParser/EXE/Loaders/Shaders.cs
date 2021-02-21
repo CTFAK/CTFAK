@@ -13,9 +13,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public Shaders(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+        
 
         public override void Read()
         {
@@ -65,9 +63,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public Shader(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+   
 
         public override void Read()
         {
@@ -132,9 +128,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public ShaderParameter(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+   
 
         public override void Read()
         {
@@ -156,7 +150,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             throw new System.NotImplementedException();
         }
 
-        public string GetType()
+        public string GetValueType()
         {
             switch (Type)
             {

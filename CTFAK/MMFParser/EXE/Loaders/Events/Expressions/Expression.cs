@@ -21,7 +21,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
 
         public override void Write(ByteWriter Writer)
         {
-            bool temp = false;
             Writer.WriteInt16((short) ObjectType);
             Writer.WriteInt16((short) Num);
             if (ObjectType == 0 && Num == 0) return;
@@ -29,34 +28,16 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
             if (ObjectType == Constants.ObjectType.System &&
                 (Num == 0 || Num == 3 || Num == 23 || Num == 24 || Num == 50))
             {
-                if(Loader==null) throw new NotImplementedException("Broken expression: "+Num);
+                if (Loader == null) throw new NotImplementedException("Broken expression: " + Num);
                 Loader.Write(newWriter);
             }
             else if ((int) ObjectType >= 2 || (int) ObjectType == -7)
             {
                 newWriter.WriteInt16((short) ObjectInfo);
                 newWriter.WriteInt16((short) ObjectInfoList);
-                if(Num==16||Num==19)Loader.Write(newWriter);
-                else
-                {
-                    // temp = true;
-                    // newWriter.WriteInt32(_unk);
-                }
+                if (Num == 16 || Num == 19) Loader.Write(newWriter);
             }
-            else
-            {
-                
-            }
-            // 
-            // newWriter.WriteUInt16(0);
-            if (temp)
-            {
-                Writer.WriteInt16((short) ((newWriter.Size()+2))); 
-            }
-            else
-            {
-                Writer.WriteInt16((short) ((newWriter.Size()+6))); 
-            }
+            Writer.WriteInt16((short) ((newWriter.Size() + 6)));
             Writer.WriteWriter(newWriter);
 
         }
@@ -69,9 +50,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
         public override void Read()
         {
             var currentPosition = Reader.Tell();
-            
-            ObjectType = (Constants.ObjectType) Reader.ReadInt16();
-            Num = Reader.ReadInt16();
+            var old = Settings.GameType == GameType.OnePointFive&&!Settings.DoMFA;
+            ObjectType = (Constants.ObjectType)(old ? Reader.ReadSByte():Reader.ReadInt16());
+            Num = old ? Reader.ReadSByte():Reader.ReadInt16();
             
             if (ObjectType == 0 && Num == 0) return;
 
@@ -82,7 +63,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
                 else if(Num==3) Loader= new StringExp(Reader);
                 else if (Num == 23) Loader = new DoubleExp(Reader);
                 else if (Num == 24) Loader = new GlobalCommon(Reader);
-                else if (Num == 50) Loader = null;
+                else if (Num == 50) Loader = new GlobalCommon(Reader);
                 else if((int)ObjectType>=2|| (int)ObjectType==-7)
                 {
                     ObjectInfo = Reader.ReadUInt16();
@@ -160,7 +141,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
 
         public override void Read()
         {
-            Value = Reader.ReadWideString();
+            Value = Reader.ReadUniversal();
         }
 
         public override void Write(ByteWriter Writer)

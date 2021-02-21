@@ -15,9 +15,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public FrameName(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+        
     }
 
     class FramePassword : StringChunk
@@ -26,9 +24,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public FramePassword(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+        
     }
     [SubChunkList(nameof(Frame.Chunks))]
     [CustomVisualName(nameof(Frame.Name),true)]
@@ -95,7 +91,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override void Read()
         {
-            var frameReader = new ByteReader(Chunk.ChunkData);
+            var frameReader = new ByteReader(Reader.ReadBytes());
             Chunks = new ChunkList();
             Chunks.Read(frameReader);
             
@@ -135,7 +131,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         
 
         public Frame(ByteReader reader) : base(reader){}
-        public Frame(ChunkList.Chunk chunk) : base(chunk){}
+        
         
     }
 
@@ -162,9 +158,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public FrameHeader(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+       
 
         public override void Write(ByteWriter Writer)
         {
@@ -219,9 +213,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public ObjectInstances(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+        
 
         public override void Write(ByteWriter Writer)
         {
@@ -269,9 +261,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public ObjectInstance(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+       
 
         public override void Read()
         {
@@ -341,9 +331,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public Layers(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+       
 
         public override void Read()
         {
@@ -406,9 +394,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public Layer(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+       
 
         public override void Read()
         {
@@ -449,9 +435,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public FramePalette(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+        
 
         public override void Read()
         {
@@ -476,7 +460,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
     public class VirtualRect:Rect
     {
         public VirtualRect(ByteReader reader) : base(reader){}
-        public VirtualRect(ChunkList.Chunk chunk) : base(chunk){}
     }
     public class MovementTimerBase:ChunkLoader
     {
@@ -486,9 +469,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public MovementTimerBase(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+   
 
         public override void Read()
         {

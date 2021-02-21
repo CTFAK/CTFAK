@@ -49,7 +49,7 @@ namespace CTFAK.MMFParser.Translation
             var cacheBuild = Settings.Build;
             var cacheType = Settings.GameType;
             Settings.Build = 288;
-            Settings.GameType = GameType.Normal;
+            // Settings.GameType = GameType.Normal;
             var template = new MFA.MFA(mfaReader);
             Pame2Mfa.Message("Loading Template");
             template.Read(); //Loading template

@@ -110,6 +110,7 @@ namespace CTFAK.Utils
 
         public string ReadWideString(int length = -1)
         {
+            
             String str = "";
             if (length >= 0)
             {

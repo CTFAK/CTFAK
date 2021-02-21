@@ -23,9 +23,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
         }
 
-        public ImageBank(Chunk chunk) : base(chunk)
-        {
-        }
+        
 
         public override void Write(ByteWriter Writer)
         {
@@ -152,24 +150,8 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
         public override void Read()
         {
-            // if (Settings.Build>=284) Handle -= 1;
             Handle = Reader.ReadInt32();
-            bool compressed = true;
-            int headersize = 0;
-            bool new_item = Reader.PeekInt32() == -1;
-            if (new_item)
-            {
-                compressed = false;
-                headersize = 12;
-            }
-
-            if (Settings.GameType == GameType.OnePointFive && headersize > 0)
-            {
-                Reader.Skip(headersize);
-            }
-
-            decompressed_size = Settings.GameType == GameType.OnePointFive || compressed ? Reader.ReadInt32() : 0;
-
+            
             if (!Debug)
             {
                 if (Settings.Build >= 284 && Settings.GameType != GameType.OnePointFive) Handle -= 1;
@@ -191,7 +173,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
         public void Load()
         {
-            Logger.Log("Start loading image");
             _bitmap = null;
             Reader.Seek(Position);
             ByteReader imageReader;
@@ -199,7 +180,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             {
                 if (Settings.GameType == GameType.OnePointFive && !Settings.DoMFA)
                 {
+                  
                     Int32 actual_size = 0;
+                    decompressed_size = Settings.GameType == GameType.OnePointFive || Reader.PeekInt32()!=-1 ? Reader.ReadInt32() : 0;
                     long tmp = Reader.Tell();
                     imageReader =
                         new ByteReader(Decompressor.DecompressOld(Reader, decompressed_size, out actual_size));
@@ -231,7 +214,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
             _width = imageReader.ReadInt16();
             _height = imageReader.ReadInt16();
-            Logger.Log($"Loading image {Handle.ToString(),4} Size: {_width,4}x{_height,4}, data size: {Size}");
+            // Logger.Log($"Loading image {Handle.ToString(),4} Size: {_width,4}x{_height,4}, data size: {Size}");
 
             _graphicMode = imageReader.ReadByte();
 
@@ -243,9 +226,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             ActionX = imageReader.ReadInt16();
             ActionY = imageReader.ReadInt16();
             if (Settings.GameType != GameType.OnePointFive) _transparent = imageReader.ReadColor();
-            Logger.Log(Reader.Size() - Reader.Tell());
-            // imageReader.ReadBytes((int) (imageReader.Size() - imageReader.Tell()));
-            // imageReader.Skip(Size);
             byte[] imageData;
             if (Flags["LZX"])
             {
@@ -439,9 +419,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
         }
 
-        public ImageItem(Chunk chunk) : base(chunk)
-        {
-        }
+        
     }
 
     public class TestPoint

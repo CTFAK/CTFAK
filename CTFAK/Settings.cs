@@ -38,6 +38,7 @@ namespace CTFAK
 
         public static bool DoMFA;
         public static bool UseGUI;
+        public static bool Old => Settings.GameType == GameType.OnePointFive;
         
         
 

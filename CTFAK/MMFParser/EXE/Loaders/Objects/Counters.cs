@@ -15,9 +15,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         {
         }
 
-        public Counter(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+        
 
         public override void Read()
         {
@@ -73,9 +71,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         {
         }
 
-        public Counters(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+        
 
         public override void Read()
         {

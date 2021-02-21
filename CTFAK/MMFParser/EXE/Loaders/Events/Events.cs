@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using CTFAK.Utils;
+using static CTFAK.Settings;
 using static CTFAK.MMFParser.EXE.ChunkList;
 
 namespace CTFAK.MMFParser.EXE.Loaders.Events
@@ -17,14 +18,12 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         public int MaxObjects;
         public int MaxObjectInfo;
         public int NumberOfPlayers;
-        public List<Quailifer> QualifiersList = new List<Quailifer>();
+        public Dictionary<int,Quailifer> QualifiersList = new Dictionary<int,Quailifer>();
         public List<int> NumberOfConditions = new List<int>();
         public List<EventGroup> Items = new List<EventGroup>();
 
 
-        public Events(Chunk chunk) : base(chunk)
-        {
-        }
+     
 
         public override void Write(ByteWriter Writer)
         {
@@ -41,7 +40,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
 
         public override void Read()
         {
-            if (Settings.GameType == GameType.OnePointFive) return;
+            // if (Settings.GameType == GameType.OnePointFive) return;
             while (true)
             {
                 var identifier = Reader.ReadAscii(4);
@@ -56,13 +55,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                     }
 
                     var qualifierCount = Reader.ReadInt16(); //should be 0, so i dont care
-                    Logger.Log(qualifierCount);
                     for (int i = 0; i < qualifierCount; i++)
                     {
                         var newQualifier = new Quailifer(Reader);
                         newQualifier.Read();
-                        QualifiersList.Add(newQualifier); //i dont understand python types
-                        //THIS IS NOT DONE
+                        if(!QualifiersList.ContainsKey(newQualifier.ObjectInfo))QualifiersList.Add(newQualifier.ObjectInfo,newQualifier);
                     }
                 }
                 else if (identifier == EventCount)
@@ -85,6 +82,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                 }
                 else if (identifier == End) break;
             }
+        }
+
+        public Events(ByteReader reader) : base(reader)
+        {
         }
     }
 
@@ -139,9 +140,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         public byte NumberOfActions;
         public bool isMFA=false;
 
-        public EventGroup(Chunk chunk) : base(chunk)
-        {
-        }
+
 
         public EventGroup(ByteReader reader) : base(reader)
         {
@@ -164,30 +163,41 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             NumberOfConditions = Reader.ReadByte();
             NumberOfActions = Reader.ReadByte();
             Flags = Reader.ReadUInt16();
-            if (Settings.Build >= 284)
+            if (Old)
             {
-                if(isMFA)
-                {
-                    IsRestricted = Reader.ReadInt16(); //For MFA
-                    RestrictCpt = Reader.ReadInt16();
-                    Identifier = Reader.ReadInt16();
-                    Undo = Reader.ReadInt16();
-                }
-                else
-                {
-                    var nop = Reader.ReadInt16();
-                    IsRestricted = Reader.ReadInt32();
-                    RestrictCpt = Reader.ReadInt32();
-                }
-            }
-            else
-            {
-                IsRestricted = Reader.ReadInt16();
+                IsRestricted = Reader.ReadInt16(); //For MFA
                 RestrictCpt = Reader.ReadInt16();
                 Identifier = Reader.ReadInt16();
                 Undo = Reader.ReadInt16();
             }
-
+            else
+            {
+                if (Settings.Build >= 284&&(Settings.GameType == GameType.Normal))
+                {
+                    if(Settings.DoMFA)
+                    {
+                        IsRestricted = Reader.ReadInt16(); //For MFA
+                        RestrictCpt = Reader.ReadInt16();
+                        Identifier = Reader.ReadInt16();
+                        Undo = Reader.ReadInt16();
+                    }
+                    else
+                    {
+                        var nop = Reader.ReadInt16();
+                        IsRestricted = Reader.ReadInt32();
+                        RestrictCpt = Reader.ReadInt32();
+                    }
+                }
+                else
+                {
+                    IsRestricted = Reader.ReadInt16();
+                    RestrictCpt = Reader.ReadInt16();
+                    Identifier = Reader.ReadInt16();
+                    Undo = Reader.ReadInt16();
+                }
+            }
+            
+            // Logger.Log($"Cond: {NumberOfConditions},Act: {NumberOfActions}");
             for (int i = 0; i < NumberOfConditions; i++)
             {
                 var item = new Condition(Reader);
@@ -202,18 +212,19 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                 Actions.Add(item);
             }
             Reader.Seek(currentPosition + Size);
-            
+            // Logger.Log($"COND:{NumberOfConditions}, ACT: {NumberOfActions}");
+
         }
 
         public override void Write(ByteWriter Writer)
         {
             ByteWriter newWriter = new ByteWriter(new MemoryStream());
-            newWriter.WriteInt8(NumberOfConditions);
-            newWriter.WriteInt8(NumberOfActions);
+            newWriter.WriteInt8((byte) Conditions.Count);
+            newWriter.WriteInt8((byte) Actions.Count);
             newWriter.WriteUInt16(Flags);
             if (Settings.Build >= 284)
             {
-                if(isMFA)//For MFA
+                if(Settings.DoMFA)//For MFA
                 {
                     newWriter.WriteInt16((short) IsRestricted); 
                     newWriter.WriteInt16((short) RestrictCpt);
@@ -262,6 +273,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         {
             var num = cond.Num;
             if (num == -42) num = -27;
+            // if (num == -49) num = -81;
             if (Settings.Build >= 287)
             {
                 // if (num == -28||num == -29||num == -30||num == -31||num == -32||num == -33||num == -34||num == -35||num == -36||num == -37||num == -38||num == -39) num = -8;

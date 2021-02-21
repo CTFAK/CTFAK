@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using CTFAK.MMFParser.EXE.Loaders;
@@ -17,7 +18,6 @@ namespace CTFAK.MMFParser.EXE
     {
         public List<Chunk> Chunks = new List<Chunk>();
         public bool Verbose = false;
-        public List<Frame> Frames = new List<Frame>();
 
         public void Write(ByteWriter Writer)
         {
@@ -29,6 +29,8 @@ namespace CTFAK.MMFParser.EXE
 
         public void Read(ByteReader reader)
         {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             Chunks.Clear();
 
             while (true)
@@ -38,30 +40,16 @@ namespace CTFAK.MMFParser.EXE
                 chunk.Read(reader);
                 if (chunk.Id == 26214 && Settings.GameType != GameType.TwoFivePlus) chunk.Loader = LoadModern(chunk);
                 else chunk.Loader = LoadModern(chunk);
+                if(chunk.Loader!=null)chunk.Loader.Chunk = chunk;
 
                 Chunks.Add(chunk);
                 if (reader.Tell() >= reader.Size()) break; //In case there is no LAST chunk(may happen for fnac)
                 if (chunk.Id == 32639) break; //LAST chunkID
                 if (chunk.Id == 8750) BuildKey(); //Only build key when we have all the needed info
                 if (chunk.Id == 8788) Settings.GameType = GameType.TwoFivePlus; //Can be only seen in 2.5+
-                if (chunk.Id == 8791)
-                {
-                    var headers = GetChunk<ObjectHeaders>().Headers;
-                    var names = GetChunk<ObjectNames>().Names;
-                    Program.CleanData.Frameitems = new FrameItems((ByteReader) null);
-                    foreach (KeyValuePair<int, ObjectHeader> header in headers)
-                    {
-                        var newInfo = new ObjectInfo((ByteReader) null);
-                        newInfo.Handle = header.Value.Handle;
-                        newInfo.Name = names[header.Key];
-                        newInfo.ObjectType = (Constants.ObjectType) header.Value.ObjectType;
-                        newInfo.InkEffect = (int) header.Value.InkEffect;
-                        newInfo.InkEffectValue = header.Value.InkEffectParameter;
-
-                        Program.CleanData.Frameitems.ItemDict.Add(newInfo.Handle, newInfo);
-                    }
-                }
+                
             }
+            stopwatch.Stop();
         }
 
         public class Chunk
@@ -122,7 +110,7 @@ namespace CTFAK.MMFParser.EXE
                         ChunkData = exeReader.ReadBytes(Size);
                         break;
                 }
-
+                if(ChunkData==null) throw new NullReferenceException("ChunkData is null after reading");
                 //Save();
             }
 
@@ -271,188 +259,150 @@ namespace CTFAK.MMFParser.EXE
 
         public ChunkLoader LoadModern(Chunk chunk)
         {
+            var reader = chunk.GetReader();
             ChunkLoader loader = null;
             switch (chunk.Id)
             {
                 case 8739:
-                    loader = new AppHeader(chunk);
+                    loader = new AppHeader(reader);
                     break;
                 case 8740:
-                    loader = new AppName(chunk);
+                    loader = new AppName(reader);
                     break;
                 case 8741:
-                    loader = new AppAuthor(chunk);
+                    loader = new AppAuthor(reader);
                     break;
                 case 8742:
-                    loader = new AppMenu(chunk);
+                    loader = new AppMenu(reader);
                     break;
                 case 8743:
-                    loader = new ExtPath(chunk);
+                    loader = new ExtPath(reader);
                     break;
                 case 8747:
-                    loader = new FrameHandles(chunk);
+                    loader = new FrameHandles(reader);
                     break;
                 case 8750:
-                    loader = new EditorFilename(chunk);
+                    loader = new EditorFilename(reader);
                     break;
                 case 8751:
-                    loader = new TargetFilename(chunk);
+                    loader = new TargetFilename(reader);
                     break;
                 case 8752:
-                    loader = new AppDoc(chunk);
+                    loader = new AppDoc(reader);
                     break;
                 case 8771:
-                    loader = new Shaders(chunk);
+                    loader = new Shaders(reader);
                     break;
                 case 8756:
-                    loader = new Extensions(chunk);
+                    loader = new Extensions(reader);
                     break;
                 case 8745:
-                    loader = new FrameItems(chunk);
+                    loader = new FrameItems(reader);
                     break;
                 case 8787:
-                    loader = new ObjectHeaders(chunk);
+                    loader = new ObjectHeaders(reader);
                     break;
                 case 8790:
-                    loader = new ObjectPropertyList(chunk);
+                    loader = new ObjectPropertyList(reader);
                     break;
                 case 8762:
-                    loader = new AboutText(chunk);
+                    loader = new AboutText(reader);
                     break;
                 case 8763:
-                    loader = new Copyright(chunk);
+                    loader = new Copyright(reader);
                     break;
                 case 13123:
-                    loader = new DemoFilePath(chunk);
+                    loader = new DemoFilePath(reader);
                     break;
                 case 13109:
-                    loader = new FrameName(chunk);
+                    loader = new FrameName(reader);
                     break;
                 case 13107:
-                    loader = new Frame(chunk);
-                    Frames.Add((Frame) loader);
+                    loader = new Frame(reader);
                     break;
                 case 13108:
-                    loader = new FrameHeader(chunk);
+                    loader = new FrameHeader(reader);
                     break;
                 case 13111:
-                    loader = new FramePalette(chunk);
+                    loader = new FramePalette(reader);
                     break;
                 case 13112:
-                    loader = new ObjectInstances(chunk);
+                    loader = new ObjectInstances(reader);
                     break;
                 case 13115:
-                    loader = new Transition(chunk);
+                    loader = new Transition(reader);
                     break;
                 case 13116:
-                    loader = new Transition(chunk);
+                    loader = new Transition(reader);
                     break;
                 case 13122:
-                    loader = new VirtualRect(chunk);
+                    loader = new VirtualRect(reader);
                     break;
                 case 13121:
-                    loader = new Layers(chunk);
+                    loader = new Layers(reader);
                     break;
                 case 26214:
                     if (Settings.GameType == GameType.Android) break;
-                    loader = new ImageBank(chunk);
+                    loader = new ImageBank(reader);
                     break;
                 case 26216:
                     if (Settings.GameType == GameType.Android) break;
-                    loader = new SoundBank(chunk);
+                    loader = new SoundBank(reader);
                     break;
                 case 26217:
                     if (Settings.GameType == GameType.Android) break;
-                    loader = new MusicBank(chunk);
+                    loader = new MusicBank(reader);
                     break;
                 case 26215:
-                    loader = new FontBank(chunk);
+                    loader = new FontBank(reader);
                     break;
                 case 17477:
-                    loader = new ObjectName(chunk);
+                    loader = new ObjectName(reader);
                     break;
                 case 17476:
-                    loader = new ObjectHeader(chunk);
+                    loader = new ObjectHeader(reader);
+                    break;
+                case 8748:
+                    loader = new ExtData(reader);
                     break;
                 case 17478:
-                    loader = new ObjectProperties(chunk);
+                    loader = new ObjectProperties(reader);
                     return loader;
                 case 8788:
-                    loader = new ObjectNames(chunk);
+                    loader = new ObjectNames(reader);
                     break;
                 case 8754:
-                    loader = new GlobalValues(chunk);
+                    loader = new GlobalValues(reader);
                     break;
                 case 8755:
-                    loader = new GlobalStrings(chunk);
+                    loader = new GlobalStrings(reader);
                     break;
                 case 13117:
                     if (Settings.GameType == GameType.Android) break;
-                    loader = new Events(chunk);
+                    loader = new Events(reader);
                     break;
                 case 13127:
-                    loader = new MovementTimerBase(chunk);
+                    loader = new MovementTimerBase(reader);
                     break;
             }
 
+            if (Settings.GameType == GameType.OnePointFive)
+            {
+                if (loader == null)
+                {
+                    Logger.Log("NULL loader for "+chunk.Name);
+                }
+                else
+                {
+                    Logger.Log("Loading old "+loader.GetType().Name);
+                }
+            }
             loader?.Read();
             // chunk.ChunkData = null; //TODO:Do something smarter
             // chunk.RawData = null;
             return loader;
         }
-
-        public ChunkLoader LoadOld(Chunk chunk)
-        {
-            ChunkLoader loader = null;
-            switch (chunk.Id)
-            {
-                case 8740:
-                    loader = new AppName(chunk);
-                    break;
-                case 8741:
-                    loader = new AppAuthor(chunk);
-                    break;
-                case 8745:
-                    loader = new FrameItems(chunk);
-                    break;
-                case 17477:
-                    loader = new ObjectName(chunk);
-                    break;
-                case 17476:
-                    loader = new ObjectHeader(chunk);
-                    break;
-                case 17478:
-                    loader = new ObjectProperties(chunk);
-                    return loader;
-                case 13107:
-                    loader = new Frame(chunk);
-                    break;
-                case 8750:
-                    loader = new EditorFilename(chunk);
-                    break;
-                case 8751:
-                    loader = new TargetFilename(chunk);
-                    break;
-                case 13109:
-                    loader = new FrameName(chunk);
-                    break;
-                case 13108:
-                    loader = new FrameHeader(chunk);
-                    break;
-                case 13112:
-                    loader = new ObjectInstances(chunk);
-                    break;
-                case 26214:
-                    // loader = new ImageBank(chunk);
-                    break;
-                case 26216:
-                    // loader = new SoundBank(chunk);
-                    break;
-            }
-
-            loader?.Read();
-            return loader;
-        }
+        
 
 
         public T GetChunk<T>() where T : ChunkLoader

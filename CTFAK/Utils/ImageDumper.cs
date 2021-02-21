@@ -67,6 +67,7 @@ namespace CTFAK.Utils
 
         public static void SaveDirection(AnimationDirection dir, ImageBank bank,string fullPath)
         {
+            if (dir.Reader == null) return;
             for (int i = 0; i < dir.Frames.Count; i++)
             {
                 var frame = dir.Frames[i];
@@ -111,7 +112,7 @@ namespace CTFAK.Utils
                     Directory.CreateDirectory($"{fullPath}\\Direction {anim.DirectionDict.ToList().IndexOf(dirpair)}");
                     for (int i = 0; i < anim.DirectionDict[0].Frames.Count; i++)
                     {
-                        
+                        if (dirpair.Value != null && dirpair.Value.Frames.Count > 0) continue;
                         var frame = dirpair.Value.Frames[i];
                         bank.Images[frame].Save($"{fullPath}\\Direction {anim.DirectionDict.ToList().IndexOf(dirpair)}\\{i}.png");
                     } 

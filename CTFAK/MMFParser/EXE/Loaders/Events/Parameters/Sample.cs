@@ -13,7 +13,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
         {
             Handle = Reader.ReadInt16();
             Flags = Reader.ReadUInt16();
-            Name = Reader.ReadWideString();
+            Name = Reader.ReadUniversal();
         }
 
         public override void Write(ByteWriter Writer)

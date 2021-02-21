@@ -77,9 +77,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
         }
 
-        public SoundBank(Chunk chunk) : base(chunk)
-        {
-        }
+        
     }
 
     public class SoundBase : ChunkLoader
@@ -111,9 +109,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
         }
 
-        public SoundBase(Chunk chunk) : base(chunk)
-        {
-        }
+       
     }
 
     public class SoundItem : SoundBase
@@ -157,7 +153,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         }
 
         
-        public void Write(ByteWriter writer)
+        public override void Write(ByteWriter writer)
         {
             writer.WriteUInt32((uint)Handle);
             writer.WriteInt32(Checksum);
@@ -183,8 +179,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
         }
 
-        public SoundItem(Chunk chunk) : base(chunk)
-        {
-        }
+        
     }
 }

@@ -31,9 +31,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         {
         }
 
-        public Backdrop(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+        
 
         public override void Read()
         {
@@ -87,19 +85,31 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         {
         }
 
-        public Quickbackdrop(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+       
 
         public override void Read()
         {
-            Size = Reader.ReadInt32();
-            ObstacleType = (Obstacle) Reader.ReadInt16();
-            CollisionType = (Collision) Reader.ReadInt16();
-            Width = Reader.ReadInt32();
-            Height = Reader.ReadInt32();
-            Shape = new Shape(Reader);
-            Shape.Read();
+            if (Settings.GameType == GameType.OnePointFive)
+            {
+                Size = Reader.ReadInt16();
+                ObstacleType = (Obstacle) Reader.ReadInt16();
+                CollisionType = (Collision) Reader.ReadInt16();
+                Width = Reader.ReadInt32();
+                Height = Reader.ReadInt32();
+                Shape = new Shape(Reader);
+                Shape.Read(); 
+            }
+            else
+            {
+                Size = Reader.ReadInt32();
+                ObstacleType = (Obstacle) Reader.ReadInt16();
+                CollisionType = (Collision) Reader.ReadInt16();
+                Width = Reader.ReadInt32();
+                Height = Reader.ReadInt32();
+                Shape = new Shape(Reader);
+                Shape.Read(); 
+            }
+            
         }
 
         public override void Write(ByteWriter Writer)
@@ -133,9 +143,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         {
         }
 
-        public Shape(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+       
 
         public override void Read()
         {

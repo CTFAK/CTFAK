@@ -72,8 +72,8 @@ namespace CTFAK.MMFParser.EXE
             RuntimeVersion = (short) exeReader.ReadUInt16(); 
             RuntimeSubversion = (short) exeReader.ReadUInt16(); 
             ProductVersion = (Constants.Products)exeReader.ReadInt32();
-            ProductBuild = exeReader.ReadInt32();//Easy Access
-            Settings.Build=ProductBuild;
+            ProductBuild = exeReader.ReadInt32();
+            Settings.Build=ProductBuild;//Easy Access
             Logger.Log("GAME BUILD: "+Settings.Build);
             Logger.Log("PRODUCT: "+ProductVersion);
             
@@ -84,7 +84,7 @@ namespace CTFAK.MMFParser.EXE
 
             //Load chunks into gamedata for easier access
             //Can only be accessed from here AFTER loading all the chunks
-            //If you need it AT LOADING - use ChunkList.get_chunk<ChunkType>();
+            //If you need it AT LOADING - use ChunkList.GetChunk<ChunkType>();
             if (GameChunks.GetChunk<AppName>() != null) Name = GameChunks.PopChunk<AppName>();
             if (GameChunks.GetChunk<Copyright>() != null) Copyright = GameChunks.PopChunk<Copyright>();
             if (GameChunks.GetChunk<AppAuthor>()!=null) Author = GameChunks.PopChunk<AppAuthor>();
@@ -99,15 +99,38 @@ namespace CTFAK.MMFParser.EXE
             if (GameChunks.GetChunk<AppIcon>() != null) Icon = GameChunks.PopChunk<AppIcon>();
             if (GameChunks.GetChunk<GlobalStrings>() != null) GStrings = GameChunks.PopChunk<GlobalStrings>();
             if (GameChunks.GetChunk<GlobalValues>() != null) GValues = GameChunks.PopChunk<GlobalValues>();
-            if (GameChunks.GetChunk<FrameItems>() != null) Frameitems = GameChunks.PopChunk<FrameItems>();
             if (GameChunks.GetChunk<FrameHandles>() != null) FrameHandles = GameChunks.PopChunk<FrameHandles>();
             if (GameChunks.GetChunk<Extensions>() != null) Extensions = GameChunks.PopChunk<Extensions>();
+            if (GameChunks.GetChunk<FrameItems>() != null) Frameitems = GameChunks.PopChunk<FrameItems>();
+            else Frameitems=new FrameItems(null as ByteReader);
+            
             for (int i = 0; i < Header.NumberOfFrames; i++)
             {
                 Frames.Add(GameChunks.PopChunk<Frame>());
             }
 
-            //Print();
+            if (Settings.GameType == GameType.TwoFivePlus)
+            {
+                var headers = GameChunks.PopChunk<ObjectHeaders>().Headers;
+                var names = GameChunks.PopChunk<ObjectNames>().Names;
+                if(headers.Count>names.Count)Logger.LogWarning("Warning: Some object names for 2.5+ are missing");
+                if(headers.Count<names.Count)Logger.LogWarning("Warning: Some object headers for 2.5+ are missing");
+                
+                Program.CleanData.Frameitems = new FrameItems((ByteReader) null);
+                foreach (KeyValuePair<int, ObjectHeader> header in headers)
+                {
+                    var newInfo = new ObjectInfo((ByteReader) null);
+                    newInfo.Handle = header.Value.Handle;
+                    newInfo.ObjectType = (Constants.ObjectType) header.Value.ObjectType;
+                    newInfo.InkEffect = (int) header.Value.InkEffect;
+                    newInfo.InkEffectValue = header.Value.InkEffectParameter;
+                    string name = $"{newInfo.ObjectType}-{newInfo.Handle}";
+                    names.TryGetValue(header.Key, out name);
+                    newInfo.Name = name;
+                    Frameitems.ItemDict.Add(newInfo.Handle, newInfo);
+                }
+            }
+            
         }
         public void Print()
         {

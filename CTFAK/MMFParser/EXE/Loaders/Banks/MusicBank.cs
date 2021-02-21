@@ -57,9 +57,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
         }
 
-        public MusicBank(Chunk chunk) : base(chunk)
-        {
-        }
+        
     }
 
     public class MusicFile : ChunkLoader
@@ -120,9 +118,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
         }
 
-        public MusicFile(Chunk chunk) : base(chunk)
-        {
-        }
+        
     }
 
    

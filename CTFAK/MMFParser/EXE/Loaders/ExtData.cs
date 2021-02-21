@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using CTFAK.Utils;
 using static CTFAK.MMFParser.EXE.ChunkList;
 
@@ -6,7 +7,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
 {
     class ExtData : ChunkLoader
     {
-        public ExtData(Chunk chunk) : base(chunk) { }
+       
         public override void Write(ByteWriter Writer)
         {
             throw new NotImplementedException();
@@ -25,7 +26,13 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public override void Read()
         {
             var filename = Reader.ReadAscii();
-            //var data = reader.ReadBytes();
+            var data = Reader.ReadBytes();
+            Logger.Log($"Found file {filename}, {data.Length.ToPrettySize()}");
+            // File.WriteAllBytes($"{Settings.DumpPath}\\{filename}",data);
+        }
+
+        public ExtData(ByteReader reader) : base(reader)
+        {
         }
     }
 }

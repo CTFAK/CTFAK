@@ -298,6 +298,7 @@ namespace CTFAK.MMFParser.MFA
             if (Reader.ReadAscii(4)!= "AGMI") throw new Exception("Invalid Icon Bank: ");
             Icons = new AGMIBank(Reader);
             Icons.Read();
+            Logger.Log($"{Icons.Items[2].Bitmap.Width}x{Icons.Items[2].Bitmap.Width}");
 
             if (Reader.ReadAscii(4) != "AGMI") throw new Exception("Invalid Image Bank");
             Images = new AGMIBank(Reader);

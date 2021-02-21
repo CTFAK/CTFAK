@@ -17,11 +17,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             this.Reader = reader;
         }
 
-        protected ChunkLoader(Chunk chunk)
-        {
-            this.Chunk = chunk;
-            this.Reader = chunk.GetReader();
-        }
+        
 
 
         public abstract void Read();

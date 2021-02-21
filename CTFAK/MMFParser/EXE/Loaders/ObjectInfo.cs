@@ -16,7 +16,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
         private ObjectHeader _header=new ObjectHeader((ByteReader) null);
         private ObjectName _name=new ObjectName((ByteReader) null);
         private ObjectProperties _properties;
-        public ObjectInfo(Chunk chunk) : base(chunk){}
         public ObjectInfo(ByteReader reader) : base(reader){}
         public override void Write(ByteWriter Writer)
         {
@@ -39,11 +38,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
             var infoChunks = new ChunkList();
             infoChunks.Verbose = false;
             infoChunks.Read(Reader);
-            
             _header = infoChunks.GetChunk<ObjectHeader>();
             _name = infoChunks.GetChunk<ObjectName>();
             _properties = infoChunks.GetChunk<ObjectProperties>(); 
             _properties.ReadNew((int) ObjectType,this);
+            if(Name=="play button")Logger.Log($"{Name} - {InkEffect} - {_header.InkEffect} - {InkEffectValue}");
             
         }
 
@@ -150,7 +149,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
     public class ObjectName : StringChunk
     {
         public ObjectName(ByteReader reader) : base(reader){}
-        public ObjectName(Chunk chunk) : base(chunk){}
     }
 
     public class ObjectProperties : ChunkLoader
@@ -159,7 +157,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public ChunkLoader Loader;
 
         public ObjectProperties(ByteReader reader) : base(reader){}
-        public ObjectProperties(Chunk chunk) : base(chunk){}
         public void ReadNew(int ObjectType,ObjectInfo parent)
         {
             if(ObjectType==0) Loader=new Quickbackdrop(Reader);
@@ -193,7 +190,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public byte Opacity;
 
         public ObjectHeader(ByteReader reader) : base(reader){}
-        public ObjectHeader(Chunk chunk) : base(chunk){}
         public override void Write(ByteWriter Writer)
         {
             throw new NotImplementedException();
@@ -210,16 +206,12 @@ namespace CTFAK.MMFParser.EXE.Loaders
             Reserved = Reader.ReadInt16();
             InkEffect = Reader.ReadByte();
             Reader.Skip(3);
-            if ( InkEffect== 0)
-            {
-                Reader.Skip(3);
-                InkEffectParameter = Reader.ReadByte();
-            }
-            else
-            {
-                InkEffectParameter = (uint) (255-Reader.ReadByte()); 
-            }
-            
+            // if ( InkEffect== 0) Reader.Skip(3);
+            InkEffectParameter = Reader.ReadByte();
+            // if (InkEffect == 1) InkEffectParameter = 255 - InkEffectParameter;
+
+
+
 
 
 

@@ -25,6 +25,7 @@ using Frame = CTFAK.MMFParser.EXE.Loaders.Frame;
 using Layer = CTFAK.MMFParser.MFA.Loaders.Layer;
 using Movement = CTFAK.MMFParser.MFA.Loaders.mfachunks.Movement;
 using Paragraph = CTFAK.MMFParser.MFA.Loaders.mfachunks.Paragraph;
+using Parameter = CTFAK.MMFParser.EXE.Loaders.Events.Parameter;
 using Text = CTFAK.MMFParser.MFA.Loaders.mfachunks.Text;
 
 namespace CTFAK.MMFParser.Translation
@@ -47,7 +48,7 @@ namespace CTFAK.MMFParser.Translation
             mfa.Path = game.EditorFilename?.Value ?? "";
 
             //if (game.Fonts != null) mfa.Fonts = game.Fonts;
-            mfa.Sounds.Items.Clear();
+            // mfa.Sounds.Items.Clear();
             if (game.Sounds != null&&game.Sounds.Items!=null)
             {
                 
@@ -66,14 +67,14 @@ namespace CTFAK.MMFParser.Translation
                 }
             }
             
-            // mfa.Music = game.Music;
+            mfa.Music = game.Music;
             mfa.Images.Items = game.Images?.Images ?? new Dictionary<int, ImageItem>();
             foreach (var key in mfa.Images.Items.Keys)
             {
                 mfa.Images.Items[key].Debug = true;
             }
 
-            // game.Images.Images.Clear();
+            // game.Images.Images.Clea r();
 
             mfa.Author = game.Author?.Value ?? "";
             mfa.Copyright = game.Copyright?.Value ?? "";
@@ -189,7 +190,7 @@ namespace CTFAK.MMFParser.Translation
                 newFrame.ActiveLayer = 0;
                 //LayerInfo
                 // if(frame.Layers==null) continue;
-                if (Settings.GameType != GameType.OnePointFive)
+                if (Settings.GameType != GameType.OnePointFive&&frame.Layers!=null)
                 {
                     var count = frame.Layers.Count;
                     for (int i = 0; i < count; i++)
@@ -222,6 +223,7 @@ namespace CTFAK.MMFParser.Translation
                 var newFrameItems = new List<FrameItem>();
                 var newInstances = new List<FrameInstance>();
                 if (frame.Objects != null)
+                // if (false)
                 {
 
                     for (int i = 0; i < frame.Objects.Count; i++)
@@ -272,7 +274,7 @@ namespace CTFAK.MMFParser.Translation
                     newFrame.Events.Objects = new List<EventObject>();
                     newFrame.Events._ifMFA = true;
                     newFrame.Events.Version = 1028;
-                    // if (false) 
+                    // if(false)
                     if(frame.Events != null)
                     {
                         foreach (var item in newFrame.Items)
@@ -291,14 +293,71 @@ namespace CTFAK.MMFParser.Translation
                         }
 
                         newFrame.Events.Items = frame.Events.Items;
-                    
+                        Dictionary<int,Quailifer> qualifiers = new Dictionary<int,Quailifer>();
+                        foreach (Quailifer quailifer in frame.Events.QualifiersList.Values)
+                        {
+                            int newHandle = 0;
+                            while (true)
+                            {
+                                if (!newFrame.Items.Any(item => item.Handle == newHandle)&&
+                                    !qualifiers.Keys.Any(item => item == newHandle)) break;
+                                newHandle++;
+
+                            }
+                            qualifiers.Add(newHandle,quailifer);
+                            var qualItem = new EventObject(null as ByteReader);
+                            qualItem.Handle = (uint) newHandle;
+                            qualItem.SystemQualifier = (ushort) quailifer.Qualifier;
+                            qualItem.Name = "";
+                            qualItem.TypeName = "";
+                            qualItem.ItemType =(ushort) quailifer.Type;
+                            qualItem.ObjectType = 3;
+                            newFrame.Events.Objects.Add(qualItem);
+
+                        }
+                        foreach (EventGroup eventGroup in newFrame.Events.Items)
+                        {
+                            foreach (Action action in eventGroup.Actions)
+                            {
+                                foreach (var quailifer in qualifiers)
+                                {
+                                    if (quailifer.Value.ObjectInfo == action.ObjectInfo)
+                                        action.ObjectInfo = quailifer.Key;
+                                    foreach (var param in action.Items)
+                                    {
+                                        var objInfoFld = param?.Loader?.GetType()?.GetField("ObjectInfo");
+                                        if (objInfoFld == null) continue;
+                                        if ((int)objInfoFld?.GetValue(param?.Loader) ==
+                                            quailifer.Value?.ObjectInfo)
+                                            param.Loader?.GetType().GetField("ObjectInfo")
+                                                .SetValue(param.Loader, quailifer.Key);
+                                    }
+                                }
+                                
+                            }
+                            foreach (Condition cond in eventGroup.Conditions)
+                            {
+                                foreach (var quailifer in qualifiers)
+                                {
+                                    if (quailifer.Value.ObjectInfo == cond.ObjectInfo)
+                                        cond.ObjectInfo = quailifer.Key;
+                                    foreach (var param in cond.Items)
+                                    {
+                                        var objInfoFld = param?.Loader?.GetType()?.GetField("ObjectInfo");
+                                        if (objInfoFld == null) continue;
+                                        if ((int)objInfoFld?.GetValue(param?.Loader) ==
+                                            quailifer.Value?.ObjectInfo)
+                                            param.Loader?.GetType().GetField("ObjectInfo")
+                                                .SetValue(param.Loader, quailifer.Key);
+                                    }
+                                }   
+                            }
+                        }
+                        
                     }
                 }
                 Logger.Log("Frame Translated");
                 mfa.Frames.Add(newFrame);
-                
-
-
             }
         }
 
@@ -409,7 +468,7 @@ namespace CTFAK.MMFParser.Translation
             }
             else
             {
-                var itemLoader = (ObjectCommon) item?.Properties?.Loader;
+                var itemLoader = item?.Properties?.Loader as ObjectCommon;
                 if (itemLoader == null) throw new NotImplementedException("Null loader");
                 Logger.Log(("Translating Object: " + itemLoader.Parent.Name),false,ConsoleColor.Blue,false);
                 //CommonSection
@@ -536,7 +595,7 @@ namespace CTFAK.MMFParser.Translation
                         newExt.Qualifiers = newObject.Qualifiers;
 
                     }
-                    if (Settings.GameType != GameType.OnePointFive)
+                    // if (Settings.GameType != GameType.OnePointFive)
                     {
                         var exts = Program.CleanData.Extensions;
                         Extension ext = null;

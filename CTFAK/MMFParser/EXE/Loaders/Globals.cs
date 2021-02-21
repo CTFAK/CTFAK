@@ -8,7 +8,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
     public class GlobalValues : ChunkLoader
     {
         public List<float> Items = new List<float>();
-        public GlobalValues(Chunk chunk) : base(chunk) { }
         public override void Write(ByteWriter Writer)
         {
             throw new NotImplementedException();
@@ -53,11 +52,14 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
             
         }
+
+        public GlobalValues(ByteReader reader) : base(reader)
+        {
+        }
     }
     public class GlobalStrings : ChunkLoader
     {
         public List<string> Items = new List<string>();
-        public GlobalStrings(Chunk chunk) : base(chunk) { }
         public override void Write(ByteWriter Writer)
         {
             throw new NotImplementedException();
@@ -81,6 +83,10 @@ namespace CTFAK.MMFParser.EXE.Loaders
                 Items.Add(Reader.ReadAscii());
             }
 
+        }
+
+        public GlobalStrings(ByteReader reader) : base(reader)
+        {
         }
     }
 }

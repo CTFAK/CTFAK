@@ -13,9 +13,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public FrameHandles(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+        
 
         public override void Read()
         {
@@ -39,7 +37,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         }
 
         public override void Print(bool ext){}
-        public override string[] GetReadableData() => null;
+        public override string[] GetReadableData() => new[] {$"Frame Count: {Items.Count}"};
 
     }
 }

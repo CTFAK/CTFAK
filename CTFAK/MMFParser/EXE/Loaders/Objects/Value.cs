@@ -12,9 +12,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         {
         }
 
-        public AlterableValues(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+       
 
         public override void Read()
         {
@@ -57,9 +55,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         {
         }
 
-        public AlterableStrings(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+       
 
         public override void Read()
         {

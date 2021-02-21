@@ -11,9 +11,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         {
         }
 
-        public Animations(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+        
 
         public override void Read()
         {
@@ -71,9 +69,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         {
         }
 
-        public Animation(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+       
 
         public override void Read()
         {
@@ -131,9 +127,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         {
         }
 
-        public AnimationDirection(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+       
 
         public override void Read()
         {

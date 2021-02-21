@@ -17,9 +17,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public Transition(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+   
 
         public override void Read()
         {

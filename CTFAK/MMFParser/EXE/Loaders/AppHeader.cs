@@ -68,10 +68,10 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
             {
                 var start = Reader.Tell();
-                if (Settings.GameType != GameType.OnePointFive)
+                if (!Settings.Old)
                 {
                     Size = Reader.ReadInt32();
-                    Debug.Assert(Size==Reader.Size());
+                    // Debug.Assert(Size==Reader.Size());
                 }
                 Flags.flag=(uint) Reader.ReadInt16();
 
@@ -84,12 +84,12 @@ namespace CTFAK.MMFParser.EXE.Loaders
                 InitialLives = (int) (Reader.ReadUInt32() ^ 0xffffffff);
                 Controls = new Controls(Reader);
                 
-                if (Settings.GameType == GameType.OnePointFive) Reader.Skip(56);
-                else Controls.Read();
-                
+                // if (Settings.GameType == GameType.OnePointFive) Reader.Skip(56);
+                // else Controls.Read();
+                Controls.Read();
                 BorderColor = Reader.ReadColor();
                 NumberOfFrames = Reader.ReadInt32();
-                if (Settings.GameType == GameType.OnePointFive) return;
+                if (Settings.Old) return;
                 FrameRate = Reader.ReadInt32();
                 WindowsMenuIndex = Reader.ReadByte(); 
             }
@@ -146,9 +146,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public AppHeader(Chunk chunk) : base(chunk)
-        {
-        }
+        
     }
 
 
@@ -256,6 +254,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             _right = _reader.ReadInt16();
             _button1 = _reader.ReadInt16();
             _button2 = _reader.ReadInt16();
+            if (Settings.GameType == GameType.OnePointFive) return;
             _button3 = _reader.ReadInt16();
             _button4 = _reader.ReadInt16();
         }

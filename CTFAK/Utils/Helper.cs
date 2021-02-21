@@ -140,8 +140,11 @@ namespace CTFAK.Utils
             {
                 item = new Colour(reader);
             }
-            
 
+            if (code == 40)
+            {
+                item = new Filename(reader);
+            }
             if (code == 50)
             {
                 item = new AlterableValue(reader);

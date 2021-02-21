@@ -7,14 +7,13 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 {
     public class FontBank : ChunkLoader
     {
-        public int NumberOfItems;
         public bool Compressed;
         public bool Debug;
         public List<FontItem> Items;
 
         public override void Print(bool ext)
         {
-            Logger.Log($"FontCount:{NumberOfItems.ToString()}");
+            Logger.Log($"FontCount:{Items.Count}");
         }
 
         public override string[] GetReadableData()
@@ -29,12 +28,12 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             {
                 //TODO
             }
-            NumberOfItems = Reader.ReadInt32();
+            var count = Reader.ReadInt32();
             int offset = 0;
             if (Settings.Build > 284 && !Debug) offset = -1;
             
             Items = new List<FontItem>();
-            for (int i = 0; i < NumberOfItems; i++)
+            for (int i = 0; i < count; i++)
             {
                 var item = new FontItem(Reader);
                 item.Read();
@@ -57,9 +56,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
         }
 
-        public FontBank(Chunk chunk) : base(chunk)
-        {
-        }
+       
     }
     public class FontItem:ChunkLoader
     {
@@ -73,9 +70,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
         }
 
-        public FontItem(Chunk chunk) : base(chunk)
-        {
-        }
+        
 
         public override void Read()
         {
@@ -135,9 +130,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
         }
 
-        public LogFont(Chunk chunk) : base(chunk)
-        {
-        }
+        
 
         public override void Read()
         {

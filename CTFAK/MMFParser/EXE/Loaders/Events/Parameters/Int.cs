@@ -4,7 +4,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
 {
     class Int : Short
     {
-        public int Value;
+        public new int Value;
 
         public Int(ByteReader reader) : base(reader) { }
         public override void Read()

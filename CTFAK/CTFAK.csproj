@@ -175,6 +175,7 @@
     <Compile Include="MMFParser\Attributes\SubListAttribute.cs" />
     <Compile Include="MMFParser\EXE\APK.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Common.cs" />
+    <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Filename.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Shaders.cs" />
     <Compile Include="MMFParser\EXE\Loaders\TwoFivePlus.cs" />
     <Compile Include="MMFParser\EXE\Loaders\Events\Parameters\Click.cs" />

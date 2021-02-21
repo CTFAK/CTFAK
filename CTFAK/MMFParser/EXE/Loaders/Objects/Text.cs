@@ -16,9 +16,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         {
         }
 
-        public Text(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+        
 
         public override void Read()
         {
@@ -100,9 +98,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         {
         }
 
-        public Paragraph(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+        
 
         public override void Read()
         {
@@ -120,7 +116,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 FontHandle = Reader.ReadUInt16();
                 Flags.flag = Reader.ReadUInt16();
                 Color = Reader.ReadColor();
-                Value = Reader.ReadWideString(); 
+                Value = Reader.ReadUniversal(); 
             }
             
         }

@@ -15,8 +15,8 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         private ushort _movementsOffset;
         private ushort _animationsOffset;
         private ushort _systemObjectOffset;
-        public ushort _counterOffset;
-        public ushort _extensionOffset;
+        private ushort _counterOffset;
+        private ushort _extensionOffset;
         public string Identifier;
         
         public Animations Animations;
@@ -85,7 +85,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         public AlterableValues Values;
         public AlterableStrings Strings;
         public Movements Movements;
-        private ushort _zeroUnk;
         public Text Text;
         public Counter Counter;
         public short[] _qualifiers=new short[8];
@@ -98,9 +97,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         {
             Parent = parent;
         }
-        public ObjectCommon(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+        
 
 
         public override void Read()
@@ -148,8 +145,8 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     _counterOffset = Reader.ReadUInt16();
                     _systemObjectOffset = Reader.ReadUInt16();
                     Reader.Skip(2);
-                    Flags.flag = Reader.ReadUInt16();
-                    Reader.Skip(2);
+                    Flags.flag = Reader.ReadUInt32();
+                    // Reader.Skip(2);
                     var end = Reader.Tell() + 8 * 2;
                     for (int i = 0; i < 8; i++)
                     {
@@ -258,18 +255,37 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
                 if (_extensionOffset > 0)
                 {
-                    Reader.Seek(currentPosition + _extensionOffset);
-
-                    var dataSize = Reader.ReadInt32() - 20;
-                    Reader.Skip(4); //maxSize;
-                    ExtensionVersion = Reader.ReadInt32();
-                    ExtensionId = Reader.ReadInt32();
-                    ExtensionPrivate = Reader.ReadInt32();
-                    if (dataSize != 0)
+                    if (Settings.Old)
                     {
-                        ExtensionData = Reader.ReadBytes(dataSize);
+                        Reader.Seek(currentPosition + _extensionOffset);
+
+                        var dataSize = Reader.ReadInt16() - 8;
+                        Reader.Skip(2); //maxSize;
+                        var extOldId=Reader.ReadInt16();
+                        ExtensionVersion = Reader.ReadInt16();
+                        ExtensionId = 0;
+                        ExtensionPrivate = 0;
+                        if (dataSize != 0)
+                        {
+                            ExtensionData = Reader.ReadBytes(dataSize);
+                        }
+                        else ExtensionData = new byte[0];
                     }
-                    else ExtensionData = new byte[0];
+                    else
+                    {
+                        Reader.Seek(currentPosition + _extensionOffset);
+
+                        var dataSize = Reader.ReadInt32() - 20;
+                        Reader.Skip(4); //maxSize;
+                        ExtensionVersion = Reader.ReadInt32();
+                        ExtensionId = Reader.ReadInt32();
+                        ExtensionPrivate = Reader.ReadInt32();
+                        if (dataSize != 0)
+                        {
+                            ExtensionData = Reader.ReadBytes(dataSize);
+                        }
+                        else ExtensionData = new byte[0];
+                    }
                 }
 
                 if (_counterOffset > 0)

@@ -24,9 +24,9 @@ namespace CTFAK.GUI
         public static void Message(string msg)
         {
             var date = DateTime.Now;
-            // inst?.textBox1?.AppendText(msg.Length > 0
-                // ? $"[{date.Hour,2}:{date.Minute,2}:{date.Second,2}:{date.Millisecond,3}] {msg}\r\n"
-                // : "\r\n");
+            inst?.textBox1?.AppendText(msg.Length > 0
+                ? $"[{date.Hour,2}:{date.Minute,2}:{date.Second,2}:{date.Millisecond,3}] {msg}\r\n"
+                : "\r\n");
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)

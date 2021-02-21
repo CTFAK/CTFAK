@@ -45,7 +45,7 @@ namespace CTFAK.GUI
 
         private SoundPlayer _soundPlayer;
         public Label ObjectViewerLabel;
-        public TreeNode LastSelected;
+        public ChunkNode LastSelected;
 
 
         public MainForm(Color color)
@@ -273,16 +273,15 @@ namespace CTFAK.GUI
         {
             Logger.Log("Loading GUI");
             //GameData gameData = null;
-            var exe = Exe.Instance;
-            var gameData = exe?.GameData ?? Program.CleanData;
+            var gameData = Program.CleanData;
 
 
             treeView1.Nodes.Clear();
             {
                 if(gameData.Name!=null)treeView1.Nodes.Add(new ChunkNode($"Title '{gameData.Name.Value}'",gameData.Name));
                 if(gameData.Author!=null)treeView1.Nodes.Add(new ChunkNode($"Author '{gameData.Author.Value}'",gameData.Author));
-                if(gameData.TargetFilename!=null)treeView1.Nodes.Add(new ChunkNode(gameData.TargetFilename));
-                if(gameData.EditorFilename!=null)treeView1.Nodes.Add(new ChunkNode(gameData.EditorFilename));
+                if(gameData.TargetFilename!=null)treeView1.Nodes.Add(new ChunkNode(gameData.TargetFilename as ChunkLoader));
+                if(gameData.EditorFilename!=null)treeView1.Nodes.Add(new ChunkNode(gameData.EditorFilename as ChunkLoader));
                 if(gameData.Menu!=null)treeView1.Nodes.Add(new ChunkNode(gameData.Menu));
                 //Extension Data
                 //Other Extension
@@ -309,7 +308,7 @@ namespace CTFAK.GUI
                 }
                 treeView1.Nodes.Add(frameBankNode);
                 
-                var objBankNode = new TreeNode($"Object Bank ({gameData.Frameitems.ItemDict.Count} Items)");
+                var objBankNode = new ChunkNode($"Object Bank ({gameData.Frameitems.ItemDict.Count} Items)",gameData.Frameitems);
                 foreach (ObjectInfo obj in gameData.Frameitems.ItemDict.Values)
                 {
                     var objNode = new ChunkNode($"{obj.Name}",obj);
@@ -814,7 +813,7 @@ namespace CTFAK.GUI
         private void advancedTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
             ObjectViewerLabel?.Dispose();
-            LastSelected = objTreeView.SelectedNode;
+            if (objTreeView.SelectedNode != null&& objTreeView.SelectedNode is ChunkNode) LastSelected = objTreeView.SelectedNode as ChunkNode;
             var node = e.Node;
             var loader = ((ChunkNode) node).loader;
             string text=String.Empty;
@@ -990,8 +989,7 @@ namespace CTFAK.GUI
 
         private void dumpSelectedBtn_Click(object sender, EventArgs e)
         {
-            Logger.Log("Dumping");
-            var node = (ChunkNode) LastSelected;
+            var node = LastSelected;
             var path =
                 $"{Settings.ImagePath}\\{objTreeView.SelectedNode.FullPath}";
             if (node == null) return;

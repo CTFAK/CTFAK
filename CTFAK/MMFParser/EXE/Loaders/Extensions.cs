@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -15,13 +16,14 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public Extensions(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
 
         public override void Read()
         {
-            if (Settings.GameType == GameType.OnePointFive) return;
+            if (Settings.GameType == GameType.OnePointFive)
+            {
+                // File.WriteAllBytes($"{Settings.DumpPath}\\test.bin",Reader.ReadBytes());
+                // return;
+            }
             var count = Reader.ReadUInt16();
             PreloadExtensions = Reader.ReadUInt16();
             Items = new List<Extension>();
@@ -39,8 +41,10 @@ namespace CTFAK.MMFParser.EXE.Loaders
             Writer.WriteInt16((short) PreloadExtensions);
             foreach (Extension item in Items)
             {
+                
                 item.Write(Writer);
             }
+           
         }
 
         public override void Print(bool ext)
@@ -50,7 +54,10 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override string[] GetReadableData()
         {
-            throw new System.NotImplementedException();
+            return new[]
+            {
+                $"Count: {Items.Count}"
+            };
         }
     }
     public class Extension:ChunkLoader
@@ -67,29 +74,31 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public Extension(ChunkList.Chunk chunk) : base(chunk)
-        {
-        }
+ 
 
         public override void Read()
         {
             var currentPosition = Reader.Tell();
             var size = Reader.ReadInt16();
-            if (size < 0)
-            {
-                size = (short) (size*-1);
-            }
-
+            if (size < 0) size = (short) (size * -1);
             Handle = Reader.ReadInt16();
             MagicNumber = Reader.ReadInt32();
             VersionLs = Reader.ReadInt32();
             VersionMs = Reader.ReadInt32();
-            var arr = Reader.ReadWideString().Split('.');
+            string[] arr;
+            arr = Reader.ReadUniversal().Split('.');
             Name = arr[0];
-            Logger.Log("Found Extension: "+Name+" with id "+Handle);
+            Logger.Log("Found Extension: " + Name + " with id " + Handle);
             Ext = arr[1];
-            SubType = Reader.ReadWideString();
-            Reader.Seek(currentPosition+size);
+            SubType = Reader.ReadUniversal();
+            Reader.Seek(currentPosition + size);
+
+            var newString = string.Empty;
+            newString += $"MagicNumber={MagicNumber}\n";
+            newString += $"VersionLs={VersionLs}\n";
+            newString += $"VersionMs={VersionMs}\n";
+            newString += $"SubType={SubType}\n";
+            File.WriteAllText($"{Settings.DumpPath}\\ext", newString);
         }
 
         public override void Write(ByteWriter Writer)

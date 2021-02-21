@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using CTFAK.MMFParser.EXE.Loaders.Events.Parameters;
 using CTFAK.Utils;
+using static CTFAK.Settings;
 
 namespace CTFAK.MMFParser.EXE.Loaders.Events
 {
@@ -12,7 +14,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         public int OtherFlags;
         public int DefType;
         public int NumberOfParameters;
-        public Constants.ObjectType ObjectType;
+        public int ObjectType;
         public int Num;
         public int ObjectInfo;
         public int Identifier;
@@ -50,25 +52,30 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
 
         public override void Read()
         {
+            var old =Old&&!Settings.DoMFA;
             var currentPosition = Reader.Tell();
             var size = Reader.ReadUInt16();
-            ObjectType = (Constants.ObjectType)Reader.ReadInt16();
-            Num = Reader.ReadInt16();
+
+            ObjectType = old ? Reader.ReadSByte(): Reader.ReadInt16();
+            Num = old ? Reader.ReadSByte(): Reader.ReadInt16();
+            if ((int) ObjectType > 2 && Num <48)
+            {
+                if(old)Num -= 32;
+            }
             ObjectInfo = Reader.ReadUInt16();
             ObjectInfoList = Reader.ReadInt16();
             Flags = Reader.ReadSByte();
             OtherFlags = Reader.ReadSByte();
             NumberOfParameters = Reader.ReadByte();
             DefType = Reader.ReadByte();
-            Identifier = Reader.ReadUInt16();
+            Identifier = Reader.ReadInt16();
             for (int i = 0; i < NumberOfParameters; i++)
             {
                 var item = new Parameter(Reader);
                 item.Read();
                 Items.Add(item);
             }
-            // Logger.Log(this);
-            Reader.Seek(currentPosition + size);
+            if(old)Logger.Log(this);
             
 
             
@@ -85,7 +92,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         public int Flags;
         public int OtherFlags;
         public int DefType;
-        public Constants.ObjectType ObjectType;
+        public int ObjectType;
         public int Num;
         public int ObjectInfo;
         public int ObjectInfoList;
@@ -120,10 +127,15 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
 
         public override void Read()
         {
+            var old = Settings.GameType == GameType.OnePointFive&&!Settings.DoMFA;
             var currentPosition = Reader.Tell();
             var size = Reader.ReadUInt16();
-            ObjectType = (Constants.ObjectType)Reader.ReadInt16();
-            Num = Reader.ReadInt16();
+            ObjectType =  old ? Reader.ReadSByte(): Reader.ReadInt16();
+            Num = old ? Reader.ReadSByte(): Reader.ReadInt16();
+            if ((int) ObjectType >= 2 && Num >= 48)
+            {
+                if(old)Num += 32;
+            }
             ObjectInfo = Reader.ReadUInt16();
             ObjectInfoList = Reader.ReadInt16();
             Flags = Reader.ReadSByte();
@@ -136,7 +148,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                 item.Read();
                 Items.Add(item);
             }
-            // Logger.Log(this);
+            if(old)Logger.Log(this);
 
         }
         public override string ToString()

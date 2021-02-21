@@ -48,7 +48,7 @@ namespace CTFAK.MMFParser.Translation
                 content += $"<parameter>\n";
                 content += $"        <name>{parameter.Name}</name>\n";
                 content += $"        <code>{parameter.Name}</code>\n";
-                content += $"        <type>{parameter.GetType()}</type>\n";//TODO:Shader Type
+                content += $"        <type>{parameter.GetValueType()}</type>\n";//TODO:Shader Type
                 content += $"        <property>edit</property>\n";
                 content += $"        <value>1.0</value>\n";
                 content += $"</parameter>\n";

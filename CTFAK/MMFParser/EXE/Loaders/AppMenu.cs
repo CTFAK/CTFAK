@@ -17,9 +17,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public AppMenu(Chunk chunk) : base(chunk)
-        {
-        }
+        
 
         public override void Print(bool ext)
         {
@@ -130,9 +128,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        public AppMenuItem(Chunk chunk) : base(chunk)
-        {
-        }
+        
 
         public override void Print(bool ext)
         {

@@ -53,6 +53,7 @@ namespace CTFAK.Utils
         public static byte[] DecompressOld(ByteReader reader, Int32 decompressSize, out Int32 actualSize)
         {
             var start = reader.Tell();
+            
             var compressedSize = reader.Size();
             var buffer = reader.ReadBytes((int) compressedSize);
             return DecompressOldBlock(buffer, (int) compressedSize, decompressSize, out actualSize);

@@ -60,6 +60,8 @@ namespace CTFAK.MMFParser.EXE
                 GameData.Read(exeReader);
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
             }
+            
+
         }
 
         public int CalculateEntryPoint(ByteReader exeReader)
