@@ -62,7 +62,6 @@ namespace CTFAK.MMFParser.MFA.Loaders
             AntiAliasing = Reader.ReadInt32();
 
             Flags = Reader.ReadInt32();
-            Logger.Log("SUCKKK: "+ Flags);
             
             IconType = Reader.ReadInt32();
             if(IconType==1)

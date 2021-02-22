@@ -42,22 +42,17 @@ namespace CTFAK.Utils
 
         public static byte[] DecompressOld(ByteReader reader)
         {
+            var decompressedSize = reader.PeekInt32()!=-1?reader.ReadInt32():0;
             var start = reader.Tell();
-            var decompressedSize = reader.ReadInt32();
             var compressedSize = reader.Size();
             var buffer = reader.ReadBytes((int) compressedSize);
-            Int32 actualSize = 0;
-            return DecompressOldBlock(buffer, (int) compressedSize, decompressedSize, out actualSize);
+            Int32 actualSize;
+            var data = DecompressOldBlock(buffer, (int) compressedSize, decompressedSize, out actualSize);
+            reader.Seek(start+actualSize);
+            return data;
         }
 
-        public static byte[] DecompressOld(ByteReader reader, Int32 decompressSize, out Int32 actualSize)
-        {
-            var start = reader.Tell();
-            
-            var compressedSize = reader.Size();
-            var buffer = reader.ReadBytes((int) compressedSize);
-            return DecompressOldBlock(buffer, (int) compressedSize, decompressSize, out actualSize);
-        }
+        
 
 
         public static byte[] DecompressOldBlock(byte[] buff, int size, int decompSize, out Int32 actual_size)

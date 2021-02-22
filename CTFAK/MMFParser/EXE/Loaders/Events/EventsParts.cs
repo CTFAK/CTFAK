@@ -75,7 +75,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                 item.Read();
                 Items.Add(item);
             }
-            if(old)Logger.Log(this);
+            Logger.Log(this);
             
 
             
@@ -148,7 +148,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                 item.Read();
                 Items.Add(item);
             }
-            if(old)Logger.Log(this);
+            Logger.Log(this);
 
         }
         public override string ToString()

@@ -180,17 +180,15 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             {
                 if (Settings.GameType == GameType.OnePointFive && !Settings.DoMFA)
                 {
-                  
-                    Int32 actual_size = 0;
-                    decompressed_size = Settings.GameType == GameType.OnePointFive || Reader.PeekInt32()!=-1 ? Reader.ReadInt32() : 0;
-                    long tmp = Reader.Tell();
-                    imageReader =
-                        new ByteReader(Decompressor.DecompressOld(Reader, decompressed_size, out actual_size));
-                    Reader.Seek(tmp + actual_size);
+                    imageReader = new ByteReader(Decompressor.DecompressOld(Reader));
+                }
+                else if(!Settings.DoMFA)
+                {
+                    imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
                 }
                 else
                 {
-                    imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
+                    imageReader = Reader;
                 }
             }
             else throw new InvalidDataException("Unsupported reader");
@@ -214,18 +212,21 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
             _width = imageReader.ReadInt16();
             _height = imageReader.ReadInt16();
-            // Logger.Log($"Loading image {Handle.ToString(),4} Size: {_width,4}x{_height,4}, data size: {Size}");
+            Logger.Log($"Loading image {Handle.ToString(),4} Size: {_width,4}x{_height,4}, data size: {Size}");
 
             _graphicMode = imageReader.ReadByte();
 
             Flags.flag = imageReader.ReadByte();
 
-            if (Settings.GameType != GameType.OnePointFive) imageReader.Skip(2);
+            if (Settings.GameType != GameType.OnePointFive||(Settings.DoMFA&&Settings.GameType == GameType.OnePointFive))
+            {
+                imageReader.Skip(2);
+            }
             XHotspot = imageReader.ReadInt16();
             YHotspot = imageReader.ReadInt16();
             ActionX = imageReader.ReadInt16();
             ActionY = imageReader.ReadInt16();
-            if (Settings.GameType != GameType.OnePointFive) _transparent = imageReader.ReadColor();
+            if (Settings.GameType != GameType.OnePointFive||(Settings.DoMFA&&Settings.GameType == GameType.OnePointFive)) _transparent = imageReader.ReadColor();
             byte[] imageData;
             if (Flags["LZX"])
             {

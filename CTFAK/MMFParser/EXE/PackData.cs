@@ -47,7 +47,6 @@ namespace CTFAK.MMFParser.EXE
 
             exeReader.Seek((int)(start + dataSize - 32));
             var uheader = exeReader.ReadAscii(4);
-            Logger.Log("SUPERHEADER: "+uheader);
             if (uheader == "PAMU")
             {
                 Settings.GameType = GameType.Normal;
@@ -85,7 +84,6 @@ namespace CTFAK.MMFParser.EXE
             bool hasBingo=newHeader != "PAME" && newHeader != "PAMU";
             Logger.Log(newHeader);
 
-            Logger.Log("PACK OFFSET: "+offset);
             exeReader.Seek(offset);
             for (int i = 0; i < count; i++)
             {

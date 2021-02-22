@@ -43,7 +43,6 @@ namespace CTFAK.MMFParser.Translation
                 else return null;
             } 
             else mfaReader = new ByteReader(TemplatePath, FileMode.Open);
-            Logger.Log("Loading images");
             
             Settings.DoMFA = true;
             var cacheBuild = Settings.Build;
