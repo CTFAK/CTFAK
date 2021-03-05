@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using CTFAK.Utils;
 
 namespace CTFAK.MMFParser.EXE.Loaders.Objects
@@ -106,7 +107,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 var currentPosition = Reader.Tell();
                 
 
-                if (Settings.Build >= 284&&Settings.GameType != GameType.OnePointFive)
+                if (Settings.Build >= 284&&Settings.GameType ==GameType.Normal)//new no 1.5
                 {
                     var size = Reader.ReadInt32();
                     _animationsOffset = Reader.ReadUInt16();
@@ -136,7 +137,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     _fadeinOffset = Reader.ReadUInt32();
                     _fadeoutOffset = Reader.ReadUInt32();
                 }
-                else if(Settings.GameType != GameType.OnePointFive)
+                else if(Settings.GameType == GameType.Normal)//old no 1.5
                 {
                     var size = Reader.ReadInt32();
                     _movementsOffset = Reader.ReadUInt16();
@@ -166,7 +167,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     _fadeinOffset = Reader.ReadUInt32();
                     _fadeoutOffset = Reader.ReadUInt32();
                 }
-                else
+                else if(Settings.GameType == GameType.OnePointFive)
                 {
                     var size = Reader.ReadUInt16();
                     var checksum = Reader.ReadUInt16();
@@ -194,6 +195,48 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     _fadeinOffset = Reader.ReadUInt32();
                     _fadeoutOffset = Reader.ReadUInt32();
                 }
+                else if (Settings.GameType == GameType.Android)
+                {
+                    // File.WriteAllBytes($"{Settings.DumpPath}\\{Parent.Name}.chunk",Reader.ReadBytes());
+                    var size = Reader.ReadInt32();
+                    
+                    
+                    var version = Reader.ReadUInt16();
+                    Reader.Skip(2);
+                    _movementsOffset = Reader.ReadUInt16();
+                    _animationsOffset = Reader.ReadUInt16();
+                    _systemObjectOffset = Reader.ReadUInt16();
+                    _counterOffset = Reader.ReadUInt16();
+                    
+
+
+                    Flags.flag = Reader.ReadUInt16();
+                    Reader.Skip(2);
+                    var end = Reader.Tell() + 8 * 2;
+                    for (int i = 0; i < 8; i++)
+                    {
+                        _qualifiers[i] = Reader.ReadInt16();
+                    }
+
+                    Reader.Seek(end);
+                    _extensionOffset = Reader.ReadUInt16();
+                    
+                    
+                    
+                    
+                    
+
+                   
+                    _valuesOffset = Reader.ReadUInt16();
+                    _stringsOffset = Reader.ReadUInt16();
+                    NewFlags.flag = Reader.ReadUInt16();
+                    Preferences.flag = Reader.ReadUInt16();
+                    Identifier = Reader.ReadAscii(4);
+                    Logger.Log(Identifier);
+                    BackColor = Reader.ReadColor();
+                    _fadeinOffset = Reader.ReadUInt32();
+                    _fadeoutOffset = Reader.ReadUInt32();
+                }
                 
                 
                 
@@ -202,6 +245,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 if (_animationsOffset > 0)
                 {
                     Reader.Seek(currentPosition + _animationsOffset);
+                    if (Settings.GameType == GameType.Android) return;
                     Animations = new Animations(Reader);
                     Animations.Read();
                 }
@@ -210,6 +254,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 if (_movementsOffset > 0)
                 {
                     Reader.Seek(currentPosition + _movementsOffset);
+                    if (Settings.GameType == GameType.Android) return;
                     if (Settings.GameType == GameType.OnePointFive)
                     {
                         Movements=new Movements((ByteReader) null);

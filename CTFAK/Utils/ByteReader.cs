@@ -68,7 +68,12 @@ namespace CTFAK.Utils
             Seek(-2, SeekOrigin.Current);
             return value;
         }
-
+        public byte PeekByte()
+        {
+            byte value = ReadByte();
+            Seek(-1, SeekOrigin.Current);
+            return value;
+        }
         public Int16 PeekInt16()
         {
             Int16 value = ReadInt16();

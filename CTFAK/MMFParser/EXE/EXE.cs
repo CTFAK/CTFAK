@@ -27,7 +27,6 @@ namespace CTFAK.MMFParser.EXE
             _executable = exeReader.ReadBytes(entryPoint);
             
             
-            
             var firstShort = exeReader.PeekUInt16();
             bool retard = false;
             Logger.Log("First Short: " + firstShort.ToString("X2"), true, ConsoleColor.Yellow);
@@ -73,6 +72,7 @@ namespace CTFAK.MMFParser.EXE
             exeReader.Seek(60);
 
             var hdrOffset = exeReader.ReadUInt16();
+            
 
             exeReader.Seek(hdrOffset);
             var peHdr = exeReader.ReadAscii(2);
@@ -85,7 +85,7 @@ namespace CTFAK.MMFParser.EXE
             var optionalHeader = 28 + 68;
             var dataDir = 16 * 8;
             exeReader.Skip(optionalHeader + dataDir);
-
+            
             var possition = 0;
             for (var i = 0; i < numOfSections; i++)
             {
@@ -105,14 +105,16 @@ namespace CTFAK.MMFParser.EXE
                     exeReader.Seek(entry + 16);
                     var size = exeReader.ReadUInt32();
                     var address = exeReader.ReadUInt32(); //Pointer to raw data
+                    
                     possition = (int) (address + size);
                     break;
                 }
 
                 exeReader.Seek(entry + 40);
             }
-
+            
             exeReader.Seek(possition);
+            
             return (int) exeReader.Tell();
         }
         

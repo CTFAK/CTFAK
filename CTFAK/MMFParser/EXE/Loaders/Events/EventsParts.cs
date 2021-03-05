@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using CTFAK.MMFParser.EXE.Loaders.Events.Parameters;
+using CTFAK.MMFParser.EXE.Loaders.Events.Viewer;
 using CTFAK.Utils;
 using static CTFAK.Settings;
 
@@ -75,14 +76,17 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                 item.Read();
                 Items.Add(item);
             }
-            Logger.Log(this);
+            // Logger.Log(this);
             
 
             
         }
         public override string ToString()
         {
-            return $"Condition {ObjectType}=={Num}{(Items.Count > 0 ? "-"+Items[0].ToString() : " ")}";
+            return Preprocessor.ProcessCondition(this);
+            
+                
+                     //$"Condition {(Constants.ObjectType)ObjectType}=={Names.ConditionNames[ObjectType][Num]}{(Items.Count > 0 ? "-"+Items[0].ToString() : " ")}";
 
         }
     }
@@ -191,6 +195,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
 
             var actualLoader = Helper.LoadParameter(Code,Reader);
             this.Loader = actualLoader;
+            // Loader?.Read();
             if (Loader!=null) Loader.Read();
             else throw new Exception("Loader is null: "+Code);
           

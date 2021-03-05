@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using CTFAK.MMFParser.EXE.Loaders.Events.Expressions;
+using CTFAK.MMFParser.EXE.Loaders.Events.Viewer;
 using CTFAK.Utils;
 
 namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
@@ -32,6 +33,43 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
 
             }
             
+        }
+
+        public string BuildExpression()
+        {
+            var str = string.Empty;
+            //if (Items == null) return str;
+            foreach (Expression item in Items)
+            {
+                if (item.Loader == null)str+=Names.ExpressionNames[item.ObjectType][item.Num];
+                else
+                {
+                    str += item.Loader.GetType().GetField("Value").GetValue(item.Loader);
+                }
+                
+
+                
+
+                //str += ; 
+
+
+            }
+
+            return str;
+        }
+
+        public string GetOperator()
+        {
+            switch (Comparsion)
+            {
+                case 0: return "==";
+                case 1: return "!=";
+                case 2: return "<=";
+                case 3: return "<";
+                case 4: return ">=";
+                case 5: return ">";
+                    default: return "err";
+            }
         }
 
         public override void Write(ByteWriter Writer)

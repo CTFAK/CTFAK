@@ -42,7 +42,7 @@ namespace CTFAK.MMFParser.Translation
             Message("Running Pame2MFA");
             Message("Original MFA Build: " + mfa.BuildVersion);
             Message("");
-            mfa.Name = game.Name.Value;
+            mfa.Name = game.Name?.Value;
             mfa.LangId = 0;//8192;
             mfa.Description = "";
             mfa.Path = game.EditorFilename?.Value ?? "";
@@ -68,7 +68,7 @@ namespace CTFAK.MMFParser.Translation
             }
             
             mfa.Music = game.Music;
-            mfa.Images.Items = game.Images?.Images ?? new Dictionary<int, ImageItem>();
+            mfa.Images.Items = game.Images.Images;
             foreach (var key in mfa.Images.Items.Keys)
             {
                 mfa.Images.Items[key].Debug = true;
@@ -114,7 +114,7 @@ namespace CTFAK.MMFParser.Translation
             mfa.InitialLifes = game.Header.InitialLives;
             mfa.FrameRate = game.Header.FrameRate;
             mfa.BuildType = 0;
-            mfa.BuildPath = game.TargetFilename.Value;
+            mfa.BuildPath = game.TargetFilename?.Value ?? "";
             mfa.CommandLine = "";
             mfa.FrameRate = 60;
             mfa.Aboutbox = game.AboutText?.Length > 0
@@ -296,6 +296,7 @@ namespace CTFAK.MMFParser.Translation
                         Dictionary<int,Quailifer> qualifiers = new Dictionary<int,Quailifer>();
                         foreach (Quailifer quailifer in frame.Events.QualifiersList.Values)
                         {
+                            break;
                             int newHandle = 0;
                             while (true)
                             {

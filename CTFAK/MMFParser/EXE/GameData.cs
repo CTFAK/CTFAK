@@ -61,8 +61,9 @@ namespace CTFAK.MMFParser.EXE
             newChunks.Write(Writer);
 
         }
-        public void Read(ByteReader exeReader)
+        public virtual void Read(ByteReader exeReader)
         {
+            
             string magic = exeReader.ReadAscii(4); //Reading header
             Logger.Log("MAGIC HEADER: "+magic);
             //Checking for header
@@ -81,6 +82,7 @@ namespace CTFAK.MMFParser.EXE
 
             GameChunks = new ChunkList(); //Reading game chunks
             GameChunks.Read(exeReader);
+            
 
             //Load chunks into gamedata for easier access
             //Can only be accessed from here AFTER loading all the chunks

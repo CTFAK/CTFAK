@@ -72,6 +72,7 @@ namespace CTFAK.Utils
 
         public void WriteBytes(byte[] value) => Write(value);
         public void WriteDouble(double value) => Write(value);
+        public void WriteString(string value) => Write(value);
 
         public void WriteUniversal(string value,bool addZero=false)
         {

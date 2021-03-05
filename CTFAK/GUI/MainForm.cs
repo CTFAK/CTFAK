@@ -822,7 +822,7 @@ namespace CTFAK.GUI
             {
                 text += $"Size: {img.Bitmap.Width}x{img.Bitmap.Height}\r\n";
                 text += $"Action Point: {img.ActionX}x{img.ActionY}\r\n";
-                text += $"Hotspot: {img.XHotspot}x{img.YHotspot}\r\n";
+                text += $"Hotspot: {img.HotspotX}x{img.HotspotY}\r\n";
                 imageViewPictureBox.Image = img.Bitmap;
             }
             else if (loader is Animation anim)

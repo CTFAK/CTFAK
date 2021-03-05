@@ -40,7 +40,8 @@ namespace CTFAK.MMFParser.EXE.Loaders
             infoChunks.Read(Reader);
             _header = infoChunks.GetChunk<ObjectHeader>();
             _name = infoChunks.GetChunk<ObjectName>();
-            _properties = infoChunks.GetChunk<ObjectProperties>(); 
+            _properties = infoChunks.GetChunk<ObjectProperties>();
+           
             _properties.ReadNew((int) ObjectType,this);
             if(Name=="play button")Logger.Log($"{Name} - {InkEffect} - {_header.InkEffect} - {InkEffectValue}");
             

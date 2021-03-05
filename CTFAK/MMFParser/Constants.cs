@@ -1,4 +1,6 @@
-﻿namespace CTFAK.MMFParser
+﻿using CTFAK.Utils;
+
+namespace CTFAK.MMFParser
 {
     public static class Constants
     {
@@ -12,6 +14,8 @@
             CNC1=0
 
         }
+
+        
         public enum ValueType
         {
             Long=0,

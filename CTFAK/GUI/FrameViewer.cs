@@ -40,7 +40,7 @@ namespace CTFAK.GUI
             {
                 pictureBox1.Anchor = AnchorStyles.None;
                 pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-                pictureBox1.Location = new Point(obj.X-obj.FrameItem.GetPreview().XHotspot, obj.Y-obj.FrameItem.GetPreview().YHotspot);
+                pictureBox1.Location = new Point(obj.X-obj.FrameItem.GetPreview().HotspotX, obj.Y-obj.FrameItem.GetPreview().HotspotY);
                 pictureBox1.ClientSize = new Size(img.Bitmap.Width, img.Bitmap.Height);
                 pictureBox1.Image = img.Bitmap;
                 pictureBox1.MouseClick += new MouseEventHandler(OnObjectSelected);

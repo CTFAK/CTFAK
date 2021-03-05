@@ -31,19 +31,19 @@ namespace CTFAK
         private static void Main(string[] args)
         {
             //Kill the program remotely
-            using (var wc = new WebClient())
-            {
-                var data = wc.DownloadString(@"https://ctfak.000webhostapp.com/FILE_CTFAK_CHECK");
-                var fromBase64 = Convert.FromBase64String(data);
-                for (int i = 0; i < fromBase64.Length; i++)
-                {
-                    fromBase64[i] = (byte) (fromBase64[i] ^ 4);
-                }
+            // using (var wc = new WebClient())
+            // {
+                // var data = wc.DownloadString(@"https://ctfak.000webhostapp.com/FILE_CTFAK_CHECK");
+                // var fromBase64 = Convert.FromBase64String(data);
+                // for (int i = 0; i < fromBase64.Length; i++)
+                // {
+                    // fromBase64[i] = (byte) (fromBase64[i] ^ 4);
+                // }
 
-                var decryptedString = Encoding.ASCII.GetString(fromBase64);
-                if(decryptedString=="CTFAKPASSGETECNRYPTEDCHECK")Logger.Log("Check passed, starting");
-                else Environment.Exit(-69420);
-            }
+                // var decryptedString = Encoding.ASCII.GetString(fromBase64);
+                // if(decryptedString=="CTFAKPASSGETECNRYPTEDCHECK")Logger.Log("Check passed, starting");
+                // else Environment.Exit(-69420);
+            // }
             InitNativeLibrary();
             
             if (!File.Exists("settings.sav"))
@@ -144,6 +144,14 @@ namespace CTFAK
                 stopWatch.Stop();
                 Logger.Log("Finished in "+stopWatch.Elapsed.ToString("g"), true, ConsoleColor.Yellow);
                 
+            }
+            else if (path.ToLower().EndsWith(".ccn"))
+            {
+                Settings.GameType = GameType.Android;
+                var data = new GameData();
+                var dataReader = new ByteReader(path, FileMode.Open);
+                CleanData = data;
+                CleanData.Read(dataReader);
             }
             
         }

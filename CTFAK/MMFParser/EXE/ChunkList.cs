@@ -86,7 +86,7 @@ namespace CTFAK.MMFParser.EXE
                 Flag = (ChunkFlags) exeReader.ReadInt16();
                 Size = exeReader.ReadInt32();
 
-                // if(Settings.Old) Logger.Log("Reading old chunk"+(Constants.ChunkNames)Id);
+                Logger.Log("Reading "+(Constants.ChunkNames)Id);
 
                 switch (Flag)
                 {
@@ -342,7 +342,6 @@ namespace CTFAK.MMFParser.EXE
                     loader = new Layers(reader);
                     break;
                 case 26214:
-                    if (Settings.GameType == GameType.Android) break;
                     loader = new ImageBank(reader);
                     break;
                 case 26216:

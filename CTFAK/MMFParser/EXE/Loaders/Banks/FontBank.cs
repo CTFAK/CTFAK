@@ -24,6 +24,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public override void Read()
         {
             if (Settings.GameType == GameType.OnePointFive && !Settings.DoMFA) return;
+            if (Settings.GameType == GameType.Android && !Settings.DoMFA) return;
             if (Debug)
             {
                 //TODO

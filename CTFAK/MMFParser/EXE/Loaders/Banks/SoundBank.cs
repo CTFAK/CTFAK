@@ -71,6 +71,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
 
             }
+
             Logger.Log("Sounds Success",true,ConsoleColor.Green);
         }
         public override void Write(ByteWriter writer)

@@ -39,7 +39,19 @@ namespace CTFAK.Utils
             Array.Resize<byte>(ref decompressedData, decompSize);
             return decompressedData;
         }
+        public static byte[] DecompressBlock(ByteReader reader, int size)
+        {
+            ZLibDecompressOptions decompOpts = new ZLibDecompressOptions();
+            MemoryStream compressedStream = new MemoryStream(reader.ReadBytes(size));
+            MemoryStream decompressedStream = new MemoryStream();
+            using (ZLibStream zs = new ZLibStream(compressedStream, decompOpts)) zs.CopyTo(decompressedStream);
 
+            byte[] decompressedData = decompressedStream.GetBuffer();
+            compressedStream.Dispose();
+            decompressedStream.Dispose();
+            // We have no original size, so we are gonna just leave everything as is
+            return decompressedData;
+        }
         public static byte[] DecompressOld(ByteReader reader)
         {
             var decompressedSize = reader.PeekInt32()!=-1?reader.ReadInt32():0;

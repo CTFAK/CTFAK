@@ -7,7 +7,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
 {
     public class Expression : DataLoader
     {
-        public Constants.ObjectType ObjectType;
+        public int ObjectType;
         public int Num;
         public int ObjectInfo;
         public int ObjectInfoList;
@@ -25,7 +25,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
             Writer.WriteInt16((short) Num);
             if (ObjectType == 0 && Num == 0) return;
             var newWriter = new ByteWriter(new MemoryStream());
-            if (ObjectType == Constants.ObjectType.System &&
+            if (ObjectType == (int)Constants.ObjectType.System &&
                 (Num == 0 || Num == 3 || Num == 23 || Num == 24 || Num == 50))
             {
                 if (Loader == null) throw new NotImplementedException("Broken expression: " + Num);
@@ -51,13 +51,13 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
         {
             var currentPosition = Reader.Tell();
             var old = Settings.GameType == GameType.OnePointFive&&!Settings.DoMFA;
-            ObjectType = (Constants.ObjectType)(old ? Reader.ReadSByte():Reader.ReadInt16());
+            ObjectType = (old ? Reader.ReadSByte():Reader.ReadInt16());
             Num = old ? Reader.ReadSByte():Reader.ReadInt16();
             
             if (ObjectType == 0 && Num == 0) return;
 
             var size = Reader.ReadInt16();
-            if (ObjectType == Constants.ObjectType.System)
+            if (ObjectType == (int)Constants.ObjectType.System)
             {
                 if(Num==0) Loader=new LongExp(Reader);
                 else if(Num==3) Loader= new StringExp(Reader);

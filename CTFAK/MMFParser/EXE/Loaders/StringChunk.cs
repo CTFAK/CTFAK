@@ -12,7 +12,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public override void Read()
         {
             Value = Reader.ReadUniversal();
-            // Print(false);
+            Print(false);
         }
 
         public override void Write(ByteWriter Writer)
@@ -22,7 +22,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override void Print(bool ext)
         {
-            Logger.Log($"{Chunk.Name} contains:  {Value}\n",true,ConsoleColor.DarkCyan);
+            Logger.Log($"{Chunk?.Name} contains:  {Value}\n",true,ConsoleColor.DarkCyan);
         }
 
         public override string[] GetReadableData()
