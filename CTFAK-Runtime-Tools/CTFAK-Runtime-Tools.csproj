@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IO\ReaderMemoryExtensions.cs" />
     <Compile Include="IO\RuntimeStream.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

@@ -34,7 +34,9 @@ namespace CTFAK_Runtime_Tools
                 var runtimeStream = new RuntimeStream(proc);//creating my new stream
                 var runtimeReader = new ByteReader(runtimeStream);//create an instance of my advanced reader
                 var runtimeWriter = new ByteWriter(runtimeStream);//create an instance of my advanced writer
-               runtimeReader.Seek(FindPAMUAddr(proc,runtimeReader)); 
+                var newOffset = FindPAMUAddr(proc, runtimeReader);
+                Console.WriteLine("PAMU OFFSET: "+newOffset.ToString("X2"));
+               runtimeReader.Seek(newOffset); 
                var newData = new RuntimeGameData();
                newData.Read(runtimeReader);
                

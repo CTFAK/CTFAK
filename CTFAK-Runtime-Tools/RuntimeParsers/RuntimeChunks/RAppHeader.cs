@@ -1,4 +1,5 @@
-﻿using CTFAK.MMFParser.EXE.Loaders;
+﻿using System;
+using CTFAK.MMFParser.EXE.Loaders;
 using CTFAK.Utils;
 
 namespace CTFAK_Runtime_Tools.RuntimeParsers.RuntimeChunks
@@ -32,7 +33,7 @@ namespace CTFAK_Runtime_Tools.RuntimeParsers.RuntimeChunks
             BorderColor = Reader.ReadColor();
             NumberOfFrames = Reader.ReadInt32();
             FrameRate = Reader.ReadInt32();
-            WindowsMenuIndex = Reader.ReadByte();
+            WindowsMenuIndex = (byte) Reader.ReadInt32();
         }
     }
 }

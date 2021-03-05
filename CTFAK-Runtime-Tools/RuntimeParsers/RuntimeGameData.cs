@@ -4,6 +4,8 @@ using CTFAK.MMFParser;
 using CTFAK.MMFParser.EXE;
 using CTFAK.MMFParser.EXE.Loaders;
 using CTFAK.Utils;
+using CTFAK_Runtime_Tools.IO;
+using CTFAK_Runtime_Tools.RuntimeParsers.RuntimeChunks;
 
 namespace CTFAK_Runtime_Tools.RuntimeParsers
 {
@@ -12,21 +14,30 @@ namespace CTFAK_Runtime_Tools.RuntimeParsers
         public override void Read(ByteReader exeReader)
         {
             string magic = exeReader.ReadAscii(4); //Reading header
-            Logger.Log("MAGIC HEADER: "+magic);
-            //Checking for header
+
             if (magic == Constants.UnicodeGameHeader) Settings.Unicode = true;//PAMU
             else if (magic == Constants.GameHeader) Settings.Unicode = false;//PAME
+            
             else Logger.Log("Couldn't found any known headers", true, ConsoleColor.Red);//Header not found
             RuntimeVersion = (short) exeReader.ReadUInt16(); 
             RuntimeSubversion = (short) exeReader.ReadUInt16(); 
             ProductVersion = (Constants.Products)exeReader.ReadInt32();
             ProductBuild = exeReader.ReadInt32();
-            Settings.Build=ProductBuild;//Easy Access
-            Logger.Log("GAME BUILD: "+Settings.Build);
-            Logger.Log("PRODUCT: "+ProductVersion);
-            Header=new AppHeader(exeReader);
-            Header.Read();
+            
+            Settings.Build=ProductBuild;
            
+            Header=new RAppHeader(exeReader);
+            Header.Read();
+            
+            var appNamePtr = exeReader.ReadInt32();
+            var start = exeReader.Tell();
+            exeReader.Seek(appNamePtr);
+            Name = new AppName(exeReader);
+            Name.Read();
+            exeReader.Seek(start);
+            
+            
+
         }
     }
 }
