@@ -15,28 +15,26 @@ namespace CTFAK_Runtime_Tools.RuntimeParsers
         {
             string magic = exeReader.ReadAscii(4); //Reading header
 
-            if (magic == Constants.UnicodeGameHeader) Settings.Unicode = true;//PAMU
-            else if (magic == Constants.GameHeader) Settings.Unicode = false;//PAME
-            
-            else Logger.Log("Couldn't found any known headers", true, ConsoleColor.Red);//Header not found
-            RuntimeVersion = (short) exeReader.ReadUInt16(); 
-            RuntimeSubversion = (short) exeReader.ReadUInt16(); 
-            ProductVersion = (Constants.Products)exeReader.ReadInt32();
+            if (magic == Constants.UnicodeGameHeader) Settings.Unicode = true; //PAMU
+            else if (magic == Constants.GameHeader) Settings.Unicode = false; //PAME
+            else Logger.Log("Couldn't found any known headers", true, ConsoleColor.Red); //Header not found
+
+            RuntimeVersion = (short) exeReader.ReadUInt16();
+            RuntimeSubversion = (short) exeReader.ReadUInt16();
+            ProductVersion = (Constants.Products) exeReader.ReadInt32();
             ProductBuild = exeReader.ReadInt32();
-            
-            Settings.Build=ProductBuild;
-           
-            Header=new RAppHeader(exeReader);
+
+            Settings.Build = ProductBuild;
+
+            Header = new AppHeader(exeReader);
             Header.Read();
-            
-            var appNamePtr = exeReader.ReadInt32();
-            var start = exeReader.Tell();
-            exeReader.Seek(appNamePtr);
-            Name = new AppName(exeReader);
-            Name.Read();
-            exeReader.Seek(start);
-            
-            
+
+            exeReader.ReadAtOffset(exeReader.ReadInt32(), (reader =>
+            {
+                Name = new AppName(reader);
+                Name.Read();
+
+            }));
 
         }
     }

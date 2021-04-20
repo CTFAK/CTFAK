@@ -11,10 +11,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public bool Debug;
         public List<FontItem> Items;
 
-        public override void Print(bool ext)
-        {
-            Logger.Log($"FontCount:{Items.Count}");
-        }
 
         public override string[] GetReadableData()
         {
@@ -99,10 +95,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             else Writer.WriteWriter(compressedWriter);
         }
 
-        public override void Print(bool ext)
-        {
-            throw new System.NotImplementedException();
-        }
 
         public override string[] GetReadableData()
         {
@@ -167,11 +159,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             Writer.WriteInt8(_quality);
             Writer.WriteInt8(_pitchAndFamily);
             Writer.WriteUniversal(_faceName);
-        }
-
-        public override void Print(bool ext)
-        {
-            throw new System.NotImplementedException();
         }
 
         public override string[] GetReadableData()

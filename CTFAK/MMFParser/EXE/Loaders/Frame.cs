@@ -64,14 +64,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             Chunks.Write(Writer);
         }
 
-        public override void Print(bool ext)
-        {
-            Logger.Log($"Frame: {Name}", true, ConsoleColor.Green);
-            Logger.Log($"   Password: {Password}", true, ConsoleColor.Green);
-            Logger.Log($"   Size: {Width}x{Height}", true, ConsoleColor.Green);
-            Logger.Log($"   Objects: {Objects.Count}", true, ConsoleColor.Green);
-            Logger.Log($"-------------------------", true, ConsoleColor.Green);
-        }
 
         public override string[] GetReadableData()
         {
@@ -110,24 +102,40 @@ namespace CTFAK.MMFParser.EXE.Loaders
             _fadeOut = Chunks.PopChunk<Transition>();
             
             Flags.flag = _header?.Flags?.flag??0;
-            Logger.Log(Properties.GlobalStrings.readingFrame+$" {Name}",true,ConsoleColor.Green);
+            Logger.Log(Properties.GlobalStrings.readingFrame+$" {_name.Value}",true,ConsoleColor.Green);
+
+            Width = _header.Width;
+            Height = _header.Height;
+            VirtWidth = _virtualSize?.Right??0;
+            VirtHeight = _virtualSize?.Bottom??0;
+            MovementTimer = _movementTimer?.Value??0;
+            Name = _name?.Value;
+            Password = _password?.Value;
+            Background = _header.Background;
+            Objects = _objects?.Items;
+            Palette = _palette?.Items;
+            Events = _events;
+            FadeIn = _fadeIn;
+            FadeOut = _fadeOut;
+            Layers = _layers?.Items;
+
 
         }
 
-        public int Width => _header.Width;
-        public int Height => _header.Height;
-        public int VirtWidth => _virtualSize.Right;
-        public int VirtHeight => _virtualSize.Bottom;
-        public int MovementTimer => _movementTimer.Value;
-        public string Name => _name?.Value ?? "UNK";
-        public string Password => _password?.Value ?? "";
-        public Color Background => _header.Background;
-        public List<ObjectInstance> Objects => _objects?.Items ?? null;
-        public List<Color> Palette => _palette?.Items ?? new Color[256].ToList();
-        public Events.Events Events => _events;
-        public Transition FadeIn => _fadeIn;
-        public Transition FadeOut => _fadeOut;
-        public List<Layer> Layers => _layers?.Items ?? null;
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public int VirtWidth { get; set; }
+        public int VirtHeight { get; set; }
+        public int MovementTimer { get; set; }
+        public string Name { get; set; }
+        public string Password { get; set; }
+        public Color Background { get; set; }
+        public List<ObjectInstance> Objects { get; set; }
+        public List<Color> Palette { get; set; }
+        public Events.Events Events { get; set; }
+        public Transition FadeIn { get; set; }
+        public Transition FadeOut { get; set; }
+        public List<Layer> Layers { get; set; }
         
 
         public Frame(ByteReader reader) : base(reader){}
@@ -166,10 +174,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             Writer.WriteInt32(Height);
             Writer.WriteColor(Background);
             Writer.WriteInt32((int) Flags.flag);
-        }
-
-        public override void Print(bool ext)
-        {
         }
 
         public override string[] GetReadableData()
@@ -218,11 +222,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public override void Write(ByteWriter Writer)
         {
             throw new NotImplementedException();
-        }
-
-        public override void Print(bool ext)
-        {
-
         }
 
         public override string[] GetReadableData()
@@ -305,10 +304,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public string Name => FrameItem.Name;
 
-        public override void Print(bool ext)
-        {
-            throw new NotImplementedException();
-        }
 
         public override string[] GetReadableData()
         {
@@ -355,10 +350,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             }
         }
 
-        public override void Print(bool ext)
-        {
-            throw new NotImplementedException();
-        }
 
         public override string[] GetReadableData()=>new string[]{$"Layers: {Items.Count}" };
         
@@ -416,10 +407,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             Writer.WriteUniversal(Name);
         }
 
-        public override void Print(bool ext)
-        {
-            throw new NotImplementedException();
-        }
 
         public override string[] GetReadableData()
         {
@@ -454,7 +441,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             }
         }
 
-        public override void Print(bool ext){}
         public override string[] GetReadableData() => new string[]{"Length: 256"};
     }
     public class VirtualRect:Rect
@@ -481,7 +467,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             Writer.WriteInt32(Value);
         }
 
-        public override void Print(bool ext){}
         public override string[] GetReadableData()=>new string[]{"Value: "+Value};
         
     }

@@ -59,34 +59,26 @@ namespace CTFAK.Utils
         }
         public static (byte[], int) Read32(byte[] data, int width, int height)
         {
-            
+
             byte[] colorArray = new byte[width * height * 4];
             int stride = width * 4;
-            int pad = GetPadding(width, 2);
+            int pad = GetPadding(width, 4);
             int position = 0;
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
-                    UInt16 newShort = (ushort) (data[position] | data[position + 1] << 8);
-                    byte r = (byte) ((newShort & 31744) >> 11);
-                    byte g = (byte) ((newShort & 2016) >> 6);
-                    byte b = (byte) ((newShort & 31));
-
-                    r = (byte) ((r << 3));
-                    g = (byte) ((g << 2));
-                    b = (byte) ((b << 2));
-                    colorArray[(y * stride) + (x * 4) + 2] = r;
-                    colorArray[(y * stride) + (x * 4) + 1] = g;
-                    colorArray[(y * stride) + (x * 4) + 0] = b;
-                    colorArray[(y * stride) + (x * 4) + 3] = 255;
-                    position += 2;
+                    colorArray[(y * stride) + (x * 4) + 0] = data[position];
+                    colorArray[(y * stride) + (x * 4) + 1] = data[position + 1];
+                    colorArray[(y * stride) + (x * 4) + 2] = data[position + 2];
+                    colorArray[(y * stride) + (x * 4) + 3] = data[position + 3];
+                    position += 4;
                 }
 
-                position += pad * 2;
+                position += pad * 4;
             }
-            return (colorArray, position);
 
+            return (colorArray, position);
 
 
         }

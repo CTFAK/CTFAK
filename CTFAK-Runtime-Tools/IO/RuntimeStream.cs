@@ -9,7 +9,6 @@ namespace CTFAK_Runtime_Tools.IO
     {
         private IntPtr _procHandle;
         public Process Process;
-        private byte[] _buffer;
 
         public RuntimeStream(Process proc)
         {

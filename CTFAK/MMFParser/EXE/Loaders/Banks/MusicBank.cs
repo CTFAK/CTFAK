@@ -18,10 +18,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             throw new NotImplementedException();
         }
 
-        public override void Print(bool ext)
-        {
-        }
-
         public override string[] GetReadableData()
         {
             throw new NotImplementedException();
@@ -73,10 +69,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public override void Write(ByteWriter Writer)
         {
             throw new NotImplementedException();
-        }
-
-        public override void Print(bool ext)
-        {
         }
 
         public override string[] GetReadableData()

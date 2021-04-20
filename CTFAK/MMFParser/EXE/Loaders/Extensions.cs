@@ -47,10 +47,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
            
         }
 
-        public override void Print(bool ext)
-        {
-            throw new System.NotImplementedException();
-        }
 
         public override string[] GetReadableData()
         {
@@ -112,11 +108,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             newWriter.WriteUnicode(SubType);
             Writer.WriteInt16((short) (newWriter.Size()+2));
             Writer.WriteWriter(newWriter);
-        }
-
-        public override void Print(bool ext)
-        {
-            throw new System.NotImplementedException();
         }
 
         public override string[] GetReadableData()

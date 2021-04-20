@@ -16,10 +16,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         public List<SoundItem> Items;
         public bool IsCompressed = true;
 
-        public override void Print(bool ext)
-        {
-        }
-
         public override string[] GetReadableData()
         {
             return new string[]
@@ -98,11 +94,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
             throw new NotImplementedException();
         }
-
-        public override void Print(bool ext)
-        {
-        }
-
         public override string[] GetReadableData()
         {
             throw new NotImplementedException();
@@ -155,10 +146,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             {
                 soundData = new ByteReader(Reader.ReadBytes(decompressedSize));
             }
-            Name = soundData.ReadWideString(nameLenght);
+            Name = Settings.GameType == GameType.NSwitch ?  soundData.ReadAscii(nameLenght):soundData.ReadWideString(nameLenght);
             Name = Name.Replace(" ", "");
             Data = soundData.ReadBytes((int) soundData.Size());
-            if (Settings.DumpSounds)
+            // if (Settings.DumpSounds)
             {
                 Name = Helper.CleanInput(Name);
                 File.WriteAllBytes($"{Settings.SoundPath}\\{Name}.wav", Data);

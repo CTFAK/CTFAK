@@ -31,19 +31,19 @@ namespace CTFAK
         private static void Main(string[] args)
         {
             //Kill the program remotely
-            // using (var wc = new WebClient())
-            // {
-                // var data = wc.DownloadString(@"https://ctfak.000webhostapp.com/FILE_CTFAK_CHECK");
-                // var fromBase64 = Convert.FromBase64String(data);
-                // for (int i = 0; i < fromBase64.Length; i++)
-                // {
-                    // fromBase64[i] = (byte) (fromBase64[i] ^ 4);
-                // }
+            //using (var wc = new WebClient())
+            //{
+            //    var data = wc.DownloadString(@"https://ctfak.000webhostapp.com/FILE_CTFAK_CHECK");
+            //    var fromBase64 = Convert.FromBase64String(data);
+            //    for (int i = 0; i < fromBase64.Length; i++)
+            //    {
+            //        fromBase64[i] = (byte)(fromBase64[i] ^ 4);
+            //    }
 
-                // var decryptedString = Encoding.ASCII.GetString(fromBase64);
-                // if(decryptedString=="CTFAKPASSGETECNRYPTEDCHECK")Logger.Log("Check passed, starting");
-                // else Environment.Exit(-69420);
-            // }
+            //    var decryptedString = Encoding.ASCII.GetString(fromBase64);
+            //    if (decryptedString == "CTFAKPASSGETECNRYPTEDCHECK") Logger.Log("Check passed, starting");
+            //    else Environment.Exit(-69420);
+            //}
             InitNativeLibrary();
             
             if (!File.Exists("settings.sav"))
@@ -80,15 +80,19 @@ namespace CTFAK
             {
                 ImageBank.Load = false;
                 ReadFile(args[0], true, false, true);
+                Console.ReadKey();
                 
-                MFAGenerator.BuildMFA();
+                //MFAGenerator.BuildMFA();
             }
             else if(args.Length==0)
             {
-                MyForm = new MainForm(Color.FromArgb(223, 114, 38));
-                Application.Run(MyForm);
+                Console.WriteLine("Usage: CTFAK.EXE: [full_path_to_game]");
+                Console.WriteLine("Press any key to exit...");
+                Console.ReadKey();
+                //MyForm = new MainForm(Color.FromArgb(223, 114, 38));
+                //Application.Run(MyForm);
             }
-        
+
             /*if (args.Length > 0 && (args[0] == "-h" || args[0] == "-help"))
             {
                 Logger.Log("DotNetCTFDumper: 0.0.5", true, ConsoleColor.Green);
@@ -133,7 +137,11 @@ namespace CTFAK
                 stopWatch.Start();
                 currentExe.ParseExe(exeReader);
                 stopWatch.Stop();
-                Logger.Log($"Game reading finished in {stopWatch.Elapsed.ToString("g")}, {exeReader.Size()-exeReader.Tell()} bytes left", true, ConsoleColor.Yellow);
+                Logger.Log($"Game reading finished in {stopWatch.Elapsed.ToString("g")}, {exeReader.Size() - exeReader.Tell()} bytes left", true, ConsoleColor.Yellow);
+                MFAGenerator.BuildMFA();
+                Logger.Log($"Decompiling Finished", true, ConsoleColor.Green);
+
+                var newWriter = new ByteWriter($"{Settings.DumpPath}\\repacked.exe", FileMode.Create);
             }
             else if (path.ToLower().EndsWith(".apk"))
             {
@@ -152,6 +160,17 @@ namespace CTFAK
                 var dataReader = new ByteReader(path, FileMode.Open);
                 CleanData = data;
                 CleanData.Read(dataReader);
+            }
+            else if (path.ToLower().EndsWith(".dat"))
+            {
+                Settings.GameType = GameType.NSwitch;
+                var data = new GameData();
+                var dataReader = new ByteReader(path, FileMode.Open);
+                
+                CleanData = data;
+                CleanData.Read(dataReader);
+                var newData = new ChunkList();
+                newData.Read(dataReader);
             }
             
         }

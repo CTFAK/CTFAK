@@ -64,6 +64,7 @@ namespace CTFAK.MMFParser.EXE
         public virtual void Read(ByteReader exeReader)
         {
             
+            
             string magic = exeReader.ReadAscii(4); //Reading header
             Logger.Log("MAGIC HEADER: "+magic);
             //Checking for header
@@ -82,11 +83,12 @@ namespace CTFAK.MMFParser.EXE
 
             GameChunks = new ChunkList(); //Reading game chunks
             GameChunks.Read(exeReader);
-            
+            if (Settings.GameType == GameType.NSwitch) return;
 
             //Load chunks into gamedata for easier access
             //Can only be accessed from here AFTER loading all the chunks
             //If you need it AT LOADING - use ChunkList.GetChunk<ChunkType>();
+
             if (GameChunks.GetChunk<AppName>() != null) Name = GameChunks.PopChunk<AppName>();
             if (GameChunks.GetChunk<Copyright>() != null) Copyright = GameChunks.PopChunk<Copyright>();
             if (GameChunks.GetChunk<AppAuthor>()!=null) Author = GameChunks.PopChunk<AppAuthor>();
@@ -115,6 +117,7 @@ namespace CTFAK.MMFParser.EXE
             {
                 var headers = GameChunks.PopChunk<ObjectHeaders>().Headers;
                 var names = GameChunks.PopChunk<ObjectNames>().Names;
+                if (headers == null || names == null) return;
                 if(headers.Count>names.Count)Logger.LogWarning("Warning: Some object names for 2.5+ are missing");
                 if(headers.Count<names.Count)Logger.LogWarning("Warning: Some object headers for 2.5+ are missing");
                 

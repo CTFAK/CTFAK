@@ -83,6 +83,7 @@
     <DebugType>pdbonly</DebugType>
     <DefineConstants>WIN32</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="7z.NET, Version=1.0.3.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\7z.NET.1.0.3\lib\net463\7z.NET.dll</HintPath>
@@ -99,6 +100,9 @@
     <Reference Include="Joveler.DynLoader, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Joveler.DynLoader.2.0.0\lib\net451\Joveler.DynLoader.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="K4os.Compression.LZ4, Version=1.2.10.0, Culture=neutral, PublicKeyToken=2186fa9121ef231d, processorArchitecture=MSIL">
+      <HintPath>..\packages\K4os.Compression.LZ4.1.2.10-beta\lib\net46\K4os.Compression.LZ4.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -118,9 +122,8 @@
       <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
@@ -151,7 +154,9 @@
       <DependentUpon>FrameViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\GUIComponents\ChunkNode.cs" />
-    <Compile Include="GUI\GUIComponents\ObjectBox.cs" />
+    <Compile Include="GUI\GUIComponents\ObjectBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="GUI\HexViewForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -275,6 +280,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>GlobalStrings.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Utils\BitDict.cs" />
     <Compile Include="Utils\ByteFlag.cs" />
@@ -336,6 +346,10 @@
       <LastGenOutput>GlobalStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Locale\GlobalStrings.ru-ru.resx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Dependencies\Decrypter-x64.dll">
@@ -359,25 +373,8 @@
   </Target>
   <Import Project="..\packages\Joveler.Compression.ZLib.4.0.0\build\net451\Joveler.Compression.ZLib.targets" Condition="Exists('..\packages\Joveler.Compression.ZLib.4.0.0\build\net451\Joveler.Compression.ZLib.targets')" />
   <PropertyGroup>
-    <PostBuildEvent>md  $(SolutionDir)\Build\
-md  $(SolutionDir)\Build\x64\
-md  $(SolutionDir)\Build\x86\
-copy $(TargetPath)  $(SolutionDir)Build\CTFAK.exe
-copy $(TargetDir)x64\Decrypter-x64.dll $(SolutionDir)Build\x64\Decrypter-x64.dll 
-copy $(TargetDir)x86\Decrypter-x86.dll $(SolutionDir)Build\x86\Decrypter-x86.dll     
-copy $(TargetDir)x64\zlibwapi.dll $(SolutionDir)Build\x64\zlibwapi.dll
-copy $(TargetDir)x86\zlibwapi.dll $(SolutionDir)Build\x86\zlibwapi.dll
-copy $(TargetDir)CTFAK.pdb $(SolutionDir)Build\CTFAK.pdb
-copy $(TargetDir)Be.Windows.Forms.HexBox.dll $(SolutionDir)Build\Be.Windows.Forms.HexBox.dll
-copy $(TargetDir)Joveler.Compression.ZLib.dll $(SolutionDir)Build\Joveler.Compression.ZLib.dll
-copy $(TargetDir)Joveler.DynLoader.dll $(SolutionDir)Build\Joveler.DynLoader.dll
-copy $(TargetDir)System.Buffers.dll $(SolutionDir)Build\System.Buffers.dll
-copy $(TargetDir)System.Memory.dll $(SolutionDir)Build\System.Memory.dll
-copy $(TargetDir)System.Memory.dll $(SolutionDir)Build\System.Memory.dll
-copy $(TargetDir)System.Numerics.Vectors.dll $(SolutionDir)Build\System.Numerics.Vectors.dll
-copy $(TargetDir)System.Runtime.CompilerServices.Unsafe.dll $(SolutionDir)Build\System.Runtime.CompilerServices.Unsafe.dll
-
-</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\7z.NET.1.0.3\build\7z.NET.targets" Condition="Exists('..\packages\7z.NET.1.0.3\build\7z.NET.targets')" />
 </Project>

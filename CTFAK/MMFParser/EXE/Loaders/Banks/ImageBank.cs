@@ -9,6 +9,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using CTFAK.GUI;
 using CTFAK.Utils;
 using Joveler.Compression.ZLib;
+using K4os.Compression.LZ4;
 using static CTFAK.MMFParser.EXE.ChunkList;
 
 
@@ -35,9 +36,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             }
         }
 
-        public override void Print(bool ext)
-        {
-        }
 
         public override string[] GetReadableData()
         {
@@ -82,7 +80,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             // return;
             // }
             if (!Settings.DoMFA) Reader.Seek(0); //Reset the reader to avoid bugs when dumping more than once
-           
+            if(Settings.GameType==GameType.TwoFivePlus)
+            {
+                //File.WriteAllBytes("images.bank",Reader.ReadBytes((int)Reader.Size()));
+                //return;
+            }
             
             var tempImages = new Dictionary<int, ImageItem>();
             int count;
@@ -96,7 +98,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 count = Reader.ReadInt32();
             }
             Logger.Log($"Found {count} images", true, ConsoleColor.Green);
-            if (Settings.GameType == GameType.TwoFivePlus && !Settings.DoMFA) return;
+
             var stopWatch = new Stopwatch();
             stopWatch.Start();
             //if (!Settings.DumpImages) return;
@@ -162,7 +164,41 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
         public override void Read()
         {
-            if (Settings.GameType == GameType.Android&&!Settings.DoMFA)
+            if ((Settings.GameType == GameType.TwoFivePlus) && !Settings.DoMFA)
+            {
+                Handle = Reader.ReadInt32();
+                
+                var unk2 = Reader.ReadInt32();
+                var unk = Reader.ReadInt32();
+                //Flags.flag = Reader.ReadUInt32();
+                var unk3 = Reader.ReadInt32();
+                var dataSize = Reader.ReadInt32();
+                _width = Reader.ReadInt16(); //width
+                _height = Reader.ReadInt16(); //height
+                var unk6 = Reader.ReadInt16();
+                var unk7= Reader.ReadInt16();
+                HotspotX = Reader.ReadInt16();
+                HotspotY = Reader.ReadInt16();
+                ActionX = Reader.ReadInt16();
+                ActionY = Reader.ReadInt16();
+                _transparent = Reader.ReadColor();
+                var decompressedSize = Reader.ReadInt32();
+                rawImg = Reader.ReadBytes(dataSize-4);
+                byte[] target = new byte[decompressedSize];
+                LZ4Codec.Decode(rawImg, target);
+                
+                rawImg = target;
+                _graphicMode = 16;
+                
+                Load();
+                //Save($"{Settings.ImagePath}\\{Handle}.png");
+
+                //Logger.Log(
+                //       $"Loading image {_width}x{_height} with handle {Handle}, Size {dataSize},decompressedSize {decompressedSize}");
+
+
+            }
+            else if ((Settings.GameType == GameType.Android||Settings.GameType == GameType.NSwitch)&&!Settings.DoMFA)
             {
                 Handle = Reader.ReadInt16();
                 var unk = (uint) Reader.ReadInt32();
@@ -183,8 +219,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 if (thefuk1 == 255)
                 {
                     rawImg = Reader.ReadBytes(size);
-                    // File.WriteAllBytes($"{Settings.ImagePath}\\{Handle}.chunk",imageReader.ReadBytes());
-                    // imageReader.Seek(0);
                     return;
                 }
                 else
@@ -204,63 +238,30 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             else
             {
                 Handle = Reader.ReadInt32();
-                if (!Debug)
-                {
-                    if (Settings.Build >= 284 && Settings.GameType != GameType.OnePointFive) Handle -= 1;
-                }
-
-                Position = (int) Reader.Tell();
+                if (!Debug) if (Settings.Build >= 284 && Settings.GameType != GameType.OnePointFive) Handle -= 1;
                 _bitmap = null;
-                Reader.Seek(Position);
+
                 ByteReader imageReader;
-                if (Settings.GameType != GameType.Android)
-                {
-                    if (Settings.GameType == GameType.OnePointFive && !Settings.DoMFA)
-                    {
-                        imageReader = new ByteReader(Decompressor.DecompressOld(Reader));
-                    }
-                    else if (!Settings.DoMFA)
-                    {
-                        imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
-                    }
-                    else
-                    {
-                        imageReader = Reader;
-                    }
-                }
+
+                if (Settings.GameType == GameType.OnePointFive && !Settings.DoMFA) imageReader = new ByteReader(Decompressor.DecompressOld(Reader));
+                else if (!Settings.DoMFA) imageReader = Debug ? Reader : Decompressor.DecompressAsReader(Reader, out var a);
                 else imageReader = Reader;
-                // else throw new InvalidDataException("Unsupported reader");
 
-                long start = imageReader.Tell();
-
-
-                if (Settings.GameType == GameType.OnePointFive && !Settings.DoMFA)
-                {
-                    _checksum = imageReader.ReadInt16();
-                }
+                if (Settings.GameType == GameType.OnePointFive && !Settings.DoMFA) _checksum = imageReader.ReadInt16();
                 else _checksum = imageReader.ReadInt32();
 
                 _references = imageReader.ReadInt32();
                 Size = (int) imageReader.ReadUInt32();
 
-                if (Debug)
-                {
-                    imageReader = new ByteReader(imageReader.ReadBytes(Size + 20));
-                }
+                if (Debug) imageReader = new ByteReader(imageReader.ReadBytes(Size + 20));
 
                 _width = imageReader.ReadInt16();
                 _height = imageReader.ReadInt16();
-                // Logger.Log($"Loading image {Handle.ToString(),4} Size: {_width,4}x{_height,4}, data size: {Size}");
-
                 _graphicMode = imageReader.ReadByte();
-
                 Flags.flag = imageReader.ReadByte();
 
                 if (Settings.GameType != GameType.OnePointFive ||
-                    (Settings.DoMFA && Settings.GameType == GameType.OnePointFive))
-                {
-                    imageReader.Skip(2);
-                }
+                    (Settings.DoMFA && Settings.GameType == GameType.OnePointFive)) imageReader.Skip(2);
 
                 HotspotX = imageReader.ReadInt16();
                 HotspotY = imageReader.ReadInt16();
@@ -273,39 +274,28 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 if (Flags["LZX"])
                 {
                     uint decompressedSize = imageReader.ReadUInt32();
+                    
                     imageData = Decompressor.DecompressBlock(imageReader,
                         (int) (imageReader.Size() - imageReader.Tell()),
                         (int) decompressedSize);
                 }
-                else
-                {
-                    imageData = imageReader.ReadBytes((int) (Size));
-                }
-
+                else imageData = imageReader.ReadBytes((int)(Size));
 
                 rawImg = imageData;
             }
-            // Load();
+            if(!Settings.DoMFA)Load();
         }
 
-        public override void Print(bool ext)
-        {
-        }
 
-        public override string[] GetReadableData()
-        {
-            throw new NotImplementedException();
-        }
+        public override string[] GetReadableData() { return null; }
+
 
         public void Load()
         {
             int bytesRead = 0;
             // if (!ImageBank.Load) return;
 
-            if (Flags["RLE"] || Flags["RLEW"] || Flags["RLET"])
-            {
-                return;
-            }
+            if (Flags["RLE"] || Flags["RLEW"] || Flags["RLET"]) return;
             else
             {
                 switch (_graphicMode)
@@ -325,13 +315,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                         (_colorArray, bytesRead) = ImageHelper.ReadSixteen(rawImg, _width, _height);
                         break;
                     }
-                    case 8:
-                    {
-                        Logger.Log("Reading 32-bit color");
-                        (_colorArray, bytesRead) = ImageHelper.Read32(rawImg, _width, _height);
-                        break;
-                    }
-                    case 16:
+                    case 16: //just using this number for 2.5+
                     {
                         (_colorArray, bytesRead) = ImageHelper.Read32(rawImg, _width, _height);
                         break;
@@ -358,19 +342,20 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                     }
                 }
             }
-
-            if (Settings.GameType != GameType.OnePointFive)
+            //Alpha channel in 2.5+ is not separated from the image data. That's smart
+            if (Settings.GameType != GameType.OnePointFive&&Settings.GameType!=GameType.TwoFivePlus)
             {
-                if (Settings.Build > 283) // No idea, but this is not working with old games
+                
+                if (Settings.Build > 283) // No idea why, but this is not working with old games
                 {
-                    if (_transparent != null)
+                    if (_transparent != null&&!Flags["Alpha"])
                     {
                         for (int i = 0; i < (_height * _width * 4) - 3; i++)
                         {
                             if (_colorArray[i + 1] == _transparent.R && _colorArray[i + 2] == _transparent.G &&
                                 _colorArray[i + 3] == _transparent.B)
                             {
-                                _colorArray[i] = _transparent.A;
+                                _colorArray[4] = _transparent.A;
                             }
                         }
                     }
@@ -386,7 +371,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
             try
             {
-                if (Settings.GameType == GameType.TwoFivePlus) Logger.Log("Trying to save image");
+                //if (Settings.GameType == GameType.TwoFivePlus) Logger.Log("Trying to save image");
                 Bitmap.Save(filename);
             }
             catch

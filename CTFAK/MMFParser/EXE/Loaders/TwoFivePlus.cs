@@ -19,6 +19,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override void Read()
         {
+            return;
             Headers = new Dictionary<int,ObjectHeader>();
             int current = 0;
             while (Reader.Tell()<Reader.Size())
@@ -32,11 +33,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
         }
 
         public override void Write(ByteWriter Writer)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override void Print(bool ext)
         {
             throw new System.NotImplementedException();
         }
@@ -67,10 +63,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             throw new System.NotImplementedException();
         }
 
-        public override void Print(bool ext)
-        {
-            throw new System.NotImplementedException();
-        }
 
         public override string[] GetReadableData()
         {
@@ -86,8 +78,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             throw new NotImplementedException();
         }
 
-        public override void Print(bool ext){}
-        
 
         public override string[] GetReadableData()
         {
@@ -105,7 +95,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             int current = 0;
             while(Reader.Tell() < end)
             {
-                var name = Reader.ReadWideString();
+                var name =Settings.GameType == GameType.NSwitch ? Reader.ReadAscii(): Reader.ReadWideString();
                 Names.Add(current,name);
                 current++;
             }

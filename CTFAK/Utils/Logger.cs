@@ -21,7 +21,13 @@ namespace CTFAK.Utils
         }
         public static void Log(string text, bool logToScreen = true,ConsoleColor color = ConsoleColor.White, bool logToConsole=true)
         {
-
+            if (logToScreen)
+            {
+                Console.ForegroundColor = color;
+                Console.WriteLine(Helper.GetCurrentTime() + text);
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+            return;
             if (_writer == null)
             {
                 File.Delete("NewLog.log");
@@ -29,14 +35,10 @@ namespace CTFAK.Utils
                 _writer.AutoFlush = true;
 
             }
-            _writer.WriteLine(Helper.GetCurrentTime()+ text);
+
+            //_writer.WriteLine(Helper.GetCurrentTime()+ text);
             
-            if (logToScreen)
-            {
-                Console.ForegroundColor = color;
-                Console.WriteLine(Helper.GetCurrentTime()+text);
-                Console.ForegroundColor = ConsoleColor.White;
-            }
+            
             if(logToConsole) MainConsole.Message(text);
                 
 

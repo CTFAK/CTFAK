@@ -22,7 +22,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             throw new NotImplementedException();
         }
 
-        public override void Print(bool ext){}
         public override string[] GetReadableData()
         {
             return new string[]
@@ -41,53 +40,40 @@ namespace CTFAK.MMFParser.EXE.Loaders
             _header = infoChunks.GetChunk<ObjectHeader>();
             _name = infoChunks.GetChunk<ObjectName>();
             _properties = infoChunks.GetChunk<ObjectProperties>();
-           
-            _properties.ReadNew((int) ObjectType,this);
-            if(Name=="play button")Logger.Log($"{Name} - {InkEffect} - {_header.InkEffect} - {InkEffectValue}");
             
+
+           
+            Handle = _header.Handle;
+            ObjectType = (Constants.ObjectType)_header.ObjectType;
+            Flags = (int)_header.Flags;
+            InkEffect = (int)_header.InkEffect&0xFFFF;
+            InkEffectValue = _header.InkEffectParameter;
+            Name = _name?.Value ?? $"{ObjectType}-{Handle}";
+            Properties = _properties;
+            Properties.ReadNew((int)ObjectType, this);
+
+
+
+
         }
 
-        public int Handle
-        {
-            get=>_header.Handle;
-            set => _header.Handle = (short) value;
-        }
+        public int Handle { get; set; }
+        
+        public string Name { get; set; }
+       
+        public ObjectProperties Properties { get; set; }
 
-        public string Name
-        {
-            get=>_name?.Value ?? $"{ObjectType} - "+Handle;
-            set => _name.Value = value;
-        } 
-        public ObjectProperties Properties => _properties;
+        public Constants.ObjectType ObjectType { get; set; }
+        
+        public int Flags { get; set; }
+        
+        public int Reserved { get; set; }
 
-        public Constants.ObjectType ObjectType
-        {
-            get=>(Constants.ObjectType) _header.ObjectType;
-            set => _header.ObjectType = (short) value;
-        }
-
-        public int Flags
-        {
-            get => (int) _header.Flags;
-            set => _header.Flags = (uint) value;
-        }
-        public int Reserved => (int) _header.Reserved;
-
-        public int InkEffect
-        {
-            get => (int) _header.InkEffect & 0xffff;
-            set => _header.InkEffect=(uint) (value& 0xffff);
-        }
-        public uint InkEffectValue
-        {
-            get => _header.InkEffectParameter;
-            set => _header.InkEffectParameter = value;
-        }
-        public byte BlendCoeff
-        {
-            get => _header.Opacity;
-            set => _header.Opacity = value;
-        }
+        public int InkEffect { get; set; }
+       
+        public uint InkEffectValue { get; set; }
+        
+        public byte BlendCoeff { get; set; }
         public bool Transparent => ByteFlag.GetFlag((uint) _header.InkEffect, 28);
         public bool Antialias => ByteFlag.GetFlag((uint) _header.InkEffect, 29);
         
@@ -175,7 +161,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             throw new NotImplementedException();
         }
 
-        public override void Print(bool ext){}
         public override string[] GetReadableData() => null;
 
     }
@@ -196,7 +181,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             throw new NotImplementedException();
         }
 
-        public override void Print(bool ext){}
         public override string[] GetReadableData() => null;
 
         public override void Read()

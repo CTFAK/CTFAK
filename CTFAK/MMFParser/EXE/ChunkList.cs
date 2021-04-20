@@ -38,8 +38,13 @@ namespace CTFAK.MMFParser.EXE
                 Chunk chunk = new Chunk(Chunks.Count, this);
                 chunk.Verbose = Verbose;
                 chunk.Read(reader);
-                if (chunk.Id == 26214 && Settings.GameType != GameType.TwoFivePlus) chunk.Loader = LoadModern(chunk);
+                if (Settings.GameType == GameType.NSwitch)
+                {
+                    if(chunk.Id==26216)chunk.Loader = LoadModern(chunk);
+                    else File.WriteAllBytes($"{Settings.ChunkPath}\\{((Constants.ChunkNames)chunk.Id)}.chunk",chunk.ChunkData);
+                }
                 else chunk.Loader = LoadModern(chunk);
+              
                 if(chunk.Loader!=null)chunk.Loader.Chunk = chunk;
 
                 Chunks.Add(chunk);
@@ -50,6 +55,7 @@ namespace CTFAK.MMFParser.EXE
                 
             }
             stopwatch.Stop();
+            Logger.Log("Data Left: "+(reader.Size()-reader.Tell()).ToPrettySize());
         }
 
         public class Chunk
@@ -86,7 +92,7 @@ namespace CTFAK.MMFParser.EXE
                 Flag = (ChunkFlags) exeReader.ReadInt16();
                 Size = exeReader.ReadInt32();
 
-                Logger.Log("Reading "+(Constants.ChunkNames)Id);
+                // Logger.Log("Reading "+(Constants.ChunkNames)Id+" "+Size.ToPrettySize());
 
                 switch (Flag)
                 {
@@ -119,22 +125,6 @@ namespace CTFAK.MMFParser.EXE
                 Loader = null;
                 Writer.WriteInt16((short) Id);
                 Writer.WriteInt16((short) Flag);
-                // if (!(Loader is Frame)) Loader = null;
-                if ((Loader is Events)) Loader = null;
-                if ((Loader is ImageBank)) Loader = null;
-
-                if ((Loader is FrameHeader)) Loader = null;
-                if ((Loader is VirtualRect)) Loader = null;
-                if ((Loader is FrameName)) Loader = null;
-                if ((Loader is FramePalette)) Loader = null;
-                if ((Loader is Layers)) Loader = null;
-                // if ((Loader is AppMenu)) Loader = null;
-                // if ((Loader is MovementTimerBase)) Loader = null;
-
-                // if ((Loader is FrameHandles)) Loader = null;
-                // if ((Loader is Extensions)) Loader = null;
-                // if ((Loader is StringChunk)) Loader = null;
-                // if ((Loader is Frame)) Loader = null;
 
                 var dataWriter = new ByteWriter(new MemoryStream());
                 if (Loader == null)
@@ -153,7 +143,7 @@ namespace CTFAK.MMFParser.EXE
                 switch (Flag)
                 {
                     case ChunkFlags.NotCompressed:
-                        compressedData = dataWriter;
+                        compressedData.WriteBytes(dataWriter.GetBuffer());
 
                         break;
                     case ChunkFlags.Compressed:
@@ -378,6 +368,7 @@ namespace CTFAK.MMFParser.EXE
                     break;
                 case 13117:
                     if (Settings.GameType == GameType.Android) break;
+                    if (Settings.GameType == GameType.TwoFivePlus) break;
                     loader = new Events(reader);
                     break;
                 case 13127:

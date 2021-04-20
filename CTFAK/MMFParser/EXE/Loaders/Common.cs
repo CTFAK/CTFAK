@@ -26,7 +26,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             Writer.WriteInt32(Bottom);
         }
 
-        public override void Print(bool ext){}
         public override string[] GetReadableData() => new string[]
         {
             $"Value: {Right}x{Bottom}"

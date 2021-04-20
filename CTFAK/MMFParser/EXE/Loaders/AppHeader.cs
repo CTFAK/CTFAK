@@ -60,7 +60,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public short GraphicsMode;
         public short Otherflags;
         public Controls Controls;
-        public byte WindowsMenuIndex;
+        public int WindowsMenuIndex;
 
 
         public override void Read()
@@ -68,11 +68,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
             {
                 var start = Reader.Tell();
-                if (!Settings.Old)
-                {
-                    Size = Reader.ReadInt32();
-                    // Debug.Assert(Size==Reader.Size());
-                }
+                if (!Settings.Old) Size = Reader.ReadInt32();
                 Flags.flag=(uint) Reader.ReadInt16();
 
                 NewFlags.flag = (uint) Reader.ReadInt16();
@@ -91,7 +87,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
                 NumberOfFrames = Reader.ReadInt32();
                 if (Settings.Old) return;
                 FrameRate = Reader.ReadInt32();
-                WindowsMenuIndex = Reader.ReadByte(); 
+                WindowsMenuIndex = Reader.ReadInt32(); 
             }
             
             
@@ -113,21 +109,10 @@ namespace CTFAK.MMFParser.EXE.Loaders
             Writer.WriteInt32(NumberOfFrames);
            
             Writer.WriteInt32(FrameRate);
-            Writer.WriteInt8(WindowsMenuIndex);
-            Writer.WriteInt16(0);
-            Writer.WriteInt8(0);
-          
-            
-            
-        }
+            Writer.WriteInt32(WindowsMenuIndex);
+          }
 
-        public override void Print(bool ext)
-        {
-            Logger.Log($"ScreenRes: {WindowWidth}x{WindowHeight}", true, ConsoleColor.DarkMagenta);
-            Logger.Log($"Score: {InitialScore}, Lives: {InitialLives}", true, ConsoleColor.DarkMagenta);
-            Logger.Log($"Frame count: {NumberOfFrames}", true, ConsoleColor.DarkMagenta);
-            Logger.Log("");
-        }
+
 
         public override string[] GetReadableData()
         {
@@ -177,15 +162,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             foreach (PlayerControl control in Items)
             {
                 control.Write(Writer);
-            }
-        }
-
-        public override void Print(bool ext)
-        {
-            Logger.Log("Controls: ",true,ConsoleColor.Yellow);
-            foreach (var item in Items)
-            {
-                item.Print();
             }
         }
 

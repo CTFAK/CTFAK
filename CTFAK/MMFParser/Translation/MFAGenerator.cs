@@ -56,11 +56,11 @@ namespace CTFAK.MMFParser.Translation
             Settings.Build = cacheBuild;
             Settings.GameType = cacheType;
             Pame2Mfa.Translate(ref template, Program.CleanData); //Translation
-            
-            var mfaWriter =
-                new ByteWriter(
-                    Program.CleanData.EditorFilename?.Value?.Length > 0 ? $"{Settings.DumpPath}\\{Path.GetFileNameWithoutExtension(Program.CleanData.EditorFilename.Value)}.mfa" : $"{Settings.DumpPath}\\out.mfa",
-                    FileMode.Create); //New writer for new MFA
+
+            var dumpPath = Program.CleanData.EditorFilename?.Value?.Length > 0 ? $"{Settings.DumpPath}\\{Path.GetFileNameWithoutExtension(Program.CleanData.EditorFilename.Value)}.mfa" : $"{Settings.DumpPath}\\out.mfa";
+            Logger.Log("Writing mfa to " + dumpPath);
+                var mfaWriter =
+                new ByteWriter(dumpPath,FileMode.Create); //New writer for new MFA
             Pame2Mfa.Message("");
             Pame2Mfa.Message("Writing MFA");
             template.Write(mfaWriter); //Writing new MFA

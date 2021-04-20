@@ -17,12 +17,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
         }
 
-        
-
-        public override void Print(bool ext)
-        {
-        }
-
         public override string[] GetReadableData()
         {
             List<string> list = new List<string>();
@@ -126,13 +120,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public AppMenuItem(ByteReader reader) : base(reader)
         {
-        }
-
-        
-
-        public override void Print(bool ext)
-        {
-            throw new NotImplementedException();
         }
 
         public override string[] GetReadableData()

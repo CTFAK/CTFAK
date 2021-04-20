@@ -33,7 +33,7 @@ namespace CTFAK_Runtime_Tools.RuntimeParsers.RuntimeChunks
             BorderColor = Reader.ReadColor();
             NumberOfFrames = Reader.ReadInt32();
             FrameRate = Reader.ReadInt32();
-            WindowsMenuIndex = (byte) Reader.ReadInt32();
+            WindowsMenuIndex = Reader.ReadInt32();
         }
     }
 }

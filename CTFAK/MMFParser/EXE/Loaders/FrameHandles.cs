@@ -36,7 +36,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             }
         }
 
-        public override void Print(bool ext){}
         public override string[] GetReadableData() => new[] {$"Frame Count: {Items.Count}"};
 
     }

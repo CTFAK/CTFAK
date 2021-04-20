@@ -43,12 +43,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
         {
             throw new System.NotImplementedException();
         }
-
-        public override void Print(bool ext)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override string[] GetReadableData()
         {
             throw new System.NotImplementedException();

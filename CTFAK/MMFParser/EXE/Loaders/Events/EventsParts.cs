@@ -76,18 +76,16 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                 item.Read();
                 Items.Add(item);
             }
-            // Logger.Log(this);
+            Logger.Log(this);
             
 
             
         }
         public override string ToString()
         {
-            return Preprocessor.ProcessCondition(this);
-            
-                
-                     //$"Condition {(Constants.ObjectType)ObjectType}=={Names.ConditionNames[ObjectType][Num]}{(Items.Count > 0 ? "-"+Items[0].ToString() : " ")}";
-
+            //return Preprocessor.ProcessCondition(this);
+            //return $"Condition {(Constants.ObjectType)ObjectType}=={Names.ConditionNames[ObjectType][Num]}{(Items.Count > 0 ? "-"+Items[0].ToString() : " ")}";
+            return $"Condition {(Constants.ObjectType)ObjectType}=={Num}{(Items.Count > 0 ? "-"+Items[0].ToString() : " ")}";
         }
     }
 

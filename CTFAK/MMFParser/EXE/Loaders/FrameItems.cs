@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CTFAK.MMFParser.Attributes;
 using CTFAK.Utils;
 using static CTFAK.MMFParser.EXE.ChunkList;
@@ -18,10 +19,6 @@ namespace CTFAK.MMFParser.EXE.Loaders
             }
         }
 
-        public override void Print(bool ext)
-        {
-                       
-        }
 
         public override string[] GetReadableData()
         {
@@ -34,7 +31,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public override void Read()
         {
             var count = Reader.ReadInt32();
-            
+
             for (int i = 0; i < count; i++)
             {
                 var item = new ObjectInfo(Reader);

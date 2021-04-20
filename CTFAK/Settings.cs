@@ -145,6 +145,7 @@ namespace CTFAK
         TwoFivePlus,
         OnePointFive,
         MMFTwo,
-        Android
+        Android,
+        NSwitch
     }
 }

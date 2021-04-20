@@ -21,7 +21,7 @@ using Extension = CTFAK.MMFParser.EXE.Loaders.Events.Parameters.Extension;
 
 namespace CTFAK.Utils
 {
-    static class Helper
+    public static class Helper
     {
         public static string CleanInput(string strIn)
         {
