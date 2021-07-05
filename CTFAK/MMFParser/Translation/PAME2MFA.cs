@@ -296,7 +296,6 @@ namespace CTFAK.MMFParser.Translation
                         Dictionary<int,Quailifer> qualifiers = new Dictionary<int,Quailifer>();
                         foreach (Quailifer quailifer in frame.Events.QualifiersList.Values)
                         {
-                            break;
                             int newHandle = 0;
                             while (true)
                             {

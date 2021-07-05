@@ -5,6 +5,8 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Web.Caching;
@@ -160,6 +162,7 @@ namespace CTFAK
                 var dataReader = new ByteReader(path, FileMode.Open);
                 CleanData = data;
                 CleanData.Read(dataReader);
+                MFAGenerator.BuildMFA();
             }
             else if (path.ToLower().EndsWith(".dat"))
             {

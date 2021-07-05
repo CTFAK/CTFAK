@@ -36,32 +36,29 @@ namespace CTFAK.MMFParser.EXE
             while (true)
             {
                 Chunk chunk = new Chunk(Chunks.Count, this);
-                chunk.Verbose = Verbose;
                 chunk.Read(reader);
-                if (Settings.GameType == GameType.NSwitch)
-                {
-                    if(chunk.Id==26216)chunk.Loader = LoadModern(chunk);
-                    else File.WriteAllBytes($"{Settings.ChunkPath}\\{((Constants.ChunkNames)chunk.Id)}.chunk",chunk.ChunkData);
-                }
-                else chunk.Loader = LoadModern(chunk);
+                chunk.Loader = LoadChunk(chunk);
               
                 if(chunk.Loader!=null)chunk.Loader.Chunk = chunk;
 
                 Chunks.Add(chunk);
-                if (reader.Tell() >= reader.Size()) break; //In case there is no LAST chunk(may happen for fnac)
+                if (reader.Tell() >= reader.Size()) break; //In case there is no LAST chunk(custom protection maybe)
                 if (chunk.Id == 32639) break; //LAST chunkID
                 if (chunk.Id == 8750) BuildKey(); //Only build key when we have all the needed info
                 if (chunk.Id == 8788) Settings.GameType = GameType.TwoFivePlus; //Can be only seen in 2.5+
                 
             }
             stopwatch.Stop();
-            Logger.Log("Data Left: "+(reader.Size()-reader.Tell()).ToPrettySize());
+            //Logger.Log("Data Left: "+(reader.Size()-reader.Tell()).ToPrettySize());
         }
 
         public class Chunk
         {
             ChunkList _chunkList;
-            public string Name = "UNKNOWN";
+            public string Name
+            {
+                get=>_chunkList.GetNameByID(Id);
+            }
             int _uid;
             public int Id = 0;
 
@@ -87,8 +84,6 @@ namespace CTFAK.MMFParser.EXE
             public void Read(ByteReader exeReader)
             {
                 Id = exeReader.ReadInt16();
-                Name = _chunkList.GetNameByID(Id);
-
                 Flag = (ChunkFlags) exeReader.ReadInt16();
                 Size = exeReader.ReadInt32();
 
@@ -247,7 +242,7 @@ namespace CTFAK.MMFParser.EXE
             }
         }
 
-        public ChunkLoader LoadModern(Chunk chunk)
+        public ChunkLoader LoadChunk(Chunk chunk)
         {
             var reader = chunk.GetReader();
             ChunkLoader loader = null;
@@ -288,12 +283,6 @@ namespace CTFAK.MMFParser.EXE
                     break;
                 case 8745:
                     loader = new FrameItems(reader);
-                    break;
-                case 8787:
-                    loader = new ObjectHeaders(reader);
-                    break;
-                case 8790:
-                    loader = new ObjectPropertyList(reader);
                     break;
                 case 8762:
                     loader = new AboutText(reader);
@@ -357,8 +346,14 @@ namespace CTFAK.MMFParser.EXE
                 case 17478:
                     loader = new ObjectProperties(reader);
                     return loader;
+                case 8787:
+                    loader = new ObjectHeaders(reader);
+                    break;
                 case 8788:
                     loader = new ObjectNames(reader);
+                    break;
+                case 8790:
+                    loader = new ObjectPropertyList(reader);
                     break;
                 case 8754:
                     loader = new GlobalValues(reader);
@@ -367,7 +362,7 @@ namespace CTFAK.MMFParser.EXE
                     loader = new GlobalStrings(reader);
                     break;
                 case 13117:
-                    if (Settings.GameType == GameType.Android) break;
+                    //if (Settings.GameType == GameType.Android) break;
                     if (Settings.GameType == GameType.TwoFivePlus) break;
                     loader = new Events(reader);
                     break;

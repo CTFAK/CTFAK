@@ -22,6 +22,9 @@
     <Filter Include="GUI">
       <UniqueIdentifier>{cc41c015-fca6-4eca-af60-f9dd729b8ed7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы заголовков\MMF Headers">
+      <UniqueIdentifier>{130c5082-88ee-4129-9b1c-2d59beb25993}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -54,6 +57,9 @@
     <ClCompile Include="GUIHandler.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="API.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Mono.h">
@@ -63,9 +69,6 @@
       <Filter>Hooks</Filter>
     </ClInclude>
     <ClInclude Include="Loader.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="Structs.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="detours.h">
@@ -109,6 +112,111 @@
     </ClInclude>
     <ClInclude Include="Events.h">
       <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\CfcError.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\CfcFile.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\CFCMacro.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\Cncf.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\cncr.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\Cncy.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\Cnpdll.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\colors.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\D3dSurfInfo.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\EffectEx.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\EVTCCX.H">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\Fill.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\FilterMgr.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\ImageFlt.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\ImgFlt.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\ImgFltDefs.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\Mvt.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\Palet.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\PaletCpp.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\PictEdDefs.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\Props.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\PTYPE.H">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\SndDefs.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\SoundConverter.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\SoundError.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\SoundFilter.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\SoundFilterMgr.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\StdDefs.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\Surface.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\SurfaceDefs.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\TigsExt.hpp">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\WinMacro.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\BlitMac.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\Ccx.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="MMF\Ccxhdr.h">
+      <Filter>Файлы заголовков\MMF Headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

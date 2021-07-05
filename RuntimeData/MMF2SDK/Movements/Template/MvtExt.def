@@ -1,0 +1,7 @@
+
+EXPORTS
+	GetNumberOfMvts		@2
+	GetMvtName			@3
+	GetMvtID			@4
+	GetMvtIcon			@5
+	CreateMvt			@6

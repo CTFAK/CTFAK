@@ -47,6 +47,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
     }
     public class ObjectPropertyList:ChunkLoader
     {
+        public Dictionary<int, ObjectProperties> Props;
         public ObjectPropertyList(ByteReader reader) : base(reader)
         {
         }
@@ -55,7 +56,18 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override void Read()
         {
-            
+            var start = Reader.Tell();
+            var end = start + Reader.Size();
+            Props = new Dictionary<int, ObjectProperties>();
+            int current = 0;
+            while (Reader.Tell() < end)
+            {
+                var prop = new ObjectProperties(Reader);
+                prop.Read();
+                Logger.Log($"Reading object prop: {current}");
+                Props.Add(current, prop);
+                current++;
+            }
         }
 
         public override void Write(ByteWriter Writer)

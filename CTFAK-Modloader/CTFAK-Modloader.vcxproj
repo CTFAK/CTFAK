@@ -163,6 +163,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="API.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="GUIHandler.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
@@ -189,9 +190,43 @@
     <ClInclude Include="includes.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="Memory.h" />
+    <ClInclude Include="MMF\BlitMac.h" />
+    <ClInclude Include="MMF\Ccx.h" />
+    <ClInclude Include="MMF\Ccxhdr.h" />
+    <ClInclude Include="MMF\CfcError.h" />
+    <ClInclude Include="MMF\CfcFile.h" />
+    <ClInclude Include="MMF\CFCMacro.h" />
+    <ClInclude Include="MMF\Cncf.h" />
+    <ClInclude Include="MMF\cncr.h" />
+    <ClInclude Include="MMF\Cncy.h" />
+    <ClInclude Include="MMF\Cnpdll.h" />
+    <ClInclude Include="MMF\colors.h" />
+    <ClInclude Include="MMF\D3dSurfInfo.h" />
+    <ClInclude Include="MMF\EffectEx.h" />
+    <ClInclude Include="MMF\EVTCCX.H" />
+    <ClInclude Include="MMF\Fill.h" />
+    <ClInclude Include="MMF\FilterMgr.h" />
+    <ClInclude Include="MMF\ImageFlt.h" />
+    <ClInclude Include="MMF\ImgFlt.h" />
+    <ClInclude Include="MMF\ImgFltDefs.h" />
+    <ClInclude Include="MMF\Mvt.h" />
+    <ClInclude Include="MMF\Palet.h" />
+    <ClInclude Include="MMF\PaletCpp.h" />
+    <ClInclude Include="MMF\PictEdDefs.h" />
+    <ClInclude Include="MMF\Props.h" />
+    <ClInclude Include="MMF\PTYPE.H" />
+    <ClInclude Include="MMF\SndDefs.h" />
+    <ClInclude Include="MMF\SoundConverter.h" />
+    <ClInclude Include="MMF\SoundError.h" />
+    <ClInclude Include="MMF\SoundFilter.h" />
+    <ClInclude Include="MMF\SoundFilterMgr.h" />
+    <ClInclude Include="MMF\StdDefs.h" />
+    <ClInclude Include="MMF\Surface.h" />
+    <ClInclude Include="MMF\SurfaceDefs.h" />
+    <ClInclude Include="MMF\TigsExt.hpp" />
+    <ClInclude Include="MMF\WinMacro.h" />
     <ClInclude Include="Mono.h" />
     <ClInclude Include="Settings.h" />
-    <ClInclude Include="Structs.h" />
     <ClInclude Include="VEH.h" />
   </ItemGroup>
   <ItemGroup>

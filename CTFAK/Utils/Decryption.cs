@@ -27,7 +27,8 @@ namespace CTFAK.Utils
             var data2Ptr = Marshal.StringToHGlobalAnsi(data2);
             var data3Ptr = Marshal.StringToHGlobalAnsi(data3);
 
-            keyPtr = NativeLib.make_key(data1Ptr,data2Ptr,data3Ptr, MagicChar);
+            //keyPtr = NativeLib.make_key(data1Ptr,data2Ptr,data3Ptr, MagicChar);
+            keyPtr = NativeLib.make_key(data1,data2,data3, MagicChar);
             byte[] key = new byte[256];
             Marshal.Copy(keyPtr, key, 0, 256);
             Marshal.FreeHGlobal(keyPtr);
@@ -45,7 +46,7 @@ namespace CTFAK.Utils
             data1ptr = Marshal.StringToHGlobalUni(data1);
             data2ptr = Marshal.StringToHGlobalUni(data2);
             data3ptr = Marshal.StringToHGlobalUni(data3);
-            keyPtr = NativeLib.make_key_w(data1ptr, data2ptr, data3ptr, MagicChar);
+            keyPtr = NativeLib.make_key_w(data1, data2, data3, MagicChar);
             byte[] key = new byte[256];
             Marshal.Copy(keyPtr, key, 0, 256);
             _decryptionKey = key;

@@ -106,7 +106,7 @@ namespace CTFAK.MMFParser.EXE
             if (GameChunks.GetChunk<FrameHandles>() != null) FrameHandles = GameChunks.PopChunk<FrameHandles>();
             if (GameChunks.GetChunk<Extensions>() != null) Extensions = GameChunks.PopChunk<Extensions>();
             if (GameChunks.GetChunk<FrameItems>() != null) Frameitems = GameChunks.PopChunk<FrameItems>();
-            else Frameitems=new FrameItems(null as ByteReader);
+            else Frameitems=new FrameItems(null);
             
             for (int i = 0; i < Header.NumberOfFrames; i++)
             {
@@ -117,13 +117,14 @@ namespace CTFAK.MMFParser.EXE
             {
                 var headers = GameChunks.PopChunk<ObjectHeaders>().Headers;
                 var names = GameChunks.PopChunk<ObjectNames>().Names;
-                if (headers == null || names == null) return;
-                if(headers.Count>names.Count)Logger.LogWarning("Warning: Some object names for 2.5+ are missing");
-                if(headers.Count<names.Count)Logger.LogWarning("Warning: Some object headers for 2.5+ are missing");
+                var props = GameChunks.PopChunk<ObjectPropertyList>().Props;
+                //if (headers == null || names == null||props==null) return;
+
                 
-                Program.CleanData.Frameitems = new FrameItems((ByteReader) null);
+                Program.CleanData.Frameitems = new FrameItems(null);
                 foreach (KeyValuePair<int, ObjectHeader> header in headers)
                 {
+                    
                     var newInfo = new ObjectInfo((ByteReader) null);
                     newInfo.Handle = header.Value.Handle;
                     newInfo.ObjectType = (Constants.ObjectType) header.Value.ObjectType;
@@ -132,6 +133,7 @@ namespace CTFAK.MMFParser.EXE
                     string name = $"{newInfo.ObjectType}-{newInfo.Handle}";
                     names.TryGetValue(header.Key, out name);
                     newInfo.Name = name;
+                    Logger.Log($"Combining object \"{name}\" ({(Constants.ObjectType)(header.Value.ObjectType)})");
                     Frameitems.ItemDict.Add(newInfo.Handle, newInfo);
                 }
             }

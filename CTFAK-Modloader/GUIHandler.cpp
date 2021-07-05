@@ -46,7 +46,9 @@ long __stdcall hkEndScene(LPDIRECT3DDEVICE9 pDevice)
 		D3DDEVICE_CREATION_PARAMETERS params;
 		pDevice->GetCreationParameters(&params);
 		window = params.hFocusWindow;
+		printf("Hooking WndProc\n");
 		oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)WndProc);
+		printf("Hooked WndProc\n");
 		ImGui::CreateContext();
 		
 
@@ -61,8 +63,8 @@ long __stdcall hkEndScene(LPDIRECT3DDEVICE9 pDevice)
 	ImGui_ImplDX9_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
-	ImGui::ShowDemoWindow();
-	//Loader::DrawUI();
+	//ImGui::ShowDemoWindow();
+	Loader::DrawUI();
 
 
 	ImGui::EndFrame();
@@ -98,7 +100,7 @@ DWORD WINAPI HookDirect3D9(LPVOID lpParam)
 
 	pDummyDevice->Release();
 	pD3D->Release();
-	printf("Hooking EndScene function");
+	printf("Hooking EndScene function\n");
 	//oReset = (long(__stdcall*)(LPDIRECT3DDEVICE9,D3DPRESENT_PARAMETERS*))DetourFunction((PBYTE)(d3d9Device[16]), (PBYTE)hkReset);
 	oEndScene = (long(__stdcall*)(LPDIRECT3DDEVICE9))DetourFunction((PBYTE)(d3d9Device[42]), (PBYTE)hkEndScene);
 	return TRUE;

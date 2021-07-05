@@ -90,6 +90,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             int count;
             if (Settings.GameType == GameType.Android)
             {
+                return;
                 Reader.Skip(2);
                 count = Reader.ReadInt16();
             }

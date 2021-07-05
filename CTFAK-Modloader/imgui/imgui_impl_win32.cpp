@@ -300,7 +300,6 @@ IMGUI_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wPa
         return true;
     case WM_KEYDOWN:
     case WM_SYSKEYDOWN:
-        printf("SHIT");
         if (wParam < 256)
             io.KeysDown[wParam] = 1;
         return true;

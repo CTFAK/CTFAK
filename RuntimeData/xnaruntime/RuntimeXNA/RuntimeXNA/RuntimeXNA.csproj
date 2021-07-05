@@ -1,0 +1,822 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{C5407D5C-20F0-4C46-A039-908EDF466880}</ProjectGuid>
+    <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>RuntimeXNA</RootNamespace>
+    <AssemblyName>RuntimeXNA</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
+    <XnaPlatform>Windows</XnaPlatform>
+    <XnaProfile>HiDef</XnaProfile>
+    <XnaCrossPlatformGroupID>8bc26d5e-2ad8-4043-b87e-f1727a1ace4f</XnaCrossPlatformGroupID>
+    <XnaOutputType>Game</XnaOutputType>
+    <ApplicationIcon>Game.ico</ApplicationIcon>
+    <Thumbnail>GameThumbnail.png</Thumbnail>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Users\PC\Desktop\XNA\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>4</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\x86\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+    <XnaCompressContent>false</XnaCompressContent>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x86\Release</OutputPath>
+    <DefineConstants>TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+    <XnaCompressContent>true</XnaCompressContent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>43B18585BFAC84F8DAF3EC3A609F4FB91E1C7443</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>RuntimeXNA_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BinaryRead, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\BinaryRead.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Video, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Avatar, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Net, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Storage, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="mscorlib">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Net">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Actions\ACT_EXTSETALPHACOEF.cs" />
+    <Compile Include="Actions\ACT_EXTSETEFFECT.cs" />
+    <Compile Include="Actions\ACT_EXTSETEFFECTPARAM.cs" />
+    <Compile Include="Actions\ACT_EXTSETRGBCOEF.cs" />
+    <Compile Include="Actions\ACT_SETCHANNELFREQ.cs" />
+    <Compile Include="Actions\ACT_SETEFFECTPARAMTEXTURE.cs" />
+    <Compile Include="Actions\ACT_SETSAMPLEFREQ.cs" />
+    <Compile Include="Application\CEmbeddedFile.cs" />
+    <Compile Include="Conditions\CND_EVERY2.cs" />
+    <Compile Include="Conditions\CND_TIMER2.cs" />
+    <Compile Include="Conditions\CND_RUNNINGAS.cs" />
+    <Compile Include="Expressions\EXP_EMPTY.cs" />
+    <Compile Include="Expressions\EXP_EXTALPHACOEF.cs" />
+    <Compile Include="Expressions\EXP_EXTRGBCOEF.cs" />
+    <Compile Include="Expressions\EXP_FRAMERGBCOEF.cs" />
+    <Compile Include="Expressions\EXP_GETCHANNELFREQ.cs" />
+    <Compile Include="Expressions\EXP_GETSAMPLEFREQ.cs" />
+    <Compile Include="Expressions\EXP_PATH.cs" />
+    <Compile Include="Expressions\EXP_ZERO.cs" />
+    <Compile Include="Expressions\EXP_RUNTIMENAME.cs" />
+    <Compile Include="Extensions\CRunInventory.cs" />
+    <Compile Include="Extensions\CRunkcclock.cs" />
+    <Compile Include="Extensions\CRunkcwctrl.cs" />
+    <Compile Include="Actions\ACT_ADDLIVES.cs" />
+    <Compile Include="Actions\ACT_ADDSCORE.cs" />
+    <Compile Include="Actions\ACT_ADDVARG.cs" />
+    <Compile Include="Actions\ACT_CADDVALUE.cs" />
+    <Compile Include="Actions\ACT_CCAENDAPP.cs" />
+    <Compile Include="Actions\ACT_CCAHIDE.cs" />
+    <Compile Include="Actions\ACT_CCAJUMPFRAME.cs" />
+    <Compile Include="Actions\ACT_CCANEXTFRAME.cs" />
+    <Compile Include="Actions\ACT_CCAPAUSEAPP.cs" />
+    <Compile Include="Actions\ACT_CCAPREVIOUSFRAME.cs" />
+    <Compile Include="Actions\ACT_CCARESTARTAPP.cs" />
+    <Compile Include="Actions\ACT_CCARESTARTFRAME.cs" />
+    <Compile Include="Actions\ACT_CCARESUMEAPP.cs" />
+    <Compile Include="Actions\ACT_CCASETGLOBALSTRING.cs" />
+    <Compile Include="Actions\ACT_CCASETGLOBALVALUE.cs" />
+    <Compile Include="Actions\ACT_CCASHOW.cs" />
+    <Compile Include="Actions\ACT_CDISPLAY.cs" />
+    <Compile Include="Actions\ACT_CDISPLAYX.cs" />
+    <Compile Include="Actions\ACT_CDISPLAYY.cs" />
+    <Compile Include="Actions\ACT_CREATE.cs" />
+    <Compile Include="Actions\ACT_CSETCOLOR1.cs" />
+    <Compile Include="Actions\ACT_CSETCOLOR2.cs" />
+    <Compile Include="Actions\ACT_CSETMAX.cs" />
+    <Compile Include="Actions\ACT_CSETMIN.cs" />
+    <Compile Include="Actions\ACT_CSETVALUE.cs" />
+    <Compile Include="Actions\ACT_CSUBVALUE.cs" />
+    <Compile Include="Actions\ACT_DELALLCREATEDBKD.cs" />
+    <Compile Include="Actions\ACT_DELCREATEDBKDAT.cs" />
+    <Compile Include="Actions\ACT_ENDGAME.cs" />
+    <Compile Include="Actions\ACT_EXTADDTODEBUGGER.cs" />
+    <Compile Include="Actions\ACT_EXTADDVAR.cs" />
+    <Compile Include="Actions\ACT_EXTBOUNCE.cs" />
+    <Compile Include="Actions\ACT_EXTBRANCHNODE.cs" />
+    <Compile Include="Actions\ACT_EXTCHGFLAG.cs" />
+    <Compile Include="Actions\ACT_EXTCLRFLAG.cs" />
+    <Compile Include="Actions\ACT_EXTDESTROY.cs" />
+    <Compile Include="Actions\ACT_EXTDISPATCHVAR.cs" />
+    <Compile Include="Actions\ACT_EXTDISPLAYDURING.cs" />
+    <Compile Include="Actions\ACT_EXTFORCEANIM.cs" />
+    <Compile Include="Actions\ACT_EXTFORCEDIR.cs" />
+    <Compile Include="Actions\ACT_EXTFORCEFRAME.cs" />
+    <Compile Include="Actions\ACT_EXTFORCESPEED.cs" />
+    <Compile Include="Actions\ACT_EXTGOTONODE.cs" />
+    <Compile Include="Actions\ACT_EXTHIDE.cs" />
+    <Compile Include="Actions\ACT_EXTINKEFFECT.cs" />
+    <Compile Include="Actions\ACT_EXTLOOKAT.cs" />
+    <Compile Include="Actions\ACT_EXTMAXSPEED.cs" />
+    <Compile Include="Actions\ACT_EXTMOVEAFTER.cs" />
+    <Compile Include="Actions\ACT_EXTMOVEBEFORE.cs" />
+    <Compile Include="Actions\ACT_EXTMOVETOLAYER.cs" />
+    <Compile Include="Actions\ACT_EXTNEXTMOVE.cs" />
+    <Compile Include="Actions\ACT_EXTPREVMOVE.cs" />
+    <Compile Include="Actions\ACT_EXTRESTANIM.cs" />
+    <Compile Include="Actions\ACT_EXTRESTDIR.cs" />
+    <Compile Include="Actions\ACT_EXTRESTFRAME.cs" />
+    <Compile Include="Actions\ACT_EXTRESTSPEED.cs" />
+    <Compile Include="Actions\ACT_EXTREVERSE.cs" />
+    <Compile Include="Actions\ACT_EXTSELMOVE.cs" />
+    <Compile Include="Actions\ACT_EXTSETACCELERATION.cs" />
+    <Compile Include="Actions\ACT_EXTSETBOLD.cs" />
+    <Compile Include="Actions\ACT_EXTSETDECELERATION.cs" />
+    <Compile Include="Actions\ACT_EXTSETDIR.cs" />
+    <Compile Include="Actions\ACT_EXTSETDIRECTIONS.cs" />
+    <Compile Include="Actions\ACT_EXTSETFLAG.cs" />
+    <Compile Include="Actions\ACT_EXTSETFONTNAME.cs" />
+    <Compile Include="Actions\ACT_EXTSETFONTSIZE.cs" />
+    <Compile Include="Actions\ACT_EXTSETGRAVITY.cs" />
+    <Compile Include="Actions\ACT_EXTSETITALIC.cs" />
+    <Compile Include="Actions\ACT_EXTSETPOS.cs" />
+    <Compile Include="Actions\ACT_EXTSETROTATINGSPEED.cs" />
+    <Compile Include="Actions\ACT_EXTSETSEMITRANSPARENCY.cs" />
+    <Compile Include="Actions\ACT_EXTSETTEXTCOLOR.cs" />
+    <Compile Include="Actions\ACT_EXTSETVAR.cs" />
+    <Compile Include="Actions\ACT_EXTSETVARSTRING.cs" />
+    <Compile Include="Actions\ACT_EXTSETX.cs" />
+    <Compile Include="Actions\ACT_EXTSETY.cs" />
+    <Compile Include="Actions\ACT_EXTSHOOT.cs" />
+    <Compile Include="Actions\ACT_EXTSHOOTTOWARD.cs" />
+    <Compile Include="Actions\ACT_EXTSHOW.cs" />
+    <Compile Include="Actions\ACT_EXTSHUFFLE.cs" />
+    <Compile Include="Actions\ACT_EXTSPEED.cs" />
+    <Compile Include="Actions\ACT_EXTSPRBACK.cs" />
+    <Compile Include="Actions\ACT_EXTSPRFRONT.cs" />
+    <Compile Include="Actions\ACT_EXTSTART.cs" />
+    <Compile Include="Actions\ACT_EXTSTARTANIM.cs" />
+    <Compile Include="Actions\ACT_EXTSTOP.cs" />
+    <Compile Include="Actions\ACT_EXTSTOPANIM.cs" />
+    <Compile Include="Actions\ACT_EXTSUBVAR.cs" />
+    <Compile Include="Actions\ACT_EXTWRAP.cs" />
+    <Compile Include="Actions\ACT_FULLSCREENMODE.cs" />
+    <Compile Include="Actions\ACT_GOLEVEL.cs" />
+    <Compile Include="Actions\ACT_GRPACTIVATE.cs" />
+    <Compile Include="Actions\ACT_GRPDEACTIVATE.cs" />
+    <Compile Include="Actions\ACT_HIDECURSOR.cs" />
+    <Compile Include="Actions\ACT_LOCKCHANNEL.cs" />
+    <Compile Include="Actions\ACT_NEXTLEVEL.cs" />
+    <Compile Include="Actions\ACT_NOINPUT.cs" />
+    <Compile Include="Actions\ACT_OPENDEBUGGER.cs" />
+    <Compile Include="Actions\ACT_PAUSE.cs" />
+    <Compile Include="Actions\ACT_PAUSEALLCHANNELS.cs" />
+    <Compile Include="Actions\ACT_PAUSEANYKEY.cs" />
+    <Compile Include="Actions\ACT_PAUSECHANNEL.cs" />
+    <Compile Include="Actions\ACT_PAUSEDEBUGGER.cs" />
+    <Compile Include="Actions\ACT_PAUSEKEY.cs" />
+    <Compile Include="Actions\ACT_PAUSESAMPLE.cs" />
+    <Compile Include="Actions\ACT_PLAYCHANNEL.cs" />
+    <Compile Include="Actions\ACT_PLAYLOOPCHANNEL.cs" />
+    <Compile Include="Actions\ACT_PLAYLOOPSAMPLE.cs" />
+    <Compile Include="Actions\ACT_PLAYSAMPLE.cs" />
+    <Compile Include="Actions\ACT_PREVLEVEL.cs" />
+    <Compile Include="Actions\ACT_QASK.cs" />
+    <Compile Include="Actions\ACT_RANDOMIZE.cs" />
+    <Compile Include="Actions\ACT_RESTARTGAME.cs" />
+    <Compile Include="Actions\ACT_RESTARTLEVEL.cs" />
+    <Compile Include="Actions\ACT_RESTINPUT.cs" />
+    <Compile Include="Actions\ACT_RESUMEALLCHANNELS.cs" />
+    <Compile Include="Actions\ACT_RESUMECHANNEL.cs" />
+    <Compile Include="Actions\ACT_RESUMESAMPLE.cs" />
+    <Compile Include="Actions\ACT_SETCHANNELPAN.cs" />
+    <Compile Include="Actions\ACT_SETCHANNELVOL.cs" />
+    <Compile Include="Actions\ACT_SETFRAMEBDKCOLOR.cs" />
+    <Compile Include="Actions\ACT_SETFRAMEHEIGHT.cs" />
+    <Compile Include="Actions\ACT_SETFRAMERATE.cs" />
+    <Compile Include="Actions\ACT_SETFRAMEWIDTH.cs" />
+    <Compile Include="Actions\ACT_SETGLOBALSTRING.cs" />
+    <Compile Include="Actions\ACT_SETINPUT.cs" />
+    <Compile Include="Actions\ACT_SETINPUTKEY.cs" />
+    <Compile Include="Actions\ACT_SETLIVES.cs" />
+    <Compile Include="Actions\ACT_SETLOOPINDEX.cs" />
+    <Compile Include="Actions\ACT_SETPLAYERNAME.cs" />
+    <Compile Include="Actions\ACT_SETSAMPLEMAINVOL.cs" />
+    <Compile Include="Actions\ACT_SETSAMPLEMALNPAN.cs" />
+    <Compile Include="Actions\ACT_SETSAMPLEPAN.cs" />
+    <Compile Include="Actions\ACT_SETSAMPLEVOL.cs" />
+    <Compile Include="Actions\ACT_SETSCORE.cs" />
+    <Compile Include="Actions\ACT_SETTIMER.cs" />
+    <Compile Include="Actions\ACT_SETVARG.cs" />
+    <Compile Include="Actions\ACT_SETVIRTUALHEIGHT.cs" />
+    <Compile Include="Actions\ACT_SETVIRTUALWIDTH.cs" />
+    <Compile Include="Actions\ACT_SHOWCURSOR.cs" />
+    <Compile Include="Actions\ACT_SKIP.cs" />
+    <Compile Include="Actions\ACT_SPRADDBKD.cs" />
+    <Compile Include="Actions\ACT_SPRBACK.cs" />
+    <Compile Include="Actions\ACT_SPRFRONT.cs" />
+    <Compile Include="Actions\ACT_SPRPASTE.cs" />
+    <Compile Include="Actions\ACT_SPRREPLACECOLOR.cs" />
+    <Compile Include="Actions\ACT_SPRSETANGLE.cs" />
+    <Compile Include="Actions\ACT_SPRSETSCALE.cs" />
+    <Compile Include="Actions\ACT_SPRSETSCALEX.cs" />
+    <Compile Include="Actions\ACT_SPRSETSCALEY.cs" />
+    <Compile Include="Actions\ACT_STARTLOOP.cs" />
+    <Compile Include="Actions\ACT_STOPCHANNEL.cs" />
+    <Compile Include="Actions\ACT_STOPLOOP.cs" />
+    <Compile Include="Actions\ACT_STOPSAMPLE.cs" />
+    <Compile Include="Actions\ACT_STOPSPESAMPLE.cs" />
+    <Compile Include="Actions\ACT_STRDESTROY.cs" />
+    <Compile Include="Actions\ACT_STRDISPLAY.cs" />
+    <Compile Include="Actions\ACT_STRDISPLAYDURING.cs" />
+    <Compile Include="Actions\ACT_STRDISPLAYSTRING.cs" />
+    <Compile Include="Actions\ACT_STRNEXT.cs" />
+    <Compile Include="Actions\ACT_STRPREV.cs" />
+    <Compile Include="Actions\ACT_STRSET.cs" />
+    <Compile Include="Actions\ACT_STRSETCOLOUR.cs" />
+    <Compile Include="Actions\ACT_STRSETSTRING.cs" />
+    <Compile Include="Actions\ACT_SUBLIVES.cs" />
+    <Compile Include="Actions\ACT_SUBSCORE.cs" />
+    <Compile Include="Actions\ACT_SUBVARG.cs" />
+    <Compile Include="Actions\ACT_UNLOCKCHANNEL.cs" />
+    <Compile Include="Actions\ACT_WINDOWEDMODE.cs" />
+    <Compile Include="Actions\CAct.cs" />
+    <Compile Include="Actions\CActExtension.cs" />
+    <Compile Include="Actions\CLoop.cs" />
+    <Compile Include="Animations\CAnim.cs" />
+    <Compile Include="Animations\CAnimDir.cs" />
+    <Compile Include="Animations\CAnimHeader.cs" />
+    <Compile Include="Animations\CRAni.cs" />
+    <Compile Include="Application\CExtStorage.cs" />
+    <Compile Include="Application\CKeyConvert.cs" />
+    <Compile Include="Application\CRunApp.cs" />
+    <Compile Include="Application\CRunFrame.cs" />
+    <Compile Include="Application\CSoundPlayer.cs" />
+    <Compile Include="Banks\CFont.cs" />
+    <Compile Include="Banks\CFontBank.cs" />
+    <Compile Include="Banks\CImage.cs" />
+    <Compile Include="Banks\CImageBank.cs" />
+    <Compile Include="Banks\CRotatedMask.cs" />
+    <Compile Include="Banks\CSound.cs" />
+    <Compile Include="Banks\CSoundBank.cs" />
+    <Compile Include="Banks\IEnum.cs" />
+    <Compile Include="Conditions\CCnd.cs" />
+    <Compile Include="Conditions\CCndExtension.cs" />
+    <Compile Include="Conditions\CND_ALWAYS.cs" />
+    <Compile Include="Conditions\CND_ANYKEY.cs" />
+    <Compile Include="Conditions\CND_CCAAPPFINISHED.cs" />
+    <Compile Include="Conditions\CND_CCAFRAMECHANGED.cs" />
+    <Compile Include="Conditions\CND_CCAISPAUSED.cs" />
+    <Compile Include="Conditions\CND_CCAISVISIBLE.cs" />
+    <Compile Include="Conditions\CND_CCOUNTER.cs" />
+    <Compile Include="Conditions\CND_CHANCE.cs" />
+    <Compile Include="Conditions\CND_CHOOSEALL.cs" />
+    <Compile Include="Conditions\CND_CHOOSEALLINLINE.cs" />
+    <Compile Include="Conditions\CND_CHOOSEALLINZONE.cs" />
+    <Compile Include="Conditions\CND_CHOOSEALLINZONE_OLD.cs" />
+    <Compile Include="Conditions\CND_CHOOSEALL_OLD.cs" />
+    <Compile Include="Conditions\CND_CHOOSEFLAGRESET.cs" />
+    <Compile Include="Conditions\CND_CHOOSEFLAGRESET_OLD.cs" />
+    <Compile Include="Conditions\CND_CHOOSEFLAGSET.cs" />
+    <Compile Include="Conditions\CND_CHOOSEFLAGSET_OLD.cs" />
+    <Compile Include="Conditions\CND_CHOOSEVALUE.cs" />
+    <Compile Include="Conditions\CND_CHOOSEVALUE_OLD.cs" />
+    <Compile Include="Conditions\CND_CHOOSEZONE.cs" />
+    <Compile Include="Conditions\CND_CHOOSEZONE_OLD.cs" />
+    <Compile Include="Conditions\CND_COMPARE.cs" />
+    <Compile Include="Conditions\CND_COMPAREG.cs" />
+    <Compile Include="Conditions\CND_COMPAREGSTRING.cs" />
+    <Compile Include="Conditions\CND_END.cs" />
+    <Compile Include="Conditions\CND_ENDGROUP.cs" />
+    <Compile Include="Conditions\CND_ENDOFPAUSE.cs" />
+    <Compile Include="Conditions\CND_EVERY.cs" />
+    <Compile Include="Conditions\CND_EXTANIMENDOF.cs" />
+    <Compile Include="Conditions\CND_EXTANIMPLAYING.cs" />
+    <Compile Include="Conditions\CND_EXTBOUNCING.cs" />
+    <Compile Include="Conditions\CND_EXTCHOOSE.cs" />
+    <Compile Include="Conditions\CND_EXTCMPACC.cs" />
+    <Compile Include="Conditions\CND_EXTCMPDEC.cs" />
+    <Compile Include="Conditions\CND_EXTCMPFRAME.cs" />
+    <Compile Include="Conditions\CND_EXTCMPSPEED.cs" />
+    <Compile Include="Conditions\CND_EXTCMPVAR.cs" />
+    <Compile Include="Conditions\CND_EXTCMPVARFIXED.cs" />
+    <Compile Include="Conditions\CND_EXTCMPVARSTRING.cs" />
+    <Compile Include="Conditions\CND_EXTCMPX.cs" />
+    <Compile Include="Conditions\CND_EXTCMPY.cs" />
+    <Compile Include="Conditions\CND_EXTCOLBACK.cs" />
+    <Compile Include="Conditions\CND_EXTCOLLISION.cs" />
+    <Compile Include="Conditions\CND_EXTENDPATH.cs" />
+    <Compile Include="Conditions\CND_EXTFACING.cs" />
+    <Compile Include="Conditions\CND_EXTFLAGRESET.cs" />
+    <Compile Include="Conditions\CND_EXTFLAGSET.cs" />
+    <Compile Include="Conditions\CND_EXTHIDDEN.cs" />
+    <Compile Include="Conditions\CND_EXTINPLAYFIELD.cs" />
+    <Compile Include="Conditions\CND_EXTISBOLD.cs" />
+    <Compile Include="Conditions\CND_EXTISCOLBACK.cs" />
+    <Compile Include="Conditions\CND_EXTISCOLLIDING.cs" />
+    <Compile Include="Conditions\CND_EXTISIN.cs" />
+    <Compile Include="Conditions\CND_EXTISITALIC.cs" />
+    <Compile Include="Conditions\CND_EXTISOUT.cs" />
+    <Compile Include="Conditions\CND_EXTNEARBORDERS.cs" />
+    <Compile Include="Conditions\CND_EXTNOMOREOBJECT.cs" />
+    <Compile Include="Conditions\CND_EXTNOMOREZONE.cs" />
+    <Compile Include="Conditions\CND_EXTNUMBERZONE.cs" />
+    <Compile Include="Conditions\CND_EXTNUMOFOBJECT.cs" />
+    <Compile Include="Conditions\CND_EXTOUTPLAYFIELD.cs" />
+    <Compile Include="Conditions\CND_EXTPATHNODE.cs" />
+    <Compile Include="Conditions\CND_EXTPATHNODENAME.cs" />
+    <Compile Include="Conditions\CND_EXTREVERSED.cs" />
+    <Compile Include="Conditions\CND_EXTSHOWN.cs" />
+    <Compile Include="Conditions\CND_EXTSTOPPED.cs" />
+    <Compile Include="Conditions\CND_GROUP.cs" />
+    <Compile Include="Conditions\CND_GROUPACTIVATED.cs" />
+    <Compile Include="Conditions\CND_GROUPSTART.cs" />
+    <Compile Include="Conditions\CND_ISLADDER.cs" />
+    <Compile Include="Conditions\CND_ISOBSTACLE.cs" />
+    <Compile Include="Conditions\CND_JOYPRESSED.cs" />
+    <Compile Include="Conditions\CND_JOYPUSHED.cs" />
+    <Compile Include="Conditions\CND_KBKEYDEPRESSED.cs" />
+    <Compile Include="Conditions\CND_KBPRESSKEY.cs" />
+    <Compile Include="Conditions\CND_LEVEL.cs" />
+    <Compile Include="Conditions\CND_LIVE.cs" />
+    <Compile Include="Conditions\CND_MCLICK.cs" />
+    <Compile Include="Conditions\CND_MCLICKINZONE.cs" />
+    <Compile Include="Conditions\CND_MCLICKONOBJECT.cs" />
+    <Compile Include="Conditions\CND_MINZONE.cs" />
+    <Compile Include="Conditions\CND_MKEYDEPRESSED.cs" />
+    <Compile Include="Conditions\CND_MONOBJECT.cs" />
+    <Compile Include="Conditions\CND_MOUSEON.cs" />
+    <Compile Include="Conditions\CND_NEVER.cs" />
+    <Compile Include="Conditions\CND_NOMORE.cs" />
+    <Compile Include="Conditions\CND_NOMOREALLZONE.cs" />
+    <Compile Include="Conditions\CND_NOMOREALLZONE_OLD.cs" />
+    <Compile Include="Conditions\CND_NOMORELIVE.cs" />
+    <Compile Include="Conditions\CND_NOSAMPLAYING.cs" />
+    <Compile Include="Conditions\CND_NOSPCHANNELPLAYING.cs" />
+    <Compile Include="Conditions\CND_NOSPSAMPLAYING.cs" />
+    <Compile Include="Conditions\CND_NOTALWAYS.cs" />
+    <Compile Include="Conditions\CND_NUMOFALLOBJECT.cs" />
+    <Compile Include="Conditions\CND_NUMOFALLOBJECT_OLD.cs" />
+    <Compile Include="Conditions\CND_NUMOFALLZONE.cs" />
+    <Compile Include="Conditions\CND_NUMOFALLZONE_OLD.cs" />
+    <Compile Include="Conditions\CND_ONCE.cs" />
+    <Compile Include="Conditions\CND_ONCLOSE.cs" />
+    <Compile Include="Conditions\CND_ONLOOP.cs" />
+    <Compile Include="Conditions\CND_ONMOUSEWHEELDOWN.cs" />
+    <Compile Include="Conditions\CND_ONMOUSEWHEELUP.cs" />
+    <Compile Include="Conditions\CND_OR.cs" />
+    <Compile Include="Conditions\CND_ORLOGICAL.cs" />
+    <Compile Include="Conditions\CND_PICKFROMID.cs" />
+    <Compile Include="Conditions\CND_PICKFROMID_OLD.cs" />
+    <Compile Include="Conditions\CND_PLAYERPLAYING.cs" />
+    <Compile Include="Conditions\CND_QEQUAL.cs" />
+    <Compile Include="Conditions\CND_QEXACT.cs" />
+    <Compile Include="Conditions\CND_QFALSE.cs" />
+    <Compile Include="Conditions\CND_QUITAPPLICATION.cs" />
+    <Compile Include="Conditions\CND_REMARK.cs" />
+    <Compile Include="Conditions\CND_REPEAT.cs" />
+    <Compile Include="Conditions\CND_SCORE.cs" />
+    <Compile Include="Conditions\CND_SPCHANNELPAUSED.cs" />
+    <Compile Include="Conditions\CND_SPRCLICK.cs" />
+    <Compile Include="Conditions\CND_SPSAMPAUSED.cs" />
+    <Compile Include="Conditions\CND_START.cs" />
+    <Compile Include="Conditions\CND_TIMEOUT.cs" />
+    <Compile Include="Conditions\CND_TIMER.cs" />
+    <Compile Include="Conditions\CND_TIMERINF.cs" />
+    <Compile Include="Conditions\CND_TIMERSUP.cs" />
+    <Compile Include="Conditions\IChooseValue.cs" />
+    <Compile Include="Conditions\ICndEval.cs" />
+    <Compile Include="Conditions\IEvaExpObject.cs" />
+    <Compile Include="Conditions\IEvaObject.cs" />
+    <Compile Include="Events\CEvent.cs" />
+    <Compile Include="Events\CEventGroup.cs" />
+    <Compile Include="Events\CEventProgram.cs" />
+    <Compile Include="Events\CGroupFind.cs" />
+    <Compile Include="Events\CLoadQualifiers.cs" />
+    <Compile Include="Events\CPushedEvent.cs" />
+    <Compile Include="Events\CQualToOiList.cs" />
+    <Compile Include="Expressions\CExp.cs" />
+    <Compile Include="Expressions\CExpExtension.cs" />
+    <Compile Include="Expressions\CExpOi.cs" />
+    <Compile Include="Expressions\CValue.cs" />
+    <Compile Include="Expressions\EXP_ABS.cs" />
+    <Compile Include="Expressions\EXP_ACOS.cs" />
+    <Compile Include="Expressions\EXP_AND.cs" />
+    <Compile Include="Expressions\EXP_ASIN.cs" />
+    <Compile Include="Expressions\EXP_ATAN.cs" />
+    <Compile Include="Expressions\EXP_ATAN2.cs" />
+    <Compile Include="Expressions\EXP_BIN.cs" />
+    <Compile Include="Expressions\EXP_CCAGETFRAMENUMBER.cs" />
+    <Compile Include="Expressions\EXP_CCAGETGLOBALSTRING.cs" />
+    <Compile Include="Expressions\EXP_CCAGETGLOBALVALUE.cs" />
+    <Compile Include="Expressions\EXP_CEIL.cs" />
+    <Compile Include="Expressions\EXP_CGETCOLOR1.cs" />
+    <Compile Include="Expressions\EXP_CGETCOLOR2.cs" />
+    <Compile Include="Expressions\EXP_CGETMAX.cs" />
+    <Compile Include="Expressions\EXP_CGETMIN.cs" />
+    <Compile Include="Expressions\EXP_COS.cs" />
+    <Compile Include="Expressions\EXP_CRENUMBERALL.cs" />
+    <Compile Include="Expressions\EXP_CVALUE.cs" />
+    <Compile Include="Expressions\EXP_DIV.cs" />
+    <Compile Include="Expressions\EXP_DOUBLE.cs" />
+    <Compile Include="Expressions\EXP_END.cs" />
+    <Compile Include="Expressions\EXP_EXP.cs" />
+    <Compile Include="Expressions\EXP_EXTACC.cs" />
+    <Compile Include="Expressions\EXP_EXTDEC.cs" />
+    <Compile Include="Expressions\EXP_EXTDIR.cs" />
+    <Compile Include="Expressions\EXP_EXTFLAG.cs" />
+    <Compile Include="Expressions\EXP_EXTGETFONTCOLOR.cs" />
+    <Compile Include="Expressions\EXP_EXTGETFONTNAME.cs" />
+    <Compile Include="Expressions\EXP_EXTGETFONTSIZE.cs" />
+    <Compile Include="Expressions\EXP_EXTGETGRAVITY.cs" />
+    <Compile Include="Expressions\EXP_EXTGETLAYER.cs" />
+    <Compile Include="Expressions\EXP_EXTGETSEMITRANSPARENCY.cs" />
+    <Compile Include="Expressions\EXP_EXTIDENTIFIER.cs" />
+    <Compile Include="Expressions\EXP_EXTISPR.cs" />
+    <Compile Include="Expressions\EXP_EXTNANI.cs" />
+    <Compile Include="Expressions\EXP_EXTNMOVE.cs" />
+    <Compile Include="Expressions\EXP_EXTNOBJECTS.cs" />
+    <Compile Include="Expressions\EXP_EXTSPEED.cs" />
+    <Compile Include="Expressions\EXP_EXTVAR.cs" />
+    <Compile Include="Expressions\EXP_EXTVARBYINDEX.cs" />
+    <Compile Include="Expressions\EXP_EXTVARSTRING.cs" />
+    <Compile Include="Expressions\EXP_EXTVARSTRINGBYINDEX.cs" />
+    <Compile Include="Expressions\EXP_EXTXAP.cs" />
+    <Compile Include="Expressions\EXP_EXTXLEFT.cs" />
+    <Compile Include="Expressions\EXP_EXTXRIGHT.cs" />
+    <Compile Include="Expressions\EXP_EXTXSPR.cs" />
+    <Compile Include="Expressions\EXP_EXTYAP.cs" />
+    <Compile Include="Expressions\EXP_EXTYBOTTOM.cs" />
+    <Compile Include="Expressions\EXP_EXTYSPR.cs" />
+    <Compile Include="Expressions\EXP_EXTYTOP.cs" />
+    <Compile Include="Expressions\EXP_FIND.cs" />
+    <Compile Include="Expressions\EXP_FLOATTOSTRING.cs" />
+    <Compile Include="Expressions\EXP_FLOOR.cs" />
+    <Compile Include="Expressions\EXP_FRAMERATE.cs" />
+    <Compile Include="Expressions\EXP_GAMLEVEL.cs" />
+    <Compile Include="Expressions\EXP_GAMLEVELNEW.cs" />
+    <Compile Include="Expressions\EXP_GAMNPLAYER.cs" />
+    <Compile Include="Expressions\EXP_GETANGLE.cs" />
+    <Compile Include="Expressions\EXP_GETBLUE.cs" />
+    <Compile Include="Expressions\EXP_GETCHANNELDUR.cs" />
+    <Compile Include="Expressions\EXP_GETCHANNELPAN.cs" />
+    <Compile Include="Expressions\EXP_GETCHANNELVOL.cs" />
+    <Compile Include="Expressions\EXP_GETCOLLISIONMASK.cs" />
+    <Compile Include="Expressions\EXP_GETFRAMEBKDCOLOR.cs" />
+    <Compile Include="Expressions\EXP_GETGREEN.cs" />
+    <Compile Include="Expressions\EXP_GETINPUT.cs" />
+    <Compile Include="Expressions\EXP_GETINPUTKEY.cs" />
+    <Compile Include="Expressions\EXP_GETPLAYERNAME.cs" />
+    <Compile Include="Expressions\EXP_GETRED.cs" />
+    <Compile Include="Expressions\EXP_GETRGB.cs" />
+    <Compile Include="Expressions\EXP_GETRGBAT.cs" />
+    <Compile Include="Expressions\EXP_GETSAMPLEDUR.cs" />
+    <Compile Include="Expressions\EXP_GETSAMPLEMAINPAN.cs" />
+    <Compile Include="Expressions\EXP_GETSAMPLEMAINVOL.cs" />
+    <Compile Include="Expressions\EXP_GETSAMPLEPAN.cs" />
+    <Compile Include="Expressions\EXP_GETSAMPLEVOL.cs" />
+    <Compile Include="Expressions\EXP_GETSCALEX.cs" />
+    <Compile Include="Expressions\EXP_GETSCALEY.cs" />
+    <Compile Include="Expressions\EXP_GETVIRTUALHEIGHT.cs" />
+    <Compile Include="Expressions\EXP_GETVIRTUALWIDTH.cs" />
+    <Compile Include="Expressions\EXP_HEX.cs" />
+    <Compile Include="Expressions\EXP_INT.cs" />
+    <Compile Include="Expressions\EXP_LEFT.cs" />
+    <Compile Include="Expressions\EXP_LEN.cs" />
+    <Compile Include="Expressions\EXP_LN.cs" />
+    <Compile Include="Expressions\EXP_LOG.cs" />
+    <Compile Include="Expressions\EXP_LONG.cs" />
+    <Compile Include="Expressions\EXP_LOOPINDEX.cs" />
+    <Compile Include="Expressions\EXP_LOWER.cs" />
+    <Compile Include="Expressions\EXP_MAX.cs" />
+    <Compile Include="Expressions\EXP_MID.cs" />
+    <Compile Include="Expressions\EXP_MIN.cs" />
+    <Compile Include="Expressions\EXP_MINUS.cs" />
+    <Compile Include="Expressions\EXP_MOD.cs" />
+    <Compile Include="Expressions\EXP_MOUSEWHEELDELTA.cs" />
+    <Compile Include="Expressions\EXP_MULT.cs" />
+    <Compile Include="Expressions\EXP_NEWLINE.cs" />
+    <Compile Include="Expressions\EXP_NOT.cs" />
+    <Compile Include="Expressions\EXP_OR.cs" />
+    <Compile Include="Expressions\EXP_PARENTH1.cs" />
+    <Compile Include="Expressions\EXP_PARENTH2.cs" />
+    <Compile Include="Expressions\EXP_PLALIVES.cs" />
+    <Compile Include="Expressions\EXP_PLASCORE.cs" />
+    <Compile Include="Expressions\EXP_PLAYHEIGHT.cs" />
+    <Compile Include="Expressions\EXP_PLAYWIDTH.cs" />
+    <Compile Include="Expressions\EXP_PLAYXLEFT.cs" />
+    <Compile Include="Expressions\EXP_PLAYXRIGHT.cs" />
+    <Compile Include="Expressions\EXP_PLAYYBOTTOM.cs" />
+    <Compile Include="Expressions\EXP_PLAYYTOP.cs" />
+    <Compile Include="Expressions\EXP_PLUS.cs" />
+    <Compile Include="Expressions\EXP_POW.cs" />
+    <Compile Include="Expressions\EXP_RANDOM.cs" />
+    <Compile Include="Expressions\EXP_REVERSEFIND.cs" />
+    <Compile Include="Expressions\EXP_RIGHT.cs" />
+    <Compile Include="Expressions\EXP_ROUND.cs" />
+    <Compile Include="Expressions\EXP_SIN.cs" />
+    <Compile Include="Expressions\EXP_SQR.cs" />
+    <Compile Include="Expressions\EXP_STR.cs" />
+    <Compile Include="Expressions\EXP_STRGETCURRENT.cs" />
+    <Compile Include="Expressions\EXP_STRGETNPARA.cs" />
+    <Compile Include="Expressions\EXP_STRGETNUMBER.cs" />
+    <Compile Include="Expressions\EXP_STRGETNUMERIC.cs" />
+    <Compile Include="Expressions\EXP_STRING.cs" />
+    <Compile Include="Expressions\EXP_STRINGGLO.cs" />
+    <Compile Include="Expressions\EXP_STRINGGLONAMED.cs" />
+    <Compile Include="Expressions\EXP_STRNUMBER.cs" />
+    <Compile Include="Expressions\EXP_TAN.cs" />
+    <Compile Include="Expressions\EXP_TIMCENT.cs" />
+    <Compile Include="Expressions\EXP_TIMHOURS.cs" />
+    <Compile Include="Expressions\EXP_TIMMINITS.cs" />
+    <Compile Include="Expressions\EXP_TIMSECONDS.cs" />
+    <Compile Include="Expressions\EXP_TIMVALUE.cs" />
+    <Compile Include="Expressions\EXP_UPPER.cs" />
+    <Compile Include="Expressions\EXP_VAL.cs" />
+    <Compile Include="Expressions\EXP_VARGLO.cs" />
+    <Compile Include="Expressions\EXP_VARGLONAMED.cs" />
+    <Compile Include="Expressions\EXP_VIRGULE.cs" />
+    <Compile Include="Expressions\EXP_XMOUSE.cs" />
+    <Compile Include="Expressions\EXP_XOR.cs" />
+    <Compile Include="Expressions\EXP_YMOUSE.cs" />
+    <Compile Include="Extensions\CExtLoad.cs" />
+    <Compile Include="Extensions\CExtLoader.cs" />
+    <Compile Include="Extensions\CRunActiveBackdrop.cs" />
+    <Compile Include="Extensions\CRunAdvDir.cs" />
+    <Compile Include="Extensions\CRunAdvGameBoard.cs" />
+    <Compile Include="Extensions\CRunAdvPathMov.cs" />
+    <Compile Include="Extensions\CRunclickteam_movement_controller.cs" />
+    <Compile Include="Extensions\CRunExtension.cs" />
+    <Compile Include="Extensions\CRunGet.cs" />
+    <Compile Include="Extensions\CRunIIF.cs" />
+    <Compile Include="Extensions\CRunInAndOutController.cs" />
+    <Compile Include="Extensions\CRunKcArray.cs" />
+    <Compile Include="Extensions\CRunKcBoxA.cs" />
+    <Compile Include="Extensions\CRunKcBoxB.cs" />
+    <Compile Include="Extensions\CRunKcButton.cs" />
+    <Compile Include="Extensions\CRunkccombo.cs" />
+    <Compile Include="Extensions\CRunKcDbl.cs" />
+    <Compile Include="Extensions\CRunkcdirect.cs" />
+    <Compile Include="Extensions\CRunkcedit.cs" />
+    <Compile Include="Extensions\CRunkchisc.cs" />
+    <Compile Include="Extensions\CRunkcini.cs" />
+    <Compile Include="Extensions\CRunkclist.cs" />
+    <Compile Include="Extensions\CRunkcrandom.cs" />
+    <Compile Include="Extensions\CRunLayer.cs" />
+    <Compile Include="Extensions\CRunMoveSafely2.cs" />
+    <Compile Include="Extensions\CRunMTRandom.cs" />
+    <Compile Include="Extensions\CRunObjectMover.cs" />
+    <Compile Include="Extensions\CRunparser.cs" />
+    <Compile Include="Extensions\CRunPlatform.cs" />
+    <Compile Include="Extensions\CRunStringTokenizer.cs" />
+    <Compile Include="Extensions\CRunWargameMap.cs" />
+    <Compile Include="Extensions\CRunXBOXGamepad.cs" />
+    <Compile Include="Extensions\CRunXNA.cs" />
+    <Compile Include="Extensions\CRunXNAEdit.cs" />
+    <Compile Include="Extensions\CRunXNAGamerServices.cs" />
+    <Compile Include="Frame\CLayer.cs" />
+    <Compile Include="Frame\CLO.cs" />
+    <Compile Include="Frame\CLOList.cs" />
+    <Compile Include="Movements\CMove.cs" />
+    <Compile Include="Movements\CMoveBall.cs" />
+    <Compile Include="Movements\CMoveBullet.cs" />
+    <Compile Include="Movements\CMoveDef.cs" />
+    <Compile Include="Movements\CMoveDefBall.cs" />
+    <Compile Include="Movements\CMoveDefExtension.cs" />
+    <Compile Include="Movements\CMoveDefGeneric.cs" />
+    <Compile Include="Movements\CMoveDefList.cs" />
+    <Compile Include="Movements\CMoveDefMouse.cs" />
+    <Compile Include="Movements\CMoveDefPath.cs" />
+    <Compile Include="Movements\CMoveDefPlatform.cs" />
+    <Compile Include="Movements\CMoveDefRace.cs" />
+    <Compile Include="Movements\CMoveDefStatic.cs" />
+    <Compile Include="Movements\CMoveDisappear.cs" />
+    <Compile Include="Movements\CMoveExtension.cs" />
+    <Compile Include="Movements\CMoveGeneric.cs" />
+    <Compile Include="Movements\CMoveMouse.cs" />
+    <Compile Include="Movements\CMovePath.cs" />
+    <Compile Include="Movements\CMovePlatform.cs" />
+    <Compile Include="Movements\CMoveRace.cs" />
+    <Compile Include="Movements\CMoveStatic.cs" />
+    <Compile Include="Movements\CPathStep.cs" />
+    <Compile Include="Movements\CRMvt.cs" />
+    <Compile Include="Movements\CRunMvtclickteam_circular.cs" />
+    <Compile Include="Movements\CRunMvtclickteam_dragdrop.cs" />
+    <Compile Include="Movements\CRunMvtclickteam_invaders.cs" />
+    <Compile Include="Movements\CRunMvtclickteam_presentation.cs" />
+    <Compile Include="Movements\CRunMvtclickteam_regpolygon.cs" />
+    <Compile Include="Movements\CRunMvtclickteam_simple_ellipse.cs" />
+    <Compile Include="Movements\CRunMvtclickteam_sinewave.cs" />
+    <Compile Include="Movements\CRunMvtclickteam_vector.cs" />
+    <Compile Include="Movements\CRunMvtExtension.cs" />
+    <Compile Include="Movements\CRunMvtinandout.cs" />
+    <Compile Include="Movements\CRunMvtpinball.cs" />
+    <Compile Include="Movements\CRunMvtspaceship.cs" />
+    <Compile Include="Objects\CActive.cs" />
+    <Compile Include="Objects\CCCA.cs" />
+    <Compile Include="Objects\CCounter.cs" />
+    <Compile Include="Objects\CExtension.cs" />
+    <Compile Include="Objects\CLives.cs" />
+    <Compile Include="Objects\CObject.cs" />
+    <Compile Include="Objects\CQuestion.cs" />
+    <Compile Include="Objects\CRCom.cs" />
+    <Compile Include="Objects\CScore.cs" />
+    <Compile Include="Objects\CText.cs" />
+    <Compile Include="OI\CDefCCA.cs" />
+    <Compile Include="OI\CDefCounter.cs" />
+    <Compile Include="OI\CDefCounters.cs" />
+    <Compile Include="OI\CDefObject.cs" />
+    <Compile Include="OI\CDefText.cs" />
+    <Compile Include="OI\CDefTexts.cs" />
+    <Compile Include="OI\CObjectCommon.cs" />
+    <Compile Include="OI\COC.cs" />
+    <Compile Include="OI\COCBackground.cs" />
+    <Compile Include="OI\COCQBackdrop.cs" />
+    <Compile Include="OI\COI.cs" />
+    <Compile Include="OI\COIList.cs" />
+    <Compile Include="Params\CCreate.cs" />
+    <Compile Include="Params\CParam.cs" />
+    <Compile Include="Params\CParamExpression.cs" />
+    <Compile Include="Params\CPosition.cs" />
+    <Compile Include="Params\CPositionInfo.cs" />
+    <Compile Include="Params\PARAM_2SHORTS.cs" />
+    <Compile Include="Params\PARAM_CMPTIME.cs" />
+    <Compile Include="Params\PARAM_COLOUR.cs" />
+    <Compile Include="Params\PARAM_CREATE.cs" />
+    <Compile Include="Params\PARAM_EFFECT.cs" />
+    <Compile Include="Params\PARAM_EVERY.cs" />
+    <Compile Include="Params\PARAM_EXPRESSION.cs" />
+    <Compile Include="Params\PARAM_EXTENSION.cs" />
+    <Compile Include="Params\PARAM_GROUP.cs" />
+    <Compile Include="Params\PARAM_GROUPOINTER.cs" />
+    <Compile Include="Params\PARAM_INT.cs" />
+    <Compile Include="Params\PARAM_KEY.cs" />
+    <Compile Include="Params\PARAM_MUSIC.cs" />
+    <Compile Include="Params\PARAM_OBJECT.cs" />
+    <Compile Include="Params\PARAM_POSITION.cs" />
+    <Compile Include="Params\PARAM_PROGRAM.cs" />
+    <Compile Include="Params\PARAM_SAMPLE.cs" />
+    <Compile Include="Params\PARAM_SHOOT.cs" />
+    <Compile Include="Params\PARAM_SHORT.cs" />
+    <Compile Include="Params\PARAM_STRING.cs" />
+    <Compile Include="Params\PARAM_TIME.cs" />
+    <Compile Include="Params\PARAM_ZONE.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Game1.cs" />
+    <Compile Include="RunLoop\CBkd2.cs" />
+    <Compile Include="RunLoop\CCreateObjectInfo.cs" />
+    <Compile Include="RunLoop\CObjInfo.cs" />
+    <Compile Include="RunLoop\CRun.cs" />
+    <Compile Include="RunLoop\CSaveGlobal.cs" />
+    <Compile Include="RunLoop\CSaveGlobalCounter.cs" />
+    <Compile Include="RunLoop\CSaveGlobalText.cs" />
+    <Compile Include="RunLoop\CSaveGlobalValues.cs" />
+    <Compile Include="RunLoop\IControl.cs" />
+    <Compile Include="Services\CArrayList.cs" />
+    <Compile Include="Services\CChunk.cs" />
+    <Compile Include="Services\CFile.cs" />
+    <Compile Include="Services\CFontInfo.cs" />
+    <Compile Include="Services\CFuncVal.cs" />
+    <Compile Include="Services\CPoint.cs" />
+    <Compile Include="Services\CRect.cs" />
+    <Compile Include="Services\CServices.cs" />
+    <Compile Include="Sprites\CColMask.cs" />
+    <Compile Include="Sprites\CMask.cs" />
+    <Compile Include="Sprites\CRSpr.cs" />
+    <Compile Include="Sprites\CSprite.cs" />
+    <Compile Include="Sprites\CSpriteGen.cs" />
+    <Compile Include="Sprites\IDrawing.cs" />
+    <Compile Include="Sprites\SpriteBatchEffect.cs" />
+    <Compile Include="Values\CDefStrings.cs" />
+    <Compile Include="Values\CDefValues.cs" />
+    <Compile Include="Values\CRVal.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Game.ico" />
+    <Content Include="GameThumbnail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RuntimeXNAContent\RuntimeXNAContent.contentproj">
+      <Name>RuntimeXNAContent</Name>
+      <XnaReferenceType>Content</XnaReferenceType>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Xna.Framework.4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft XNA Framework Redistributable 4.0</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="RuntimeXNA_TemporaryKey.pfx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
+  <!--
+      To modify your build process, add your task inside one of the targets below and uncomment it. 
+      Other similar extension points exist, see Microsoft.Common.targets.
+      <Target Name="BeforeBuild">
+      </Target>
+      <Target Name="AfterBuild">
+      </Target>
+    -->
+</Project>

@@ -1,5 +1,6 @@
 #pragma once
-#include "Structs.h"
+#include "Mono.h"
+#include "MMF\Ccxhdr.h"
 
 class Loader
 {
@@ -8,7 +9,7 @@ public:
 	static MonoMethod* OnUpdateMethod;
 	static MonoMethod* OnFrameSwitchMethod;
 	static MonoMethod* OnInjectedMethod;
-	static DataStruct* gameDataPtr;
+	static CRunApp* currentApp;
 	static uintptr_t GameBase;
 	static HMODULE CTFAK;
 	static void Entry();
@@ -16,11 +17,5 @@ public:
 	static void InitMono();
 	static void DrawUI();
 };
-struct CounterValue
-{
-	int32_t a;
-	int32_t b;
-	int32_t value;
-	int32_t unk;
-};
+
 

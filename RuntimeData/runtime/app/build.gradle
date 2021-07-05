@@ -1,0 +1,61 @@
+
+//AddPrePlugins
+apply plugin: 'com.android.application'
+
+//AddPostPlugins
+android {
+    compileSdkVersion BUILD_API.toInteger()
+
+    defaultConfig {
+        applicationId BUILD_APPID
+        minSdkVersion BUILD_MIN.toInteger()
+        targetSdkVersion BUILD_TARGET.toInteger()
+        versionCode BUILD_VERS_CODE.toInteger()
+        versionName BUILD_VERS_NAME
+        //DefaultConfigs
+    }
+    if(project.hasProperty("RELEASE_STORE_FILE")) {
+        signingConfigs {
+            release {
+                storeFile file(RELEASE_STORE_FILE)
+                storePassword RELEASE_STORE_PASSWORD
+                keyAlias RELEASE_KEY_ALIAS
+                keyPassword RELEASE_KEY_PASSWORD
+            }
+        }
+    }
+    //SigningOptions
+    buildTypes {
+        if(project.hasProperty("RELEASE_STORE_FILE")) {
+            release {
+                signingConfig signingConfigs.release
+                minifyEnabled false
+                //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            }
+        }
+    }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to check for errors in release builds,
+        // but continue the build even when errors are found:
+        abortOnError false
+    }
+    repositories {
+    //add Repository
+    }	
+    dexOptions {
+       preDexLibraries false
+    }
+}
+
+dependencies {
+    //Projectsdk
+    implementation "com.android.support:support-v4:$version_support"
+    implementation "com.android.support:appcompat-v7:$version_support"
+    //Googlelibs
+    implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
+}
+
+
+
+//AddTasks

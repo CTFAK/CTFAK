@@ -15,10 +15,10 @@ namespace CTFAK.Utils
         public static extern IntPtr decode_chunk(IntPtr chunkData, int chunkSize, byte magicChar, IntPtr wrapperKey);
 
         [DllImport(_dllPath, EntryPoint = "make_key", CharSet = CharSet.Auto)]
-        public static extern IntPtr make_key(IntPtr cTitle, IntPtr cCopyright, IntPtr cProject, byte magicChar);
+        public static extern IntPtr make_key([MarshalAs(UnmanagedType.LPStr)]string cTitle, [MarshalAs(UnmanagedType.LPStr)] string cCopyright, [MarshalAs(UnmanagedType.LPStr)] string cProject, byte magicChar);
 
         [DllImport(_dllPath, EntryPoint = "make_key_w", CharSet = CharSet.Unicode)]
-        public static extern IntPtr make_key_w(IntPtr cTitle, IntPtr cCopyright, IntPtr cProject, byte magicChar);
+        public static extern IntPtr make_key_w([MarshalAs(UnmanagedType.LPTStr)]string cTitle, [MarshalAs(UnmanagedType.LPTStr)] string cCopyright, [MarshalAs(UnmanagedType.LPTStr)] string cProject, byte magicChar);
 
         [DllImport(_dllPath, EntryPoint = "make_key_combined", CharSet = CharSet.Auto)]
         public static extern IntPtr make_key_combined(IntPtr data, byte magicChar);

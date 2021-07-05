@@ -137,6 +137,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     _fadeinOffset = Reader.ReadUInt32();
                     _fadeoutOffset = Reader.ReadUInt32();
                 }
+                else if(Settings.GameType==GameType.TwoFivePlus)
+                {
+                    Logger.Log("SHIT");
+                }
                 else if(Settings.GameType == GameType.Normal)//old no 1.5
                 {
                     var size = Reader.ReadInt32();
@@ -197,42 +201,27 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 }
                 else if (Settings.GameType == GameType.Android)
                 {
+                    currentPosition = Reader.Tell();
                     // File.WriteAllBytes($"{Settings.DumpPath}\\{Parent.Name}.chunk",Reader.ReadBytes());
                     var size = Reader.ReadInt32();
-                    
-                    
-                    var version = Reader.ReadUInt16();
-                    Reader.Skip(2);
                     _movementsOffset = Reader.ReadUInt16();
-                    _animationsOffset = Reader.ReadUInt16();
-                    _systemObjectOffset = Reader.ReadUInt16();
+                    _valuesOffset = Reader.ReadUInt16();
+                    var version = Reader.ReadUInt16();
                     _counterOffset = Reader.ReadUInt16();
-                    
-
-
+                    _systemObjectOffset = Reader.ReadUInt16();
+                    _extensionOffset = Reader.ReadUInt16();
                     Flags.flag = Reader.ReadUInt16();
                     Reader.Skip(2);
-                    var end = Reader.Tell() + 8 * 2;
                     for (int i = 0; i < 8; i++)
                     {
                         _qualifiers[i] = Reader.ReadInt16();
                     }
-
-                    Reader.Seek(end);
-                    _extensionOffset = Reader.ReadUInt16();
-                    
-                    
-                    
-                    
-                    
-
-                   
-                    _valuesOffset = Reader.ReadUInt16();
+                    _animationsOffset = Reader.ReadUInt16();
+                    Reader.Skip(2);
                     _stringsOffset = Reader.ReadUInt16();
-                    NewFlags.flag = Reader.ReadUInt16();
+                    NewFlags.flag = Reader.ReadUInt32();
                     Preferences.flag = Reader.ReadUInt16();
                     Identifier = Reader.ReadAscii(4);
-                    Logger.Log(Identifier);
                     BackColor = Reader.ReadColor();
                     _fadeinOffset = Reader.ReadUInt32();
                     _fadeoutOffset = Reader.ReadUInt32();
@@ -254,10 +243,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 if (_movementsOffset > 0)
                 {
                     Reader.Seek(currentPosition + _movementsOffset);
-                    if (Settings.GameType == GameType.Android) return;
                     if (Settings.GameType == GameType.OnePointFive)
                     {
-                        Movements=new Movements((ByteReader) null);
+                        Movements=new Movements(null);
                         var mov = new Movement(Reader);
                         mov.Read();
                         Movements.Items.Add(mov);
@@ -270,9 +258,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     }
                     
                 }
-
+                
                 if (_systemObjectOffset > 0)
                 {
+                    
                     Reader.Seek(currentPosition + _systemObjectOffset);
                     switch (Parent.ObjectType)
                     {
@@ -283,13 +272,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                             break;
                         //Counter
                         case Constants.ObjectType.Counter:
-                            Counters = new Counters(Reader);
-                            Counters.Read();
-                            break;
                         case Constants.ObjectType.Score:
-                            Counters = new Counters(Reader);
-                            Counters.Read();
-                            break;
                         case Constants.ObjectType.Lives:
                             Counters = new Counters(Reader);
                             Counters.Read();
