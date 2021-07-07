@@ -88,6 +88,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             
             var tempImages = new Dictionary<int, ImageItem>();
             int count;
+            if(Settings.GameType==GameType.TwoFivePlus)
+            {
+                return;
+            }
             if (Settings.GameType == GameType.Android)
             {
                 return;

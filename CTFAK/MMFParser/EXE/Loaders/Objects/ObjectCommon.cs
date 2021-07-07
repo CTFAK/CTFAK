@@ -139,7 +139,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 }
                 else if(Settings.GameType==GameType.TwoFivePlus)
                 {
-                    Logger.Log("SHIT");
+                    
+                    var size = Reader.ReadInt32();
+                    var data = Reader.ReadBytes(size+4);
+                    return;
                 }
                 else if(Settings.GameType == GameType.Normal)//old no 1.5
                 {

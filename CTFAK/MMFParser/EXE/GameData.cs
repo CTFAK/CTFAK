@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CTFAK.MMFParser.EXE.Loaders;
 using CTFAK.MMFParser.EXE.Loaders.Banks;
+using CTFAK.MMFParser.EXE.Loaders.Objects;
 using CTFAK.Utils;
 
 namespace CTFAK.MMFParser.EXE
@@ -131,8 +132,16 @@ namespace CTFAK.MMFParser.EXE
                     newInfo.InkEffect = (int) header.Value.InkEffect;
                     newInfo.InkEffectValue = header.Value.InkEffectParameter;
                     string name = $"{newInfo.ObjectType}-{newInfo.Handle}";
+                    ObjectProperties prop=null;
                     names.TryGetValue(header.Key, out name);
                     newInfo.Name = name;
+                    props.TryGetValue(header.Key, out prop);
+                    newInfo.Properties = prop;
+
+                    newInfo.Properties.Reader.Seek(0);
+                    newInfo.Properties.ReadNew((int)newInfo.ObjectType, newInfo);
+
+                    if (newInfo.Properties?.Loader is ObjectCommon common) common.Parent = newInfo;
                     Logger.Log($"Combining object \"{name}\" ({(Constants.ObjectType)(header.Value.ObjectType)})");
                     Frameitems.ItemDict.Add(newInfo.Handle, newInfo);
                 }

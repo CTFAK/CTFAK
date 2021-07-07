@@ -19,17 +19,23 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override void Read()
         {
-            return;
-            Headers = new Dictionary<int,ObjectHeader>();
+            Settings.GameType = GameType.TwoFivePlus;
+            var start = Reader.Tell();
+            var end = start + Reader.Size();
+            
+            Headers = new Dictionary<int, ObjectHeader>();
             int current = 0;
-            while (Reader.Tell()<Reader.Size())
+            while (Reader.Tell() < end)
             {
-                var newh = new ObjectHeader(Reader);
-                newh.Read();
-                Headers.Add(current,newh);
-                current++;
+                var prop = new ObjectHeader(Reader);
+                Logger.Log($"Reading object header: {current}");
+                prop.Read();
+                var chunkSize = Reader.ReadInt32();
 
+                Headers.Add(current, prop);
+                current++;
             }
+
         }
 
         public override void Write(ByteWriter Writer)
@@ -56,14 +62,17 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override void Read()
         {
+            
             var start = Reader.Tell();
+            
             var end = start + Reader.Size();
+            var chunkSize = Reader.ReadInt32();
             Props = new Dictionary<int, ObjectProperties>();
             int current = 0;
             while (Reader.Tell() < end)
             {
                 var prop = new ObjectProperties(Reader);
-                prop.Read();
+                prop.ReadNew(2, null);
                 Logger.Log($"Reading object prop: {current}");
                 Props.Add(current, prop);
                 current++;

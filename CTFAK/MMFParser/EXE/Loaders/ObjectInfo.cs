@@ -189,18 +189,8 @@ namespace CTFAK.MMFParser.EXE.Loaders
             ObjectType = Reader.ReadInt16();
             Flags = Reader.ReadUInt16();
             Reserved = Reader.ReadInt16();
-            InkEffect = Reader.ReadByte();
-            Reader.Skip(3);
-            // if ( InkEffect== 0) Reader.Skip(3);
-            InkEffectParameter = Reader.ReadByte();
-            // if (InkEffect == 1) InkEffectParameter = 255 - InkEffectParameter;
-
-
-
-
-
-
-            // Logger.Log($"{Handle}-{ObjectType}-{Flags}-{Reserved}");
+            InkEffect = (uint)Reader.ReadInt16();
+            InkEffectParameter = (uint)Reader.ReadInt16();
 
 
 

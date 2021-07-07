@@ -436,43 +436,50 @@ namespace CTFAK.MMFParser.Translation
                 // newItem.Chunks.GetOrCreateChunk<Opacity>().RGBCoeff = Color.White;
             
             newItem.IconHandle = 12;
-            
-            
+
+
 
             if (item.ObjectType == Constants.ObjectType.QuickBackdrop)
             {
-                var backdropLoader = (EXE.Loaders.Objects.Quickbackdrop) item.Properties.Loader;
-                var backdrop = new QuickBackdrop((ByteReader) null);
-                backdrop.ObstacleType = (uint) backdropLoader.ObstacleType;
-                backdrop.CollisionType = (uint) backdropLoader.CollisionType;
-                backdrop.Width = backdropLoader.Width;
-                backdrop.Height = backdropLoader.Height;
-                backdrop.Shape = backdropLoader.Shape.ShapeType;
-                backdrop.BorderSize = backdropLoader.Shape.BorderSize;
-                backdrop.FillType = backdropLoader.Shape.FillType;
-                backdrop.Color1 = backdropLoader.Shape.Color1;
-                backdrop.Color2 = backdropLoader.Shape.Color2;
-                backdrop.Flags = backdropLoader.Shape.GradFlags;
-                backdrop.Image = backdropLoader.Shape.Image;
-                newItem.Loader = backdrop;
 
+                    var backdropLoader = (EXE.Loaders.Objects.Quickbackdrop)item.Properties.Loader;
+                    var backdrop = new QuickBackdrop((ByteReader)null);
+                    backdrop.ObstacleType = (uint)backdropLoader.ObstacleType;
+                    backdrop.CollisionType = (uint)backdropLoader.CollisionType;
+                    backdrop.Width = backdropLoader.Width;
+                    backdrop.Height = backdropLoader.Height;
+                    backdrop.Shape = backdropLoader.Shape.ShapeType;
+                    backdrop.BorderSize = backdropLoader.Shape.BorderSize;
+                    backdrop.FillType = backdropLoader.Shape.FillType;
+                    backdrop.Color1 = backdropLoader.Shape.Color1;
+                    backdrop.Color2 = backdropLoader.Shape.Color2;
+                    backdrop.Flags = backdropLoader.Shape.GradFlags;
+                    backdrop.Image = backdropLoader.Shape.Image;
+                    newItem.Loader = backdrop;
             }
             else if (item.ObjectType == Constants.ObjectType.Backdrop)
             {
-                var backdropLoader = (EXE.Loaders.Objects.Backdrop) item.Properties.Loader;
-                var backdrop = new Backdrop((ByteReader) null);
-                backdrop.ObstacleType = (uint) backdropLoader.ObstacleType;
-                backdrop.CollisionType = (uint) backdropLoader.CollisionType;
-                backdrop.Handle = backdropLoader.Image;
-                newItem.Loader = backdrop;
+
+                    var backdropLoader = (EXE.Loaders.Objects.Backdrop)item.Properties.Loader;
+                    var backdrop = new Backdrop((ByteReader)null);
+                    backdrop.ObstacleType = (uint)backdropLoader.ObstacleType;
+                    backdrop.CollisionType = (uint)backdropLoader.CollisionType;
+                    backdrop.Handle = backdropLoader.Image;
+                    newItem.Loader = backdrop;
+              
             }
             else
             {
                 var itemLoader = item?.Properties?.Loader as ObjectCommon;
-                if (itemLoader == null) throw new NotImplementedException("Null loader");
-                Logger.Log(("Translating Object: " + itemLoader.Parent.Name),false,ConsoleColor.Blue,false);
+                if(Settings.GameType!=GameType.TwoFivePlus)
+                {
+                    if (itemLoader == null) throw new NotImplementedException("Null loader. Object type: " + item.ObjectType);
+                }
+                
+                Logger.Log(("Translating Object: " + itemLoader?.Parent?.Name),false,ConsoleColor.Blue,false);
                 //CommonSection
                 var newObject = new ObjectLoader(null);
+
                 newObject.ObjectFlags = (int) (itemLoader.Flags.flag);
                 newObject.NewObjectFlags = (int) (itemLoader.NewFlags.flag);
                 newObject.BackgroundColor = itemLoader.BackColor;

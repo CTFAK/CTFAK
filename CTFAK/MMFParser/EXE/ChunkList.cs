@@ -46,6 +46,8 @@ namespace CTFAK.MMFParser.EXE
                 if (chunk.Id == 32639) break; //LAST chunkID
                 if (chunk.Id == 8750) BuildKey(); //Only build key when we have all the needed info
                 if (chunk.Id == 8788) Settings.GameType = GameType.TwoFivePlus; //Can be only seen in 2.5+
+                if (chunk.Id == 8787) Settings.GameType = GameType.TwoFivePlus; //Can be only seen in 2.5+
+                if (chunk.Id == 8786) Settings.GameType = GameType.TwoFivePlus; //Can be only seen in 2.5+
                 
             }
             stopwatch.Stop();
@@ -86,6 +88,8 @@ namespace CTFAK.MMFParser.EXE
                 Id = exeReader.ReadInt16();
                 Flag = (ChunkFlags) exeReader.ReadInt16();
                 Size = exeReader.ReadInt32();
+                Logger.Log("Preparing to read chunk data: "+Id);
+
 
                 // Logger.Log("Reading "+(Constants.ChunkNames)Id+" "+Size.ToPrettySize());
 
