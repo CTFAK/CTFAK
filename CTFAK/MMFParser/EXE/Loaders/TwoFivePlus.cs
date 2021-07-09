@@ -67,12 +67,13 @@ namespace CTFAK.MMFParser.EXE.Loaders
             
             var end = start + Reader.Size();
             var chunkSize = Reader.ReadInt32();
+            Settings.GameType = GameType.TwoFivePlus;
             Props = new Dictionary<int, ObjectProperties>();
             int current = 0;
             while (Reader.Tell() < end)
             {
                 var prop = new ObjectProperties(Reader);
-                prop.ReadNew(2, null);
+                prop.ReadNew(2, null,true);
                 Logger.Log($"Reading object prop: {current}");
                 Props.Add(current, prop);
                 current++;

@@ -50,7 +50,7 @@ namespace CTFAK.MMFParser.EXE.Loaders
             InkEffectValue = _header.InkEffectParameter;
             Name = _name?.Value ?? $"{ObjectType}-{Handle}";
             Properties = _properties;
-            Properties.ReadNew((int)ObjectType, this);
+            Properties.ReadNew((int)ObjectType, this,true);
 
 
 
@@ -144,14 +144,16 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public ChunkLoader Loader;
 
         public ObjectProperties(ByteReader reader) : base(reader){}
-        public void ReadNew(int ObjectType,ObjectInfo parent)
+        public void ReadNew(int ObjectType,ObjectInfo parent,bool isFirstRead)
         {
             if(ObjectType==0) Loader=new Quickbackdrop(Reader);
             else if (ObjectType == 1) Loader = new Backdrop(Reader);
             else
             {
                 IsCommon = true;
+                
                 Loader = new ObjectCommon(Reader,parent);
+                ((ObjectCommon)Loader).isFirstRead = isFirstRead;
             }
             Loader?.Read();
         }

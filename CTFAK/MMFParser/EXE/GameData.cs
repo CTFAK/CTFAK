@@ -137,11 +137,10 @@ namespace CTFAK.MMFParser.EXE
                     newInfo.Name = name;
                     props.TryGetValue(header.Key, out prop);
                     newInfo.Properties = prop;
+                    
+                    newInfo.Properties.ReadNew((int)newInfo.ObjectType, newInfo,false);
 
-                    newInfo.Properties.Reader.Seek(0);
-                    newInfo.Properties.ReadNew((int)newInfo.ObjectType, newInfo);
-
-                    if (newInfo.Properties?.Loader is ObjectCommon common) common.Parent = newInfo;
+                    //if (newInfo.Properties?.Loader is ObjectCommon common) common.Parent = newInfo;
                     Logger.Log($"Combining object \"{name}\" ({(Constants.ObjectType)(header.Value.ObjectType)})");
                     Frameitems.ItemDict.Add(newInfo.Handle, newInfo);
                 }

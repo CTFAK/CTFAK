@@ -431,27 +431,43 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             ByteWriter chunk = new ByteWriter(new MemoryStream());
             chunk.WriteInt32(_checksum);
             chunk.WriteInt32(_references);
+            if (Settings.GameType == GameType.TwoFivePlus && _graphicMode == 16)
+            {
+                Logger.Log("gMode " + _graphicMode);
+                var rawBuffer = rawImg;
+                for (long pp = 0; pp < rawImg.Length; pp = pp + 4)
+                {
+                    rawBuffer[(pp / 4) + 0] = rawImg[pp + 0];
+                    rawBuffer[(pp / 4) + 1] = rawImg[pp + 1];
+                    rawBuffer[(pp / 4) + 2] = rawImg[pp + 2];
+                }
+                Array.Resize(ref rawBuffer, 3 * rawImg.Length / 4);
+                Logger.Log("RawImg size: " + rawImg.Length + " RawBuffer size: " + rawBuffer.Length);
+                rawImg = rawBuffer;
+                Array.Resize(ref rawImg, rawBuffer.Length);
+                _graphicMode = 4;
+            }
             byte[] compressedImg = null;
             Flags["LZX"] = true;
             if (Flags["LZX"])
             {
                 compressedImg = Decompressor.compress_block(rawImg);
-                chunk.WriteUInt32((uint) compressedImg.Length + 4);
+                chunk.WriteUInt32((uint)compressedImg.Length + 4);
             }
             else
             {
-                chunk?.WriteUInt32((uint) (rawImg?.Length ?? 0));
+                chunk?.WriteUInt32((uint)(rawImg?.Length ?? 0));
             }
 
-            chunk.WriteInt16((short) _width);
-            chunk.WriteInt16((short) _height);
-            chunk.WriteInt8((byte) _graphicMode);
-            chunk.WriteInt8((byte) Flags.flag);
+            chunk.WriteInt16((short)_width);
+            chunk.WriteInt16((short)_height);
+            chunk.WriteInt8((byte)_graphicMode);
+            chunk.WriteInt8((byte)Flags.flag);
             chunk.WriteInt16(0);
-            chunk.WriteInt16((short) HotspotX);
-            chunk.WriteInt16((short) HotspotY);
-            chunk.WriteInt16((short) ActionX);
-            chunk.WriteInt16((short) ActionY);
+            chunk.WriteInt16((short)HotspotX);
+            chunk.WriteInt16((short)HotspotY);
+            chunk.WriteInt16((short)ActionX);
+            chunk.WriteInt16((short)ActionY);
             chunk.WriteColor(_transparent);
             if (Flags["LZX"])
             {

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using CTFAK.Utils;
+using Joveler.Compression.ZLib;
 
 namespace CTFAK.MMFParser.EXE.Loaders.Objects
 {
@@ -90,6 +91,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         public Counter Counter;
         public short[] _qualifiers=new short[8];
 
+        //twoFilePlusOnly
+        public bool isFirstRead=true;
+        public int twoFilePlusPos;
+        public ByteReader decompressedReader;
+
 
         public ObjectCommon(ByteReader reader) : base(reader)
         {
@@ -105,7 +111,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         {
             {
                 var currentPosition = Reader.Tell();
-                
+                if(isFirstRead)twoFilePlusPos = (int)currentPosition;
 
                 if (Settings.Build >= 284&&Settings.GameType ==GameType.Normal)//new no 1.5
                 {
@@ -139,10 +145,23 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 }
                 else if(Settings.GameType==GameType.TwoFivePlus)
                 {
-                    
-                    var size = Reader.ReadInt32();
-                    var data = Reader.ReadBytes(size+4);
-                    return;
+
+                    if (isFirstRead)
+                    {
+                        var size = Reader.ReadInt32();
+                        //var decompressedSize = Reader.ReadInt32();
+                        var ass = Reader.ReadBytes(size);
+                        var decompressed = Ionic.Zlib.ZlibStream.UncompressBuffer(ass);
+                        decompressedReader = new ByteReader(new MemoryStream(decompressed));
+                        Reader.Seek(currentPosition + size + 8);
+                    }
+                    else
+                    {
+
+                        Console.WriteLine("READING WITH DECOMPRESSED DATA: "+ Reader.Size());
+                    }
+
+
                 }
                 else if(Settings.GameType == GameType.Normal)//old no 1.5
                 {
@@ -229,7 +248,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     _fadeinOffset = Reader.ReadUInt32();
                     _fadeoutOffset = Reader.ReadUInt32();
                 }
-                
+                if (Settings.GameType == GameType.TwoFivePlus && isFirstRead) return;
                 
                 
 
