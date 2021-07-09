@@ -97,8 +97,6 @@ namespace CTFAK.MMFParser.MFA.Loaders
             }
             else throw new NotImplementedException("Unsupported object: "+ObjectType);
             Loader.Read();
-            
-
 
         }
         public FrameItem(ByteReader reader):base(reader)

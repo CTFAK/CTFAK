@@ -434,6 +434,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             chunk.WriteInt32(_references);
             if (Settings.GameType == GameType.TwoFivePlus && _graphicMode == 16)
             {
+                Logger.Log("Converting from 32-bit to 24-bit image");
                 Logger.Log("gMode "+_graphicMode);
                 rawBuffer = rawImg;
                 for (long pp = 0; pp < rawImg.Length; pp = pp + 4)
