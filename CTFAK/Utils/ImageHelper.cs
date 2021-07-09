@@ -23,7 +23,8 @@ namespace CTFAK.Utils
 
                 position += pad * 3;
             }
-
+            Logger.Log("colorArray readPoint");
+            //for (int nigger = 0; nigger < width * height * 4; nigger = nigger + 4) Logger.Log(colorArray[nigger] + ", " + colorArray[nigger + 1] + ", " + colorArray[nigger + 2] + ", " + colorArray[nigger + 3]);
             return (colorArray, position);
         }
 
@@ -77,7 +78,8 @@ namespace CTFAK.Utils
 
                 position += pad * 4;
             }
-
+            Logger.Log("colorArray read32");
+            //for (int nigger = 0; nigger < width * height * 4; nigger = nigger + 4) Logger.Log(colorArray[nigger]+", "+colorArray[nigger+1]+", "+colorArray[nigger+2]+", "+colorArray[nigger+3]);
             return (colorArray, position);
 
 
@@ -208,9 +210,10 @@ namespace CTFAK.Utils
             int pad = bytes - ((width * pointSize) % bytes);
             if (pad == bytes)
             {
+                Logger.Log("Pad size 0");
                 return 0;
             }
-
+            Logger.Log("Pad size " + (int)Math.Ceiling((double)((float)pad / (float)pointSize)));
             return (int) Math.Ceiling((double) ((float) pad / (float) pointSize));
         }
     }

@@ -471,7 +471,7 @@ namespace CTFAK.MMFParser.Translation
             else
             {
                 var itemLoader = item?.Properties?.Loader as ObjectCommon;
-                if(Settings.GameType!=GameType.TwoFivePlus)
+                if(Settings.GameType==GameType.TwoFivePlus)
                 {
                     if (itemLoader == null) throw new NotImplementedException("Null loader. Object type: " + item.ObjectType);
                 }
@@ -525,6 +525,7 @@ namespace CTFAK.MMFParser.Translation
 
                 if (item.ObjectType == Constants.ObjectType.Active)
                 {
+                    Logger.Log("object Active");
                     var active = new Active(null);
                     //Shit Section
                     {

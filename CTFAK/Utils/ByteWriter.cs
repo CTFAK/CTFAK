@@ -106,7 +106,7 @@ namespace CTFAK.Utils
             WriteInt8(color.R);
             WriteInt8(color.G);
             WriteInt8(color.B);
-            WriteInt8(color.A);
+            WriteInt8(color.A); //color.A
         }
 
         public void WriteWriter(ByteWriter toWrite)

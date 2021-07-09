@@ -90,7 +90,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             int count;
             if(Settings.GameType==GameType.TwoFivePlus)
             {
-                return;
+                //return;
             }
             if (Settings.GameType == GameType.Android)
             {
@@ -162,6 +162,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
         public byte[] rawImg;
         public byte[] rawAlpha;
+        public byte[] rawBuffer;
 
         public bool Debug = false;
         private int decompressed_size = 0;
@@ -431,6 +432,22 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             ByteWriter chunk = new ByteWriter(new MemoryStream());
             chunk.WriteInt32(_checksum);
             chunk.WriteInt32(_references);
+            if (Settings.GameType == GameType.TwoFivePlus && _graphicMode == 16)
+            {
+                Logger.Log("gMode "+_graphicMode);
+                rawBuffer = rawImg;
+                for (long pp = 0; pp < rawImg.Length; pp = pp + 4)
+                {
+                    rawBuffer[(pp / 4)+0] = rawImg[pp+0];
+                    rawBuffer[(pp / 4)+1] = rawImg[pp+1];
+                    rawBuffer[(pp / 4)+2] = rawImg[pp+2];
+                }
+                Array.Resize(ref rawBuffer, 3*rawImg.Length/4);
+                Logger.Log("RawImg size: " + rawImg.Length + " RawBuffer size: " + rawBuffer.Length);
+                rawImg = rawBuffer;
+                Array.Resize(ref rawImg, rawBuffer.Length);
+                _graphicMode = 4;
+            }
             byte[] compressedImg = null;
             Flags["LZX"] = true;
             if (Flags["LZX"])

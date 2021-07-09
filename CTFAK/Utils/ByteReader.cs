@@ -150,7 +150,7 @@ namespace CTFAK.Utils
             var b = ReadByte();
             var a = ReadByte();
 
-            return Color.FromArgb(a,r, g, b);
+            return Color.FromArgb(a,r,g,b);
 
         }
 
