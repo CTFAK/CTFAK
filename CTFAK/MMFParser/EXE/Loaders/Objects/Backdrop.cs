@@ -35,6 +35,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(-4);
             if (Settings.GameType == GameType.OnePointFive)
             {
                 Size = Reader.ReadInt32();
@@ -83,6 +84,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(-4);
             if (Settings.GameType == GameType.OnePointFive)
             {
                 Size = Reader.ReadInt16();
@@ -136,6 +138,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(-4);
             BorderSize = Reader.ReadInt16();
             BorderColor = Reader.ReadColor();
             ShapeType = Reader.ReadInt16();

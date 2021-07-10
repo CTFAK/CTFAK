@@ -20,7 +20,6 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         private ushort _counterOffset;
         private ushort _extensionOffset;
         public string Identifier;
-        
         public Animations Animations;
 
         public BitDict Preferences = new BitDict(new string[]
@@ -111,9 +110,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         {
             {
                 var currentPosition = Reader.Tell();
-                if(isFirstRead)twoFilePlusPos = (int)currentPosition;
-
-                if (Settings.Build >= 284&&Settings.GameType ==GameType.Normal)//new no 1.5
+                twoFilePlusPos = (int)currentPosition;
+                Console.WriteLine("is about to read the object " + isFirstRead + " at position " + currentPosition + "/" + Reader.Size());
+                if (currentPosition > 25800) isFirstRead = false;
+                if (Settings.Build >= 284&&Settings.GameType == GameType.Normal)//new no 1.5
                 {
                     var size = Reader.ReadInt32();
                     _animationsOffset = Reader.ReadUInt16();
@@ -145,23 +145,68 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 }
                 else if(Settings.GameType==GameType.TwoFivePlus)
                 {
+                    //isFirstRead = true;
 
                     if (isFirstRead)
                     {
-                        var size = Reader.ReadInt32();
+                        //Reader.Seek(0);
+                        var size2 = Reader.ReadInt32();
                         //var decompressedSize = Reader.ReadInt32();
-                        var ass = Reader.ReadBytes(size);
+                        var ass = Reader.ReadBytes(size2);
+                        Console.WriteLine("Reading now " + size2 + " at " + Reader.Tell());
                         var decompressed = Ionic.Zlib.ZlibStream.UncompressBuffer(ass);
                         decompressedReader = new ByteReader(new MemoryStream(decompressed));
-                        Reader.Seek(currentPosition + size + 8);
+                        Reader.Seek(currentPosition + size2 + 8);
+                        Console.WriteLine("firstread READING WITH DECOMPRESSED DATA: size " + decompressedReader.Size() + " position " + twoFilePlusPos);
                     }
                     else
                     {
-
-                        Console.WriteLine("READING WITH DECOMPRESSED DATA: "+ Reader.Size());
+                        //Console.WriteLine(currentPosition);
+                        //Console.WriteLine(Reader.Size()); //i think if currentPos == reader.size + 4 then we need to reader.seek(4)
+                        if (currentPosition == Reader.Size() + 4)
+                        {
+                            Reader.Seek(4);
+                            currentPosition = 4;
+                        }
+                        var size2 = Reader.ReadInt32();
+                        //var decompressedSize = Reader.ReadInt32();
+                        var ass = Reader.ReadBytes(size2);
+                        Console.WriteLine("Reading now " + size2 + " at " + Reader.Tell());
+                        var decompressed = Ionic.Zlib.ZlibStream.UncompressBuffer(ass);
+                        decompressedReader = new ByteReader(new MemoryStream(decompressed));
+                        Reader.Seek(currentPosition + size2 + 8);
+                        Console.WriteLine("secondread READING WITH DECOMPRESSED DATA: size "+ decompressedReader.Size()+" position "+twoFilePlusPos);
+                    }
+                    //do we do anything with the decompressed bytes?
+                    var size = decompressedReader.ReadInt32();
+                    _animationsOffset = decompressedReader.ReadUInt16();
+                    _movementsOffset = decompressedReader.ReadUInt16();
+                    var version = decompressedReader.ReadUInt16();
+                    decompressedReader.Skip(2);
+                    _extensionOffset = decompressedReader.ReadUInt16();
+                    _counterOffset = decompressedReader.ReadUInt16();
+                    Flags.flag = decompressedReader.ReadUInt16();
+                    decompressedReader.Skip(2);
+                    var end = decompressedReader.Tell() + 8 * 2;
+                    for (int i = 0; i < 8; i++)
+                    {
+                        _qualifiers[i] = decompressedReader.ReadInt16();
                     }
 
+                    decompressedReader.Seek(end);
 
+                    _systemObjectOffset = decompressedReader.ReadUInt16();
+
+                    _valuesOffset = decompressedReader.ReadUInt16();
+                    _stringsOffset = decompressedReader.ReadUInt16();
+                    NewFlags.flag = decompressedReader.ReadUInt16();
+                    Preferences.flag = decompressedReader.ReadUInt16();
+                    Identifier = decompressedReader.ReadAscii(4);
+                    BackColor = decompressedReader.ReadColor();
+                    _fadeinOffset = decompressedReader.ReadUInt32();
+                    _fadeoutOffset = decompressedReader.ReadUInt32();
+                    Console.WriteLine("finished parsing 2.5+ decompressed bytes");
+                    //finish
                 }
                 else if(Settings.GameType == GameType.Normal)//old no 1.5
                 {
@@ -248,101 +293,212 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     _fadeinOffset = Reader.ReadUInt32();
                     _fadeoutOffset = Reader.ReadUInt32();
                 }
-                if (Settings.GameType == GameType.TwoFivePlus && isFirstRead) return;
-                
-                
+                //if (Settings.GameType == GameType.TwoFivePlus) return;
 
+                //we finished reading the offsets
+                Console.WriteLine("Movement  Offset: " + _movementsOffset);
+                Console.WriteLine("Values    Offset: " + _valuesOffset);
+                Console.WriteLine("Counter   Offset: " + _counterOffset);
+                Console.WriteLine("Sys Obj   Offset: " + _systemObjectOffset);
+                Console.WriteLine("Extension Offset: " + _extensionOffset);
+                Console.WriteLine("Animation Offset: " + _animationsOffset);
+                Console.WriteLine("Strings   Offset: " + _stringsOffset);
 
-                if (_animationsOffset > 0)
+                if (Settings.GameType != GameType.TwoFivePlus)
                 {
-                    Reader.Seek(currentPosition + _animationsOffset);
-                    if (Settings.GameType == GameType.Android) return;
-                    Animations = new Animations(Reader);
-                    Animations.Read();
-                }
-
-
-                if (_movementsOffset > 0)
-                {
-                    Reader.Seek(currentPosition + _movementsOffset);
-                    if (Settings.GameType == GameType.OnePointFive)
+                    if (_animationsOffset > 0)
                     {
-                        Movements=new Movements(null);
-                        var mov = new Movement(Reader);
-                        mov.Read();
-                        Movements.Items.Add(mov);
-                        
+                        Reader.Seek(currentPosition + _animationsOffset);
+                        if (Settings.GameType == GameType.Android) return;
+                        Animations = new Animations(Reader);
+                        Animations.Read();
                     }
-                    else
-                    {
-                        Movements = new Movements(Reader);
-                        Movements.Read(); 
-                    }
-                    
-                }
-                
-                if (_systemObjectOffset > 0)
-                {
-                    
-                    Reader.Seek(currentPosition + _systemObjectOffset);
-                    switch (Parent.ObjectType)
-                    {
-                        //Text
-                        case Constants.ObjectType.Text:
-                            Text = new Text(Reader);
-                            Text.Read();
-                            break;
-                        //Counter
-                        case Constants.ObjectType.Counter:
-                        case Constants.ObjectType.Score:
-                        case Constants.ObjectType.Lives:
-                            Counters = new Counters(Reader);
-                            Counters.Read();
-                            break;
 
-                    }
-                }
 
-                if (_extensionOffset > 0)
-                {
-                    if (Settings.Old)
+                    if (_movementsOffset > 0)
                     {
-                        Reader.Seek(currentPosition + _extensionOffset);
-
-                        var dataSize = Reader.ReadInt16() - 8;
-                        Reader.Skip(2); //maxSize;
-                        var extOldId=Reader.ReadInt16();
-                        ExtensionVersion = Reader.ReadInt16();
-                        ExtensionId = 0;
-                        ExtensionPrivate = 0;
-                        if (dataSize != 0)
+                        Reader.Seek(currentPosition + _movementsOffset);
+                        if (Settings.GameType == GameType.OnePointFive)
                         {
-                            ExtensionData = Reader.ReadBytes(dataSize);
-                        }
-                        else ExtensionData = new byte[0];
-                    }
-                    else
-                    {
-                        Reader.Seek(currentPosition + _extensionOffset);
+                            Movements = new Movements(null);
+                            var mov = new Movement(Reader);
+                            mov.Read();
+                            Movements.Items.Add(mov);
 
-                        var dataSize = Reader.ReadInt32() - 20;
-                        Reader.Skip(4); //maxSize;
-                        ExtensionVersion = Reader.ReadInt32();
-                        ExtensionId = Reader.ReadInt32();
-                        ExtensionPrivate = Reader.ReadInt32();
-                        if (dataSize != 0)
-                        {
-                            ExtensionData = Reader.ReadBytes(dataSize);
                         }
-                        else ExtensionData = new byte[0];
+                        else
+                        {
+                            Movements = new Movements(Reader);
+                            Movements.Read();
+                        }
+
+                    }
+
+                    if (_systemObjectOffset > 0)
+                    {
+
+                        Reader.Seek(currentPosition + _systemObjectOffset);
+                        switch (Parent.ObjectType)
+                        {
+                            //Text
+                            case Constants.ObjectType.Text:
+                                Text = new Text(Reader);
+                                Text.Read();
+                                break;
+                            //Counter
+                            case Constants.ObjectType.Counter:
+                            case Constants.ObjectType.Score:
+                            case Constants.ObjectType.Lives:
+                                Counters = new Counters(Reader);
+                                Counters.Read();
+                                break;
+
+                        }
+                    }
+
+                    if (_extensionOffset > 0)
+                    {
+                        if (Settings.Old)
+                        {
+                            Reader.Seek(currentPosition + _extensionOffset);
+
+                            var dataSize = Reader.ReadInt16() - 8;
+                            Reader.Skip(2); //maxSize;
+                            var extOldId = Reader.ReadInt16();
+                            ExtensionVersion = Reader.ReadInt16();
+                            ExtensionId = 0;
+                            ExtensionPrivate = 0;
+                            if (dataSize != 0)
+                            {
+                                ExtensionData = Reader.ReadBytes(dataSize);
+                            }
+                            else ExtensionData = new byte[0];
+                        }
+                        else
+                        {
+                            Reader.Seek(currentPosition + _extensionOffset);
+
+                            var dataSize = Reader.ReadInt32() - 20;
+                            Reader.Skip(4); //maxSize;
+                            ExtensionVersion = Reader.ReadInt32();
+                            ExtensionId = Reader.ReadInt32();
+                            ExtensionPrivate = Reader.ReadInt32();
+                            if (dataSize != 0)
+                            {
+                                ExtensionData = Reader.ReadBytes(dataSize);
+                            }
+                            else ExtensionData = new byte[0];
+                        }
+                    }
+
+                    if (_counterOffset > 0)
+                    {
+                        Reader.Seek(currentPosition + _counterOffset);
+                        Counter = new Counter(Reader);
+                        Counter.Read();
                     }
                 }
 
-                if (_counterOffset > 0)
+                //if it's 2.5+ use the decompressed reader instead of the normal one
+                if (Settings.GameType == GameType.TwoFivePlus)
                 {
-                    Reader.Seek(currentPosition + _counterOffset);
-                    Counter = new Counter(Reader);
-                    Counter.Read();
+                    var decCurPos = 4; // currentPosition;
+                    if (_animationsOffset > 0)
+                    {
+                        decompressedReader.Seek(decCurPos + _animationsOffset); //(currentPosition + _animationsOffset);
+                        if (Settings.GameType == GameType.Android) return;
+                        Animations = new Animations(decompressedReader);
+                        Console.WriteLine("reading animations for 2.5");
+                        Animations.Read();
+                    }
+
+
+                    if (_movementsOffset > 0)
+                    {
+                        decompressedReader.Seek(decCurPos + _movementsOffset);
+                        if (Settings.GameType == GameType.OnePointFive)
+                        {
+                            Movements = new Movements(null);
+                            var mov = new Movement(decompressedReader);
+                            Console.WriteLine("reading movements for 1.5");
+                            mov.Read();
+                            Movements.Items.Add(mov);
+
+                        }
+                        else
+                        {
+                            Movements = new Movements(decompressedReader);
+                            Console.WriteLine("reading movements for 2.5");
+                            Movements.Read();
+                        }
+
+                    }
+
+                    if (_systemObjectOffset > 0)
+                    {
+                        decompressedReader.Seek(decCurPos + _systemObjectOffset);
+                        switch (Constants.ObjectType.Lives) //(Parent.ObjectType)
+                        {
+                            //Text
+                            case Constants.ObjectType.Text:
+                                Text = new Text(decompressedReader);
+                                Text.Read();
+                                break;
+                            //Counter
+                            case Constants.ObjectType.Counter:
+                            case Constants.ObjectType.Score:
+                            case Constants.ObjectType.Lives:
+                                Counters = new Counters(decompressedReader);
+                                Console.WriteLine("reading counters for 2.5");
+                                Counters.Read();
+                                break;
+
+                        }
+                    }
+
+                    if (_extensionOffset > 0)
+                    {
+                        if (Settings.Old)
+                        {
+                            decompressedReader.Seek(decCurPos + _extensionOffset);
+
+                            var dataSize = decompressedReader.ReadInt16() - 8;
+                            decompressedReader.Skip(2); //maxSize;
+                            var extOldId = decompressedReader.ReadInt16();
+                            ExtensionVersion = decompressedReader.ReadInt16();
+                            ExtensionId = 0;
+                            ExtensionPrivate = 0;
+                            if (dataSize >= 0)
+                            {
+                                ExtensionData = decompressedReader.ReadBytes(dataSize);
+                            }
+                            else ExtensionData = new byte[0];
+                        }
+                        else
+                        {
+                            
+                            decompressedReader.Seek(decCurPos + _extensionOffset);
+                            Console.WriteLine("reading extensions for 2.5");
+                            var dataSize = decompressedReader.ReadInt32() - 20;
+                            decompressedReader.Skip(4); //maxSize;
+                            ExtensionVersion = decompressedReader.ReadInt32();
+                            ExtensionId = decompressedReader.ReadInt32();
+                            ExtensionPrivate = decompressedReader.ReadInt32();
+                            if (dataSize > 0)
+                            {
+                                ExtensionData = decompressedReader.ReadBytes(dataSize);
+                            }
+                            else ExtensionData = new byte[0];
+                        }
+                    }
+
+                    if (_counterOffset > 0)
+                    {
+                        decompressedReader.Seek(decCurPos + _counterOffset);
+                        Counter = new Counter(decompressedReader);
+                        Console.WriteLine("reading counters for 2.5");
+                        Counter.Read();
+                    }
                 }
 
             }

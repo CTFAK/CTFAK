@@ -21,7 +21,7 @@ namespace CTFAK.Utils
                     position += 3; 
                 }
 
-                position += pad * 3;
+                position += pad * 3; //the pad is usually 1
             }
 
             return (colorArray, position);

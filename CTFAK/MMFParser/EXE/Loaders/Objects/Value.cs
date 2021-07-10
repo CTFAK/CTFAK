@@ -16,6 +16,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(-4);
             Items = new List<int>();
             Reader.ReadUInt16();
             var count = Reader.ReadUInt16();
@@ -55,6 +56,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(-4);
             Items = new List<string>();
 
             var count = Reader.ReadUInt16();

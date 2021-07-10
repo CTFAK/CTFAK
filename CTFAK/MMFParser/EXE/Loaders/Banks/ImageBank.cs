@@ -90,7 +90,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             int count;
             if(Settings.GameType==GameType.TwoFivePlus)
             {
-                return;
+                //return;
             }
             if (Settings.GameType == GameType.Android)
             {
@@ -303,6 +303,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             if (Flags["RLE"] || Flags["RLEW"] || Flags["RLET"]) return;
             else
             {
+                Console.WriteLine("-------------------------------------------------------------------Loading image of type " + _graphicMode + " (size: "+rawImg.Length+")");
                 switch (_graphicMode)
                 {
                     case 4:
@@ -433,18 +434,36 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             chunk.WriteInt32(_references);
             if (Settings.GameType == GameType.TwoFivePlus && _graphicMode == 16)
             {
-                Logger.Log("gMode " + _graphicMode);
+                //Logger.Log("gMode " + _graphicMode);
                 var rawBuffer = rawImg;
-                for (long pp = 0; pp < rawImg.Length; pp = pp + 4)
+                var padBuffer = rawImg;
+                int vag = 0;
+                for (int pp = 0; pp < rawImg.Length; pp = pp + 4)
                 {
-                    rawBuffer[(pp / 4) + 0] = rawImg[pp + 0];
-                    rawBuffer[(pp / 4) + 1] = rawImg[pp + 1];
-                    rawBuffer[(pp / 4) + 2] = rawImg[pp + 2];
+                    rawBuffer[vag + 0] = rawImg[pp + 0];
+                    rawBuffer[vag + 1] = rawImg[pp + 1];
+                    rawBuffer[vag + 2] = rawImg[pp + 2];
+                    vag = vag + 3;
                 }
                 Array.Resize(ref rawBuffer, 3 * rawImg.Length / 4);
-                Logger.Log("RawImg size: " + rawImg.Length + " RawBuffer size: " + rawBuffer.Length);
+                //Console.WriteLine("-----RawImg size: " + rawImg.Length + " RawBuffer size: " + rawBuffer.Length);
                 rawImg = rawBuffer;
                 Array.Resize(ref rawImg, rawBuffer.Length);
+                //we need to fix the padding here
+                int pad = GetPadding(_width, 3);
+                int padPos = 0;
+                for (int i = 0; i < rawBuffer.Length; i = i + 3)
+                {
+                    padBuffer[padPos + 0] = rawBuffer[i + 0];
+                    padBuffer[padPos + 1] = rawBuffer[i + 1];
+                    padBuffer[padPos + 2] = rawBuffer[i + 2];
+                    padPos = padPos + 3;
+                    if ((i / 3) % _width == 0) padPos = padPos + (pad * 3);
+                }
+                Console.WriteLine("--------------------------------------------------New size with padding is " + padPos + " (pad = "+pad+")");
+                Array.Resize(ref padBuffer, padPos);
+                rawImg = padBuffer;
+                Array.Resize(ref rawImg, padPos);
                 _graphicMode = 4;
             }
             byte[] compressedImg = null;
@@ -471,6 +490,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             chunk.WriteColor(_transparent);
             if (Flags["LZX"])
             {
+                Console.WriteLine("Adding LZX image (" + _width+"*" + _height + ") of size " + rawImg.Length + " to MFA");
                 chunk.WriteInt32(rawImg.Length);
                 chunk.WriteBytes(compressedImg);
             }
@@ -485,6 +505,16 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             writer.WriteWriter(chunk);
         }
 
+        private int GetPadding(int width, int pointSize, int bytes = 2)
+        {
+                int pad = bytes - ((width * pointSize) % bytes);
+                if (pad == bytes)
+                {
+                    return 0;
+                }
+
+                return (int)Math.Ceiling((double)((float)pad / (float)pointSize));
+        }
 
         public ImageItem(ByteReader reader) : base(reader)
         {

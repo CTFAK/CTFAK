@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using CTFAK.Utils;
 
 namespace CTFAK.MMFParser.EXE.Loaders.Objects
@@ -15,10 +16,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(-4);
             var currentPosition = Reader.Tell();
             var size = Reader.ReadInt16();
             var count = Reader.ReadInt16();
-
+            Console.WriteLine("reading animation - size " + Reader.Size() + ", there are " + count + " imgs @ "+currentPosition);
             var offsets = new List<short>();
             for (int i = 0; i < count; i++)
             {
@@ -72,6 +74,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(-4);
             var currentPosition = Reader.Tell();
             var offsets = new List<int>();
             for (int i = 0; i < 32; i++)
@@ -126,14 +129,20 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(4);
+            Console.WriteLine("current position: " + Reader.Tell() + " out of size " + Reader.Size());
+            if (Reader.Tell() > Reader.Size() - 10) return; //really hacky shit, but it works
             MinSpeed = Reader.ReadSByte();
             MaxSpeed = Reader.ReadSByte();
             Repeat = Reader.ReadInt16();
             BackTo = Reader.ReadInt16();
             var frameCount = Reader.ReadUInt16();
+            Console.WriteLine("the frame count is " + frameCount +"/"+MinSpeed+"."+MaxSpeed+"."+Repeat+"."+BackTo);
+            if (frameCount > 10) return;
             for (int i = 0; i < frameCount; i++)
             {
                 var handle = Reader.ReadInt16();
+                Console.WriteLine("adding image #" + i);
                 Frames.Add(handle);
                 
                 

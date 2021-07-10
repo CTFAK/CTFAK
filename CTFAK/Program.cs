@@ -82,7 +82,7 @@ namespace CTFAK
             {
                 ImageBank.Load = false;
                 ReadFile(args[0], true, false, true);
-                Console.ReadKey();
+                //Console.ReadKey();
                 
                 //MFAGenerator.BuildMFA();
             }
@@ -90,7 +90,7 @@ namespace CTFAK
             {
                 Console.WriteLine("Usage: CTFAK.EXE: [full_path_to_game]");
                 Console.WriteLine("Press any key to exit...");
-                Console.ReadKey();
+                //Console.ReadKey();
                 //MyForm = new MainForm(Color.FromArgb(223, 114, 38));
                 //Application.Run(MyForm);
             }

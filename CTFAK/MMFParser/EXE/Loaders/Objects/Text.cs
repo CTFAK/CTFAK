@@ -20,6 +20,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(-4);
             if (Settings.GameType == GameType.OnePointFive)
             {
                 var currentPos = Reader.Tell();
@@ -97,6 +98,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(-4);
             if (Settings.GameType == GameType.OnePointFive)
             {
                 var size = Reader.ReadUInt16();

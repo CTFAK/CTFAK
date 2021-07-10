@@ -24,7 +24,7 @@ namespace CTFAK.Utils
             if (logToScreen)
             {
                 Console.ForegroundColor = color;
-                Console.WriteLine(Helper.GetCurrentTime() + text);
+                //Console.WriteLine(Helper.GetCurrentTime() + text);
                 Console.ForegroundColor = ConsoleColor.White;
             }
             return;

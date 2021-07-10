@@ -86,5 +86,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
+    <PostBuildEvent>copy $(TargetDir)$(TargetFileName) E:\fnaf\FNaFModLoader\$(TargetFileName)</PostBuildEvent>
   </PropertyGroup>
 </Project>

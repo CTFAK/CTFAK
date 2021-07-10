@@ -19,6 +19,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(-4);
             var rootPosition = Reader.Tell();
             var count = Reader.ReadUInt32();
             var currentPos = Reader.Tell();
@@ -65,6 +66,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(-4);
             if (Old)
             {
                 Player = Reader.ReadUInt16();
@@ -205,6 +207,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(-4);
             X1 = Reader.ReadInt16();
             X2 = Reader.ReadInt16();
             Y1 = Reader.ReadInt16();
@@ -241,6 +244,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(-4);
             var count = Reader.ReadInt16();
             MinimumSpeed = Reader.ReadInt16();
             MaximumSpeed = Reader.ReadInt16();
@@ -304,6 +308,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(-4);
             if (Settings.Old)
             {
                 Speed = Reader.ReadByte();
@@ -399,6 +404,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(-4);
             Speed = Reader.ReadInt16();
             Acceleration = Reader.ReadInt16();
             Deceleration = Reader.ReadInt16();
@@ -435,6 +441,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+            if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(-4);
             Speed = Reader.ReadInt16();
             Acceleration = Reader.ReadInt16();
             Deceleration = Reader.ReadInt16();
@@ -474,6 +481,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
 
         public override void Read()
         {
+           if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(-4);
            Speed = Reader.ReadInt16();
            Acceleration = Reader.ReadInt16();
            Deceleration = Reader.ReadInt16();
