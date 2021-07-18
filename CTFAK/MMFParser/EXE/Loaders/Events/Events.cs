@@ -163,7 +163,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             }
             else
             {
-                if (Settings.Build >= 284&&(Settings.GameType == GameType.Normal))
+                if (Settings.Build >= 284)
                 {
                     if(Settings.DoMFA)
                     {
