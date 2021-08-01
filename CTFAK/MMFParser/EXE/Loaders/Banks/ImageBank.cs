@@ -193,7 +193,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 await Task.Run(delegate() {
                      string ll = LZ4Codec.Decode(rawImg, target);
                      Console.WriteLine(ll);
-                }
+                });
                 Console.WriteLine("Cleaning up memory using Garbare Collectors..");
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
