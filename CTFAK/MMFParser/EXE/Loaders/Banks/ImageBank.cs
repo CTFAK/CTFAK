@@ -168,7 +168,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         private int decompressed_size = 0;
         private Bitmap _bitmap;
 
-        public async override void Read()
+        public override void Read()
         {
             if ((Settings.GameType == GameType.TwoFivePlus) && !Settings.DoMFA)
             {
@@ -191,14 +191,13 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 var decompressedSize = Reader.ReadInt32();
                 rawImg = Reader.ReadBytes(dataSize-4);
                 byte[] target = new byte[decompressedSize];
-                await Task.Run(delegate()
-                     string ll = LZ4Codec.Decode(rawImg, target);
-                     Console.WriteLine("Decoded: " + ll);
-                });
+                string ll = LZ4Codec.Decode(rawImg, target);
+                Console.WriteLine("Decoded: " + ll);
                 Console.WriteLine("Cleaning up memory using Garbare Collectors..");
                 int maxGarbage = 3000;
-                GC.Collect();
+                int mem = GC.Collect();
                 GC.WaitForPendingFinalizers();
+                Console.WriteLine("Cleaned: " + mem.ConvertToString);
                 
                 rawImg = target;
                 _graphicMode = 16;
