@@ -190,7 +190,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 var decompressedSize = Reader.ReadInt32();
                 rawImg = Reader.ReadBytes(dataSize-4);
                 byte[] target = new byte[decompressedSize];
-                LZ4Codec.Decode(rawImg, target);
+                await Task.Run(delegate() {
+                     string ll = LZ4Codec.Decode(rawImg, target);
+                     Console.WriteLine(ll);
+                }
                 
                 rawImg = target;
                 _graphicMode = 16;
