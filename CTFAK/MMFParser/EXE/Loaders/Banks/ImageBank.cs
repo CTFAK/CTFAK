@@ -191,8 +191,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 var decompressedSize = Reader.ReadInt32();
                 rawImg = Reader.ReadBytes(dataSize-4);
                 byte[] target = new byte[decompressedSize];
-                string ll = LZ4Codec.Decode(rawImg, target);
-                Console.WriteLine("Decoded: " + ll);
+                LZ4Codec.Decode(rawImg, target);
                 Console.WriteLine("Cleaning up memory using Garbare Collectors..");
                 int maxGarbage = 3000;
                 GC.Collect();
