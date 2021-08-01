@@ -194,6 +194,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                      string ll = LZ4Codec.Decode(rawImg, target);
                      Console.WriteLine(ll);
                 }
+                Console.WriteLine("Cleaning up memory using Garbare Collectors..");
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
                 
                 rawImg = target;
                 _graphicMode = 16;
