@@ -11,6 +11,7 @@ using CTFAK.Utils;
 using Joveler.Compression.ZLib;
 using K4os.Compression.LZ4;
 using static CTFAK.MMFParser.EXE.ChunkList;
+using System.Threading;
 
 
 namespace CTFAK.MMFParser.EXE.Loaders.Banks
