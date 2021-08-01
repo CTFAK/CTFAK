@@ -195,9 +195,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 Console.WriteLine("Decoded: " + ll);
                 Console.WriteLine("Cleaning up memory using Garbare Collectors..");
                 int maxGarbage = 3000;
-                int mem = GC.Collect();
+                GC.Collect();
                 GC.WaitForPendingFinalizers();
-                Console.WriteLine("Cleaned: " + mem.ConvertToString);
+                Console.WriteLine("Cleaned!");
                 
                 rawImg = target;
                 _graphicMode = 16;
