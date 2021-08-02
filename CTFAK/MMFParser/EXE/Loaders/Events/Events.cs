@@ -14,6 +14,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         public readonly string EventCount = "ERes";
         public readonly string EventgroupData = "ERev";
         public readonly string End = "<<ER";
+        public readonly string ExtensionData = "ERop";
 
         public int MaxObjects;
         public int MaxObjectInfo;
@@ -39,7 +40,13 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             // if (Settings.GameType == GameType.OnePointFive) return;
             while (true)
             {
+                if (Reader.Tell() > Reader.Size() - 4)
+                {
+                    Console.WriteLine("E45:  Ran out of bytes reading Events (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                    return; //really hacky shit, but it works
+                }
                 var identifier = Reader.ReadAscii(4);
+                //Console.WriteLine("event ID: " + identifier);
                 if (identifier == Header)
                 {
                     MaxObjects = Reader.ReadInt16();
@@ -55,28 +62,41 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                     {
                         var newQualifier = new Quailifer(Reader);
                         newQualifier.Read();
-                        if(!QualifiersList.ContainsKey(newQualifier.ObjectInfo))QualifiersList.Add(newQualifier.ObjectInfo,newQualifier);
+                        if (!QualifiersList.ContainsKey(newQualifier.ObjectInfo)) QualifiersList.Add(newQualifier.ObjectInfo, newQualifier);
                     }
+                    //Console.WriteLine("event header: max objects " + MaxObjects + "," + MaxObjectInfo + " number of players " + NumberOfPlayers + " number of conditions " + NumberOfConditions.Sum() + " number of qualifiers " + qualifierCount);
                 }
                 else if (identifier == EventCount)
                 {
                     var size = Reader.ReadInt32();
+                    //Console.WriteLine("event count: there are " + size + " events"); //this is incorrect - the event size is not the same as the actual number of lines of events
+                }
+                else if (identifier == ExtensionData)
+                {
+                    //Console.WriteLine("reading ERop");
+                    var size = Reader.ReadInt32();
+                    //Console.WriteLine("extension data (ERop): the size is " + size);
                 }
                 else if (identifier == EventgroupData)
                 {
                     var size = Reader.ReadInt32();
                     var endPosition = Reader.Tell() + size;
+                    //Console.WriteLine("event group: size " + size + "/" + endPosition);
+                    //if (Settings.GameType == GameType.TwoFivePlus) Reader.Seek(endPosition);
                     while (true)
                     {
+                        //Console.WriteLine("making eventgroup reader");
                         var eg = new EventGroup(Reader);
+                        //Console.WriteLine("reading eventgroup data");
                         eg.Read();
+                        //Console.WriteLine("adding eventgroup items");
                         Items.Add(eg);
-                        
+                        //Console.WriteLine("done");
                         if (Reader.Tell() >= endPosition) break;
                     }
-                    
+
                 }
-                else if (identifier == End) break;
+                else if (identifier == End || identifier == "  <<") break;
             }
         }
 
@@ -163,7 +183,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             }
             else
             {
-                if (Settings.Build >= 284)
+                if (Settings.Build >= 284) //&&(Settings.GameType == GameType.Normal)
                 {
                     if(Settings.DoMFA)
                     {
@@ -188,19 +208,25 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                 }
             }
             
-            // Logger.Log($"Cond: {NumberOfConditions},Act: {NumberOfActions}");
+            //Console.WriteLine("---Cond: {"+NumberOfConditions+"},Act: {"+NumberOfActions+"}");
             for (int i = 0; i < NumberOfConditions; i++)
             {
+                //Console.WriteLine("-Reading condition #" + i);
                 var item = new Condition(Reader);
                 item.Read();
+                //Console.WriteLine("-Adding condition #" + i);
                 Conditions.Add(item);
+                //Console.WriteLine("done adding condition #" + i);
             }
 
             for (int i = 0; i < NumberOfActions; i++)
             {
+                //Console.WriteLine("-Reading action #" + i);
                 var item = new Action(Reader);
                 item.Read();
+                //Console.WriteLine("-Adding action #" + i);
                 Actions.Add(item);
+                //Console.WriteLine("done adding action #" + i);
             }
             Reader.Seek(currentPosition + Size);
             // Logger.Log($"COND:{NumberOfConditions}, ACT: {NumberOfActions}");

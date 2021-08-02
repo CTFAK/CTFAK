@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using CTFAK.MMFParser.EXE;
 using CTFAK.Utils;
 
@@ -38,6 +39,11 @@ namespace CTFAK.MMFParser.MFA.Loaders
 
         public override void Write(ByteWriter Writer)
         {
+            if (Id == null)
+            {
+                Console.WriteLine("Null transition error, skipping");
+                return;
+            }
             Writer.AutoWriteUnicode(Module);
             Writer.AutoWriteUnicode(Name);
             Writer.WriteAscii(Id);

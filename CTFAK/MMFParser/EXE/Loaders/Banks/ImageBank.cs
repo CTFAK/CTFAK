@@ -26,7 +26,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
         {
         }
 
-        
+
 
         public override void Write(ByteWriter Writer)
         {
@@ -81,15 +81,15 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             // return;
             // }
             if (!Settings.DoMFA) Reader.Seek(0); //Reset the reader to avoid bugs when dumping more than once
-            if(Settings.GameType==GameType.TwoFivePlus)
+            if (Settings.GameType == GameType.TwoFivePlus)
             {
                 //File.WriteAllBytes("images.bank",Reader.ReadBytes((int)Reader.Size()));
                 //return;
             }
-            
+
             var tempImages = new Dictionary<int, ImageItem>();
             int count;
-            if(Settings.GameType==GameType.TwoFivePlus)
+            if (Settings.GameType == GameType.TwoFivePlus)
             {
                 //return;
             }
@@ -108,16 +108,17 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             var stopWatch = new Stopwatch();
             stopWatch.Start();
             //if (!Settings.DumpImages) return;
-            Logger.Log("Reading Images", true, ConsoleColor.Green);
+            if (Settings.GameType != GameType.TwoFivePlus) Logger.Log("Reading Images", true, ConsoleColor.Green);
+            if (Settings.GameType == GameType.TwoFivePlus) Console.WriteLine("Writing 2.5+ images, please be patient...");
             for (int i = 0; i < count; i++)
             {
                 if (MainForm.BreakImages) break;
                 {
                     var item = new ImageItem(Reader);
                     item.Read();
-                    if(Settings.GameType != GameType.Android)tempImages.Add(item.Handle, item);
+                    if (Settings.GameType != GameType.Android) tempImages.Add(item.Handle, item);
                     if (SaveImages) item.Save($"{Settings.ImagePath}\\" + item.Handle.ToString() + ".png");
-                    OnImageSaved?.Invoke(i, (int) count);
+                    OnImageSaved?.Invoke(i, (int)count);
                 }
             }
 
@@ -173,7 +174,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             if ((Settings.GameType == GameType.TwoFivePlus) && !Settings.DoMFA)
             {
                 Handle = Reader.ReadInt32();
-                
+
                 var unk2 = Reader.ReadInt32();
                 var unk = Reader.ReadInt32();
                 //Flags.flag = Reader.ReadUInt32();
@@ -182,25 +183,25 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 _width = Reader.ReadInt16(); //width
                 _height = Reader.ReadInt16(); //height
                 var unk6 = Reader.ReadInt16();
-                var unk7= Reader.ReadInt16();
+                var unk7 = Reader.ReadInt16();
                 HotspotX = Reader.ReadInt16();
                 HotspotY = Reader.ReadInt16();
                 ActionX = Reader.ReadInt16();
                 ActionY = Reader.ReadInt16();
                 _transparent = Reader.ReadColor();
                 var decompressedSize = Reader.ReadInt32();
-                rawImg = Reader.ReadBytes(dataSize-4);
+                rawImg = Reader.ReadBytes(dataSize - 4);
                 byte[] target = new byte[decompressedSize];
                 LZ4Codec.Decode(rawImg, target);
-                Console.WriteLine("Cleaning up memory using Garbare Collectors..");
+                //Console.WriteLine("Cleaning up memory using Garbare Collectors..");
                 int maxGarbage = 3000;
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
-                Console.WriteLine("Cleaned!");
-                
+                //Console.WriteLine("Cleaned!");
+
                 rawImg = target;
                 _graphicMode = 16;
-                
+
                 Load();
                 //Save($"{Settings.ImagePath}\\{Handle}.png");
 
@@ -209,10 +210,10 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
 
             }
-            else if ((Settings.GameType == GameType.Android||Settings.GameType == GameType.NSwitch)&&!Settings.DoMFA)
+            else if ((Settings.GameType == GameType.Android || Settings.GameType == GameType.NSwitch) && !Settings.DoMFA)
             {
                 Handle = Reader.ReadInt16();
-                var unk = (uint) Reader.ReadInt32();
+                var unk = (uint)Reader.ReadInt32();
 
                 _width = Reader.ReadInt16(); //width
                 _height = Reader.ReadInt16(); //height
@@ -226,7 +227,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 var thefuk2 = Reader.PeekUInt16();
                 ByteReader imageReader;
                 Logger.Log(
-                    $"Loading image {_width}x{_height} with handle {Handle}, Size {size}. Bytes per pixel: {size/(_width*_height)}");
+                    $"Loading image {_width}x{_height} with handle {Handle}, Size {size}. Bytes per pixel: {size / (_width * _height)}");
                 if (thefuk1 == 255)
                 {
                     rawImg = Reader.ReadBytes(size);
@@ -234,14 +235,14 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 }
                 else
                 {
-                    imageReader = new ByteReader(Decompressor.DecompressBlock(Reader,size));
+                    imageReader = new ByteReader(Decompressor.DecompressBlock(Reader, size));
                     imageReader.Seek(0);
                     rawImg = imageReader.ReadBytes();
                 }
 
                 if (Handle == 88)
                 {
-                    
+
                     Load();
                     Environment.Exit(0);
                 }
@@ -262,7 +263,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 else _checksum = imageReader.ReadInt32();
 
                 _references = imageReader.ReadInt32();
-                Size = (int) imageReader.ReadUInt32();
+                Size = (int)imageReader.ReadUInt32();
 
                 if (Debug) imageReader = new ByteReader(imageReader.ReadBytes(Size + 20));
 
@@ -285,16 +286,16 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 if (Flags["LZX"])
                 {
                     uint decompressedSize = imageReader.ReadUInt32();
-                    
+
                     imageData = Decompressor.DecompressBlock(imageReader,
-                        (int) (imageReader.Size() - imageReader.Tell()),
-                        (int) decompressedSize);
+                        (int)(imageReader.Size() - imageReader.Tell()),
+                        (int)decompressedSize);
                 }
                 else imageData = imageReader.ReadBytes((int)(Size));
 
                 rawImg = imageData;
             }
-            if(!Settings.DoMFA)Load();
+            if (!Settings.DoMFA) Load();
         }
 
 
@@ -309,34 +310,34 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             if (Flags["RLE"] || Flags["RLEW"] || Flags["RLET"]) return;
             else
             {
-                Console.WriteLine("-------------------------------------------------------------------Loading image of type " + _graphicMode + " (size: "+rawImg.Length+")");
+                //Console.WriteLine("-------------------------------------------------------------------Loading image of type " + _graphicMode + " (size: " + rawImg.Length + ")");
                 switch (_graphicMode)
                 {
                     case 4:
-                    {
-                        (_colorArray, bytesRead) = ImageHelper.ReadPoint(rawImg, _width, _height);
-                        break;
-                    }
+                        {
+                            (_colorArray, bytesRead) = ImageHelper.ReadPoint(rawImg, _width, _height);
+                            break;
+                        }
                     case 6:
-                    {
-                        (_colorArray, bytesRead) = ImageHelper.ReadFifteen(rawImg, _width, _height);
-                        break;
-                    }
+                        {
+                            (_colorArray, bytesRead) = ImageHelper.ReadFifteen(rawImg, _width, _height);
+                            break;
+                        }
                     case 7:
-                    {
-                        (_colorArray, bytesRead) = ImageHelper.ReadSixteen(rawImg, _width, _height);
-                        break;
-                    }
+                        {
+                            (_colorArray, bytesRead) = ImageHelper.ReadSixteen(rawImg, _width, _height);
+                            break;
+                        }
                     case 16: //just using this number for 2.5+
-                    {
-                        (_colorArray, bytesRead) = ImageHelper.Read32(rawImg, _width, _height);
-                        break;
-                    }
+                        {
+                            (_colorArray, bytesRead) = ImageHelper.Read32(rawImg, _width, _height);
+                            break;
+                        }
                     default:
-                    {
-                        Logger.Log("Unknown Color Mode: " + _graphicMode);
-                        break;
-                    }
+                        {
+                            Logger.Log("Unknown Color Mode: " + _graphicMode);
+                            break;
+                        }
                 }
             }
 
@@ -355,12 +356,12 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 }
             }
             //Alpha channel in 2.5+ is not separated from the image data. That's smart
-            if (Settings.GameType != GameType.OnePointFive&&Settings.GameType!=GameType.TwoFivePlus)
+            if (Settings.GameType != GameType.OnePointFive && Settings.GameType != GameType.TwoFivePlus)
             {
-                
+
                 if (Settings.Build > 283) // No idea why, but this is not working with old games
                 {
-                    if (_transparent != null&&!Flags["Alpha"])
+                    if (_transparent != null && !Flags["Alpha"])
                     {
                         for (int i = 0; i < (_height * _width * 4) - 3; i++)
                         {
@@ -458,6 +459,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                 //we need to fix the padding here
                 int pad = GetPadding(_width, 3);
                 int padPos = 0;
+                Array.Resize(ref padBuffer, rawBuffer.Length * 2);
                 for (int i = 0; i < rawBuffer.Length; i = i + 3)
                 {
                     padBuffer[padPos + 0] = rawBuffer[i + 0];
@@ -466,7 +468,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
                     padPos = padPos + 3;
                     if ((i / 3) % _width == 0) padPos = padPos + (pad * 3);
                 }
-                Console.WriteLine("--------------------------------------------------New size with padding is " + padPos + " (pad = "+pad+")");
+                //Console.WriteLine("--------------------------------------------------New size with padding is " + padPos + " (pad = " + pad + ")");
                 Array.Resize(ref padBuffer, padPos);
                 rawImg = padBuffer;
                 Array.Resize(ref rawImg, padPos);
@@ -496,7 +498,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             chunk.WriteColor(_transparent);
             if (Flags["LZX"])
             {
-                Console.WriteLine("Adding LZX image (" + _width+"*" + _height + ") of size " + rawImg.Length + " to MFA");
+                //Console.WriteLine("Adding LZX image (" + _width + "*" + _height + ") of size " + rawImg.Length + " to MFA");
                 chunk.WriteInt32(rawImg.Length);
                 chunk.WriteBytes(compressedImg);
             }
@@ -513,20 +515,20 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
 
         private int GetPadding(int width, int pointSize, int bytes = 2)
         {
-                int pad = bytes - ((width * pointSize) % bytes);
-                if (pad == bytes)
-                {
-                    return 0;
-                }
+            int pad = bytes - ((width * pointSize) % bytes);
+            if (pad == bytes)
+            {
+                return 0;
+            }
 
-                return (int)Math.Ceiling((double)((float)pad / (float)pointSize));
+            return (int)Math.Ceiling((double)((float)pad / (float)pointSize));
         }
 
         public ImageItem(ByteReader reader) : base(reader)
         {
         }
 
-        
+
     }
 
     public class TestPoint

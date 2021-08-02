@@ -64,13 +64,25 @@ namespace CTFAK.MMFParser.MFA.Loaders
             Writer.AutoWriteUnicode(UnkString);
             Writer.WriteInt32(LastViewedX);
             Writer.WriteInt32(LastViewedY);
-            Writer.WriteInt32(Palette.Count);//WTF HELP 
-            
-            foreach (var item in Palette)
+
+            if (Palette == null)
             {
-                Writer.WriteColor(item);
+                Console.WriteLine("writing fake palette 256");
+                Writer.WriteInt32(256);//WTF HELP 
+                for (int i = 0; i < 256; i++)
+                {
+                    Writer.WriteColor(Color.FromArgb(0, 0, 0, 0)); //make a fake palette
+                }
             }
-            
+            if (Palette != null)
+            {
+                Console.WriteLine("writing real palette " + Palette.Count);
+                Writer.WriteInt32(Palette.Count);//WTF HELP 
+                foreach (var item in Palette)
+                {
+                    Writer.WriteColor(item);
+                }
+            }
             Writer.WriteInt32(StampHandle);
             Writer.WriteInt32(ActiveLayer);
             Writer.WriteInt32(Layers.Count);

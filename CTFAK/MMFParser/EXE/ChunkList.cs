@@ -90,8 +90,8 @@ namespace CTFAK.MMFParser.EXE
                 Size = exeReader.ReadInt32();
                 Logger.Log("Preparing to read chunk data: "+Id);
 
-
-                // Logger.Log("Reading "+(Constants.ChunkNames)Id+" "+Size.ToPrettySize());
+                //if (Id == 8754 || Id == 13108 || Id == 8759 || Id == 8747 || Id == 13122) Flag = ChunkFlags.NotCompressed;
+                //Console.WriteLine("***ChunkList: reading " + (Constants.ChunkNames)Id + " (" + Size + ") - " + Flag);
 
                 switch (Flag)
                 {
@@ -100,6 +100,7 @@ namespace CTFAK.MMFParser.EXE
                         break;
                     case ChunkFlags.CompressedAndEncrypted:
                         ChunkData = Decryption.DecodeMode3(exeReader.ReadBytes(Size), Size, Id, out DecompressedSize);
+                        //Console.WriteLine(ChunkData.Length);
                         break;
                     case ChunkFlags.Compressed:
                         if (Settings.GameType == GameType.OnePointFive)
@@ -115,6 +116,7 @@ namespace CTFAK.MMFParser.EXE
                         ChunkData = exeReader.ReadBytes(Size);
                         break;
                 }
+                //Console.WriteLine("***Chunk size: " + ChunkData.Length);
                 if(ChunkData==null) throw new NullReferenceException("ChunkData is null after reading");
                 //Save();
             }
@@ -250,6 +252,7 @@ namespace CTFAK.MMFParser.EXE
         {
             var reader = chunk.GetReader();
             ChunkLoader loader = null;
+            //Console.WriteLine("reading chunk " + chunk.Id);
             switch (chunk.Id)
             {
                 case 8739:
@@ -367,11 +370,15 @@ namespace CTFAK.MMFParser.EXE
                     break;
                 case 13117:
                     //if (Settings.GameType == GameType.Android) break;
-                    if (Settings.GameType == GameType.TwoFivePlus) break;
+                    //if (Settings.GameType == GameType.TwoFivePlus) break;   //comment this line to enable experimental 2.5+ event dumping
                     loader = new Events(reader);
                     break;
                 case 13127:
                     loader = new MovementTimerBase(reader);
+                    break;
+
+                default: 
+                    Console.WriteLine("(unknown chunk " + chunk.Id + ")");
                     break;
             }
 

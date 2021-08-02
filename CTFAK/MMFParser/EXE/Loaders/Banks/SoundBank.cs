@@ -149,7 +149,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Banks
             Name = Settings.GameType == GameType.NSwitch ?  soundData.ReadAscii(nameLenght):soundData.ReadWideString(nameLenght);
             Name = Name.Replace(" ", "");
             Data = soundData.ReadBytes((int) soundData.Size());
-            // if (Settings.DumpSounds)
+            if (Settings.DumpSounds)
             {
                 Name = Helper.CleanInput(Name);
                 File.WriteAllBytes($"{Settings.SoundPath}\\{Name}.wav", Data);

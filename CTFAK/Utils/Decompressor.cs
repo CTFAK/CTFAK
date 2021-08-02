@@ -27,10 +27,18 @@ namespace CTFAK.Utils
         public static byte[] DecompressBlock(ByteReader reader, int size, int decompSize)
         {
             ZLibDecompressOptions decompOpts = new ZLibDecompressOptions();
-            MemoryStream compressedStream = new MemoryStream(reader.ReadBytes(size));
+            byte[] fakeByte = { 1, 2, 3 };
+            int size2 = size;
+            if (size < 0)
+            {
+                Console.WriteLine("Decompression error - incorrect size");
+                return fakeByte;
+                size2 = (int) reader.Size();
+            }
+            MemoryStream compressedStream = new MemoryStream(reader.ReadBytes(size2));
             MemoryStream decompressedStream = new MemoryStream();
-            using (ZLibStream zs = new ZLibStream(compressedStream, decompOpts)) zs.CopyTo(decompressedStream);
-
+            if (size > 0) using (ZLibStream zs = new ZLibStream(compressedStream, decompOpts)) zs.CopyTo(decompressedStream);
+            if (size < 0) decompressedStream = compressedStream;
             byte[] decompressedData = decompressedStream.GetBuffer();
             compressedStream.Dispose();
             decompressedStream.Dispose();

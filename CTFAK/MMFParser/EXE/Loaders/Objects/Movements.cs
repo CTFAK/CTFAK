@@ -117,6 +117,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 var newOffset = Reader.ReadInt32();
                 DataSize = Reader.ReadInt32();
                 Reader.Seek(rootPos+newOffset);
+                if (Reader.Tell() > Reader.Size() - 12)
+                {
+                    Console.WriteLine("E122: Ran out of bytes reading Movement Object (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                    return; //really hacky shit, but it works
+                }
                 Player = Reader.ReadUInt16();
                 Type = Reader.ReadUInt16();
                 MovingAtStart = Reader.ReadByte();
@@ -148,7 +153,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 
 
                 }
-                if(Loader==null&&Type!=0) throw new Exception("Unsupported movement: "+Type);
+                if (Loader == null && Type != 0) return; //throw new Exception("Unsupported movement: "+Type);
                 Loader?.Read(); 
             }
             

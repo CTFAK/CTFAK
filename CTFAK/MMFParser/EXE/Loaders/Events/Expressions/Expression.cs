@@ -49,6 +49,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
 
         public override void Read()
         {
+            if (Reader.Tell() > Reader.Size() - 8)
+            {
+                Console.WriteLine("E54:  Ran out of bytes reading Expression (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                return; //really hacky shit, but it works
+            }
             var currentPosition = Reader.Tell();
             var old = Settings.GameType == GameType.OnePointFive&&!Settings.DoMFA;
             ObjectType = (old ? Reader.ReadSByte():Reader.ReadInt16());
@@ -90,6 +95,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Expressions
             Loader?.Read();
             // Unk1 = Reader.ReadInt32();
             // Unk2 = Reader.ReadUInt16();
+            //if (Settings.GameType == GameType.TwoFivePlus) Console.WriteLine("EVENT current position: " + currentPosition + " size: " + size);
+            if (currentPosition + size < 0) return;
+            if (size <= 0) return;
             Reader.Seek(currentPosition+size);
 
 

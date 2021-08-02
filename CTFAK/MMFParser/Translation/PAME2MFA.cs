@@ -33,9 +33,9 @@ namespace CTFAK.MMFParser.Translation
     public static class Pame2Mfa
     {
         public static Dictionary<int, FrameItem> FrameItems;
-        public static event Program.DumperEvent OnMessage;
+        private static bool invalid25plus;
 
-        
+        public static event Program.DumperEvent OnMessage;
 
         public static void Translate(ref MFA.MFA mfa, GameData game)
         {
@@ -74,7 +74,7 @@ namespace CTFAK.MMFParser.Translation
                 mfa.Images.Items[key].Debug = true;
             }
 
-            // game.Images.Images.Clea r();
+            // game.Images.Images.Clear();
 
             mfa.Author = game.Author?.Value ?? "";
             mfa.Copyright = game.Copyright?.Value ?? "";
@@ -128,11 +128,13 @@ namespace CTFAK.MMFParser.Translation
             {
                 var key = game.Frameitems.ItemDict.Keys.ToArray()[i];
                 var item = game.Frameitems.ItemDict[key];
+                invalid25plus = false;
                 var newItem = TranslateObject(item);
-                if (newItem.Loader == null)
+                if (newItem.Loader == null || invalid25plus == true)
                 {
+                    Console.WriteLine("Unsupported Object: " + newItem.ObjectType + " (invalid 2.5+ object: "+invalid25plus+")");
                     continue;
-                    // throw new NotImplementedException("Unsupported Object: "+newItem.ObjectType);
+                    // 
                 }              
                 FrameItems.Add(newItem.Handle, newItem);
             }
@@ -155,7 +157,7 @@ namespace CTFAK.MMFParser.Translation
             {
                 var frame = game.Frames[a];
                 // if(frame.Palette==null|| frame.Events==null|| frame.Objects==null) continue;
-                Message($"Translating frame: {frame.Name} - {a}" );
+                //Console.WriteLine($"Translating frame: {frame.Name} - {a} ({frame.Width}*{frame.Height})");
                 var newFrame = new MFA.Loaders.Frame(null);
                 newFrame.Chunks = new ChunkList(null);//MFA.MFA.emptyFrameChunks;
                 newFrame.Handle = a;
@@ -183,9 +185,19 @@ namespace CTFAK.MMFParser.Translation
                 newFrame.Password = "";
                 newFrame.LastViewedX = 320;
                 newFrame.LastViewedY = 240;
-                if (frame.Palette == null) continue;
-                
-                newFrame.Palette = frame.Palette;
+                if (frame.Palette == null)
+                {
+                    Console.WriteLine("Pame2MFA invalid palette error");
+                    List<Color> dummyPalette = new List<Color>();
+                    for (int i = 0; i < 256; i++)
+                    { 
+                        dummyPalette.Add(Color.FromArgb(0,0,0,0)); //make a fake palette
+                    }
+                    newFrame.Palette = dummyPalette;
+                    //continue;
+                }
+                if (frame.Palette != null) newFrame.Palette = frame.Palette;
+                //Console.WriteLine(newFrame.Palette);
                 newFrame.StampHandle = 13;
                 newFrame.ActiveLayer = 0;
                 //LayerInfo
@@ -326,7 +338,8 @@ namespace CTFAK.MMFParser.Translation
                                     foreach (var param in action.Items)
                                     {
                                         var objInfoFld = param?.Loader?.GetType()?.GetField("ObjectInfo");
-                                        if (objInfoFld == null) continue;
+                                        UInt16 ObjectInfo = 0;
+                                        if (objInfoFld == null || objInfoFld == param?.Loader?.GetType()?.GetField("ObjectInfo")) continue;
                                         if ((int)objInfoFld?.GetValue(param?.Loader) ==
                                             quailifer.Value?.ObjectInfo)
                                             param.Loader?.GetType().GetField("ObjectInfo")
@@ -344,7 +357,8 @@ namespace CTFAK.MMFParser.Translation
                                     foreach (var param in cond.Items)
                                     {
                                         var objInfoFld = param?.Loader?.GetType()?.GetField("ObjectInfo");
-                                        if (objInfoFld == null) continue;
+                                        UInt16 ObjectInfo = 0;
+                                        if (objInfoFld == null || objInfoFld == param?.Loader?.GetType()?.GetField("ObjectInfo")) continue;
                                         if ((int)objInfoFld?.GetValue(param?.Loader) ==
                                             quailifer.Value?.ObjectInfo)
                                             param.Loader?.GetType().GetField("ObjectInfo")
@@ -356,7 +370,7 @@ namespace CTFAK.MMFParser.Translation
                         
                     }
                 }
-                Logger.Log("Frame Translated");
+                //Console.WriteLine($"Frame {a} Translated");
                 mfa.Frames.Add(newFrame);
             }
         }
@@ -448,6 +462,11 @@ namespace CTFAK.MMFParser.Translation
                     backdrop.CollisionType = (uint)backdropLoader.CollisionType;
                     backdrop.Width = backdropLoader.Width;
                     backdrop.Height = backdropLoader.Height;
+                if (backdrop.Width == 0 || backdrop.Height == 0)
+                {
+                    invalid25plus = true;
+                    return newItem;
+                }
                     backdrop.Shape = backdropLoader.Shape.ShapeType;
                     backdrop.BorderSize = backdropLoader.Shape.BorderSize;
                     backdrop.FillType = backdropLoader.Shape.FillType;

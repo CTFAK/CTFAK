@@ -83,11 +83,12 @@ namespace CTFAK.Utils
             {
                 rawData[0] ^= (byte) ((byte) (chunkId & 0xFF) ^ (byte) (chunkId >> 0x8));
             }
-
+            int rawSize = rawData.Length;
             rawData = DecryptChunk(rawData, chunkSize);
             using (ByteReader data = new ByteReader(rawData))
             {
                 uint compressedSize = data.ReadUInt32();
+                //Console.WriteLine($"!!!Decrypting chunk {chunkId}: original size {chunkSize} decompressed size {decompressedSize} actual size {rawSize} decrypted size {rawData.Length} actual compressed {compressedSize}");
                 decompressed = (int) decompressedSize;
                 return Decompressor.DecompressBlock(data, (int) compressedSize, (int) decompressedSize);
             }

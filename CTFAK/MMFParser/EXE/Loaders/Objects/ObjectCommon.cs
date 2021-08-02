@@ -111,8 +111,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             {
                 var currentPosition = Reader.Tell();
                 twoFilePlusPos = (int)currentPosition;
-                Console.WriteLine("is about to read the object " + isFirstRead + " at position " + currentPosition + "/" + Reader.Size());
-                if (currentPosition > 25800) isFirstRead = false;
+                //Console.WriteLine("is about to read the object " + isFirstRead + " at position " + currentPosition + "/" + Reader.Size());
+                //if (currentPosition >= Reader.Size()) return; //this can't be in for some reason or there will be no images
+                //if (currentPosition > 25800) isFirstRead = false;
                 if (Settings.Build >= 284&&Settings.GameType == GameType.Normal)//new no 1.5
                 {
                     var size = Reader.ReadInt32();
@@ -153,31 +154,52 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                         var size2 = Reader.ReadInt32();
                         //var decompressedSize = Reader.ReadInt32();
                         var ass = Reader.ReadBytes(size2);
-                        Console.WriteLine("Reading now " + size2 + " at " + Reader.Tell());
+                        //Console.WriteLine("Reading now " + size2 + " at " + Reader.Tell());
                         var decompressed = Ionic.Zlib.ZlibStream.UncompressBuffer(ass);
                         decompressedReader = new ByteReader(new MemoryStream(decompressed));
                         Reader.Seek(currentPosition + size2 + 8);
-                        Console.WriteLine("firstread READING WITH DECOMPRESSED DATA: size " + decompressedReader.Size() + " position " + twoFilePlusPos);
+                        //Console.WriteLine("firstread READING WITH DECOMPRESSED DATA: size " + decompressedReader.Size() + " position " + twoFilePlusPos);
                     }
                     else
                     {
                         //Console.WriteLine(currentPosition);
                         //Console.WriteLine(Reader.Size()); //i think if currentPos == reader.size + 4 then we need to reader.seek(4)
-                        if (currentPosition == Reader.Size() + 4)
+                        if (currentPosition >= Reader.Size())
                         {
+                            Console.WriteLine("Rewinding ObjectCommon buffer to 4");
                             Reader.Seek(4);
                             currentPosition = 4;
                         }
+                        if (Reader.Tell() > Reader.Size() - 4)
+                        {
+                            Console.WriteLine("E174: Ran out of bytes reading ObjectCommon (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                            return; //really hacky shit, but it works
+                        }
                         var size2 = Reader.ReadInt32();
                         //var decompressedSize = Reader.ReadInt32();
+                        if (size2 < 0)
+                        {
+                            Console.WriteLine("E181: There are no bytes to read in ObjectCommon (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                            return; //there was an error reading this data so we skip it
+                        }
                         var ass = Reader.ReadBytes(size2);
-                        Console.WriteLine("Reading now " + size2 + " at " + Reader.Tell());
+                        //Console.WriteLine("Reading now " + size2 + " at " + Reader.Tell());
+                        if (size2 > Reader.Tell() || size2 == 4552)
+                        {
+                            Console.WriteLine("E188: The size is bigger than the reader in ObjectCommon (" + size2 + "/" + Reader.Tell() + ")");
+                            return; //error so skip
+                        }
                         var decompressed = Ionic.Zlib.ZlibStream.UncompressBuffer(ass);
                         decompressedReader = new ByteReader(new MemoryStream(decompressed));
                         Reader.Seek(currentPosition + size2 + 8);
-                        Console.WriteLine("secondread READING WITH DECOMPRESSED DATA: size "+ decompressedReader.Size()+" position "+twoFilePlusPos);
+                        //Console.WriteLine("secondread READING WITH DECOMPRESSED DATA: size "+ decompressedReader.Size()+" position "+twoFilePlusPos);
                     }
                     //do we do anything with the decompressed bytes?
+                    if (decompressedReader.Tell() > decompressedReader.Size() - 19)
+                    {
+                        Console.WriteLine("E195: Ran out of bytes reading ObjectCommon (" + decompressedReader.Tell() + "/" + decompressedReader.Size() + ")");
+                        return; //really hacky shit, but it works
+                    }
                     var size = decompressedReader.ReadInt32();
                     _animationsOffset = decompressedReader.ReadUInt16();
                     _movementsOffset = decompressedReader.ReadUInt16();
@@ -194,7 +216,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     }
 
                     decompressedReader.Seek(end);
-
+                    if (decompressedReader.Tell() > decompressedReader.Size() - 20)
+                    {
+                        Console.WriteLine("E216: Ran out of bytes reading ObjectCommon (" + decompressedReader.Tell() + "/" + decompressedReader.Size() + ")");
+                        return; //really hacky shit, but it works
+                    }
                     _systemObjectOffset = decompressedReader.ReadUInt16();
 
                     _valuesOffset = decompressedReader.ReadUInt16();
@@ -205,7 +231,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     BackColor = decompressedReader.ReadColor();
                     _fadeinOffset = decompressedReader.ReadUInt32();
                     _fadeoutOffset = decompressedReader.ReadUInt32();
-                    Console.WriteLine("finished parsing 2.5+ decompressed bytes");
+                    //Console.WriteLine("finished parsing 2.5+ decompressed bytes");
                     //finish
                 }
                 else if(Settings.GameType == GameType.Normal)//old no 1.5
@@ -296,13 +322,13 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                 //if (Settings.GameType == GameType.TwoFivePlus) return;
 
                 //we finished reading the offsets
-                Console.WriteLine("Movement  Offset: " + _movementsOffset);
-                Console.WriteLine("Values    Offset: " + _valuesOffset);
-                Console.WriteLine("Counter   Offset: " + _counterOffset);
-                Console.WriteLine("Sys Obj   Offset: " + _systemObjectOffset);
-                Console.WriteLine("Extension Offset: " + _extensionOffset);
-                Console.WriteLine("Animation Offset: " + _animationsOffset);
-                Console.WriteLine("Strings   Offset: " + _stringsOffset);
+                //Console.WriteLine("Movement  Offset: " + _movementsOffset);
+                //Console.WriteLine("Values    Offset: " + _valuesOffset);
+                //Console.WriteLine("Counter   Offset: " + _counterOffset);
+                //Console.WriteLine("Sys Obj   Offset: " + _systemObjectOffset);
+                //Console.WriteLine("Extension Offset: " + _extensionOffset);
+                //Console.WriteLine("Animation Offset: " + _animationsOffset);
+                //Console.WriteLine("Strings   Offset: " + _stringsOffset);
 
                 if (Settings.GameType != GameType.TwoFivePlus)
                 {
@@ -408,7 +434,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                         decompressedReader.Seek(decCurPos + _animationsOffset); //(currentPosition + _animationsOffset);
                         if (Settings.GameType == GameType.Android) return;
                         Animations = new Animations(decompressedReader);
-                        Console.WriteLine("reading animations for 2.5");
+                        //Console.WriteLine("reading animations for 2.5+");
                         Animations.Read();
                     }
 
@@ -420,15 +446,16 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                         {
                             Movements = new Movements(null);
                             var mov = new Movement(decompressedReader);
-                            Console.WriteLine("reading movements for 1.5");
+                            //Console.WriteLine("reading movements for 1.5");
                             mov.Read();
                             Movements.Items.Add(mov);
 
                         }
                         else
                         {
+                            return;
                             Movements = new Movements(decompressedReader);
-                            Console.WriteLine("reading movements for 2.5");
+                            //Console.WriteLine("reading movements for 2.5+");
                             Movements.Read();
                         }
 
@@ -449,7 +476,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                             case Constants.ObjectType.Score:
                             case Constants.ObjectType.Lives:
                                 Counters = new Counters(decompressedReader);
-                                Console.WriteLine("reading counters for 2.5");
+                                //Console.WriteLine("reading counters for 2.5+");
                                 Counters.Read();
                                 break;
 
@@ -478,7 +505,12 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                         {
                             
                             decompressedReader.Seek(decCurPos + _extensionOffset);
-                            Console.WriteLine("reading extensions for 2.5");
+                            //Console.WriteLine("reading extensions for 2.5+");
+                            if (decompressedReader.Tell() > decompressedReader.Size() - 20)
+                            {
+                                Console.WriteLine("E505: Ran out of bytes reading ObjectCommon (" + decompressedReader.Tell() + "/" + decompressedReader.Size() + ")");
+                                return; //really hacky shit, but it works
+                            }
                             var dataSize = decompressedReader.ReadInt32() - 20;
                             decompressedReader.Skip(4); //maxSize;
                             ExtensionVersion = decompressedReader.ReadInt32();
@@ -496,7 +528,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
                     {
                         decompressedReader.Seek(decCurPos + _counterOffset);
                         Counter = new Counter(decompressedReader);
-                        Console.WriteLine("reading counters for 2.5");
+                        //Console.WriteLine("reading counters for 2.5+");
                         Counter.Read();
                     }
                 }

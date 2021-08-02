@@ -86,6 +86,10 @@ namespace CTFAK.Utils
         public static DataLoader LoadParameter(int code, ByteReader reader)
         {
             DataLoader item = null;
+            if (code >= 68 || code == 0)
+            {
+                //Console.WriteLine("Illegal 2.5+ instruction encountered: " + code);
+            }
             if (code == 1)
             {
                 item = new ParamObject(reader);
@@ -145,7 +149,7 @@ namespace CTFAK.Utils
             {
                 item = new Filename(reader);
             }
-            if (code == 50)
+            if (code == 50 || code >= 68 || code == 0) //this is haram, but doesn't crash CTF
             {
                 item = new AlterableValue(reader);
             }
@@ -189,14 +193,6 @@ namespace CTFAK.Utils
             {
                 item = new TwoShorts(reader);
             }        
-    
-            
-
-            
-
-            
-
-            
 
             return item;
         }

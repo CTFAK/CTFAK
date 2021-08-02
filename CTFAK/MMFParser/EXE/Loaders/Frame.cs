@@ -197,6 +197,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
             }
             else
             {
+                if (Reader.Tell() > Reader.Size() - 10)
+                {
+                    Console.WriteLine("E202: Ran out of bytes reading Frame (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                    return; //really hacky shit, but it works
+                }
                 Width = Reader.ReadInt32();
                 Height = Reader.ReadInt32();
                 Background = Reader.ReadColor();
@@ -234,7 +239,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override void Read()
         {
-            
+            if (Reader.Size() < 4)
+            {
+                Console.WriteLine("E244: Ran out of bytes reading Frame (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                return; //really hacky shit, but it works
+            }
             var count = Reader.ReadInt32();
             for (int i = 0; i < count; i++)
             {
@@ -331,6 +340,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public override void Read()
         {
             Items = new List<Layer>();
+            if (Reader.Size() < 4)
+            {
+                Console.WriteLine("E345: Ran out of bytes reading Frame (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                return; //really hacky shit, but it works
+            }
             var count = Reader.ReadUInt32();
             for (int i = 0; i < count; i++)
             {
@@ -426,6 +440,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override void Read()
         {
+            if (Reader.Size() < 4)
+            {
+                Console.WriteLine("E445: Ran out of bytes reading Frame (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                return; //really hacky shit, but it works
+            }
             Items = new List<Color>();
             for (int i = 0; i < 257; i++)
             {

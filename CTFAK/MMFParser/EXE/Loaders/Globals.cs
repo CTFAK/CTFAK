@@ -29,6 +29,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
             }
             foreach (var item in templist)
             {
+                if (Reader.Tell() > Reader.Size() - 1)
+                {
+                    Console.WriteLine("E34:  Ran out of bytes reading Globals (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                    return; //really hacky shit, but it works
+                }
                 var globalType = Reader.ReadSByte();
                 float newGlobal = 0f;
                 if((Constants.ValueType)globalType==Constants.ValueType.Float)
@@ -70,6 +75,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override void Read()
         {
+            if (Reader.Tell() > Reader.Size() - 10)
+            {
+                Console.WriteLine("E80:  Ran out of bytes reading Globals (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                return; //really hacky shit, but it works
+            }
             var count = Reader.ReadUInt32();
             for (int i = 0; i < count; i++)
             {

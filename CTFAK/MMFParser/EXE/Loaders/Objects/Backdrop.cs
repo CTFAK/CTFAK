@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using CTFAK.Utils;
 
 namespace CTFAK.MMFParser.EXE.Loaders.Objects
@@ -45,6 +46,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             }
             else
             {
+                if (Reader.Tell() > Reader.Size() - 18)
+                {
+                    Console.WriteLine("E51:  Ran out of bytes reading Backdrop Object (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                    return; //really hacky shit, but it works
+                }
                 Size = Reader.ReadInt32();
                 ObstacleType = (Obstacle) Reader.ReadInt16();
                 CollisionType = (Collision) Reader.ReadInt16();
@@ -97,6 +103,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             }
             else
             {
+                if (Reader.Tell() > Reader.Size() - 20)
+                {
+                    Console.WriteLine("E108: Ran out of bytes reading Backdrop Object (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                    return; //really hacky shit, but it works
+                }
                 Size = Reader.ReadInt32();
                 ObstacleType = (Obstacle) Reader.ReadInt16();
                 CollisionType = (Collision) Reader.ReadInt16();
@@ -139,6 +150,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         public override void Read()
         {
             if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(-4);
+            if (Reader.Tell() > Reader.Size() - 10)
+            {
+                Console.WriteLine("E155: Ran out of bytes reading Backdrop Object (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                return; //really hacky shit, but it works
+            }
             BorderSize = Reader.ReadInt16();
             BorderColor = Reader.ReadColor();
             ShapeType = Reader.ReadInt16();

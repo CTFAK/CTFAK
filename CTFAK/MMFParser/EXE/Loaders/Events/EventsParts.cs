@@ -26,7 +26,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         public override void Write(ByteWriter Writer)
         {
             ByteWriter newWriter = new ByteWriter(new MemoryStream());
-            // Logger.Log($"{ObjectType}-{Num}-{ObjectInfo}-{ObjectInfoList}-{Flags}-{OtherFlags}-{Items.Count}-{DefType}-{Identifier}");
+            //if (Settings.GameType == GameType.TwoFivePlus) Logger.Log($"{ObjectType}-{Num}-{ObjectInfo}-{ObjectInfoList}-{Flags}-{OtherFlags}-{Items.Count}-{DefType}-{Identifier}");
             newWriter.WriteInt16((short) ObjectType);
             newWriter.WriteInt16((short) Num);
             newWriter.WriteUInt16((ushort) ObjectInfo);
@@ -38,7 +38,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             newWriter.WriteUInt16((ushort) (Identifier));
             foreach (Parameter parameter in Items)
             {
-                parameter.Write(newWriter);
+                if (parameter.ToString() != "ERROR!") parameter.Write(newWriter);
             }
             Writer.WriteInt16((short) (newWriter.BaseStream.Position+2));
             Writer.WriteWriter(newWriter);
@@ -53,6 +53,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
 
         public override void Read()
         {
+            if (Reader.Tell() > Reader.Size() - 12)
+            {
+                Console.WriteLine("E58:  Ran out of bytes reading EventParts ("+Reader.Tell()+"/"+Reader.Size()+")");
+                return; //really hacky shit, but it works
+            }
             var old =Old&&!Settings.DoMFA;
             var currentPosition = Reader.Tell();
             var size = Reader.ReadUInt16();
@@ -70,13 +75,14 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
             NumberOfParameters = Reader.ReadByte();
             DefType = Reader.ReadByte();
             Identifier = Reader.ReadInt16();
+            //if (Settings.GameType == GameType.TwoFivePlus) Console.WriteLine("number of parameters: " + NumberOfParameters);
             for (int i = 0; i < NumberOfParameters; i++)
             {
                 var item = new Parameter(Reader);
                 item.Read();
                 Items.Add(item);
             }
-            Logger.Log(this);
+            if (Settings.GameType == GameType.TwoFivePlus) Logger.Log(this);
             
 
             
@@ -115,7 +121,8 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
 
             foreach (Parameter parameter in Items)
             {
-                parameter.Write(newWriter);
+                if (parameter.ToString() == "ERROR!") Console.WriteLine("Error in parameter: "+parameter);
+                if (parameter.ToString() != "ERROR!") parameter.Write(newWriter);
             }
             Writer.WriteUInt16((ushort) (newWriter.BaseStream.Position+2));
             Writer.WriteWriter(newWriter);
@@ -129,6 +136,11 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
 
         public override void Read()
         {
+            if (Reader.Tell() > Reader.Size() - 12)
+            {
+                Console.WriteLine("E141: Ran out of bytes reading EventParts (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                return; //really hacky shit, but it works
+            }
             var old = Settings.GameType == GameType.OnePointFive&&!Settings.DoMFA;
             var currentPosition = Reader.Tell();
             var size = Reader.ReadUInt16();
@@ -150,7 +162,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
                 item.Read();
                 Items.Add(item);
             }
-            Logger.Log(this);
+            //Logger.Log(this);
 
         }
         public override string ToString()
@@ -171,7 +183,9 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         public override void Write(ByteWriter Writer)
         {
             var newWriter = new ByteWriter(new MemoryStream());
+            if (Code == 0) return;
             newWriter.WriteInt16((short) Code);
+            if (newWriter == null) return;
             Loader.Write(newWriter);
             Writer.WriteUInt16((ushort) (newWriter.BaseStream.Position+2));
             Writer.WriteWriter(newWriter);
@@ -186,17 +200,25 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
 
         public override void Read()
         {
+            if (Reader.Tell() > Reader.Size() - 12)
+            {
+                Console.WriteLine("E205: Ran out of bytes reading EventParts (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                return; //really hacky shit, but it works
+            }
             var currentPosition = Reader.Tell();
             var size = Reader.ReadInt16();
             Code = Reader.ReadInt16();
 
-
             var actualLoader = Helper.LoadParameter(Code,Reader);
             this.Loader = actualLoader;
             // Loader?.Read();
-            if (Loader!=null) Loader.Read();
-            else throw new Exception("Loader is null: "+Code);
-          
+            if (Loader != null) Loader.Read();
+            else return; //throw new Exception("Loader is null: "+Code);
+            if (currentPosition + size < 0)
+            {
+                Console.WriteLine("E219: Ran out of bytes reading EventParts (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                return; //really hacky shit, but it works
+            }
             Reader.Seek(currentPosition+size);
 
         }
@@ -223,7 +245,8 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events
         public override string ToString()
         {
             if (Loader != null) return Loader.ToString();
-            else throw new Exception($"Unkown Parameter: {Code} ");
+            else return "String: ERROR!"; 
+            //else throw new Exception($"Unkown Parameter: {Code} ");
         }
     }
 

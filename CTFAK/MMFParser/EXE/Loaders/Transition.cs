@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using CTFAK.Utils;
 
 namespace CTFAK.MMFParser.EXE.Loaders
@@ -22,6 +23,11 @@ namespace CTFAK.MMFParser.EXE.Loaders
         public override void Read()
         {
             var currentPos = Reader.Tell();
+            if (Reader.Tell() > Reader.Size() - 4)
+            {
+                Console.WriteLine("E28:  Ran out of bytes reading Transitions (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                return; //really hacky shit, but it works
+            }
             Module = Reader.ReadAscii(4);
             Name = Reader.ReadAscii(4);
             Duration = Reader.ReadInt32();

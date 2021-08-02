@@ -80,6 +80,7 @@ namespace CTFAK
 
             if (args.Length > 0)
             {
+                Console.WriteLine("CTFAK by 1987kostya, pete7201, and ClickNinYT");
                 ImageBank.Load = false;
                 ReadFile(args[0], true, false, true);
                 //Console.ReadKey();
@@ -112,6 +113,7 @@ namespace CTFAK
             }
 
             if (args.Length > 1) ReadFile(path, verbose, dumpImages, dumpSounds);*/
+            Console.WriteLine("CTFAK exiting...");
         }
 
         public static void ReadFile(string path, bool verbose = false, bool dumpImages = false, bool dumpSounds = true)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using CTFAK.MMFParser.EXE.Loaders.Events.Expressions;
 using CTFAK.MMFParser.EXE.Loaders.Events.Viewer;
@@ -23,15 +24,20 @@ namespace CTFAK.MMFParser.EXE.Loaders.Events.Parameters
             {
                 var expression = new Expression(Reader);
                 expression.Read();
-                // Logger.Log($"Found expression {expression.ObjectType}-{expression.Num}=={((ExpressionLoader)expression.Loader)?.Value}");
-                if (expression.ObjectType == 0&& expression.Num==0)
+                //Console.WriteLine($"Found expression {expression.ObjectType}-{expression.Num}=={((ExpressionLoader)expression.Loader)?.Value}");
+                if (expression.ObjectType == 0)
                 {
                     break;
                 }
-                else Items.Add(expression);
+                else
+                {
+                    Items.Add(expression);
+                    //Console.WriteLine("Adding expression");
+                }
+                
                 // if(expression.Num==23||expression.Num==24||expression.Num==50||expression.Num==16||expression.Num==19)Logger.Log("CUMSHOT "+expression.Num);
 
-            }
+                }
             
         }
 

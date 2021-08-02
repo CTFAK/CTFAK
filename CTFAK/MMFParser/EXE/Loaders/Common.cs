@@ -1,4 +1,5 @@
 ﻿using CTFAK.Utils;
+using System;
 
 namespace CTFAK.MMFParser.EXE.Loaders
 {
@@ -12,6 +13,12 @@ namespace CTFAK.MMFParser.EXE.Loaders
 
         public override void Read()
         {
+            //if (Settings.GameType == GameType.TwoFivePlus) Console.WriteLine("position: " + Reader.Tell() + " size: " + Reader.Size());
+            if (Reader.Tell() > Reader.Size() + 1 || Reader.Size() < 4)
+            {
+                Console.WriteLine("E19:  Ran out of bytes reading Common Rectangle Loader (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                return; //really hacky shit, but it works
+            }
             Left = Reader.ReadInt32();
             Top = Reader.ReadInt32();
             Right = Reader.ReadInt32();

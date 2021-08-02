@@ -20,7 +20,7 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
             var currentPosition = Reader.Tell();
             var size = Reader.ReadInt16();
             var count = Reader.ReadInt16();
-            Console.WriteLine("reading animation - size " + Reader.Size() + ", there are " + count + " imgs @ "+currentPosition);
+            //if (Settings.GameType == GameType.TwoFivePlus) Console.WriteLine("reading animation - size " + Reader.Size() + ", there are " + count + " imgs @ "+currentPosition);
             var offsets = new List<short>();
             for (int i = 0; i < count; i++)
             {
@@ -130,19 +130,39 @@ namespace CTFAK.MMFParser.EXE.Loaders.Objects
         public override void Read()
         {
             if (Settings.GameType == GameType.TwoFivePlus) Reader.Skip(4);
-            Console.WriteLine("current position: " + Reader.Tell() + " out of size " + Reader.Size());
-            if (Reader.Tell() > Reader.Size() - 10) return; //really hacky shit, but it works
+            //if (Settings.GameType == GameType.TwoFivePlus) Console.WriteLine("current position: " + Reader.Tell() + " out of size " + Reader.Size());
+            long currentPosition = Reader.Tell();
+            if (currentPosition >= Reader.Size())
+            {
+                Console.WriteLine("Rewinding Animations buffer to 4");
+                Reader.Seek(4);
+                currentPosition = 4;
+            }
+            if (Reader.Tell() > Reader.Size() - 10)
+            {
+                Console.WriteLine("E136: Ran out of bytes reading Animations (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                return; //really hacky shit, but it works
+            }
             MinSpeed = Reader.ReadSByte();
             MaxSpeed = Reader.ReadSByte();
             Repeat = Reader.ReadInt16();
             BackTo = Reader.ReadInt16();
             var frameCount = Reader.ReadUInt16();
-            Console.WriteLine("the frame count is " + frameCount +"/"+MinSpeed+"."+MaxSpeed+"."+Repeat+"."+BackTo);
-            if (frameCount > 10) return;
+            if (frameCount > 250) //idk
+            {
+                Console.WriteLine("Invalid amount of frames, skipping");
+                if (Settings.GameType == GameType.TwoFivePlus) Console.WriteLine("the frame count is " + frameCount + "/" + MinSpeed + "." + MaxSpeed + "." + Repeat + "." + BackTo);
+                return;
+            }
             for (int i = 0; i < frameCount; i++)
             {
+                if (Reader.Tell() > Reader.Size() - 2)
+                {
+                    Console.WriteLine("E154: Ran out of bytes reading frame #"+i+"/"+frameCount+" in Animations Frames (" + Reader.Tell() + "/" + Reader.Size() + ")");
+                    break;
+                }
                 var handle = Reader.ReadInt16();
-                Console.WriteLine("adding image #" + i);
+                //if (Settings.GameType == GameType.TwoFivePlus) Console.WriteLine("adding image #" + i);
                 Frames.Add(handle);
                 
                 
