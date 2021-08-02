@@ -184,7 +184,7 @@ namespace CTFAK.MMFParser.EXE
                     Logger.Log($"       {item.ToString()}");
                 }
             }
-            if(Frames!=null&&Frames.Count>0)
+            if(Frames != null && Frames.Count > 0)
             {
                 Logger.Log("Frames: ", true, ConsoleColor.Cyan);
                 foreach (var item in Frames)
