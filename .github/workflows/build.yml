@@ -21,32 +21,15 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: nuget restore ${{env.SOLUTION_FILE_PATH}}
 
-    - name: Compile
+    - name: Compile (release)
       working-directory: ${{env.GITHUB_WORKSPACE}}
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
-      
-    - name: Upload CTFAK (debug)
-      uses: actions/upload-artifact@v2
-      with:
-       name: CTFAK
-       path: CTFAK\bin\Debug        #upload the whole root since we doesn't know what is the correct building directory
-       
+
     - name: Upload CTFAK (release)
       uses: actions/upload-artifact@v2
       with:
-       name: CTFAK
+       name: CTFAK_release
        path: CTFAK\bin\Release      #upload the whole root since we doesn't know what is the correct building directory
-       
-    - name: Upload CTFAK (x86)
-      uses: actions/upload-artifact@v2
-      with:
-       name: CTFAK
-       path: CTFAK\bin\x86        #upload the whole root since we doesn't know what is the correct building directory
-       
-    - name: Upload CTFAK (x64)
-      uses: actions/upload-artifact@v2
-      with:
-       name: CTFAK
-       path: CTFAK\bin\x64        #upload the whole root since we doesn't know what is the correct building directory
+ 
