@@ -27,9 +27,14 @@ jobs:
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
 
+    - name: Copy template file to CTFAK directory
+      run: |
+           dir
+           cd Dependencies
+           copy template.mfa "D:\a\CTFAK\CTFAK\CTFAK\bin\Release"
+         
     - name: Upload CTFAK (release)
       uses: actions/upload-artifact@v2
       with:
        name: CTFAK_release
        path: CTFAK\bin\Release      #upload the whole root since we doesn't know what is the correct building directory
- 
