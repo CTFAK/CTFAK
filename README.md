@@ -25,7 +25,7 @@ Instructions on how to build the decrypter library will be coming soon
 
 # Requirements
 
-* Microsoft Visual C++ Redistributable 2019
+* Microsoft Visual C++ Redistributable 2019.
 
 
 # License
